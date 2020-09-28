@@ -1,31 +1,27 @@
 RATIO Tool
 ======
 
-The basic blog app built in the Flask `tutorial`_.
-
-.. _tutorial: http://flask.pocoo.org/docs/tutorial/
+A tool to add knowledge to a rdf knowledgebase.
 
 
 Install
 -------
 
-::
-
     # clone the repository
     $ git clone https://github.com/ArneKramerSunderbrink/ratio
     $ cd ratio
 
-Create a virtualenv and activate it::
+Create a virtualenv and activate it:
 
     $ python3 -m venv venv
     $ . venv/bin/activate
 
-Or on Windows cmd::
+Or on Windows cmd:
 
     $ py -3 -m venv venv
     $ venv\Scripts\activate.bat
 
-Install Ratio::
+Install Ratio:
 
     $ pip install -e .
 
@@ -33,14 +29,12 @@ Install Ratio::
 Run
 ---
 
-::
-
     $ export FLASK_APP=ratio
     $ export FLASK_ENV=development
     $ flask init-db
     $ flask run
 
-Or on Windows cmd::
+Or on Windows cmd:
 
     > set FLASK_APP=raio
     > set FLASK_ENV=development
@@ -53,12 +47,10 @@ Open http://127.0.0.1:5000 in a browser.
 Test
 ----
 
-::
-
     $ pip install '.[test]'
     $ pytest
 
-Run with coverage report::
+Run with coverage report:
 
     $ coverage run -m pytest
     $ coverage report
