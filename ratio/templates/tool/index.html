@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}RATIO{% endblock %}
+
+{% block content %}
+<nav>
+  <h1>RATIO</h1>
+  <ul>
+      <li><span>{{ g.user['username'] }}</span>
+      <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
+  </ul>
+</nav>
+<p>{{ test }}</p>
+{% endblock %}

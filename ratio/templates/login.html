@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}RATIO - Log In{% endblock %}
+
+{% block content %}
+<div class="w3-display-container w3-green" style="height:100vh">
+    <form class="w3-display-middle w3-panel w3-card-4 w3-blue" method="post">
+        <p>
+            <input class="w3-input" type="text" name="username" id="username" style="width:90%" required>
+            <label for="username">Name</label>
+        </p>
+        <p>
+            <input class="w3-input" type="password" name="password" id="password" style="width:90%" required>
+            <label for="password">Password</label>
+        </p>
+        <p>
+            <input class="w3-button w3-section w3-teal w3-ripple" type="submit" value="Log In">
+        </p>
+    </form>
+</div>
+{% endblock %}
