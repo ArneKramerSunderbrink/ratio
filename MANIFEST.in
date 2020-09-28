@@ -1,0 +1,5 @@
+include ratio/schema.sql
+graft ratio/static
+graft ratio/templates
+graft tests
+global-exclude *.pyc
