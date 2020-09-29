@@ -46,9 +46,26 @@ def init_db_command():
     click.echo("Initialized the database.")
 
 
+def db_populate_dummy():
+    """Populates database with dummy data for testing and development."""
+    db = get_db()
+
+    with current_app.open_resource("data_dummy.sql") as f:
+        db.executescript(f.read().decode("utf8"))
+
+
+@click.command("db-add-dummy")
+@with_appcontext
+def db_populate_dummy_command():
+    """Populates database with dummy data for testing and development."""
+    db_populate_dummy()
+    click.echo("Added dummy data to the database.")
+
+
 def init_app(app):
     """Register database functions with the Flask app. This is called by
     the application factory.
     """
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
+    app.cli.add_command(db_populate_dummy_command)

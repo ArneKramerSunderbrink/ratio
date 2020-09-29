@@ -6,10 +6,7 @@ import pytest
 from ratio import create_app
 from ratio.db import get_db
 from ratio.db import init_db
-
-# read in SQL for populating test data
-with open(os.path.join(os.path.dirname(__file__), "data.sql"), "rb") as f:
-    _data_sql = f.read().decode("utf8")
+from ratio.db import db_populate_dummy
 
 
 @pytest.fixture
@@ -23,7 +20,7 @@ def app():
     # create the database and load test data
     with app.app_context():
         init_db()
-        get_db().executescript(_data_sql)
+        db_populate_dummy()
 
     yield app
 
@@ -48,14 +45,13 @@ class AuthActions(object):
     def __init__(self, client):
         self._client = client
 
-    #TODO: add back in ass soon as I have that functionality
-    #def login(self, username="test", password="test"):
-    #    return self._client.post(
-    #        "/auth/login", data={"username": username, "password": password}
-    #    )
+    def login(self, username="test", password="test"):
+        return self._client.post(
+            "/login", data={"username": username, "password": password}
+        )
 
-    #def logout(self):
-    #    return self._client.get("/auth/logout")
+    def logout(self):
+        return self._client.get("/logout")
 
 
 @pytest.fixture
