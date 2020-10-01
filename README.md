@@ -43,6 +43,10 @@ Or on Windows cmd:
 
 Open http://127.0.0.1:5000 in a browser.
 
+If you want to populate the database with dummy data to test the tool (including a user called 'test' with password 'test'), call:
+
+    $ flask db-add-dummy
+
 
 Test
 ----

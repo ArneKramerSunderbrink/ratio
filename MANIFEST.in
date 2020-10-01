@@ -1,4 +1,5 @@
 include ratio/schema.sql
+include ratio/data_dummy.sql
 graft ratio/static
 graft ratio/templates
 graft tests
