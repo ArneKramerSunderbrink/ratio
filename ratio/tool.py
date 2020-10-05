@@ -23,5 +23,6 @@ def index():
     #    " FROM post p JOIN user u ON p.author_id = u.id"
     #    " ORDER BY created DESC"
     #).fetchall()
-    test = 123
-    return render_template('tool/index.html', test=test)
+    # todo get subgraph from g oder so
+    subgraph = {'name': 'blabla', 'finished': False}
+    return render_template('tool/index.html', subgraph=subgraph)

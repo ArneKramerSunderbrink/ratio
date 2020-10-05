@@ -3,12 +3,8 @@
 {% block title %}RATIO{% endblock %}
 
 {% block content %}
-<nav>
-  <h1>RATIO</h1>
-  <ul>
-      <li><span>{{ g.user['username'] }}</span>
-      <li><a href="{{ url_for('auth.logout') }}">Log Out</a>
-  </ul>
-</nav>
-<p>{{ test }}</p>
+{% include 'tool/bar.html' %}
+
+<p>Test Script Root: {{ request.script_root|tojson|safe }}
+
 {% endblock %}

@@ -10,14 +10,11 @@
                 <input class="w3-input" style="width:90%"
                        type="text" name="username" id="username" value="{{ request.form['username'] or '' }}" required>
                 <label for="username">Name</label>
-            </p>
             <p>
                 <input class="w3-input" style="width:90%" type="password" name="password" id="password" required>
                 <label for="password">Password</label>
-            </p>
             <p>
                 <input class="w3-button w3-section w3-light-blue w3-ripple" type="submit" value="Log In">
-            </p>
         </form>
 
         {% for message in get_flashed_messages() %}
