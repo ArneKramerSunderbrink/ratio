@@ -8,14 +8,16 @@ def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         # a default secret that should be overridden by instance config
-        SECRET_KEY="dev",
+        SECRET_KEY='dev',
         # store the database in the instance folder
-        DATABASE=os.path.join(app.instance_path, "ratio.sqlite"),
+        DATABASE=os.path.join(app.instance_path, 'ratio.sqlite'),
+        # Prepend URL_PREFIX to all routes
+        URL_PREFIX='',
     )
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
-        app.config.from_pyfile("config.py", silent=True)
+        app.config.from_pyfile('config.py', silent=True)
     else:
         # load the test config if passed in
         app.config.update(test_config)
@@ -34,10 +36,7 @@ def create_app(test_config=None):
     # apply the blueprints to the app
     from ratio import auth, tool
 
-    app.register_blueprint(auth.bp)
-    app.register_blueprint(tool.bp)
-
-    # make url_for('index') == url_for('tool.index')
-    app.add_url_rule("/", endpoint="index")
+    app.register_blueprint(auth.bp, url_prefix=app.config['URL_PREFIX'])
+    app.register_blueprint(tool.bp, url_prefix=app.config['URL_PREFIX'])
 
     return app

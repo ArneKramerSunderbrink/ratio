@@ -10,10 +10,10 @@ from werkzeug.exceptions import abort
 from ratio.auth import login_required
 from ratio.db import get_db
 
-bp = Blueprint("tool", __name__)
+bp = Blueprint('tool', __name__)
 
 
-@bp.route("/")
+@bp.route('/')
 @login_required
 def index():
     """Show all the posts, most recent first."""
@@ -24,4 +24,4 @@ def index():
     #    " ORDER BY created DESC"
     #).fetchall()
     test = 123
-    return render_template("tool/index.html", test=test)
+    return render_template('tool/index.html', test=test)

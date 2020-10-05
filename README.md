@@ -49,21 +49,26 @@ Run with coverage report:
     $ coverage html  # open htmlcov/index.html in a browser
 
 
-Deploy with Gunicorn and Docker
+Deploy with Gunicorn
 ----
 
 Build distribution file:
 
     $ pip install wheel
-    $ python setup.py bdist_wheel
+    $ python3 setup.py bdist_wheel
 
-Copy the distribution file from `dist/` as well as the files from `docker/` to a folder on your server.
-Change the secret key in `docker/wsgi.py`.
+Copy the distribution file from `dist/` as well as `deploy/deploy.sh` and `deploy/gunicorn_conf.py` to a folder on your server.
+Adapt the deploy script to you environment, especially the secret key and the url prefix.
+Comment out `flask db-add-dummy` if no dummy data is needed.
 Call:
 
-    $ docker build -t ratioimage .
-    $ docker run --publish 8000:8000 --name --detach ratio ratioimage
+    $ chmod +x deploy.sh
+    $ source deploy.sh
+    
+Run the app with:
 
-Stop with:
+    $ gunicorn --worker-class egg:meinheld#gunicorn_worker --config "./gunicorn_conf.py" --daemon "ratio:create_app()"
 
-    $ docker rm --force ratio
+Stop all(!) gunicorn process with:
+
+    $ pkill gunicorn
