@@ -1,23 +1,12 @@
 {% extends 'base.html' %}
 
-{% block title %}RATIO{% endblock %}
+{% block title %}RATIO {{ '- '+subgraph['name'] if subgraph['name'] }}{% endblock %}
 
 {% block content %}
-{% include 'tool/bar.html' %}
-
 <script type=text/javascript>
-  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
-  $CONFIG = {{ config['URL_PREFIX']|tojson|safe }};
-  $URL_FOR = {{ url_for('tool.index')|tojson|safe }};
+  $SUBGRAPH_ID = {{ subgraph['id']|tojson|safe }};
 </script>
 
-<p>Test Script Root: {{ request.script_root|tojson|safe }}
-  <button id="script_root_test">TEST AJAX</button>
-<p>Test Config: {{ config['URL_PREFIX']|tojson|safe }}
-  <button id="config_test">TEST AJAX</button>
-<p>Test url_for: {{ url_for('tool.index')|tojson|safe }}
-  <button id="url_for_test">TEST AJAX</button>
-
-<p>Test url_for static: {{ url_for('static', filename='js/bar.js')|tojson|safe }}
+{% include 'tool/bar.html' %}
 
 {% endblock %}

@@ -8,6 +8,8 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" defer></script>
 
-<section class="content">
-  {% block content %}{% endblock %}
-</section>
+<script type=text/javascript>
+  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+</script>
+
+{% block content %}{% endblock %}

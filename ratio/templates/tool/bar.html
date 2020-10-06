@@ -2,9 +2,11 @@
 
 <div class="w3-bar w3-blue">
   <a href="#" class="w3-bar-item w3-button">{{ subgraph['name'] }}</a>
-  <a href="#" id="finished" class="w3-bar-item w3-button">
+  <input type="checkbox" style="display: none" id="finished"
+         {% if subgraph['finished']%}checked{% endif %}>
+  <label for="finished" class="w3-bar-item w3-button">
     <i class="fa fa-{% if subgraph['finished']%}check-{% endif %}square"></i> Finished
-  </a>
+  </label>
   <div class="w3-right">
     <div class="w3-bar-item"><i class="fas fa-user w3-large"></i> {{ g.user['username'] }}</div>
     <a href="{{ url_for('auth.logout') }}" class="w3-bar-item w3-button">Log Out</a>

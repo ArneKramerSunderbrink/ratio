@@ -1,41 +1,17 @@
+// finished checkbox
 $(function() {
-  $('a#finished').bind('click', function() {
-    alert('TEST');
-    // todo send change finished to backend
-    // todo change icon
-    return false;
-  });
-});
+  $('input#finished').bind('change', function() {
+    var finished = $(this).is(':checked');
 
-$(function() {
-  $('button#script_root_test').bind('click', function() {
-    $.getJSON($SCRIPT_ROOT + '/_test', {
-      arg: 'script root'
-    }, function(data) {
-      alert(data.result);
-    });
-    return false;
-  });
-});
+    if (finished) {
+      $("label[for='finished']").children('i').removeClass().addClass('fa fa-check-square');
+    } else {
+      $("label[for='finished']").children('i').removeClass().addClass('fa fa-square');
+    }
 
-$(function() {
-  $('button#config_test').bind('click', function() {
-    $.getJSON($CONFIG + '/_test', {
-      arg: 'config'
-    }, function(data) {
-      alert(data.result);
-    });
-    return false;
-  });
-});
+    $.getJSON($SCRIPT_ROOT + '_set_finished', {subgraph_id: $SUBGRAPH_ID, finished: finished})
+    .fail(function() { alert('getJSON request failed!'); });
 
-$(function() {
-  $('button#url_for_test').bind('click', function() {
-    $.getJSON($URL_FOR + '_test', {
-      arg: 'url_for'
-    }, function(data) {
-      alert(data.result);
-    });
     return false;
   });
 });

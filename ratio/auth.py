@@ -60,11 +60,21 @@ def login():
         elif not check_password_hash(user['password'], password):
             error = 'Incorrect password.'
 
+        # todo select the oone most recently worked on
+        access = db.execute(
+            'SELECT * FROM access WHERE user_id = ?', (user['id'],)
+        ).fetchone()
+
+        if access is None:
+            subgraph_id = None
+        else:
+            subgraph_id = access['subgraph_id']
+
         if error is None:
             # store the user id in a new session and return to the index
             session.clear()
             session['user_id'] = user['id']
-            return redirect(url_for('tool.index'))
+            return redirect(url_for('tool.index', subgraph_id=subgraph_id))
 
         flash(error)
 

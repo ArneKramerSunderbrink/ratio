@@ -15,21 +15,47 @@ bp = Blueprint('tool', __name__)
 
 
 @bp.route('/')
+@bp.route('/<int:subgraph_id>')
 @login_required
-def index():
-    """Show all the posts, most recent first."""
+def index(subgraph_id=None):
+    """Show all the posts, most recent first.""" #todo docu machen
+    if subgraph_id is None:
+        # todo: render view with overlay on
+        subgraph = {'id': 0, 'name': '', 'finished': False}
+        return render_template('tool/index.html', subgraph=subgraph)
+
     db = get_db()
-    #posts = db.execute(
-    #    "SELECT p.id, title, body, created, author_id, username"
-    #    " FROM post p JOIN user u ON p.author_id = u.id"
-    #    " ORDER BY created DESC"
-    #).fetchall()
-    # todo get subgraph from g oder so
-    subgraph = {'name': 'blabla', 'finished': False}
+
+    # todo testen ob dem user der subgraph gehört (gen function schreiben)
+
+    subgraph = db.execute(
+        'SELECT * FROM subgraph WHERE id = ?', (subgraph_id,)
+    ).fetchone()
+
+    if subgraph is None:
+        # todo: mach was sinnvolles: 404 not found oder so
+        print('No subgraph found')
+
     return render_template('tool/index.html', subgraph=subgraph)
 
 
-@bp.route('/_test')
-def test():
-    arg = request.args.get('arg', '', type=str)
-    return jsonify(result='test successful: ' + arg)
+@login_required
+@bp.route('/_set_finished')
+def set_finished():
+    subgraph_id = request.args.get('subgraph_id', 0, type=int)
+    finished = request.args.get('finished', '', type=str)
+
+    # todo testen ob dem user der subgraph gehört (gen function schreiben)
+
+    if finished == 'true' or finished == 'false':
+        finished = finished == 'true'
+        print(subgraph_id)
+        print(finished)
+        db = get_db()
+        db.execute(
+            "UPDATE subgraph SET finished = ? WHERE id = ?", (finished, subgraph_id)
+        )
+        db.commit()
+    else:
+        finished = False  # todo mach was sinnvolles: 404 not found oder so
+    return jsonify(finished=finished)
