@@ -5,6 +5,7 @@ from flask import redirect
 from flask import render_template
 from flask import request
 from flask import url_for
+from flask import jsonify
 from werkzeug.exceptions import abort
 
 from ratio.auth import login_required
@@ -26,3 +27,9 @@ def index():
     # todo get subgraph from g oder so
     subgraph = {'name': 'blabla', 'finished': False}
     return render_template('tool/index.html', subgraph=subgraph)
+
+
+@bp.route('/_test')
+def test():
+    arg = request.args.get('arg', '', type=str)
+    return jsonify(result='test successful: ' + arg)

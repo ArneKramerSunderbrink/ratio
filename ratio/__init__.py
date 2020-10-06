@@ -3,6 +3,21 @@ import os
 from flask import Flask
 
 
+class URLPrefixMiddleware(object):
+    def __init__(self, app, url_prefix=''):
+        self.app = app
+        self.url_prefix = url_prefix
+
+    def __call__(self, environ, start_response):
+        if environ['PATH_INFO'].startswith(self.url_prefix):
+            environ['PATH_INFO'] = environ['PATH_INFO'][len(self.url_prefix):]
+            environ['SCRIPT_NAME'] = self.url_prefix
+            return self.app(environ, start_response)
+        else:
+            start_response('404', [('Content-Type', 'text/plain')])
+            return ["This url does not belong to the app.".encode()]
+
+
 def create_app(test_config=None):
     """Create and configure an instance of the Flask application."""
     app = Flask(__name__, instance_relative_config=True)
@@ -11,7 +26,7 @@ def create_app(test_config=None):
         SECRET_KEY='dev',
         # store the database in the instance folder
         DATABASE=os.path.join(app.instance_path, 'ratio.sqlite'),
-        # Prepend URL_PREFIX to all routes
+        # Prepend URL_PREFIX to all routes, including static etc.
         URL_PREFIX='',
     )
 
@@ -21,6 +36,8 @@ def create_app(test_config=None):
     else:
         # load the test config if passed in
         app.config.update(test_config)
+
+    app.wsgi_app = URLPrefixMiddleware(app.wsgi_app, url_prefix=app.config['URL_PREFIX'])
 
     # ensure the instance folder exists
     try:
@@ -36,7 +53,7 @@ def create_app(test_config=None):
     # apply the blueprints to the app
     from ratio import auth, tool
 
-    app.register_blueprint(auth.bp, url_prefix=app.config['URL_PREFIX'])
-    app.register_blueprint(tool.bp, url_prefix=app.config['URL_PREFIX'])
+    app.register_blueprint(auth.bp)
+    app.register_blueprint(tool.bp)
 
     return app
