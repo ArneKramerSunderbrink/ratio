@@ -4,9 +4,22 @@
 
 {% block content %}
 <script type=text/javascript>
-  $SUBGRAPH_ID = {{ subgraph['id']|tojson|safe }};
+  $SUBGRAPH_ID = {{ subgraph['id'] }};
 </script>
 
-{% include 'tool/bar.html' %}
+<div class="flex-container w3-green">
+  {% include 'tool/bar.html' %}
+
+  <section class="flex-body">
+    <nobr>THIS IS A LONG LINE - THIS IS A LONG LINE - THIS IS A LONG LINE - THIS IS A LONG LINE - THIS IS A LONG LINE -
+        THIS IS A LONG LINE - THIS IS A LONG LINE - THIS IS A LONG LINE - THIS IS A LONG LINE - THIS IS A LONG LINE -
+        THIS IS A LONG LINE</nobr>
+    <br>
+    TEST <br> TEST <br> TEST <br> TEST <br> TEST <br> TEST <br> TEST <br> TEST <br> TEST <br> TEST <br> TEST <br> TEST
+    <br> TEST <br> TEST <br> TEST <br>TEST <br> TEST <br>TEST <br> TEST <br> Test
+
+    <!--<div id="overlay"></div>-->
+  </section>
+</div>
 
 {% endblock %}

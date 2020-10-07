@@ -26,15 +26,14 @@ def index(subgraph_id=None):
 
     db = get_db()
 
-    # todo testen ob dem user der subgraph gehört (gen function schreiben)
+    # todo testen ob dem user der subgraph gehört (gen function schreiben) abort(403)
 
     subgraph = db.execute(
         'SELECT * FROM subgraph WHERE id = ?', (subgraph_id,)
     ).fetchone()
 
     if subgraph is None:
-        # todo: mach was sinnvolles: 404 not found oder so
-        print('No subgraph found')
+        abort(404)
 
     return render_template('tool/index.html', subgraph=subgraph)
 
@@ -45,17 +44,16 @@ def set_finished():
     subgraph_id = request.args.get('subgraph_id', 0, type=int)
     finished = request.args.get('finished', '', type=str)
 
-    # todo testen ob dem user der subgraph gehört (gen function schreiben)
+    # todo testen ob es den subgraph gibt abort(404)
+    # todo testen ob dem user der subgraph gehört (gen function schreiben) abort(403)
 
     if finished == 'true' or finished == 'false':
         finished = finished == 'true'
-        print(subgraph_id)
-        print(finished)
         db = get_db()
         db.execute(
             "UPDATE subgraph SET finished = ? WHERE id = ?", (finished, subgraph_id)
         )
         db.commit()
+        return jsonify(finished=finished)
     else:
-        finished = False  # todo mach was sinnvolles: 404 not found oder so
-    return jsonify(finished=finished)
+        abort(404)

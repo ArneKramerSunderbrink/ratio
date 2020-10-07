@@ -1,14 +1,16 @@
 <script src="{{ url_for('static', filename='js/bar.js') }}" defer></script>
 
-<div class="w3-bar w3-blue">
+<header class="flex-header w3-bar w3-card w3-blue">
+  {% if subgraph['id'] %}
   <a href="#" class="w3-bar-item w3-button">{{ subgraph['name'] }}</a>
   <input type="checkbox" style="display: none" id="finished"
          {% if subgraph['finished']%}checked{% endif %}>
   <label for="finished" class="w3-bar-item w3-button">
     <i class="fa fa-{% if subgraph['finished']%}check-{% endif %}square"></i> Finished
   </label>
+  {% endif %}
   <div class="w3-right">
     <div class="w3-bar-item"><i class="fas fa-user w3-large"></i> {{ g.user['username'] }}</div>
     <a href="{{ url_for('auth.logout') }}" class="w3-bar-item w3-button">Log Out</a>
   </div>
-</div>
+</header>
