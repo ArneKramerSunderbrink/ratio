@@ -1,9 +1,9 @@
 <script src="{{ url_for('static', filename='js/bar.js') }}" defer></script>
 
-<header class="flex-header w3-bar w3-card w3-blue">
+<header class="w3-bar w3-card w3-blue" id="flex-header">
   {% if subgraph['id'] %}
-  <a href="#" class="w3-bar-item w3-button">{{ subgraph['name'] }}</a>
-  <input type="checkbox" style="display: none" id="finished"
+  <a href="#" id="subgraph_name" class="w3-bar-item w3-button">{{ subgraph['name'] }}</a>
+  <input type="checkbox" id="finished" style="display: none"
          {% if subgraph['finished']%}checked{% endif %}>
   <label for="finished" class="w3-bar-item w3-button">
     <i class="fa fa-{% if subgraph['finished']%}check-{% endif %}square"></i> Finished

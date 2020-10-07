@@ -1,3 +1,17 @@
+// toggle overlay
+$(function() {
+  $('a#subgraph_name').bind('click', function() {
+    overlay = $('div#overlay');
+    if (overlay.css('display') == 'none') {
+      overlay.css('display', 'block');
+    } else {
+      overlay.css('display', 'none');
+    }
+
+    return false
+  })
+})
+
 // finished checkbox
 $(function() {
   $('input#finished').bind('change', function() {

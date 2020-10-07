@@ -7,18 +7,20 @@
   $SUBGRAPH_ID = {{ subgraph['id'] }};
 </script>
 
-<div class="flex-container w3-green">
+<div class="w3-green" id="flex-container">
   {% include 'tool/bar.html' %}
 
-  <section class="flex-body">
-    <nobr>THIS IS A LONG LINE - THIS IS A LONG LINE - THIS IS A LONG LINE - THIS IS A LONG LINE - THIS IS A LONG LINE -
+  <section id="flex-body">
+    <div id="scroll-container">
+      <nobr>THIS IS A LONG LINE - THIS IS A LONG LINE - THIS IS A LONG LINE - THIS IS A LONG LINE - THIS IS A LONG LINE -
         THIS IS A LONG LINE - THIS IS A LONG LINE - THIS IS A LONG LINE - THIS IS A LONG LINE - THIS IS A LONG LINE -
         THIS IS A LONG LINE</nobr>
-    <br>
-    TEST <br> TEST <br> TEST <br> TEST <br> TEST <br> TEST <br> TEST <br> TEST <br> TEST <br> TEST <br> TEST <br> TEST
-    <br> TEST <br> TEST <br> TEST <br>TEST <br> TEST <br>TEST <br> TEST <br> Test
+      <br>
+      TEST <br> TEST <br> TEST <br> TEST <br> TEST <br> TEST <br> TEST <br> TEST <br> TEST <br> TEST <br> TEST <br> TEST
+      <br> TEST <br> TEST <br> TEST <br>TEST <br> TEST <br>TEST <br> TEST <br> Test
+    </div>
 
-    <!--<div id="overlay"></div>-->
+    <div id="overlay" {% if not subgraph['id'] %}style="display: block"{% endif %}>BLABLA</div>
   </section>
 </div>
 
