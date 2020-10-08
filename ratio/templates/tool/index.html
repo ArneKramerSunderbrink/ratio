@@ -8,7 +8,7 @@
 </script>
 
 <div class="w3-green" id="flex-container">
-  {% include 'tool/bar.html' %}
+  {% include 'tool/header.html' %}
 
   <section id="flex-body">
     <div id="scroll-container">
@@ -20,7 +20,11 @@
       <br> TEST <br> TEST <br> TEST <br>TEST <br> TEST <br>TEST <br> TEST <br> Test
     </div>
 
-    <div id="overlay" {% if not subgraph['id'] %}style="display: block"{% endif %}>BLABLA</div>
+    <div class="w3-modal" id="overlay" {% if not subgraph['id'] %}style="display: block"{% endif %}>
+      <div class="w3-modal-content">
+        {% include 'tool/subgraph_menu.html' %}
+      </div>
+    </div>
   </section>
 </div>
 
