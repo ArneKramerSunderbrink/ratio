@@ -4,6 +4,7 @@ from flask import g
 from flask import redirect
 from flask import render_template
 from flask import request
+from flask import session
 from flask import url_for
 from flask import jsonify
 from werkzeug.exceptions import abort
@@ -19,12 +20,21 @@ bp = Blueprint('tool', __name__)
 @login_required
 def index(subgraph_id=None):
     """Show all the posts, most recent first.""" #todo docu machen
-    if subgraph_id is None:
-        # todo: render view with overlay on
-        subgraph = {'id': 0, 'name': '', 'finished': False}
-        return render_template('tool/index.html', subgraph=subgraph)
-
+    user_id = session['user_id']
     db = get_db()
+
+    # for the subgraph menu
+    subgraph_list = db.execute(
+        'SELECT id, name, finished'
+        ' FROM access JOIN subgraph ON subgraph_id = id'
+        ' WHERE user_id = ?'
+        ' ORDER BY name ASC',
+        (user_id,)
+    ).fetchall()
+
+    if subgraph_id is None:
+        subgraph = {'id': 0, 'name': '', 'finished': False}
+        return render_template('tool/index.html', subgraph=subgraph, subgraph_list=subgraph_list)
 
     # todo testen ob dem user der subgraph gehört (gen function schreiben) abort(403)
 
@@ -35,7 +45,7 @@ def index(subgraph_id=None):
     if subgraph is None:
         abort(404)
 
-    return render_template('tool/index.html', subgraph=subgraph)
+    return render_template('tool/index.html', subgraph=subgraph, subgraph_list=subgraph_list)
 
 
 @login_required

@@ -7,12 +7,26 @@ VALUES
 
 INSERT INTO subgraph (name, finished)
 VALUES
-  ('subgraph1', 0);
+  ('subgraph1', 0),
+  ('subgraph2', 1),
+  ('subgraph3', 0),
+  ('subgraph4', 1),
+  ('subgraph5', 0),
+  ('subgraph6', 1),
+  ('subgraph7', 0),
+  ('This is a subgraph with a very very very very very very very very very very very very very very very very very long name', 1);
 
 INSERT INTO access (user_id, subgraph_id)
 VALUES
-  (1, 1);
+  (1, 1),
+  (1, 2),
+  (1, 3),
+  (1, 4),
+  (1, 5),
+  (1, 6),
+  (1, 7),
+  (1, 8);
 
-INSERT INTO knowledge (subgraph_id, author_id, created, subject, predicate, object)
+INSERT INTO knowledge (subgraph_id, author_id, subject, predicate, object)
 VALUES
-  (1, 1, '2020-01-01 00:00:00', 'Fritz', 'loves', 'Franz');
+  (1, 1, 'Fritz', 'loves', 'Franz');

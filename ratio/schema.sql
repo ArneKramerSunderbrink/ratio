@@ -26,14 +26,12 @@ CREATE TABLE access (
 );
 
 -- RDF triples with additional information about
--- the subgraph of the knowledge base, e.g. specifying that it's knowledge about a specific clinical trial
--- the author who added the triple to the knowledgebase
--- and the time point of creation
+-- the subgraph of the knowledge base, e.g. specifying that it's knowledge about a specific clinical trial,
+-- and the author who added the triple to the knowledgebase
 CREATE TABLE knowledge (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   subgraph_id INTEGER NOT NULL,
   author_id INTEGER NOT NULL,
-  created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   subject TEXT NOT NULL,
   predicate TEXT NOT NULL,
   object TEXT NOT NULL,
