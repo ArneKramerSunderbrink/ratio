@@ -22,8 +22,8 @@ body {
 
 #scroll-container {
   height: 100%;
-  width: 100%;
   overflow: auto;
+  width: 100%;
 }
 
 #overlay {
@@ -35,13 +35,23 @@ body {
   overflow: auto;
 }
 
+#subgraph-list div {
+  padding: 0;
+}
+
 #subgraph-list a {
+  text-align: left;
   text-overflow: ellipsis;
+  width: 90%;
   white-space: pre;
 }
 
 #subgraph-list a:hover {
   text-overflow: clip;
   white-space: normal;
-  word-break: break-all;
+  word-break: break-word;
+}
+
+#subgraph-list label {
+  width: 10%;
 }
