@@ -2,11 +2,11 @@
 
 <header class="w3-bar w3-card w3-blue" id="flex-header">
   {% if subgraph['id'] %}
-  <a href="#" id="subgraph_name" class="w3-bar-item w3-button">{{ subgraph['name'] }}</a>
+  <a href="#" id="subgraph-name" class="w3-bar-item w3-button">{{ subgraph['name'] }}</a>
   <input type="checkbox" id="finished" style="display: none"
          {% if subgraph['finished']%}checked{% endif %}>
   <label for="finished" class="w3-bar-item w3-button">
-    <i class="fa fa-{% if subgraph['finished']%}check-{% endif %}square"></i> Finished
+    <i class="fa {{ 'fa-check-square' if subgraph['finished'] else 'fa-square' }}"></i> Finished
   </label>
   {% endif %}
   <div class="w3-right">

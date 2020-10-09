@@ -9,11 +9,22 @@
            class="w3-button">{{ s['name'] }}</a>
         <input type="checkbox" id="finished-{{ s['id'] }}" style="display: none"
                {% if s['finished']%}checked{% endif %}>
-        <label for="finished-{{ s['id'] }}" class="w3-button w3-right">
-          <i class="fa fa-{% if s['finished']%}check-{% endif %}square"></i>
+        <label for="finished-{{ s['id'] }}" class="w3-button w3-right"
+               title="{{ 'Finished' if s['finished'] else 'Not finished' }}">
+          <i class="fa {{ 'fa-check-square' if s['finished'] else 'fa-square' }} fa-lg"></i>
         </label>
       </div>
     {% endfor %}
   </div>
-  <a class="w3-button w3-margin-top w3-margin-bottom w3-light-blue">NEW SUBGRAPH</a>
+  <button class="w3-button w3-margin-top w3-margin-bottom w3-light-blue" id="new-subgraph">New subgraph</button>
+  <form class="w3-bar w3-margin-top w3-margin-bottom w3-animate-opacity" style="display: none" id="new-subgraph-form" method="post">
+    <input class="w3-bar-item w3-input" style="width: 80%"
+           type="text" placeholder="Subgraph name.." name="name" id="new-subgraph-name" required>
+    <button type="submit" class="w3-bar-item w3-button" style="width: 10%" title="Add subgraph">
+      <i class="fas fa-plus fa-lg"></i>
+    </button>
+    <a href="#" class="w3-bar-item w3-button" style="width: 10%" title="Cancel" id="new-subgraph-cancel">
+      <i class="fas fa-times fa-lg"></i>
+    </a>
+  </form>
 </div>
