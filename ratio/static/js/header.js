@@ -8,7 +8,7 @@ $(function() {
       overlay.css('display', 'none');
     }
 
-    return false
+    return false;
   });
 });
 

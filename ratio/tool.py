@@ -8,6 +8,7 @@ from flask import session
 from flask import url_for
 from flask import jsonify
 from werkzeug.exceptions import abort
+from sqlite3 import IntegrityError
 
 from ratio.auth import login_required
 from ratio.db import get_db
@@ -67,3 +68,34 @@ def set_finished():
         return jsonify(finished=finished)
     else:
         abort(404)
+
+
+@login_required
+@bp.route('/_add_subgraph')
+def add_subgraph():
+    user_id = session['user_id']
+    subgraph_name = request.args.get('name', '', type=str)
+
+    if not subgraph_name or subgraph_name.isspace():
+        return jsonify(error='Subgraph name cannot be empty.')
+
+    db = get_db()
+    try:
+        db.execute(
+            'INSERT INTO subgraph (name, finished) VALUES (?, ?)',
+            (subgraph_name, False),
+        )
+    except IntegrityError:
+        return jsonify(error='A subgraph of that name already exists.')
+
+    subgraph = db.execute(
+        'SELECT * FROM subgraph WHERE name = ?', (subgraph_name,)
+    ).fetchone()
+
+    db.execute(
+        'INSERT INTO access (user_id, subgraph_id) VALUES (?, ?)',
+        (user_id, subgraph['id']),
+    )
+
+    db.commit()
+    return jsonify(redirect=url_for("tool.index", subgraph_id=subgraph['id']))

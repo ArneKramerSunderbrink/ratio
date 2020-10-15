@@ -23,12 +23,32 @@ $(function() {
     $('button#new-subgraph').css('display', 'none');
     $('form#new-subgraph-form').css('display', 'block');
     $('input#new-subgraph-name').focus();
-    return false
+    return false;
   });
 
   $('a#new-subgraph-cancel').bind('click', function() {
     $('button#new-subgraph').css('display', 'block');
     $('form#new-subgraph-form').css('display', 'none');
-    return false
+    $('div#subgraph-menu-error').css('display', 'none');
+    return false;
+  });
+});
+
+// add subgraph
+$(function() {
+  $('form#new-subgraph-form').submit(function() {
+    var data = $(this).serialize();
+
+    $.getJSON($SCRIPT_ROOT + '_add_subgraph', data, function(data) {
+      if (data.error) {
+        $('div#subgraph-menu-error').text(data.error);
+        $('div#subgraph-menu-error').css('display', 'block');
+      } else {
+        window.location = data.redirect;
+      }
+    })
+    .fail(function() { alert('getJSON request failed!'); });
+
+    return false;
   });
 });

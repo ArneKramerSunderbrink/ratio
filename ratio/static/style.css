@@ -30,6 +30,10 @@ body {
   position: absolute; /* Sit on top of the section content */
 }
 
+.w3-modal-content {
+  background-color: transparent;
+}
+
 #subgraph-list {
   height: 35vh;
   overflow: auto;
