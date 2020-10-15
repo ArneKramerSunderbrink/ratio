@@ -1,17 +1,18 @@
 // Filter
 $(function() {
   $('input#subgraph-filter').bind('keyup', function() {
-    var input, filter, ul, li, a, i;
+    var input, filter, div, entries, a, txtValue;
     input = document.getElementById('subgraph-filter');
     filter = input.value.toUpperCase();
     div = document.getElementById('subgraph-list');
-    a = div.getElementsByTagName('a');
-    for (i = 0; i < a.length; i++) {
-      txtValue = a[i].textContent || a[i].innerText;
+    entries = div.children;
+    for (i = 0; i < entries.length; i++) {
+      a = entries[i].getElementsByTagName('a')[0];
+      txtValue = a.textContent || a.innerText;
       if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        a[i].style.display = '';
+        entries[i].style.display = '';
       } else {
-        a[i].style.display = 'none';
+        entries[i].style.display = 'none';
       }
     }
   });
