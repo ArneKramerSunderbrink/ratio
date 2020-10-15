@@ -1,15 +1,18 @@
 // toggle overlay
-$(function() {
-  $('a#subgraph-name').bind('click', function() {
-    overlay = $('div#overlay');
-    if (overlay.css('display') == 'none') {
-      overlay.css('display', 'block');
-    } else {
-      overlay.css('display', 'none');
-    }
+function toggle_overlay() {
+  overlay = $('div#overlay');
+  if (overlay.css('display') == 'none') {
+    overlay.css('display', 'block');
+  } else {
+    overlay.css('display', 'none');
+  }
 
-    return false;
-  });
+  return false;
+}
+
+$(function() {
+  $('a#subgraph-name').bind('click', toggle_overlay);
+  $('a#close-overlay').bind('click', toggle_overlay);
 });
 
 // finished checkboxes
