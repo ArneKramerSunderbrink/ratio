@@ -13,23 +13,48 @@
     <td>{{ k['predicate'] }}</td>
     <td>{{ k['object'] }}</td>
     <td>
-      <a href="#" class="w3-button" title="Edit knowledge">
+      <a href="#" class="w3-button" title="Edit knowledge" id="edit-{{ k['id'] }}">
         <i class="fas fa-pen fa-lg"></i>
       </a>
     </td>
+  </tr>
+  <tr style="display: none">
+    <form id="edit-knowledge-form-{{ k['id'] }}">
+    <input type="hidden" name="subgraph_id" value="{{ subgraph['id'] }}">
+    <td>
+      <input class="w3-input" type="text" name="subject" value="{{ k['subject'] }}" required>
+    </td>
+    <td>
+      <input class="w3-input" type="text" name="predicate" value="{{ k['predicate'] }}" required>
+    </td>
+    <td>
+      <input class="w3-input" type="text" name="object" value="{{ k['object'] }}" required>
+    </td>
+    <td>
+      <button type="submit" class="w3-button" title="Save changes">
+        <i class="fas fa-save fa-lg"></i>
+      </button>
+      <a href="#" class="w3-button" title="Delete knowledge" id="delete-{{ k['id'] }}">
+        <i class="fas fa-trash fa-lg"></i>
+      </a>
+      <a href="#" class="w3-button" title="Cancel" id="cancel-edit-{{ k['id'] }}">
+        <i class="fas fa-times fa-lg"></i>
+      </a>
+    </td>
+    </form>
   </tr>
   {% endfor %}
   <tr>
     <form id="new-knowledge-form">
     <input type="hidden" name="subgraph_id" value="{{ subgraph['id'] }}">
     <td>
-      <input class="w3-input" type="text" placeholder="Subject" name="subject" id="subject" required>
+      <input class="w3-input" type="text" placeholder="Subject" name="subject" required>
     </td>
     <td>
-      <input class="w3-input" type="text" placeholder="Predicate" name="predicate" id="predicate" required>
+      <input class="w3-input" type="text" placeholder="Predicate" name="predicate" required>
     </td>
     <td>
-      <input class="w3-input" type="text" placeholder="Object" name="object" id="object" required>
+      <input class="w3-input" type="text" placeholder="Object" name="object" required>
     </td>
     <td>
       <button type="submit" class="w3-button" title="Add knowledge">

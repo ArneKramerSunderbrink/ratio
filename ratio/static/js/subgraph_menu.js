@@ -1,7 +1,7 @@
 // Filter
 $(function() {
   $('input#subgraph-filter').bind('keyup', function() {
-    var input, filter, div, entries, a, txtValue;
+    var input, filter, div, entries, i, a, txtValue;
     input = document.getElementById('subgraph-filter');
     filter = input.value.toUpperCase();
     div = document.getElementById('subgraph-list');
