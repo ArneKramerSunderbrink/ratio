@@ -1,10 +1,7 @@
 from flask import Blueprint
-from flask import flash
 from flask import g
-from flask import redirect
 from flask import render_template
 from flask import request
-from flask import session
 from flask import url_for
 from flask import jsonify
 from werkzeug.exceptions import abort
@@ -21,7 +18,7 @@ bp = Blueprint('tool', __name__)
 @login_required
 def index(subgraph_id=None):
     """Show all the posts, most recent first.""" #todo docu machen
-    user_id = session['user_id']
+    user_id = g.user['id']
     db = get_db()
 
     # for the subgraph menu
@@ -73,7 +70,7 @@ def set_finished():
 @login_required
 @bp.route('/_add_subgraph')
 def add_subgraph():
-    user_id = session['user_id']
+    user_id = g.user['id']
     subgraph_name = request.args.get('name', '', type=str)
 
     if not subgraph_name or subgraph_name.isspace():
