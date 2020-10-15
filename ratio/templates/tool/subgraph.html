@@ -1,0 +1,41 @@
+<script src="{{ url_for('static', filename='js/subgraph.js') }}" defer></script>
+
+<table class="w3-table w3-hoverable">
+  <tr>
+    <th>Subject</th>
+    <th>Predicate</th>
+    <th>Object</th>
+    <th></th>
+  </tr>
+  {% for k in knowledge %}
+  <tr>
+    <td>{{ k['subject'] }}</td>
+    <td>{{ k['predicate'] }}</td>
+    <td>{{ k['object'] }}</td>
+    <td>
+      <a href="#" class="w3-button" title="Edit knowledge">
+        <i class="fas fa-pen fa-lg"></i>
+      </a>
+    </td>
+  </tr>
+  {% endfor %}
+  <tr>
+    <form id="new-knowledge-form">
+    <input type="hidden" name="subgraph_id" value="{{ subgraph['id'] }}">
+    <td>
+      <input class="w3-input" type="text" placeholder="Subject" name="subject" id="subject" required>
+    </td>
+    <td>
+      <input class="w3-input" type="text" placeholder="Predicate" name="predicate" id="predicate" required>
+    </td>
+    <td>
+      <input class="w3-input" type="text" placeholder="Object" name="object" id="object" required>
+    </td>
+    <td>
+      <button type="submit" class="w3-button" title="Add knowledge">
+        <i class="fas fa-plus fa-lg"></i>
+      </button>
+    </td>
+    </form>
+  </tr>
+</table>

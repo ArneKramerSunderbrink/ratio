@@ -11,13 +11,8 @@
   {% include 'tool/header.html' %}
 
   <section id="flex-body">
-    <div id="scroll-container">
-      <nobr>THIS IS A LONG LINE - THIS IS A LONG LINE - THIS IS A LONG LINE - THIS IS A LONG LINE - THIS IS A LONG LINE -
-        THIS IS A LONG LINE - THIS IS A LONG LINE - THIS IS A LONG LINE - THIS IS A LONG LINE - THIS IS A LONG LINE -
-        THIS IS A LONG LINE</nobr>
-      <br>
-      TEST <br> TEST <br> TEST <br> TEST <br> TEST <br> TEST <br> TEST <br> TEST <br> TEST <br> TEST <br> TEST <br> TEST
-      <br> TEST <br> TEST <br> TEST <br>TEST <br> TEST <br>TEST <br> TEST <br> Test
+    <div class="w3-padding" id="scroll-container">
+      {% if subgraph['id'] %}{% include 'tool/subgraph.html' %}{% endif %}
     </div>
 
     <div class="w3-modal" id="overlay" {% if not subgraph['id'] %}style="display: block"{% endif %}>

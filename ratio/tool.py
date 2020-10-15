@@ -43,7 +43,11 @@ def index(subgraph_id=None):
     if subgraph is None:
         abort(404)
 
-    return render_template('tool/index.html', subgraph=subgraph, subgraph_list=subgraph_list)
+    knowledge = db.execute(
+        'SELECT * FROM knowledge WHERE subgraph_id = ?', (subgraph_id,)
+    )
+
+    return render_template('tool/index.html', subgraph=subgraph, knowledge=knowledge, subgraph_list=subgraph_list)
 
 
 @login_required
@@ -80,7 +84,7 @@ def add_subgraph():
     try:
         db.execute(
             'INSERT INTO subgraph (name, finished) VALUES (?, ?)',
-            (subgraph_name, False),
+            (subgraph_name, False)
         )
     except IntegrityError:
         return jsonify(error='A subgraph of that name already exists.')
@@ -91,8 +95,49 @@ def add_subgraph():
 
     db.execute(
         'INSERT INTO access (user_id, subgraph_id) VALUES (?, ?)',
-        (user_id, subgraph['id']),
+        (user_id, subgraph['id'])
     )
 
     db.commit()
     return jsonify(redirect=url_for("tool.index", subgraph_id=subgraph['id']))
+
+
+@login_required
+@bp.route('/_add_knowledge')
+def add_knowledge():
+    user_id = g.user['id']
+    subgraph_id = request.args.get('subgraph_id', 0, type=int)
+    rdf_subject = request.args.get('subject', '', type=str)
+    rdf_predicate = request.args.get('predicate', '', type=str)
+    rdf_object = request.args.get('object', '', type=str)
+
+    if not subgraph_id:
+        return jsonify(error='Subgraph id cannot be empty.')
+    if not rdf_subject or rdf_subject.isspace():
+        return jsonify(error='Subject cannot be empty.')
+    if not rdf_predicate or rdf_predicate.isspace():
+        return jsonify(error='Predicate cannot be empty.')
+    if not rdf_object or rdf_object.isspace():
+        return jsonify(error='Object cannot be empty.')
+
+    db = get_db()
+    db_cursor = db.cursor()
+
+    subgraph_exists = db_cursor.execute(
+        'SELECT EXISTS (SELECT 1 FROM subgraph WHERE id = ?)', (subgraph_id,)
+    )
+
+    if not subgraph_exists:
+        return jsonify(error='Subgraph with id {} does not exist.'.format(subgraph_id))
+
+    # todo check if user has access to subgraph
+
+    db_cursor.execute(
+        'INSERT INTO knowledge (subgraph_id, author_id, subject, predicate, object) VALUES (?, ?, ?, ?, ?)',
+        (subgraph_id, user_id, rdf_subject, rdf_predicate, rdf_object)
+    )
+    knowledge_id = db_cursor.lastrowid
+
+    db.commit()
+
+    return jsonify(knowledge_id=knowledge_id, subject=rdf_subject, predicate=rdf_predicate, object=rdf_object)

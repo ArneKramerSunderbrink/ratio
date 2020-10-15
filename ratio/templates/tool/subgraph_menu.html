@@ -2,11 +2,12 @@
 
 <div class="w3-container w3-card-4 w3-blue">
   <div class="w3-bar w3-margin-top">
-  <input class="w3-input w3-border w3-padding w3-bar-item" style="width: 90%"
-         type="text" placeholder="Search for subgraphs.." id="subgraph-filter">
-  <a href="#" class="w3-bar-item w3-button w3-right" title="Close" id="close-overlay">
-    <i class="fas fa-times fa-lg"></i>
-  </a>
+    <input class="w3-input w3-border w3-padding w3-bar-item" style="width: {{90 if subgraph['id'] else 100 }}%"
+           type="text" placeholder="Search for subgraphs.." id="subgraph-filter">
+    <a href="#" class="w3-bar-item w3-button w3-right" title="Close" id="close-overlay"
+       style="display: {{ 'block' if subgraph['id'] else 'none' }}">
+      <i class="fas fa-times fa-lg"></i>
+    </a>
   </div>
   <div class="w3-bar-block w3-margin-top" id="subgraph-list">
     {% for s in subgraph_list %}
