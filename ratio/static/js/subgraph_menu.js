@@ -40,7 +40,7 @@ $(function() {
   $('form#new-subgraph-form').submit(function() {
     var data = $(this).serialize();
 
-    $.getJSON($SCRIPT_ROOT + '_add_subgraph', data, function(data) {
+    $.getJSON($SCRIPT_ROOT + '/_add_subgraph', data, function(data) {
       if (data.error) {
         $('div#subgraph-menu-error').text(data.error);
         $('div#subgraph-menu-error').css('display', 'block');

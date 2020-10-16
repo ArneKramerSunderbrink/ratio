@@ -32,7 +32,7 @@ function edit_knowledge() {
   data.push({ name: "knowledge_id", value: knowledge_id });
   data.push({ name: "subgraph_id", value: $SUBGRAPH_ID });
 
-  $.getJSON($SCRIPT_ROOT + '_edit_knowledge', data, function(data) {
+  $.getJSON($SCRIPT_ROOT + '/_edit_knowledge', data, function(data) {
     if (data.error) {
       alert(data.error); //todo add element to page to display error
     } else {
@@ -62,7 +62,7 @@ function delete_knowledge() {
 
   // todo: add a "are you sure?" - dialog?
 
-  $.getJSON($SCRIPT_ROOT + '_delete_knowledge', {knowledge_id: knowledge_id, subgraph_id: $SUBGRAPH_ID}, function(data) {
+  $.getJSON($SCRIPT_ROOT + '/_delete_knowledge', {knowledge_id: knowledge_id, subgraph_id: $SUBGRAPH_ID}, function(data) {
       if (data.error) {
         alert(data.error); //todo add element to page to display error
       } else {
@@ -90,7 +90,7 @@ $(function() {
     var data = $(this).serializeArray();
     data.push({ name: "subgraph_id", value: $SUBGRAPH_ID });
 
-    $.getJSON($SCRIPT_ROOT + '_add_knowledge', data, function(data) {
+    $.getJSON($SCRIPT_ROOT + '/_add_knowledge', data, function(data) {
       if (data.error) {
         alert(data.error); //todo add element to page to display error
       } else {

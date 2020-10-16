@@ -21,7 +21,7 @@ def login_required(view):
     @wraps(view)
     def wrapped_view(*args, **kwargs):
         if g.user is None:
-            return redirect(url_for('auth.login', next_url=request.url))
+            return redirect(url_for('auth.login', next_url=request.full_path))
 
         return view(*args, **kwargs)
 
@@ -43,10 +43,9 @@ def load_logged_in_user():
 
 
 @bp.route('/login', methods=('GET', 'POST'))
-@bp.route('/login/<path:next_url>', methods=('GET', 'POST'))
-def login(next_url=None):
+def login():
     """Log in a registered user by adding the user id to the session."""
-    print(next_url)
+
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -65,8 +64,9 @@ def login(next_url=None):
             # store the user id in a new session and return to the index
             session.clear()
             session['user_id'] = user['id']
+            next_url = request.args.get('next_url', '', type=str)
             if next_url:
-                return redirect(next_url)
+                return redirect(request.script_root + next_url)
             else:
                 return redirect(url_for('tool.index'))
 

@@ -46,7 +46,7 @@ function toggle_finished() {
     }
   }
 
-  $.getJSON($SCRIPT_ROOT + '_set_finished', {subgraph_id: subgraph_id, finished: finished})
+  $.getJSON($SCRIPT_ROOT + '/_set_finished', {subgraph_id: subgraph_id, finished: finished})
   .fail(function() { alert('getJSON request failed!'); });
 
   return false;
