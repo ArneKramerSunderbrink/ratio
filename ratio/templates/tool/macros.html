@@ -1,5 +1,5 @@
 {% macro knowledge_row(knowledge_id, subgraph_id, subject, predicate, object) %}
-  <tr>
+  <tr id="tr-{{ knowledge_id }}">
     <td>{{ subject }}</td>
     <td>{{ predicate }}</td>
     <td>{{ object }}</td>
@@ -9,10 +9,8 @@
       </a>
     </td>
   </tr>
-  <tr class="w3-animate-opacity" style="display: none">
+  <tr class="w3-animate-opacity" style="display: none" id="tr-edit-{{ knowledge_id }}">
     <form id="edit-knowledge-form-{{ knowledge_id }}">
-      <input type="hidden" name="subgraph_id" value="{{ subgraph_id }}"
-             form="edit-knowledge-form-{{ knowledge_id }}">
       <td>
         <input class="w3-input" type="text" name="subject" value="{{ subject }}"
                form="edit-knowledge-form-{{ knowledge_id }}" required>

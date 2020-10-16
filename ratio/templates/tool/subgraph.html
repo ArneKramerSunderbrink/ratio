@@ -14,18 +14,21 @@
   {% endfor %}
   <tr>
     <form id="new-knowledge-form">
-    <input type="hidden" name="subgraph_id" value="{{ subgraph['id'] }}">
     <td>
-      <input class="w3-input" type="text" placeholder="Subject" name="subject" required>
+      <input class="w3-input" type="text" placeholder="Subject" name="subject"
+             form="new-knowledge-form" required>
     </td>
     <td>
-      <input class="w3-input" type="text" placeholder="Predicate" name="predicate" required>
+      <input class="w3-input" type="text" placeholder="Predicate" name="predicate"
+             form="new-knowledge-form" required>
     </td>
     <td>
-      <input class="w3-input" type="text" placeholder="Object" name="object" required>
+      <input class="w3-input" type="text" placeholder="Object" name="object"
+             form="new-knowledge-form" required>
     </td>
     <td>
-      <button type="submit" class="w3-button" title="Add knowledge">
+      <button type="submit" class="w3-button" title="Add knowledge"
+              form="new-knowledge-form">
         <i class="fas fa-plus fa-lg"></i>
       </button>
     </td>

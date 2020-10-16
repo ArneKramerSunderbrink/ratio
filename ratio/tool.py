@@ -104,6 +104,48 @@ def add_subgraph():
 
 
 @login_required
+@bp.route('/_delete_knowledge')
+def delete_knowledge():
+    user_id = g.user['id']
+    knowledge_id = request.args.get('knowledge_id', 0, type=int)
+    subgraph_id = request.args.get('subgraph_id', 0, type=int)
+
+    if not subgraph_id:
+        return jsonify(error='Subgraph id cannot be empty.')
+    if not knowledge_id:
+        return jsonify(error='Knowledge id cannot be empty.')
+
+    db = get_db()
+    db_cursor = db.cursor()
+
+    subgraph_exists = db_cursor.execute(
+        'SELECT EXISTS (SELECT 1 FROM subgraph WHERE id = ?)', (subgraph_id,)
+    ).fetchone()[0]
+
+    if not subgraph_exists:
+        return jsonify(error='Subgraph with id {} does not exist.'.format(subgraph_id))
+
+    #todo check if user owns subgraph
+
+    knowledge_exists = db_cursor.execute(
+        'SELECT EXISTS (SELECT 1 FROM knowledge WHERE id = ? AND subgraph_id = ?)', (knowledge_id, subgraph_id)
+    ).fetchone()[0]
+
+    if not knowledge_exists:
+        return jsonify(error='Knowledge with id {} in subgraph with id {} does not exist.'
+                       .format(knowledge_id, subgraph_id))
+
+    db_cursor.execute(
+        'DELETE FROM knowledge WHERE id = ?', (knowledge_id,)
+    )
+
+    db.commit()
+
+    return jsonify(knowledge_id=knowledge_id)
+
+
+
+@login_required
 @bp.route('/_add_knowledge')
 def add_knowledge():
     user_id = g.user['id']
@@ -126,7 +168,7 @@ def add_knowledge():
 
     subgraph_exists = db_cursor.execute(
         'SELECT EXISTS (SELECT 1 FROM subgraph WHERE id = ?)', (subgraph_id,)
-    )
+    ).fetchone()[0]
 
     if not subgraph_exists:
         return jsonify(error='Subgraph with id {} does not exist.'.format(subgraph_id))
