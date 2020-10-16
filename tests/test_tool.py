@@ -3,7 +3,7 @@ import pytest
 
 def test_index(client, auth):
     response = client.get("/")
-    assert response.headers["Location"] == "http://localhost/login"
+    assert response.headers["Location"] == "http://localhost/login/http://localhost/"
 
     auth.login()
     response = client.get("/")
