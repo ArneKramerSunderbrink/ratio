@@ -37,14 +37,20 @@ def index(subgraph_id=None):
         subgraph = {'id': 0, 'name': '', 'finished': False}
         return render_template('tool/index.html', subgraph=subgraph, subgraph_list=subgraph_list)
 
-    # todo testen ob dem user der subgraph gehört (gen function schreiben) abort(403)
-
     subgraph = db.execute(
         'SELECT * FROM subgraph WHERE id = ?', (subgraph_id,)
     ).fetchone()
 
     if subgraph is None:
         abort(404)
+
+    subgraph_access = db.execute(
+        'SELECT EXISTS (SELECT 1 FROM access WHERE user_id = ? AND subgraph_id = ?)',
+        (user_id, subgraph_id)
+    ).fetchone()[0]
+
+    if not subgraph_access:
+        abort(403)
 
     knowledge = db.execute(
         'SELECT * FROM knowledge WHERE subgraph_id = ?', (subgraph_id,)
@@ -56,15 +62,22 @@ def index(subgraph_id=None):
 @bp.route('/_set_finished')
 @login_required
 def set_finished():
+    user_id = g.user['id']
     subgraph_id = request.args.get('subgraph_id', 0, type=int)
     finished = request.args.get('finished', '', type=str)
 
-    # todo testen ob es den subgraph gibt abort(404)
-    # todo testen ob dem user der subgraph gehört (gen function schreiben) abort(403)
+    db = get_db()
+
+    subgraph_access = db.execute(
+        'SELECT EXISTS (SELECT 1 FROM access WHERE user_id = ? AND subgraph_id = ?)',
+        (user_id, subgraph_id)
+    ).fetchone()[0]
+
+    if not subgraph_access:
+        return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
 
     if finished == 'true' or finished == 'false':
         finished = finished == 'true'
-        db = get_db()
         db.execute(
             "UPDATE subgraph SET finished = ? WHERE id = ?", (finished, subgraph_id)
         )
@@ -217,14 +230,13 @@ def add_knowledge():
     db = get_db()
     db_cursor = db.cursor()
 
-    subgraph_exists = db_cursor.execute(
-        'SELECT EXISTS (SELECT 1 FROM subgraph WHERE id = ?)', (subgraph_id,)
+    subgraph_access = db_cursor.execute(
+        'SELECT EXISTS (SELECT 1 FROM access WHERE user_id = ? AND subgraph_id = ?)',
+        (user_id, subgraph_id)
     ).fetchone()[0]
 
-    if not subgraph_exists:
-        return jsonify(error='Subgraph with id {} does not exist.'.format(subgraph_id))
-
-    # todo check if user has access to subgraph
+    if not subgraph_access:
+        return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
 
     db_cursor.execute(
         'INSERT INTO knowledge (subgraph_id, author_id, subject, predicate, object) VALUES (?, ?, ?, ?, ?)',
