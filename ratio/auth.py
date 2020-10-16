@@ -1,5 +1,3 @@
-import functools
-
 from flask import Blueprint
 from flask import flash
 from flask import g
@@ -8,6 +6,7 @@ from flask import render_template
 from flask import request
 from flask import session
 from flask import url_for
+from functools import wraps
 from werkzeug.security import check_password_hash
 from werkzeug.security import generate_password_hash
 
@@ -19,12 +18,12 @@ bp = Blueprint('auth', __name__)
 def login_required(view):
     """View decorator that redirects anonymous users to the login page."""
 
-    @functools.wraps(view)
-    def wrapped_view(**kwargs):
+    @wraps(view)
+    def wrapped_view(*args, **kwargs):
         if g.user is None:
-            return redirect(url_for('auth.login'))
+            return redirect(url_for('auth.login', next_url=request.url))
 
-        return view(**kwargs)
+        return view(*args, **kwargs)
 
     return wrapped_view
 
@@ -44,8 +43,10 @@ def load_logged_in_user():
 
 
 @bp.route('/login', methods=('GET', 'POST'))
-def login():
+@bp.route('/login/<path:next_url>', methods=('GET', 'POST'))
+def login(next_url=None):
     """Log in a registered user by adding the user id to the session."""
+    print(next_url)
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
@@ -64,7 +65,10 @@ def login():
             # store the user id in a new session and return to the index
             session.clear()
             session['user_id'] = user['id']
-            return redirect(url_for('tool.index'))
+            if next_url:
+                return redirect(next_url)
+            else:
+                return redirect(url_for('tool.index'))
 
         flash(error)
 

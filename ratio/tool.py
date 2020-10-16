@@ -11,6 +11,8 @@ from sqlite3 import IntegrityError
 from ratio.auth import login_required
 from ratio.db import get_db
 
+MSG_SUBGRAPH_ACCESS = 'Subgraph with id {} does not exist or is not owned by user {} currently logged in.'
+
 bp = Blueprint('tool', __name__)
 
 
@@ -51,8 +53,8 @@ def index(subgraph_id=None):
     return render_template('tool/index.html', subgraph=subgraph, knowledge=knowledge, subgraph_list=subgraph_list)
 
 
-@login_required
 @bp.route('/_set_finished')
+@login_required
 def set_finished():
     subgraph_id = request.args.get('subgraph_id', 0, type=int)
     finished = request.args.get('finished', '', type=str)
@@ -72,8 +74,8 @@ def set_finished():
         abort(404)
 
 
-@login_required
 @bp.route('/_add_subgraph')
+@login_required
 def add_subgraph():
     user_id = g.user['id']
     subgraph_name = request.args.get('name', '', type=str)
@@ -103,8 +105,58 @@ def add_subgraph():
     return jsonify(redirect=url_for("tool.index", subgraph_id=subgraph['id']))
 
 
+@bp.route('/_edit_knowledge')
 @login_required
+def edit_knowledge():
+    user_id = g.user['id']
+    knowledge_id = request.args.get('knowledge_id', 0, type=int)
+    subgraph_id = request.args.get('subgraph_id', 0, type=int)
+    rdf_subject = request.args.get('subject', '', type=str)
+    rdf_predicate = request.args.get('predicate', '', type=str)
+    rdf_object = request.args.get('object', '', type=str)
+
+    if not subgraph_id:
+        return jsonify(error='Subgraph id cannot be empty.')
+    if not knowledge_id:
+        return jsonify(error='Knowledge id cannot be empty.')
+    if not rdf_subject or rdf_subject.isspace():
+        return jsonify(error='Subject cannot be empty.')
+    if not rdf_predicate or rdf_predicate.isspace():
+        return jsonify(error='Predicate cannot be empty.')
+    if not rdf_object or rdf_object.isspace():
+        return jsonify(error='Object cannot be empty.')
+
+    db = get_db()
+    db_cursor = db.cursor()
+
+    subgraph_access = db_cursor.execute(
+        'SELECT EXISTS (SELECT 1 FROM access WHERE user_id = ? AND subgraph_id = ?)',
+        (user_id, subgraph_id)
+    ).fetchone()[0]
+
+    if not subgraph_access:
+        return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
+
+    knowledge_exists = db_cursor.execute(
+        'SELECT EXISTS (SELECT 1 FROM knowledge WHERE id = ? AND subgraph_id = ?)', (knowledge_id, subgraph_id)
+    ).fetchone()[0]
+
+    if not knowledge_exists:
+        return jsonify(error='Knowledge with id {} in subgraph with id {} does not exist.'
+                       .format(knowledge_id, subgraph_id))
+
+    db_cursor.execute(
+        'UPDATE knowledge SET subject = ?, predicate = ?, object = ? WHERE id = ?',
+        (rdf_subject, rdf_predicate, rdf_object, knowledge_id)
+    )
+
+    db.commit()
+
+    return jsonify(subject=rdf_subject, predicate=rdf_predicate, object=rdf_object)
+
+
 @bp.route('/_delete_knowledge')
+@login_required
 def delete_knowledge():
     user_id = g.user['id']
     knowledge_id = request.args.get('knowledge_id', 0, type=int)
@@ -118,14 +170,13 @@ def delete_knowledge():
     db = get_db()
     db_cursor = db.cursor()
 
-    subgraph_exists = db_cursor.execute(
-        'SELECT EXISTS (SELECT 1 FROM subgraph WHERE id = ?)', (subgraph_id,)
+    subgraph_access = db_cursor.execute(
+        'SELECT EXISTS (SELECT 1 FROM access WHERE user_id = ? AND subgraph_id = ?)',
+        (user_id, subgraph_id)
     ).fetchone()[0]
 
-    if not subgraph_exists:
-        return jsonify(error='Subgraph with id {} does not exist.'.format(subgraph_id))
-
-    #todo check if user owns subgraph
+    if not subgraph_access:
+        return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
 
     knowledge_exists = db_cursor.execute(
         'SELECT EXISTS (SELECT 1 FROM knowledge WHERE id = ? AND subgraph_id = ?)', (knowledge_id, subgraph_id)
@@ -141,12 +192,12 @@ def delete_knowledge():
 
     db.commit()
 
-    return jsonify(knowledge_id=knowledge_id)
+    return jsonify()
 
 
 
-@login_required
 @bp.route('/_add_knowledge')
+@login_required
 def add_knowledge():
     user_id = g.user['id']
     subgraph_id = request.args.get('subgraph_id', 0, type=int)

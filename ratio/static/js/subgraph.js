@@ -27,10 +27,24 @@ $(function() {
 
 // edit knowledge
 function edit_knowledge() {
-  alert('test');
-  var data = $(this).serialize();
-  alert(data);
-  // todo
+  var data = $(this).serializeArray();
+  var knowledge_id = parseInt(this.id.substring(20));  // 'edit-knowledge-form-123' without 'edit-knowledge-form-'
+  data.push({ name: "knowledge_id", value: knowledge_id });
+  data.push({ name: "subgraph_id", value: $SUBGRAPH_ID });
+
+  $.getJSON($SCRIPT_ROOT + '_edit_knowledge', data, function(data) {
+    if (data.error) {
+      alert(data.error); //todo add element to page to display error
+    } else {
+      $('tr#tr-' + knowledge_id).children().eq(0).text(data.subject);
+      $('tr#tr-' + knowledge_id).children().eq(1).text(data.predicate);
+      $('tr#tr-' + knowledge_id).children().eq(2).text(data.object);
+      $('tr#tr-' + knowledge_id).css('display', 'table-row');
+      $('tr#tr-edit-' + knowledge_id).css('display', 'none');
+    }
+  })
+  .fail(function() { alert('getJSON request failed!'); });
+
   return false;
 }
 
@@ -53,8 +67,8 @@ function delete_knowledge() {
         alert(data.error); //todo add element to page to display error
       } else {
         // remove the corresponding rows
-        $('tr#tr-' + data.knowledge_id).remove();
-        $('tr#tr-edit-' + data.knowledge_id).remove();
+        $('tr#tr-' + knowledge_id).remove();
+        $('tr#tr-edit-' + knowledge_id).remove();
       }
     })
     .fail(function() { alert('getJSON request failed!'); });
