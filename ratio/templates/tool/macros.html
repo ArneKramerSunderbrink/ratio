@@ -1,0 +1,42 @@
+{% macro knowledge_row(knowledge_id, subgraph_id, subject, predicate, object) %}
+  <tr>
+    <td>{{ subject }}</td>
+    <td>{{ predicate }}</td>
+    <td>{{ object }}</td>
+    <td>
+      <a href="#" class="w3-button" title="Edit knowledge" id="edit-{{ knowledge_id }}">
+        <i class="fas fa-pen fa-lg"></i>
+      </a>
+    </td>
+  </tr>
+  <tr class="w3-animate-opacity" style="display: none">
+    <form id="edit-knowledge-form-{{ knowledge_id }}">
+      <input type="hidden" name="subgraph_id" value="{{ subgraph_id }}"
+             form="edit-knowledge-form-{{ knowledge_id }}">
+      <td>
+        <input class="w3-input" type="text" name="subject" value="{{ subject }}"
+               form="edit-knowledge-form-{{ knowledge_id }}" required>
+      </td>
+      <td>
+        <input class="w3-input" type="text" name="predicate" value="{{ predicate }}"
+               form="edit-knowledge-form-{{ knowledge_id }}" required>
+      </td>
+      <td>
+        <input class="w3-input" type="text" name="object" value="{{ object }}"
+               form="edit-knowledge-form-{{ knowledge_id }}" required>
+      </td>
+      <td>
+        <button type="submit" class="w3-button" title="Save changes"
+                form="edit-knowledge-form-{{ knowledge_id }}">
+          <i class="fas fa-save fa-lg"></i>
+        </button>
+        <a href="#" class="w3-button" title="Delete knowledge" id="delete-{{ knowledge_id }}">
+          <i class="fas fa-trash fa-lg"></i>
+        </a>
+        <a href="#" class="w3-button" title="Cancel" id="cancel-edit-{{ knowledge_id }}">
+          <i class="fas fa-times fa-lg"></i>
+        </a>
+      </td>
+    </form>
+  </tr>
+{% endmacro %}

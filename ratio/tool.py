@@ -1,6 +1,7 @@
 from flask import Blueprint
 from flask import g
 from flask import render_template
+from flask import get_template_attribute
 from flask import request
 from flask import url_for
 from flask import jsonify
@@ -140,4 +141,8 @@ def add_knowledge():
 
     db.commit()
 
-    return jsonify(knowledge_id=knowledge_id, subject=rdf_subject, predicate=rdf_predicate, object=rdf_object)
+    render_knowledge_row = get_template_attribute('tool/macros.html', 'knowledge_row')
+    knowledge_row = render_knowledge_row(knowledge_id, subgraph_id, rdf_subject, rdf_predicate, rdf_object)
+
+    return jsonify(knowledge_id=knowledge_id, subject=rdf_subject, predicate=rdf_predicate, object=rdf_object,
+                   knowledge_row=knowledge_row)

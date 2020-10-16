@@ -3,12 +3,14 @@ function display_edit_knowledge() {
   var id = parseInt(this.id.substring(5));  // 'edit-123' without 'edit-'
   $(this).parent().parent().css('display', 'none');
   $('form#edit-knowledge-form-' + id).parent().css('display', 'table-row');
+  return false;
 }
 
 function hide_edit_knowledge() {
   var id = parseInt(this.id.substring(12));  // 'cancel-edit-123' without 'cancel-edit-'
   $('form#edit-knowledge-form-' + id).parent().css('display', 'none');
   $('a#edit-' + id).parent().parent().css('display', 'table-row');
+  return false;
 }
 
 $(function() {
@@ -25,6 +27,7 @@ $(function() {
 
 // edit knowledge
 function edit_knowledge() {
+  alert('test');
   var data = $(this).serialize();
   alert(data);
   // todo
@@ -65,21 +68,12 @@ $(function() {
         alert(data.error); //todo add element to page to display error
       } else {
         // add row to table above the form
-        $('form#new-knowledge-form').parent().before(`
-          <tr class="w3-animate-opacity">
-            <td>${ data.subject }</td>
-            <td>${ data.predicate }</td>
-            <td>${ data.object }</td>
-            <td>
-              <a href="#" class="w3-button" title="Edit knowledge" id="edit-${ data.knowledge_id }">
-                <i class="fas fa-pen fa-lg"></i>
-              </a>
-            </td>
-          </tr> // todo: add the form
-        `);
+        $('form#new-knowledge-form').parent().before(data.knowledge_row);
 
         $('a#edit-' + data.knowledge_id).bind('click', display_edit_knowledge);
-        // todo add functionality to the form buttons
+        $('form#edit-knowledge-form-' + data.knowledge_id).submit(edit_knowledge);
+        $('a#delete-' + data.knowledge_id).bind('click', delete_knowledge);
+        $('a#cancel-edit-' + data.knowledge_id).bind('click', hide_edit_knowledge);
 
         $('form#new-knowledge-form')[0].reset();
       }
