@@ -23,3 +23,7 @@ flask db-add-dummy
 echo "SECRET_KEY = b'\x99<\xa5\xd5Q\xd5\xc3\xa8\x8b\x11R\xc7\xd54\x93j'" > venv/var/ratio-instance/config.py
 # Prepends URL_PREFIX to all routes (including static etc.), comment or set to '' if you don't want any
 echo "URL_PREFIX = '/ratio'" >> venv/var/ratio-instance/config.py
+# Do logging via gunicorn and with the gunicorn level
+echo "GUNICORN_LOGGER = True" >> venv/var/ratio-instance/config.py
+
+touch log.txt

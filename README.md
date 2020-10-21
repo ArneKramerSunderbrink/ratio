@@ -67,7 +67,7 @@ Call:
     
 Run the app with:
 
-    $ gunicorn --worker-class egg:meinheld#gunicorn_worker --config "./gunicorn_conf.py" --daemon "ratio:create_app()"
+    $ gunicorn --config ./gunicorn_conf.py --daemon "ratio:create_app()"
 
 Stop all(!) gunicorn process with:
 
