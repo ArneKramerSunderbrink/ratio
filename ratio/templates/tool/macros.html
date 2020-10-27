@@ -1,3 +1,36 @@
+{% macro subgraph_row(subgraph_id, subgraph_name, subgraph_finished) %}
+  <div class="item">
+    <div class="flex-row flip-frontside-subgraph-list-{{ subgraph_id }}">
+      <a href="{{ url_for('tool.index', subgraph_id=subgraph_id) }}"
+         class="w3-button flex-text">{{ subgraph_name }}</a>
+      <input type="checkbox" id="finished-{{ subgraph_id }}" style="display: none"
+             {% if subgraph_finished %}checked{% endif %}>
+      <label for="finished-{{ subgraph_id }}" class="w3-button flex-fix"
+             title="{{ 'Finished' if subgraph_finished else 'Not finished' }}">
+        <i class="fa {{ 'fa-check-square' if subgraph_finished else 'fa-square' }} fa-lg"></i>
+      </label>
+      <a href="#" class="w3-button flex-fix flip-flipbutton" data-for="subgraph-list-{{ subgraph_id }}" title="Edit subgraph">
+        <i class="fas fa-pen fa-lg"></i>
+      </a>
+    </div>
+    <div class="flip-flipside-subgraph-list-{{ subgraph_id }}" style="display: none">
+      <form class="flex-row">
+        <input class="w3-input flex-input" type="text" name="name" value="{{ subgraph_name }}" required>
+        <button type="submit" class="w3-button flex-fix w3-right" title="Save changes">
+          <i class="fas fa-save fa-lg"></i>
+        </button>
+        <a href="#" class="w3-button flex-fix w3-right" title="Delete subgraph" id="delete-{{ subgraph_id }}">
+          <i class="fas fa-trash fa-lg"></i>
+        </a>
+        <a href="#" class="w3-button flex-fix w3-right flip-frontbutton" data-for="subgraph-list-{{ subgraph_id }}" title="Cancel">
+          <i class="fas fa-times fa-lg"></i>
+        </a>
+      </form>
+    </div>
+  </div>
+{% endmacro %}
+
+
 {% macro knowledge_row(knowledge_id, subgraph_id, subject, predicate, object) %}
   <tr id="tr-{{ knowledge_id }}">
     <td>{{ subject }}</td>

@@ -1,39 +1,32 @@
+{% from "tool/macros.html" import subgraph_row %}
+
 <script src="{{ url_for('static', filename='js/subgraph_menu.js') }}" defer></script>
 
 <div class="w3-container w3-card-4 w3-blue">
-  <div class="w3-bar w3-margin-top">
-    <input class="w3-input w3-border w3-padding w3-bar-item" style="width: {{90 if subgraph['id'] else 100 }}%"
+  <div class="flex-row w3-margin-top">
+    <input class="w3-input flex-input w3-border w3-padding" style="width: {{90 if subgraph['id'] else 100 }}%"
            type="text" placeholder="Search for subgraphs.." id="subgraph-filter">
-    <a href="#" class="w3-bar-item w3-button w3-right" title="Close" id="close-overlay"
+    <a href="#" class="w3-button flex-fix w3-margin-left" title="Close" id="close-overlay"
        style="display: {{ 'block' if subgraph['id'] else 'none' }}">
       <i class="fas fa-times fa-lg"></i>
     </a>
   </div>
-  <div class="w3-bar-block w3-margin-top" id="subgraph-list">
+  <div class="w3-margin-top" id="subgraph-list">
     {% for s in subgraph_list %}
-      <div class="w3-bar-item">
-        <a href="{{ url_for('tool.index', subgraph_id=s['id']) }}"
-           class="w3-button">{{ s['name'] }}</a>
-        <input type="checkbox" id="finished-{{ s['id'] }}" style="display: none"
-               {% if s['finished']%}checked{% endif %}>
-        <label for="finished-{{ s['id'] }}" class="w3-button w3-right"
-               title="{{ 'Finished' if s['finished'] else 'Not finished' }}">
-          <i class="fa {{ 'fa-check-square' if s['finished'] else 'fa-square' }} fa-lg"></i>
-        </label>
-      </div>
+      {{ subgraph_row(s['id'], s['name'], s['finished']) }}
     {% endfor %}
   </div>
-  <div class="w3-margin-top w3-margin-bottom flip-frontside-new-subgraph">
-    <button class="w3-button w3-light-blue flip-flipbutton" data-for="new-subgraph">New subgraph</button>
+  <div class="w3-margin-top w3-margin-bottom flex-row w3-animate-opacity flip-frontside-new-subgraph">
+    <button class="w3-button flex-fix w3-light-blue flip-flipbutton" data-for="new-subgraph">New subgraph</button>
   </div>
-  <div class="w3-bar w3-margin-top w3-margin-bottom w3-animate-opacity flip-flipside-new-subgraph" style="display: none">
-    <form id="new-subgraph-form" method="post">
-      <input class="w3-bar-item w3-input" style="width: 80%"
+  <div class="w3-margin-top w3-margin-bottom w3-animate-opacity flip-flipside-new-subgraph" style="display: none">
+    <form class="flex-row" id="new-subgraph-form" method="post">
+      <input class="w3-input flex-input"
              type="text" placeholder="Subgraph name.." name="name" id="new-subgraph-name" required>
-      <button type="submit" class="w3-bar-item w3-button" style="width: 10%" title="Add subgraph">
+      <button type="submit" class="w3-button flex-fix" title="Add subgraph">
         <i class="fas fa-plus fa-lg"></i>
       </button>
-      <a href="#" class="w3-bar-item w3-button flip-frontbutton" data-for="new-subgraph" style="width: 10%" title="Cancel">
+      <a href="#" class="w3-button flex-fix flip-frontbutton" data-for="new-subgraph" title="Cancel">
         <i class="fas fa-times fa-lg"></i>
       </a>
     </form>

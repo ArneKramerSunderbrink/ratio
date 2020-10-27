@@ -18,23 +18,6 @@ $(function() {
   });
 });
 
-// toggle add subgraph
-/*$(function() {
-  $('button#new-subgraph').bind('click', function() {
-    $('button#new-subgraph').css('display', 'none');
-    $('form#new-subgraph-form').css('display', 'block');
-    $('input#new-subgraph-name').focus();
-    return false;
-  });
-
-  $('a#new-subgraph-cancel').bind('click', function() {
-    $('button#new-subgraph').css('display', 'block');
-    $('form#new-subgraph-form').css('display', 'none');
-    $('div#subgraph-menu-error').css('display', 'none');
-    return false;
-  });
-});*/
-
 // add subgraph
 $(function() {
   $('form#new-subgraph-form').submit(function() {

@@ -4,6 +4,7 @@ body {
   margin: 0;
 }
 
+/* Layout of the tool */
 #flex-container {
   display: flex;
   flex-flow: column;
@@ -26,8 +27,9 @@ body {
   width: 100%;
 }
 
+/* Subgraph list overlay */
 #overlay {
-  position: absolute; /* Sit on top of the section content */
+  position: absolute;
 }
 
 .w3-modal-content {
@@ -43,19 +45,29 @@ body {
   padding: 0;
 }
 
-#subgraph-list a {
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.flex-input {
+  flex: 1 1 0;
+}
+
+.flex-text {
+  flex: 1 1 0;
   text-align: left;
   text-overflow: ellipsis;
-  width: 90%;
   white-space: pre;
 }
 
-#subgraph-list a:hover {
+.flex-text:hover {
   text-overflow: clip;
   white-space: normal;
   word-break: break-word;
 }
 
-#subgraph-list label {
-  width: 10%;
+.flex-fix {
+  flex: 0 0 auto;
 }

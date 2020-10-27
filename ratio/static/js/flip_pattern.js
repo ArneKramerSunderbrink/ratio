@@ -1,6 +1,8 @@
 function flip_front() {
 var id = this.getAttribute('data-for');
-  $('.flip-frontside-' + id).css('display', 'block');
+  // the swapping is done in order for the function to also work with elements that have
+  // display: flex or table-row instead of simply display: block
+  $('.flip-frontside-' + id).css('display', $('.flip-flipside-' + id).css('display'));
   $('.flip-flipside-' + id).css('display', 'none');
   $('.flip-flipside-msg-' + id).css('display', 'none');
   return false;
@@ -8,8 +10,8 @@ var id = this.getAttribute('data-for');
 
 function flip_flip() {
   var id = this.getAttribute('data-for');
+  $('.flip-flipside-' + id).css('display', $('.flip-frontside-' + id).css('display'));
   $('.flip-frontside-' + id).css('display', 'none');
-  $('.flip-flipside-' + id).css('display', 'block');
   $('.flip-flipside-' + id).find('input').first().focus();
   return false;
 }
