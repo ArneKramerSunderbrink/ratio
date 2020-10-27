@@ -1,29 +1,47 @@
-function flip_front() {
-var id = this.getAttribute('data-for');
+function flip_front(id) {
   // the swapping is done in order for the function to also work with elements that have
   // display: flex or table-row instead of simply display: block
-  $('.flip-frontside-' + id).css('display', $('.flip-flipside-' + id).css('display'));
-  $('.flip-flipside-' + id).css('display', 'none');
-  $('.flip-flipside-msg-' + id).css('display', 'none');
+  var frontside, flipside, msg;
+  frontside = $(".flip-frontside[data-flipid='" + id + "']");
+  flipside = $(".flip-flipside[data-flipid='" + id + "']");
+  msg = $(".flip-flipside-msg[data-flipid='" + id + "']");
+
+  if (flipside.css('display') != 'none') {
+    frontside.css('display', flipside.css('display'));
+    flipside.css('display', 'none');
+    msg.css('display', 'none');
+  }
+
   return false;
 }
 
-function flip_flip() {
-  var id = this.getAttribute('data-for');
-  $('.flip-flipside-' + id).css('display', $('.flip-frontside-' + id).css('display'));
-  $('.flip-frontside-' + id).css('display', 'none');
-  $('.flip-flipside-' + id).find('input').first().focus();
+function flip_flip(id) {
+  var frontside, flipside, msg;
+  frontside = $(".flip-frontside[data-flipid='" + id + "']");
+  flipside = $(".flip-flipside[data-flipid='" + id + "']");
+  msg = $(".flip-flipside-msg[data-flipid='" + id + "']");
+
+  if (frontside.css('display') != 'none') {
+    flipside.css('display', frontside.css('display'));
+    frontside.css('display', 'none');
+    flipside.find('input').first().focus();
+  }
+
   return false;
 }
 
 $(function() {
-  var buttons, i;
-  buttons = $('.flip-frontbutton');
-  for (i = 0; i < buttons.length; i++) {
-    $(buttons[i]).bind('click', flip_front);
-  }
-  buttons = $('.flip-flipbutton');
-  for (i = 0; i < buttons.length; i++) {
-    $(buttons[i]).bind('click', flip_flip);
-  }
+  var elements, i;
+  $('.flip-frontbutton').bind('click', function() {
+    flip_front(this.getAttribute('data-flipid'));
+  });
+  $('.flip-flipbutton').bind('click', function() {
+    flip_flip(this.getAttribute('data-flipid'));
+  });
+  $('.flip-flipside').keyup(function(e) {
+    if (e.key === "Escape") {
+      flip_front(this.getAttribute('data-flipid'));
+      e.stopPropagation();
+    }
+  });
 });

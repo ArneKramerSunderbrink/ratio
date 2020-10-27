@@ -16,21 +16,21 @@
       {{ subgraph_row(s['id'], s['name'], s['finished']) }}
     {% endfor %}
   </div>
-  <div class="w3-margin-top w3-margin-bottom flex-row w3-animate-opacity flip-frontside-new-subgraph">
-    <button class="w3-button flex-fix w3-light-blue flip-flipbutton" data-for="new-subgraph">New subgraph</button>
+  <div class="w3-margin-top w3-margin-bottom flex-row w3-animate-opacity flip-frontside" data-flipid="new-subgraph">
+    <button class="w3-button flex-fix w3-light-blue flip-flipbutton" data-flipid="new-subgraph">New subgraph</button>
   </div>
-  <div class="w3-margin-top w3-margin-bottom w3-animate-opacity flip-flipside-new-subgraph" style="display: none">
+  <div class="w3-margin-top w3-margin-bottom w3-animate-opacity flip-flipside" data-flipid="new-subgraph" style="display: none">
     <form class="flex-row" id="new-subgraph-form" method="post">
       <input class="w3-input flex-input"
              type="text" placeholder="Subgraph name.." name="name" id="new-subgraph-name" required>
       <button type="submit" class="w3-button flex-fix" title="Add subgraph">
         <i class="fas fa-plus fa-lg"></i>
       </button>
-      <a href="#" class="w3-button flex-fix flip-frontbutton" data-for="new-subgraph" title="Cancel">
+      <a href="#" class="w3-button flex-fix flip-frontbutton" data-flipid="new-subgraph" title="Cancel">
         <i class="fas fa-times fa-lg"></i>
       </a>
     </form>
   </div>
 </div>
 
-<div class="w3-panel w3-card-4 w3-red flip-flipside-msg-new-subgraph" style="display: none" id="subgraph-menu-error"></div>
+<div class="w3-panel w3-card-4 w3-red flip-flipside-msg" data-flipid="new-subgraph" style="display: none" id="subgraph-menu-error"></div>
