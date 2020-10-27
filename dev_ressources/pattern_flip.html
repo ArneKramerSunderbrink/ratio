@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flip Pattern</title>
+</head>
+<body>
+<p>
+  <button class="flip-frontbutton" data-for="123"> Show front side</button>
+<p>
+  <button class="flip-flipbutton" data-for="123">Show flip side</button>
+
+<p>
+  <div class="flip-frontside-123">Front side</div>
+  <div class="flip-flipside-123" style="display: none">
+    Flip side
+    <input type="text">
+    <input type="text" onkeyup="$('.flip-flipside-msg-123').css('display', 'block');">
+  </div>
+<p>
+  Something else
+<p>
+  <div class="flip-flipside-123" style="display: none">Also flip side</div>
+  <div class="flip-flipside-msg-123" style="color: red; display: none">ERROR MESSAGE</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+  // show front side, hide flip side messages
+  function flip_front() {
+    var id = this.getAttribute('data-for');
+    $('.flip-frontside-' + id).css('display', 'block');
+    $('.flip-flipside-' + id).css('display', 'none');
+    $('.flip-flipside-msg-' + id).css('display', 'none');
+    return false;
+  }
+
+  // show flip side and focus on first input
+  function flip_flip() {
+    var id = this.getAttribute('data-for');
+    $('.flip-frontside-' + id).css('display', 'none');
+    $('.flip-flipside-' + id).css('display', 'block');
+    $('.flip-flipside-' + id).find('input').first().focus();
+    return false;
+  }
+
+  $(function() {
+    var buttons, i;
+    buttons = $('.flip-frontbutton');
+    for (i = 0; i < buttons.length; i++) {
+      $(buttons[i]).bind('click', flip_front);
+    }
+    buttons = $('.flip-flipbutton');
+    for (i = 0; i < buttons.length; i++) {
+      $(buttons[i]).bind('click', flip_flip);
+    }
+  });
+</script>
+
+</body>
+</html>

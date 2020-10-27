@@ -65,7 +65,7 @@ Call:
     $ chmod +x deploy.sh
     $ source deploy.sh
     
-Run the app with:
+Run the app from the venv with:
 
     $ gunicorn --config ./gunicorn_conf.py --daemon "ratio:create_app()"
 

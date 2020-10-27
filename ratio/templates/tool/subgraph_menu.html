@@ -23,17 +23,21 @@
       </div>
     {% endfor %}
   </div>
-  <button class="w3-button w3-margin-top w3-margin-bottom w3-light-blue" id="new-subgraph">New subgraph</button>
-  <form class="w3-bar w3-margin-top w3-margin-bottom w3-animate-opacity" style="display: none" id="new-subgraph-form" method="post">
-    <input class="w3-bar-item w3-input" style="width: 80%"
-           type="text" placeholder="Subgraph name.." name="name" id="new-subgraph-name" required>
-    <button type="submit" class="w3-bar-item w3-button" style="width: 10%" title="Add subgraph">
-      <i class="fas fa-plus fa-lg"></i>
-    </button>
-    <a href="#" class="w3-bar-item w3-button" style="width: 10%" title="Cancel" id="new-subgraph-cancel">
-      <i class="fas fa-times fa-lg"></i>
-    </a>
-  </form>
+  <div class="w3-margin-top w3-margin-bottom flip-frontside-new-subgraph">
+    <button class="w3-button w3-light-blue flip-flipbutton" data-for="new-subgraph">New subgraph</button>
+  </div>
+  <div class="w3-bar w3-margin-top w3-margin-bottom w3-animate-opacity flip-flipside-new-subgraph" style="display: none">
+    <form id="new-subgraph-form" method="post">
+      <input class="w3-bar-item w3-input" style="width: 80%"
+             type="text" placeholder="Subgraph name.." name="name" id="new-subgraph-name" required>
+      <button type="submit" class="w3-bar-item w3-button" style="width: 10%" title="Add subgraph">
+        <i class="fas fa-plus fa-lg"></i>
+      </button>
+      <a href="#" class="w3-bar-item w3-button flip-frontbutton" data-for="new-subgraph" style="width: 10%" title="Cancel">
+        <i class="fas fa-times fa-lg"></i>
+      </a>
+    </form>
+  </div>
 </div>
 
-<div class="w3-panel w3-card-4 w3-red" style="display: none" id="subgraph-menu-error">MESSAGE WARNUNG MÖP</div>
+<div class="w3-panel w3-card-4 w3-red flip-flipside-msg-new-subgraph" style="display: none" id="subgraph-menu-error"></div>

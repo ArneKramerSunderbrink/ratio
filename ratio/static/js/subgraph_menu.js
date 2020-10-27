@@ -19,7 +19,7 @@ $(function() {
 });
 
 // toggle add subgraph
-$(function() {
+/*$(function() {
   $('button#new-subgraph').bind('click', function() {
     $('button#new-subgraph').css('display', 'none');
     $('form#new-subgraph-form').css('display', 'block');
@@ -33,7 +33,7 @@ $(function() {
     $('div#subgraph-menu-error').css('display', 'none');
     return false;
   });
-});
+});*/
 
 // add subgraph
 $(function() {
@@ -44,6 +44,7 @@ $(function() {
       if (data.error) {
         $('div#subgraph-menu-error').text(data.error);
         $('div#subgraph-menu-error').css('display', 'block');
+        $('input#new-subgraph-name').focus();
       } else {
         window.location = data.redirect;
       }

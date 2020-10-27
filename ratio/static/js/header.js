@@ -13,6 +13,11 @@ function toggle_overlay() {
 $(function() {
   $('a#subgraph-name').bind('click', toggle_overlay);
   $('a#close-overlay').bind('click', toggle_overlay);
+  $(document).keyup(function(e) {
+    if (e.key === "Escape" && $('div#overlay').css('display') == 'block' && $SUBGRAPH_ID != 0) {
+      toggle_overlay();
+    }
+  });
 });
 
 // finished checkboxes
