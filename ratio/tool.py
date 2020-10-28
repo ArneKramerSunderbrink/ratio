@@ -121,9 +121,33 @@ def add_subgraph():
 @bp.route('/_edit_subgraph_name')
 @login_required
 def edit_subgraph_name():
-    print('check')
-    #return jsonify(error='Testerror')
-    return jsonify(name='testname')
+    user_id = g.user['id']
+    subgraph_id = request.args.get('subgraph_id', 0, type=int)
+    subgraph_name = request.args.get('name', '', type=str)
+
+    if not subgraph_id:
+        return jsonify(error='Subgraph id cannot be empty.')
+    if not subgraph_name or subgraph_name.isspace():
+        return jsonify(error='Subgraph name cannot be empty.')
+
+    db = get_db()
+    db_cursor = db.cursor()
+
+    subgraph_access = db_cursor.execute(
+        'SELECT EXISTS (SELECT 1 FROM access WHERE user_id = ? AND subgraph_id = ?)',
+        (user_id, subgraph_id)
+    ).fetchone()[0]
+
+    if not subgraph_access:
+        return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
+
+    db_cursor.execute(
+        'UPDATE subgraph SET name = ? WHERE id = ?',
+        (subgraph_name, subgraph_id)
+    )
+
+    db.commit()
+    return jsonify(name=subgraph_name)
 
 
 @bp.route('/_edit_knowledge')
@@ -214,7 +238,6 @@ def delete_knowledge():
     db.commit()
 
     return jsonify()
-
 
 
 @bp.route('/_add_knowledge')
