@@ -11,8 +11,6 @@ function flip_front(id) {
     flipside.css('display', 'none');
     msg.css('display', 'none');
   }
-
-  return false;
 }
 
 function flip_flip(id) {
@@ -26,17 +24,17 @@ function flip_flip(id) {
     frontside.css('display', 'none');
     flipside.find('input').first().focus();
   }
-
-  return false;
 }
 
 $(function() {
   var elements, i;
   $('.flip-frontbutton').bind('click', function() {
     flip_front(this.getAttribute('data-flipid'));
+    return false;
   });
   $('.flip-flipbutton').bind('click', function() {
     flip_flip(this.getAttribute('data-flipid'));
+    return false;
   });
   $('.flip-flipside').keyup(function(e) {
     if (e.key === "Escape") {

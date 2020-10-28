@@ -71,3 +71,10 @@ body {
 .flex-fix {
   flex: 0 0 auto;
 }
+
+/* Flip Elements */
+.flip-frontside,
+.flip-flipside,
+.flip-flipside-msg {
+  animation: opac 0.5s;
+}

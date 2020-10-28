@@ -115,7 +115,15 @@ def add_subgraph():
     )
 
     db.commit()
-    return jsonify(redirect=url_for("tool.index", subgraph_id=subgraph['id']))
+    return jsonify(redirect=url_for('tool.index', subgraph_id=subgraph['id']))
+
+
+@bp.route('/_edit_subgraph_name')
+@login_required
+def edit_subgraph_name():
+    print('check')
+    #return jsonify(error='Testerror')
+    return jsonify(name='testname')
 
 
 @bp.route('/_edit_knowledge')

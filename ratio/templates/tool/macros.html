@@ -1,5 +1,5 @@
 {% macro subgraph_row(subgraph_id, subgraph_name, subgraph_finished) %}
-  <div class="item">
+  <div class="item" data-subgraph-id="{{ subgraph_id }}">
     <div class="flex-row flip-frontside" data-flipid="subgraph-list-{{ subgraph_id }}">
       <a href="{{ url_for('tool.index', subgraph_id=subgraph_id) }}"
          class="w3-button flex-text">{{ subgraph_name }}</a>
