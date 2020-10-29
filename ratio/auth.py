@@ -80,3 +80,13 @@ def logout():
     """Clear the current session, including the stored user id."""
     session.clear()
     return redirect(url_for('auth.login'))
+
+
+def subgraph_access(user_id, subgraph_id):
+    access = get_db().execute(
+        'SELECT EXISTS ('
+        ' SELECT 1 FROM access JOIN subgraph ON subgraph_id = id WHERE user_id = ? AND subgraph_id = ? AND deleted = 0'
+        ')',
+        (user_id, subgraph_id)
+    ).fetchone()[0]
+    return bool(access)

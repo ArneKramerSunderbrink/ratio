@@ -8,7 +8,7 @@ from flask import jsonify
 from werkzeug.exceptions import abort
 from sqlite3 import IntegrityError
 
-from ratio.auth import login_required
+from ratio.auth import login_required, subgraph_access
 from ratio.db import get_db
 
 MSG_SUBGRAPH_ACCESS = 'Subgraph with id {} does not exist or is not owned by user {} currently logged in.'
@@ -28,7 +28,7 @@ def index(subgraph_id=None):
     subgraph_list = db.execute(
         'SELECT id, name, finished'
         ' FROM access JOIN subgraph ON subgraph_id = id'
-        ' WHERE user_id = ?'
+        ' WHERE user_id = ? and deleted = 0'
         ' ORDER BY name ASC',
         (user_id,)
     ).fetchall()
@@ -44,12 +44,7 @@ def index(subgraph_id=None):
     if subgraph is None:
         abort(404)
 
-    subgraph_access = db.execute(
-        'SELECT EXISTS (SELECT 1 FROM access WHERE user_id = ? AND subgraph_id = ?)',
-        (user_id, subgraph_id)
-    ).fetchone()[0]
-
-    if not subgraph_access:
+    if not subgraph_access(user_id, subgraph_id):
         abort(403)
 
     knowledge = db.execute(
@@ -68,12 +63,7 @@ def set_finished():
 
     db = get_db()
 
-    subgraph_access = db.execute(
-        'SELECT EXISTS (SELECT 1 FROM access WHERE user_id = ? AND subgraph_id = ?)',
-        (user_id, subgraph_id)
-    ).fetchone()[0]
-
-    if not subgraph_access:
+    if not subgraph_access(user_id, subgraph_id):
         return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
 
     if finished == 'true' or finished == 'false':
@@ -102,12 +92,7 @@ def edit_subgraph_name():
     db = get_db()
     db_cursor = db.cursor()
 
-    subgraph_access = db_cursor.execute(
-        'SELECT EXISTS (SELECT 1 FROM access WHERE user_id = ? AND subgraph_id = ?)',
-        (user_id, subgraph_id)
-    ).fetchone()[0]
-
-    if not subgraph_access:
+    if not subgraph_access(user_id, subgraph_id):
         return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
 
     db_cursor.execute(
@@ -131,16 +116,18 @@ def delete_subgraph():
     db = get_db()
     db_cursor = db.cursor()
 
-    subgraph_access = db_cursor.execute(
-        'SELECT EXISTS (SELECT 1 FROM access WHERE user_id = ? AND subgraph_id = ?)',
-        (user_id, subgraph_id)
-    ).fetchone()[0]
-
-    if not subgraph_access:
+    if not subgraph_access(user_id, subgraph_id):
         return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
 
-    # todo db mark subgraph as deleted, get name
-    subgraph_name = 'test'
+    subgraph_name = db_cursor.execute(
+        'SELECT name FROM subgraph WHERE id = ?', (subgraph_id,)
+    ).fetchone()[0]
+
+    db_cursor.execute(
+        'UPDATE subgraph SET deleted = 1 WHERE id = ?', (subgraph_id,)
+    )
+
+    db.commit()
 
     return jsonify(name=subgraph_name)
 
@@ -155,10 +142,10 @@ def add_subgraph():
         return jsonify(error='Subgraph name cannot be empty.')
 
     db = get_db()
-    try:
+    try:  # TODO besser explizit testen und dann insert und dann id mit dem cursor holen
         db.execute(
-            'INSERT INTO subgraph (name, finished) VALUES (?, ?)',
-            (subgraph_name, False)
+            'INSERT INTO subgraph (name, finished, deleted) VALUES (?, ?, ?)',
+            (subgraph_name, False, False)
         )
     except IntegrityError:
         return jsonify(error='A subgraph of that name already exists.')
@@ -200,12 +187,7 @@ def edit_knowledge():
     db = get_db()
     db_cursor = db.cursor()
 
-    subgraph_access = db_cursor.execute(
-        'SELECT EXISTS (SELECT 1 FROM access WHERE user_id = ? AND subgraph_id = ?)',
-        (user_id, subgraph_id)
-    ).fetchone()[0]
-
-    if not subgraph_access:
+    if not subgraph_access(user_id, subgraph_id):
         return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
 
     knowledge_exists = db_cursor.execute(
@@ -241,12 +223,7 @@ def delete_knowledge():
     db = get_db()
     db_cursor = db.cursor()
 
-    subgraph_access = db_cursor.execute(
-        'SELECT EXISTS (SELECT 1 FROM access WHERE user_id = ? AND subgraph_id = ?)',
-        (user_id, subgraph_id)
-    ).fetchone()[0]
-
-    if not subgraph_access:
+    if not subgraph_access(user_id, subgraph_id):
         return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
 
     knowledge_exists = db_cursor.execute(
@@ -287,12 +264,7 @@ def add_knowledge():
     db = get_db()
     db_cursor = db.cursor()
 
-    subgraph_access = db_cursor.execute(
-        'SELECT EXISTS (SELECT 1 FROM access WHERE user_id = ? AND subgraph_id = ?)',
-        (user_id, subgraph_id)
-    ).fetchone()[0]
-
-    if not subgraph_access:
+    if not subgraph_access(user_id, subgraph_id):
         return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
 
     db_cursor.execute(

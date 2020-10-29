@@ -48,7 +48,7 @@ $(function() {
   $('div#subgraph-list form > a[id^="delete-"]').bind('click', function() {
     var item = $(this.parentNode.parentNode.parentNode);
     var subgraph_id = item.attr('data-subgraph-id');
-    $.getJSON($SCRIPT_ROOT + '/_delete_subgraph', {subgraph_id: $SUBGRAPH_ID}, function(data) {
+    $.getJSON($SCRIPT_ROOT + '/_delete_subgraph', {subgraph_id: subgraph_id}, function(data) {
         if (data.error) {
           $('div#subgraph-menu-edit-msg').text(data.error);
           $('div#subgraph-menu-edit-msg').attr('data-flipid', 'subgraph-list-' + subgraph_id)
