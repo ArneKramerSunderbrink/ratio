@@ -87,37 +87,6 @@ def set_finished():
         abort(404)
 
 
-@bp.route('/_add_subgraph')
-@login_required
-def add_subgraph():
-    user_id = g.user['id']
-    subgraph_name = request.args.get('name', '', type=str)
-
-    if not subgraph_name or subgraph_name.isspace():
-        return jsonify(error='Subgraph name cannot be empty.')
-
-    db = get_db()
-    try:
-        db.execute(
-            'INSERT INTO subgraph (name, finished) VALUES (?, ?)',
-            (subgraph_name, False)
-        )
-    except IntegrityError:
-        return jsonify(error='A subgraph of that name already exists.')
-
-    subgraph = db.execute(
-        'SELECT * FROM subgraph WHERE name = ?', (subgraph_name,)
-    ).fetchone()
-
-    db.execute(
-        'INSERT INTO access (user_id, subgraph_id) VALUES (?, ?)',
-        (user_id, subgraph['id'])
-    )
-
-    db.commit()
-    return jsonify(redirect=url_for('tool.index', subgraph_id=subgraph['id']))
-
-
 @bp.route('/_edit_subgraph_name')
 @login_required
 def edit_subgraph_name():
@@ -148,6 +117,63 @@ def edit_subgraph_name():
 
     db.commit()
     return jsonify(name=subgraph_name)
+
+
+@bp.route('/_delete_subgraph')
+@login_required
+def delete_subgraph():
+    user_id = g.user['id']
+    subgraph_id = request.args.get('subgraph_id', 0, type=int)
+
+    if not subgraph_id:
+        return jsonify(error='Subgraph id cannot be empty.')
+
+    db = get_db()
+    db_cursor = db.cursor()
+
+    subgraph_access = db_cursor.execute(
+        'SELECT EXISTS (SELECT 1 FROM access WHERE user_id = ? AND subgraph_id = ?)',
+        (user_id, subgraph_id)
+    ).fetchone()[0]
+
+    if not subgraph_access:
+        return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
+
+    # todo db mark subgraph as deleted, get name
+    subgraph_name = 'test'
+
+    return jsonify(name=subgraph_name)
+
+
+@bp.route('/_add_subgraph')
+@login_required
+def add_subgraph():
+    user_id = g.user['id']
+    subgraph_name = request.args.get('name', '', type=str)
+
+    if not subgraph_name or subgraph_name.isspace():
+        return jsonify(error='Subgraph name cannot be empty.')
+
+    db = get_db()
+    try:
+        db.execute(
+            'INSERT INTO subgraph (name, finished) VALUES (?, ?)',
+            (subgraph_name, False)
+        )
+    except IntegrityError:
+        return jsonify(error='A subgraph of that name already exists.')
+
+    subgraph = db.execute(
+        'SELECT * FROM subgraph WHERE name = ?', (subgraph_name,)
+    ).fetchone()
+
+    db.execute(
+        'INSERT INTO access (user_id, subgraph_id) VALUES (?, ?)',
+        (user_id, subgraph['id'])
+    )
+
+    db.commit()
+    return jsonify(redirect=url_for('tool.index', subgraph_id=subgraph['id']))
 
 
 @bp.route('/_edit_knowledge')

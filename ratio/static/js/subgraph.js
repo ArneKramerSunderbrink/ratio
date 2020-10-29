@@ -78,7 +78,7 @@ function delete_knowledge() {
 
 $(function() {
   var as, i;
-  as = $('a[id^="delete-"]');
+  as = $('table a[id^="delete-"]');
   for (i = 0; i < as.length; i++) {
     $(as[i]).bind('click', delete_knowledge);
   }
