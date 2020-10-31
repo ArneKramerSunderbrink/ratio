@@ -15,7 +15,7 @@ function hide_edit_knowledge() {
 
 $(function() {
   var as, i;
-  as = $('a[id^="edit-"]');
+  as = $('a[id^="edit-"]'); // todo more efficient with $(subgraph).on('click', 'a[id^="edit-"]', display_edit_knowledge)
   for (i = 0; i < as.length; i++) {
     $(as[i]).bind('click', display_edit_knowledge);
   }

@@ -11,9 +11,9 @@ function toggle_overlay() {
 }
 
 $(function() {
-  $('a#subgraph-name').bind('click', toggle_overlay);
-  $('a#close-overlay').bind('click', toggle_overlay);
-  $(document).keyup(function(e) {
+  $('a#subgraph-name').on('click', toggle_overlay);
+  $('a#close-overlay').on('click', toggle_overlay);
+  $(document).on('keyup', function(e) {
     if (e.key === "Escape" && $('div#overlay').css('display') == 'block' && $SUBGRAPH_ID != 0) {
       toggle_overlay();
     }
@@ -58,6 +58,6 @@ function toggle_finished() {
 }
 
 $(function() {
-  $('input#finished').bind('change', toggle_finished);
-  $('div#subgraph-list').find(':checkbox').bind('change', toggle_finished);
+  $('input#finished').on('change', toggle_finished);
+  $('div#subgraph-list').on('change', ':checkbox', toggle_finished);
 });

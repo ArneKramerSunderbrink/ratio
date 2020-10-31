@@ -1,6 +1,6 @@
 // Filter
 $(function() {
-  $('input#subgraph-filter').bind('keyup', function() {
+  $('input#subgraph-filter').on('keyup', function() {
     var input, filter, div, entries, i, a, txtValue;
     input = document.getElementById('subgraph-filter');
     filter = input.value.toUpperCase();
@@ -20,7 +20,7 @@ $(function() {
 
 // edit subgraph
 $(function() {
-  $('div#subgraph-list form').submit(function() {
+  $('div#subgraph-list').on('submit', 'form', function() {
     var data = $(this).serializeArray();
     var list_item = $(this.parentNode.parentNode);
     var flipid = 'subgraph-list-' + list_item.attr('data-subgraph-id');
@@ -45,7 +45,7 @@ $(function() {
 
 // delete subgraph
 $(function() {
-  $('div#subgraph-list form > a[id^="delete-"]').bind('click', function() {
+  $('div#subgraph-list').on('click', 'form > a[id^="delete-"]', function() {
     var item = $(this.parentNode.parentNode.parentNode);
     var subgraph_id = item.attr('data-subgraph-id');
     $.getJSON($SCRIPT_ROOT + '/_delete_subgraph', {subgraph_id: subgraph_id}, function(data) {
@@ -54,6 +54,11 @@ $(function() {
           $('div#subgraph-menu-edit-msg').attr('data-flipid', 'subgraph-list-' + subgraph_id)
           $('div#subgraph-menu-edit-msg').css('display', 'block');
         } else {
+          if (subgraph_id == $SUBGRAPH_ID) {
+            // prevent user from going back to editing the subgraph
+            $('a#close-overlay').css('display', 'none');
+            //$(document).off('keyup', ); // todo disable in a way that its easy to enable on undo
+          }
           item.css('display', 'none');
           $('div#subgraph-menu-edit-msg').attr('data-subgraph-id', subgraph_id);
           $('div#subgraph-menu-delete-msg > span').text('"' + data.name + '" has been deleted.');
@@ -68,7 +73,7 @@ $(function() {
 
 // add subgraph
 $(function() {
-  $('form#new-subgraph-form').submit(function() {
+  $('form#new-subgraph-form').on('submit', function() {
     var data = $(this).serialize();
 
     $.getJSON($SCRIPT_ROOT + '/_add_subgraph', data, function(data) {

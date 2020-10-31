@@ -28,15 +28,15 @@ function flip_flip(id) {
 
 $(function() {
   var elements, i;
-  $('.flip-frontbutton').bind('click', function() {
+  $(document).on('click', '.flip-frontbutton', function() {
     flip_front(this.getAttribute('data-flipid'));
     return false;
   });
-  $('.flip-flipbutton').bind('click', function() {
+  $(document).on('click', '.flip-flipbutton', function() {
     flip_flip(this.getAttribute('data-flipid'));
     return false;
   });
-  $('.flip-flipside').keyup(function(e) {
+  $(document).on('keyup', '.flip-flipside', function(e) {
     if (e.key === "Escape") {
       flip_front(this.getAttribute('data-flipid'));
       e.stopPropagation();
