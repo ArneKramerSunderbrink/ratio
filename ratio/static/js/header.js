@@ -10,14 +10,16 @@ function toggle_overlay() {
   return false;
 }
 
+function overlay_escape_handler(e) {
+  if (e.key === "Escape" && $('div#overlay').css('display') == 'block' && $SUBGRAPH_ID != 0) {
+    toggle_overlay();
+  }
+}
+
 $(function() {
   $('a#subgraph-name').on('click', toggle_overlay);
   $('a#close-overlay').on('click', toggle_overlay);
-  $(document).on('keyup', function(e) {
-    if (e.key === "Escape" && $('div#overlay').css('display') == 'block' && $SUBGRAPH_ID != 0) {
-      toggle_overlay();
-    }
-  });
+  $(document).on('keyup', overlay_escape_handler);
 });
 
 // finished checkboxes

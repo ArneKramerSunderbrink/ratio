@@ -29,7 +29,7 @@ def index(subgraph_id=None):
         'SELECT id, name, finished'
         ' FROM access JOIN subgraph ON subgraph_id = id'
         ' WHERE user_id = ? and deleted = 0'
-        ' ORDER BY name ASC',
+        ' ORDER BY user_id ASC',
         (user_id,)
     ).fetchall()
 
@@ -142,25 +142,22 @@ def add_subgraph():
         return jsonify(error='Subgraph name cannot be empty.')
 
     db = get_db()
-    try:  # TODO besser explizit testen und dann insert und dann id mit dem cursor holen
-        db.execute(
-            'INSERT INTO subgraph (name, finished, deleted) VALUES (?, ?, ?)',
-            (subgraph_name, False, False)
-        )
-    except IntegrityError:
-        return jsonify(error='A subgraph of that name already exists.')
+    db_cursor = db.cursor()
 
-    subgraph = db.execute(
-        'SELECT * FROM subgraph WHERE name = ?', (subgraph_name,)
-    ).fetchone()
+    db_cursor.execute(
+        'INSERT INTO subgraph (name, finished, deleted) VALUES (?, ?, ?)',
+        (subgraph_name, False, False)
+    )
+
+    subgraph_id = db_cursor.lastrowid
 
     db.execute(
         'INSERT INTO access (user_id, subgraph_id) VALUES (?, ?)',
-        (user_id, subgraph['id'])
+        (user_id, subgraph_id)
     )
 
     db.commit()
-    return jsonify(redirect=url_for('tool.index', subgraph_id=subgraph['id']))
+    return jsonify(redirect=url_for('tool.index', subgraph_id=subgraph_id))
 
 
 @bp.route('/_edit_knowledge')

@@ -14,7 +14,7 @@ CREATE TABLE user (
 
 CREATE TABLE subgraph (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT UNIQUE NOT NULL,
+  name TEXT NOT NULL,
   finished BIT NOT NULL,
   deleted BIT NOT NULL
 );

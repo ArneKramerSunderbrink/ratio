@@ -23,8 +23,9 @@ $(function() {
   $('div#subgraph-list').on('submit', 'form', function() {
     var data = $(this).serializeArray();
     var list_item = $(this.parentNode.parentNode);
-    var flipid = 'subgraph-list-' + list_item.attr('data-subgraph-id');
-    data.push({ name: "subgraph_id", value: list_item.attr('data-subgraph-id') });
+    var subgraph_id = list_item.attr('data-subgraph-id')
+    var flipid = 'subgraph-list-' + subgraph_id;
+    data.push({ name: "subgraph_id", value: subgraph_id });
 
     $.getJSON($SCRIPT_ROOT + '/_edit_subgraph_name', data, function(data) {
       if (data.error) {
@@ -33,6 +34,9 @@ $(function() {
         $('div#subgraph-menu-edit-msg').css('display', 'block');
         list_item.find('form > input').focus();
       } else {
+        if (subgraph_id == $SUBGRAPH_ID) {
+          $('a#subgraph-name').text(data.name);
+        }
         list_item.children().eq(0).children().eq(0).text(data.name);
         flip_front(flipid);
       }
@@ -57,7 +61,7 @@ $(function() {
           if (subgraph_id == $SUBGRAPH_ID) {
             // prevent user from going back to editing the subgraph
             $('a#close-overlay').css('display', 'none');
-            //$(document).off('keyup', ); // todo disable in a way that its easy to enable on undo
+            $(document).off('keyup', overlay_escape_handler);
           }
           item.css('display', 'none');
           $('div#subgraph-menu-edit-msg').attr('data-subgraph-id', subgraph_id);

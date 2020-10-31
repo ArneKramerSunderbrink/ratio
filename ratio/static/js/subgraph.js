@@ -97,6 +97,7 @@ $(function() {
         // add row to table above the form
         $('form#new-knowledge-form').parent().before(data.knowledge_row);
 
+        // todo mit on statt bind muss ich handler für neue elemente nicht mehr explizit hinzufügen
         $('a#edit-' + data.knowledge_id).bind('click', display_edit_knowledge);
         $('form#edit-knowledge-form-' + data.knowledge_id).submit(edit_knowledge);
         $('a#delete-' + data.knowledge_id).bind('click', delete_knowledge);
