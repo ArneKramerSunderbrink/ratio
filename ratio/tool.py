@@ -42,10 +42,10 @@ def index(subgraph_id=None):
     ).fetchone()
 
     if subgraph is None:
-        abort(404)
+        abort(404)  # todo: better: open / and display a corresponding warning 'you tried to open a subgraph that does not exist'
 
     if not subgraph_access(user_id, subgraph_id):
-        abort(403)
+        abort(403)  # todo: better: open / and display a corresponding warning 'you tried to open a subgraph you have no access to'
 
     knowledge = db.execute(
         'SELECT * FROM knowledge WHERE subgraph_id = ?', (subgraph_id,)
@@ -130,6 +130,37 @@ def delete_subgraph():
     db.commit()
 
     return jsonify(name=subgraph_name)
+
+
+@bp.route('/_undo_delete_subgraph')
+@login_required
+def undo_delete_subgraph():
+    user_id = g.user['id']
+    subgraph_id = request.args.get('subgraph_id', 0, type=int)
+
+    if not subgraph_id:
+        return jsonify(error='Subgraph id cannot be empty.')
+
+    db = get_db()
+    db_cursor = db.cursor()
+
+    access = db_cursor.execute(
+        'SELECT EXISTS ('
+        ' SELECT 1 FROM access JOIN subgraph ON subgraph_id = id WHERE user_id = ? AND subgraph_id = ?'
+        ')',
+        (user_id, subgraph_id)
+    ).fetchone()[0]
+
+    if not access:
+        return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
+
+    db_cursor.execute(
+        'UPDATE subgraph SET deleted = 0 WHERE id = ?', (subgraph_id,)
+    )
+
+    db.commit()
+
+    return jsonify()
 
 
 @bp.route('/_add_subgraph')
