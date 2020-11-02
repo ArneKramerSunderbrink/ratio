@@ -42,3 +42,8 @@
      id="subgraph-menu-edit-msg"></div>
 <div class="w3-panel w3-card-4 w3-red flip-flipside-msg" data-flipid="new-subgraph" style="display: none"
      id="subgraph-menu-add-msg"></div>
+{% if message%}
+<div class="w3-panel w3-card-4 w3-red">
+  {{ message }}
+</div>
+{% endif %}

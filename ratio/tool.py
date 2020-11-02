@@ -3,10 +3,10 @@ from flask import g
 from flask import render_template
 from flask import get_template_attribute
 from flask import request
+from flask import redirect
 from flask import url_for
 from flask import jsonify
 from werkzeug.exceptions import abort
-from sqlite3 import IntegrityError
 
 from ratio.auth import login_required, subgraph_access
 from ratio.db import get_db
@@ -18,8 +18,9 @@ bp = Blueprint('tool', __name__)
 
 @bp.route('/')
 @bp.route('/<int:subgraph_id>')
+@bp.route('/<string:message>')
 @login_required
-def index(subgraph_id=None):
+def index(subgraph_id=None, message=None):
     """Show all the posts, most recent first.""" #todo docu machen
     user_id = g.user['id']
     db = get_db()
@@ -35,17 +36,17 @@ def index(subgraph_id=None):
 
     if subgraph_id is None:
         subgraph = {'id': 0, 'name': '', 'finished': False}
-        return render_template('tool/index.html', subgraph=subgraph, subgraph_list=subgraph_list)
+        return render_template('tool/index.html', subgraph=subgraph, subgraph_list=subgraph_list, message=message)
 
     subgraph = db.execute(
         'SELECT * FROM subgraph WHERE id = ?', (subgraph_id,)
     ).fetchone()
 
     if subgraph is None:
-        abort(404)  # todo: better: open / and display a corresponding warning 'you tried to open a subgraph that does not exist'
+        return redirect(url_for('tool.index', message='Subgraph with id {} does not exist.'.format(subgraph_id)))
 
     if not subgraph_access(user_id, subgraph_id):
-        abort(403)  # todo: better: open / and display a corresponding warning 'you tried to open a subgraph you have no access to'
+        return redirect(url_for('tool.index', message='You have no access to subgraph with id {}.'.format(subgraph_id)))
 
     knowledge = db.execute(
         'SELECT * FROM knowledge WHERE subgraph_id = ?', (subgraph_id,)
@@ -69,12 +70,12 @@ def set_finished():
     if finished == 'true' or finished == 'false':
         finished = finished == 'true'
         db.execute(
-            "UPDATE subgraph SET finished = ? WHERE id = ?", (finished, subgraph_id)
+            'UPDATE subgraph SET finished = ? WHERE id = ?', (finished, subgraph_id)
         )
         db.commit()
         return jsonify(finished=finished)
     else:
-        abort(404)
+        return jsonify(error='Argument "finished" has to be "true" or "false"')
 
 
 @bp.route('/_edit_subgraph_name')
