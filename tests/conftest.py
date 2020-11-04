@@ -9,7 +9,26 @@ from ratio.db import init_db
 from ratio.db import db_populate_dummy
 
 
-@pytest.fixture
+# configure pytest
+
+def pytest_addoption(parser):
+    parser.addoption(
+        '--runbrowser', action='store_true', default=False, help='run browser tests'
+    )
+
+
+def pytest_collection_modifyitems(config, items):
+    if config.getoption('--runbrowser'):
+        return
+    skip_selenium = pytest.mark.skip(reason='need --runbrowser option to run')
+    for item in items:
+        if 'browser' in item.fixturenames:
+            item.add_marker(skip_selenium)
+
+
+# define tools used by the test
+
+@pytest.fixture(scope='session')
 def app():
     """Create and configure a new app instance for each test."""
     # create a temporary file to isolate the database for each test

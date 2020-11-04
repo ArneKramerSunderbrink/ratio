@@ -8,6 +8,8 @@ instance/
 htmlcov/
 dist/
 build/
+tests/driver
+geckodriver.log
 *.egg-info/
 .idea/
 *.swp

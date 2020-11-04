@@ -66,6 +66,7 @@ def login():
             session['user_id'] = user['id']
             next_url = request.args.get('next_url', '', type=str)
             if next_url:
+                print(next_url)
                 return redirect(request.script_root + next_url)
             else:
                 return redirect(url_for('tool.index'))

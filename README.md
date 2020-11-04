@@ -31,7 +31,8 @@ Run
 
 Open http://127.0.0.1:5000 in a browser.
 
-If you want to populate the database with dummy data to test the tool (including a user called 'test' with password 'test'), call:
+If you want to populate the database with dummy data to test the tool
+(including a user called 'test' with password 'test'), call:
 
     $ flask db-add-dummy
 
@@ -48,6 +49,12 @@ Run with coverage report:
     $ coverage report
     $ coverage html  # open htmlcov/index.html in a browser
 
+To test the app with an automated browser,
+install firefox, download the geckodriver from 
+https://github.com/mozilla/geckodriver/releases
+into `tests/driver/geckodriver`, and run:
+
+    $ pytest --runbrowser
 
 Deploy with Gunicorn
 ----
@@ -57,7 +64,8 @@ Build distribution file:
     $ pip install wheel
     $ python3 setup.py bdist_wheel
 
-Copy the distribution file from `dist/` as well as `deploy/deploy.sh` and `deploy/gunicorn_conf.py` to a folder on your server.
+Copy the distribution file from `dist/` as well as `deploy/deploy.sh` and
+`deploy/gunicorn_conf.py` to a folder on your server.
 Adapt the deploy script to you environment, especially the secret key and the url prefix.
 Comment out `flask db-add-dummy` if no dummy data is needed.
 Call:

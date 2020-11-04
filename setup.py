@@ -18,5 +18,5 @@ setup(
     include_package_data=True,
     zip_safe=False,
     install_requires=["flask"],
-    extras_require={"test": ["pytest", "coverage"]},
+    extras_require={"test": ["pytest", "pytest-flask", "coverage", "selenium"]},
 )

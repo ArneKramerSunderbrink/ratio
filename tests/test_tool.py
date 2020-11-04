@@ -1,9 +1,10 @@
 import pytest
+from flask import url_for
 
 
 def test_index(client, auth):
-    response = client.get("/")
-    assert response.headers["Location"] == "http://localhost/login?next_url=%2F%3F"
+    response = client.get('/')
+    assert response.headers["Location"] == url_for('auth.login', next_url=url_for('tool.index'), _external=True) + '%3F'
 
     auth.login()
     response = client.get("/")

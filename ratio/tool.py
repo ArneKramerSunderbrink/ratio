@@ -18,7 +18,7 @@ bp = Blueprint('tool', __name__)
 
 @bp.route('/')
 @bp.route('/<int:subgraph_id>')
-@bp.route('/<string:message>')
+@bp.route('/msg:<string:message>')
 @login_required
 def index(subgraph_id=None, message=None):
     """Show all the posts, most recent first.""" #todo docu machen
