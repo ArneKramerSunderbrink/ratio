@@ -42,13 +42,13 @@ def create_app(test_config=None):
 
     app.wsgi_app = URLPrefixMiddleware(app.wsgi_app, url_prefix=app.config['URL_PREFIX'])
 
-    if app.config['GUNICORN_LOGGER']:
+    if app.config['GUNICORN_LOGGER']:  # pragma: no cover
         gunicorn_logger = logging.getLogger('gunicorn.error')
         app.logger.handlers = gunicorn_logger.handlers
         app.logger.setLevel(gunicorn_logger.level)
 
     @app.route('/_test_logging')
-    def test_logging():
+    def test_logging():  # pragma: no cover
         app.logger.debug('this is a DEBUG message')
         app.logger.info('this is an INFO message')
         app.logger.warning('this is a WARNING message')
