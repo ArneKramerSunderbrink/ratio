@@ -10,24 +10,15 @@ VALUES
   ('subgraph1', 0, 0),
   ('subgraph2', 1, 0),
   ('subgraph3', 0, 0),
-  ('subgraph4', 1, 0),
-  ('subgraph5', 0, 0),
-  ('subgraph6', 1, 0),
-  ('subgraph7', 0, 0),
-  ('deleted', 1, 1),
-  ('This is a subgraph with a very very very very very very very very very very very very very very very very very long name', 1, 0);
+  ('deleted', 1, 1);
 
 INSERT INTO access (user_id, subgraph_id)
 VALUES
   (1, 1),
   (1, 2),
-  (1, 3),
   (1, 4),
-  (1, 5),
-  (1, 6),
-  (1, 7),
-  (1, 8),
-  (1, 9);
+  (1, 2),
+  (2, 3);
 
 INSERT INTO knowledge (subgraph_id, author_id, subject, predicate, object)
 VALUES

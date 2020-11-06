@@ -63,8 +63,13 @@ def runner(app):
 class AuthActions(object):
     def __init__(self, client):
         self._client = client
+        self.usernames = ['test', 'other']
+        self.passwords = ['test', 'other']
 
-    def login(self, username="test", password="test"):
+    def login(self, username="test", password="test", user_id=None):
+        if user_id:
+            username = self.usernames[user_id - 1]
+            password = self.passwords[user_id - 1]
         return self._client.post(
             "/login", data={"username": username, "password": password}
         )

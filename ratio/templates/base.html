@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<html lang="en">
 <meta charset="utf-8">
 <title>{% block title %}{% endblock %}</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,7 +10,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" defer></script>
 <script src="{{ url_for('static', filename='js/flip_pattern.js') }}" defer></script>
 
-<script type=text/javascript>
+<script>
   $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 </script>
 
