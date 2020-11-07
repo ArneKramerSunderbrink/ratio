@@ -28,7 +28,14 @@ def test_subgraph_list(client, auth, user_id, access):
 
 
 # todo test subgraph /1 subgraph1 im header nicht finished
-# todo test subgraph /2 subgraph2 im header finished
+def test_index_with_subgraph(client, auth):
+    auth.login()
+    response = html.fromstring(client.get('/1').data)
+    assert response.find('.//a[@id="subgraph-name"]').text == 'subgraph1'  # name in header
+    # todo js funktioniert gar nicht, sicherstellen dass die input checkbox den richtigen wert hat immer!
+    # todo not finished
+    # todo knowledge is displayed ...
+
 
 # todo test subgraph /99 -> redirect to /, message Subgraph with id 99 does not exist.
 # todo test subgraph /3 -> redirect to /, message You have no access to subgraph with id 3

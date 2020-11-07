@@ -25,7 +25,8 @@ $(function() {
 // finished checkboxes
 function toggle_finished() {
   var id = this.id;
-  var finished = $(this).is(':checked');
+  var finished = $(this).prop('checked');
+  alert(finished);
 
   if (id == 'finished') {
     subgraph_id = $SUBGRAPH_ID;
@@ -34,7 +35,8 @@ function toggle_finished() {
   }
 
   // change checkbox in the subgraph menu
-  var menu_box = $("label[for='finished-"+subgraph_id+"']").children('i');
+  $('input#finished-' + subgraph_id).prop('checked', finished);
+  var menu_box = $('label[for="finished-'+subgraph_id+'"]').children('i');
   if (finished) {
     menu_box.removeClass().addClass('fa fa-check-square fa-lg');
     menu_box.prop('title', 'Finished');
@@ -45,7 +47,8 @@ function toggle_finished() {
 
   // change checkbox in the header
   if (subgraph_id == $SUBGRAPH_ID) {
-    var header_box = $("label[for='finished']").children('i');
+    $('input#finished').prop('checked', finished);
+    var header_box = $('label[for="finished"]').children('i');
     if (finished) {
       header_box.removeClass().addClass('fa fa-check-square');
     } else {
