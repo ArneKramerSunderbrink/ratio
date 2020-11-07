@@ -1,6 +1,7 @@
 import pytest
 from flask import g
 from flask import session
+from flask import url_for
 from urllib.parse import urlparse
 
 
@@ -10,7 +11,7 @@ def test_login(client, auth):
 
     # test that successful login redirects to the index page
     response = auth.login()
-    assert response.location == 'http://localhost/'
+    assert response.location == url_for('tool.index', _external=True)
 
     # login request set the user_id in the session
     # check that the user is loaded from the session

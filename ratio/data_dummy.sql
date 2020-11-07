@@ -17,7 +17,7 @@ VALUES
   (1, 1),
   (1, 2),
   (1, 4),
-  (1, 2),
+  (2, 2),
   (2, 3);
 
 INSERT INTO knowledge (subgraph_id, author_id, subject, predicate, object)
