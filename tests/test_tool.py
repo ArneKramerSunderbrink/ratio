@@ -1,4 +1,6 @@
 import pytest
+from ratio.db import get_db
+from ratio.tool import MSG_SUBGRAPH_ACCESS
 from flask import url_for
 from lxml import html
 from urllib.parse import urlparse
@@ -55,7 +57,36 @@ def test_index_redirect(client, auth, url, message):
     response = client.get(urlparse(response.location).path)  # follow redirect
     assert message.encode() in response.data
 
-# todo test set finished
+
+@pytest.mark.usefixtures("reset_db")
+def test_set_finished(client, auth):
+    db = get_db()
+    assert not db.execute('SELECT * FROM subgraph WHERE id = 1').fetchone()['finished']
+    auth.login()
+    response = client.get('/_set_finished?subgraph_id=1&finished=true')
+    assert 'error' not in response.get_json()
+    assert response.get_json()['finished']
+    assert db.execute('SELECT * FROM subgraph WHERE id = 1').fetchone()['finished']
+
+
+@pytest.mark.parametrize(
+    ('query', 'message'),
+    (('finished=true', 'Subgraph id cannot be empty.'),
+     ('subgraph_id=3&finished=true', MSG_SUBGRAPH_ACCESS.format(3, 1)),  # not owned
+     ('subgraph_id=4&finished=true', MSG_SUBGRAPH_ACCESS.format(4, 1)),  # owned but deleted
+     ('subgraph_id=99&finished=true', MSG_SUBGRAPH_ACCESS.format(99, 1)),  # doesn't exist
+     ('subgraph_id=1', 'Argument "finished" has to be "true" or "false"'),
+     ('subgraph_id=1&finished=123', 'Argument "finished" has to be "true" or "false"'))
+)
+def test_set_finished_validate_input(client, auth, query, message):
+    db = get_db()
+    assert not db.execute('SELECT * FROM subgraph WHERE id = 1').fetchone()['finished']
+    auth.login()
+    response = client.get('/_set_finished?' + query)
+    assert 'finished' not in response.get_json()
+    assert response.get_json()['error'] == message
+    assert not db.execute('SELECT * FROM subgraph WHERE id = 1').fetchone()['finished']
+
 
 # todo test edit_subgraph_name
 

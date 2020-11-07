@@ -49,6 +49,15 @@ def app():
 
 
 @pytest.fixture
+def reset_db(app):
+    # use this fixture to reset the db after the test
+    yield
+    with app.app_context():
+        init_db()
+        db_populate_dummy()
+
+
+@pytest.fixture
 def client(app):
     """A test client for the app."""
     return app.test_client()

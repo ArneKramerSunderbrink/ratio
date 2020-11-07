@@ -26,7 +26,6 @@ $(function() {
 function toggle_finished() {
   var id = this.id;
   var finished = $(this).prop('checked');
-  alert(finished);
 
   if (id == 'finished') {
     subgraph_id = $SUBGRAPH_ID;

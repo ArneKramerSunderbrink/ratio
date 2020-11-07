@@ -62,6 +62,9 @@ def set_finished():
     subgraph_id = request.args.get('subgraph_id', 0, type=int)
     finished = request.args.get('finished', '', type=str)
 
+    if not subgraph_id:
+        return jsonify(error='Subgraph id cannot be empty.')
+
     db = get_db()
 
     if not subgraph_access(user_id, subgraph_id):
