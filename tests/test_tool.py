@@ -5,6 +5,7 @@ from flask import url_for
 from lxml import html
 from urllib.parse import urlparse
 
+# todo umsortieren in file test subgraph frame and file test subgraph list and file test knowledge edit
 
 def test_index(client, auth):
     auth.login()
@@ -79,20 +80,105 @@ def test_set_finished(client, auth):
      ('subgraph_id=1&finished=123', 'Argument "finished" has to be "true" or "false"'))
 )
 def test_set_finished_validate_input(client, auth, query, message):
-    db = get_db()
-    assert not db.execute('SELECT * FROM subgraph WHERE id = 1').fetchone()['finished']
     auth.login()
     response = client.get('/_set_finished?' + query)
     assert 'finished' not in response.get_json()
     assert response.get_json()['error'] == message
-    assert not db.execute('SELECT * FROM subgraph WHERE id = 1').fetchone()['finished']
 
 
-# todo test edit_subgraph_name
+@pytest.mark.usefixtures("reset_db")
+def test_edit_subgraph_name(client, auth):
+    db = get_db()
+    assert db.execute('SELECT * FROM subgraph WHERE id = 1').fetchone()['name'] == 'subgraph1'
+    auth.login()
+    response = client.get('/_edit_subgraph_name?subgraph_id=1&name=test')
+    assert 'error' not in response.get_json()
+    assert response.get_json()['name'] == 'test'
+    assert db.execute('SELECT * FROM subgraph WHERE id = 1').fetchone()['name'] == 'test'
 
-# todo test delete_subgraph
 
-# todo test undo_delete_subgraph
+@pytest.mark.parametrize(
+    ('query', 'message'),
+    (('name=test', 'Subgraph id cannot be empty.'),
+     ('subgraph_id=3', 'Subgraph name cannot be empty.'),
+     ('subgraph_id=3&name=%20', 'Subgraph name cannot be empty.'),
+     ('subgraph_id=3&name=test', MSG_SUBGRAPH_ACCESS.format(3, 1)),  # not owned
+     ('subgraph_id=4&name=test', MSG_SUBGRAPH_ACCESS.format(4, 1)),  # owned but deleted
+     ('subgraph_id=99&name=test', MSG_SUBGRAPH_ACCESS.format(99, 1)))  # doesn't exist
+)
+def test_edit_subgraph_name_validate_input(client, auth, query, message):
+    auth.login()
+    response = client.get('/_edit_subgraph_name?' + query)
+    assert 'name' not in response.get_json()
+    assert response.get_json()['error'] == message
 
-# todo test add_subgraph
 
+@pytest.mark.usefixtures("reset_db")
+def test_delete_subgraph(client, auth):
+    db = get_db()
+    assert not db.execute('SELECT * FROM subgraph WHERE id = 1').fetchone()['deleted']
+    auth.login()
+    response = client.get('/_delete_subgraph?subgraph_id=1')
+    assert 'error' not in response.get_json()
+    assert response.get_json()['name'] == 'subgraph1'
+    assert db.execute('SELECT * FROM subgraph WHERE id = 1').fetchone()['deleted']
+
+
+@pytest.mark.parametrize(
+    ('query', 'message'),
+    (('', 'Subgraph id cannot be empty.'),
+     ('subgraph_id=3', MSG_SUBGRAPH_ACCESS.format(3, 1)),  # not owned
+     ('subgraph_id=4', MSG_SUBGRAPH_ACCESS.format(4, 1)),  # owned but deleted
+     ('subgraph_id=99', MSG_SUBGRAPH_ACCESS.format(99, 1)))  # doesn't exist
+)
+def test_delete_subgraph_validate_input(client, auth, query, message):
+    auth.login()
+    response = client.get('/_delete_subgraph?' + query)
+    assert 'name' not in response.get_json()
+    assert response.get_json()['error'] == message
+
+
+@pytest.mark.usefixtures("reset_db")
+def test_undo_delete_subgraph(client, auth):
+    db = get_db()
+    assert db.execute('SELECT * FROM subgraph WHERE id = 4').fetchone()['deleted']
+    auth.login()
+    response = client.get('/_undo_delete_subgraph?subgraph_id=4')
+    assert 'error' not in response.get_json()
+    assert not db.execute('SELECT * FROM subgraph WHERE id = 4').fetchone()['deleted']
+
+
+@pytest.mark.parametrize(
+    ('query', 'message'),
+    (('', 'Subgraph id cannot be empty.'),
+     ('subgraph_id=3', MSG_SUBGRAPH_ACCESS.format(3, 1)),  # not owned
+     ('subgraph_id=99', MSG_SUBGRAPH_ACCESS.format(99, 1)))  # doesn't exist
+)
+def test_undo_delete_subgraph_validate_input(client, auth, query, message):
+    auth.login()
+    response = client.get('/_undo_delete_subgraph?' + query)
+    assert 'name' not in response.get_json()
+    assert response.get_json()['error'] == message
+
+
+@pytest.mark.usefixtures("reset_db")
+def test_add_subgraph(client, auth):
+    db = get_db()
+    assert not db.execute('SELECT EXISTS (SELECT 1 FROM subgraph WHERE name = "new")').fetchone()[0]
+    auth.login()
+    response = client.get('/_add_subgraph?name=new')
+    assert 'error' not in response.get_json()
+    new = db.execute('SELECT * FROM subgraph WHERE name = "new"').fetchone()
+    assert new
+    assert response.get_json()['redirect'] == url_for('tool.index', subgraph_id=new['id'])
+
+
+@pytest.mark.parametrize(
+    ('query', 'message'),
+    (('', 'Subgraph name cannot be empty.'),)  # doesn't exist
+)
+def test_add_subgraph_validate_input(client, auth, query, message):
+    auth.login()
+    response = client.get('/_add_subgraph?' + query)
+    assert 'name' not in response.get_json()
+    assert response.get_json()['error'] == message
