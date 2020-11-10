@@ -5,7 +5,6 @@ from flask import url_for
 from lxml import html
 from urllib.parse import urlparse
 
-# todo umsortieren in file test subgraph frame and file test subgraph list and file test knowledge edit
 
 def test_index(client, auth):
     auth.login()
