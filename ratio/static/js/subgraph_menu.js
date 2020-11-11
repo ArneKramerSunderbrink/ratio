@@ -25,7 +25,7 @@ $(function() {
     var list_item = $(this.parentNode.parentNode);
     var subgraph_id = list_item.attr('data-subgraph-id')
     var flipid = 'subgraph-list-' + subgraph_id;
-    data.push({ name: "subgraph_id", value: subgraph_id });
+    data.push({ name: 'subgraph_id', value: subgraph_id });
 
     $.getJSON($SCRIPT_ROOT + '/_edit_subgraph_name', data, function(data) {
       if (data.error) {
@@ -49,7 +49,7 @@ $(function() {
 
 // delete subgraph
 $(function() {
-  $('div#subgraph-list').on('click', 'form > a[id^="delete-"]', function() {
+  $('div#subgraph-list').on('click', 'form > a.delete-subgraph-button', function() {
     var item = $(this.parentNode.parentNode.parentNode);
     var subgraph_id = item.attr('data-subgraph-id');
     $.getJSON($SCRIPT_ROOT + '/_delete_subgraph', {subgraph_id: subgraph_id}, function(data) {

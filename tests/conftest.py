@@ -20,10 +20,10 @@ def pytest_addoption(parser):
 def pytest_collection_modifyitems(config, items):
     if config.getoption('--runbrowser'):
         return
-    skip_selenium = pytest.mark.skip(reason='need --runbrowser option to run')
+    skip_browser = pytest.mark.skip(reason='need --runbrowser option to run')
     for item in items:
         if 'browser' in item.fixturenames:
-            item.add_marker(skip_selenium)
+            item.add_marker(skip_browser)
 
 
 # define tools used by the test

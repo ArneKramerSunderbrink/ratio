@@ -2,9 +2,9 @@ function flip_front(id) {
   // the swapping is done in order for the function to also work with elements that have
   // display: flex or table-row instead of simply display: block
   var frontside, flipside, msg;
-  frontside = $(".flip-frontside[data-flipid='" + id + "']");
-  flipside = $(".flip-flipside[data-flipid='" + id + "']");
-  msg = $(".flip-flipside-msg[data-flipid='" + id + "']");
+  frontside = $('.flip-frontside[data-flipid="' + id + '"]');
+  flipside = $('.flip-flipside[data-flipid="' + id + '"]');
+  msg = $('.flip-flipside-msg[data-flipid="' + id + '"]');
 
   if (flipside.css('display') != 'none') {
     frontside.css('display', flipside.css('display'));
@@ -15,9 +15,9 @@ function flip_front(id) {
 
 function flip_flip(id) {
   var frontside, flipside, msg;
-  frontside = $(".flip-frontside[data-flipid='" + id + "']");
-  flipside = $(".flip-flipside[data-flipid='" + id + "']");
-  msg = $(".flip-flipside-msg[data-flipid='" + id + "']");
+  frontside = $('.flip-frontside[data-flipid="' + id + '"]');
+  flipside = $('.flip-flipside[data-flipid="' + id + '"]');
+  msg = $('.flip-flipside-msg[data-flipid="' + id + '"]');
 
   if (frontside.css('display') != 'none') {
     flipside.css('display', frontside.css('display'));
@@ -37,7 +37,7 @@ $(function() {
     return false;
   });
   $(document).on('keyup', '.flip-flipside', function(e) {
-    if (e.key === "Escape") {
+    if (e.key === 'Escape') {
       flip_front(this.getAttribute('data-flipid'));
       e.stopPropagation();
     }
