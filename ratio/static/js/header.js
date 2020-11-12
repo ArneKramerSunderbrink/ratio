@@ -1,3 +1,9 @@
+/**
+ * Javascript code related to the header:
+ * Toggling the overlay and handling the finished checkboxes (both in the header and the subgraph list).
+ */
+
+
 // toggle overlay
 function toggle_overlay() {
   overlay = $('div#overlay');

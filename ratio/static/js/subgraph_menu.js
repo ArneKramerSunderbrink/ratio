@@ -1,3 +1,8 @@
+/**
+ * Javascript code related to the subgraph list:
+ * The filter, editing subgraph names, adding new subgraphs, deleting subgraphs and undoing that delete.
+ */
+
 // Filter
 $(function() {
   $('input#subgraph-filter').on('keyup', function() {

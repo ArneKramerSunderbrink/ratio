@@ -1,3 +1,7 @@
+/**
+ * Javascript code for the flip pattern described in dev_ressources/pattern_flip.html.
+ */
+
 function flip_front(id) {
   // the swapping is done in order for the function to also work with elements that have
   // display: flex or table-row instead of simply display: block

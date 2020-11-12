@@ -1,3 +1,8 @@
+/**
+ * Javascript code related to the dynamic display and editing of knowledge:
+ * todo
+ */
+
 // toggle edit knowledge
 function display_edit_knowledge() {
   var knowledge_id = parseInt(this.id.substring(5));  // 'edit-123' without 'edit-'
