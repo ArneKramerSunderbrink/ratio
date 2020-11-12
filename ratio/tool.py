@@ -1,10 +1,12 @@
+"""Functionality to display and edit subgraphs"""
+
 from flask import Blueprint
 from flask import g
+from flask import jsonify
 from flask import render_template
 from flask import request
 from flask import redirect
 from flask import url_for
-from flask import jsonify
 
 from ratio.auth import login_required, subgraph_access
 from ratio.db import get_db
@@ -19,7 +21,9 @@ bp = Blueprint('tool', __name__)
 @bp.route('/msg:<string:message>')
 @login_required
 def index(subgraph_id=None, message=None):
-    """Show all the posts, most recent first.""" #todo docu machen
+    """Main view of the tool.
+    Contains list of accessible subgraphs and displays knowledge of the selected subgraph if subgraph_id not none.
+    """
     user_id = g.user['id']
     db = get_db()
 
@@ -56,6 +60,17 @@ def index(subgraph_id=None, message=None):
 @bp.route('/_set_finished')
 @login_required
 def set_finished():
+    """What it does.
+    
+    Request arguments:
+        subgraph_id: ...
+        finished: ...
+    
+    Returns JSON:
+        error: msg...
+        finished: ...
+    """  #todo doku fertig
+    # todo ist das eig nötig das ich finished returne? mach ich doch sonst auch nicht
     user_id = g.user['id']
     subgraph_id = request.args.get('subgraph_id', 0, type=int)
     finished = request.args.get('finished', '', type=str)

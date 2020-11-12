@@ -1,10 +1,13 @@
-import os
 import logging
+import os
 
-from flask import Flask, jsonify
+from flask import Flask
+from flask import jsonify
 
 
-class URLPrefixMiddleware(object):
+class URLPrefixMiddleware:
+    """To listen to and provide the correct URLs when running und a server with a non-empty script name."""
+
     def __init__(self, app, url_prefix=''):
         self.app = app
         self.url_prefix = url_prefix
@@ -21,6 +24,7 @@ class URLPrefixMiddleware(object):
 
 def create_app(test_config=None):
     """Create and configure an instance of the Flask application."""
+
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         # a default secret that should be overridden by instance config
@@ -43,6 +47,7 @@ def create_app(test_config=None):
     app.wsgi_app = URLPrefixMiddleware(app.wsgi_app, url_prefix=app.config['URL_PREFIX'])
 
     if app.config['GUNICORN_LOGGER']:  # pragma: no cover
+        # do logging via gunicorn and with the gunicorn level
         gunicorn_logger = logging.getLogger('gunicorn.error')
         app.logger.handlers = gunicorn_logger.handlers
         app.logger.setLevel(gunicorn_logger.level)

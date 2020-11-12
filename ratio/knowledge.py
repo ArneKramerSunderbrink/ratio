@@ -1,10 +1,13 @@
+"""Functionality related to display and editing of knowledge."""
+
 from flask import Blueprint
 from flask import g
 from flask import get_template_attribute
-from flask import request
 from flask import jsonify
+from flask import request
 
-from ratio.auth import login_required, subgraph_access
+from ratio.auth import login_required
+from ratio.auth import subgraph_access
 from ratio.db import get_db
 
 MSG_SUBGRAPH_ACCESS = 'Subgraph with id {} does not exist or is not owned by user {} currently logged in.'

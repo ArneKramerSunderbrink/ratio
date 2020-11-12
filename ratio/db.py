@@ -1,15 +1,15 @@
-import sqlite3
+"""Database functionality."""
 
 import click
+import sqlite3
 from flask import current_app
 from flask import g
 from flask.cli import with_appcontext
 
 
 def get_db():
-    """Connect to the application's configured database. The connection
-    is unique for each request and will be reused if this is called
-    again.
+    """Connect to the application's configured database.
+    The connection is unique for each request and will be reused if this is called again.
     """
     if 'db' not in g:
         g.db = sqlite3.connect(
@@ -21,9 +21,7 @@ def get_db():
 
 
 def close_db(e=None):
-    """If this request connected to the database, close the
-    connection.
-    """
+    """If this request connected to the database, close the connection."""
     db = g.pop('db', None)
 
     if db is not None:
@@ -32,39 +30,35 @@ def close_db(e=None):
 
 def init_db():
     """Clear existing data and create new tables."""
-    db = get_db()
-
     with current_app.open_resource('schema.sql') as f:
-        db.executescript(f.read().decode('utf8'))
+        get_db().executescript(f.read().decode('utf8'))
 
 
 @click.command('init-db')
 @with_appcontext
 def init_db_command():
-    """Clear existing data and create new tables."""
+    """Command to clear existing data and create new tables."""
     init_db()
     click.echo('Initialized the database.')
 
 
 def db_populate_dummy():
     """Populates database with dummy data for testing and development."""
-    db = get_db()
-
     with current_app.open_resource('data_dummy.sql') as f:
-        db.executescript(f.read().decode('utf8'))
+        get_db().executescript(f.read().decode('utf8'))
 
 
 @click.command('db-add-dummy')
 @with_appcontext
 def db_populate_dummy_command():
-    """Populates database with dummy data for testing and development."""
+    """Command to populates database with dummy data for testing and development."""
     db_populate_dummy()
     click.echo('Added dummy data to the database.')
 
 
 def init_app(app):
-    """Register database functions with the Flask app. This is called by
-    the application factory.
+    """Register database functions with the Flask app.
+    This is called by the application factory.
     """
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)

@@ -17,6 +17,6 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
-    install_requires=['flask'],
-    extras_require={'test': ['pytest', 'pytest-flask', 'coverage', 'selenium', 'lxml']},
+    install_requires=['flask', 'werkzeug', 'click'],
+    extras_require={'test': ['pytest', 'pytest-flask', 'coverage', 'selenium', 'lxml']}
 )
