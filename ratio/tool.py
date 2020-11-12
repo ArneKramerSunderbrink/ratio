@@ -23,6 +23,18 @@ bp = Blueprint('tool', __name__)
 def index(subgraph_id=None, message=None):
     """Main view of the tool.
     Contains list of accessible subgraphs and displays knowledge of the selected subgraph if subgraph_id not none.
+
+    Args:
+        subgraph_id (int): Id of the subgraph to display or None.
+        message (str): Message to display below the subgraph menu if this function gets called as a redirect after
+            trying to access a subgraph that is not accessible.
+
+    Context:
+        g.user (sqlite3.Row): Logged in user.
+
+    Returns:
+        The view.
+
     """
     user_id = g.user['id']
     db = get_db()
@@ -60,17 +72,19 @@ def index(subgraph_id=None, message=None):
 @bp.route('/_set_finished')
 @login_required
 def set_finished():
-    """What it does.
+    """Changes the finished flag of a subgraph.
     
-    Request arguments:
-        subgraph_id: ...
-        finished: ...
-    
+    Request args:
+        subgraph_id (int): Id of the Subgraph to change.
+        finished (str: 'true' or 'false'): The new value of the finished flag of the subgraph.
+
+    Context:
+        g.user (sqlite3.Row): Logged in user. Must have access to the subgraph.
+
     Returns JSON:
-        error: msg...
-        finished: ...
-    """  #todo doku fertig
-    # todo ist das eig nötig das ich finished returne? mach ich doch sonst auch nicht
+        error (str): An error message if something went wrong.
+
+    """
     user_id = g.user['id']
     subgraph_id = request.args.get('subgraph_id', 0, type=int)
     finished = request.args.get('finished', '', type=str)
@@ -89,7 +103,7 @@ def set_finished():
             'UPDATE subgraph SET finished = ? WHERE id = ?', (finished, subgraph_id)
         )
         db.commit()
-        return jsonify(finished=finished)
+        return jsonify()
     else:
         return jsonify(error='Argument "finished" has to be "true" or "false"')
 
@@ -97,6 +111,20 @@ def set_finished():
 @bp.route('/_edit_subgraph_name')
 @login_required
 def edit_subgraph_name():
+    """Changes the name of a subgraph.
+
+    Request args:
+        subgraph_id (int): Id of the Subgraph to change.
+        name (str): The new name of the subgraph.
+
+    Context:
+        g.user (sqlite3.Row): Logged in user. Must have access to the subgraph.
+
+    Returns JSON:
+        name (str): The new name of the subgraph. (identical to the argument, only to make js simpler)
+        error (str): An error message if something went wrong.
+
+    """
     user_id = g.user['id']
     subgraph_id = request.args.get('subgraph_id', 0, type=int)
     subgraph_name = request.args.get('name', '', type=str)
@@ -124,6 +152,22 @@ def edit_subgraph_name():
 @bp.route('/_delete_subgraph')
 @login_required
 def delete_subgraph():
+    """Marks a subgraph as deleted.
+
+    The subgraph is not actually deleted from the db and can be made accessible again by setting the
+    deleted flag back to 0.
+
+    Request args:
+        subgraph_id (int): Id of the Subgraph to delete.
+
+    Context:
+        g.user (sqlite3.Row): Logged in user. Must have access to the subgraph.
+
+    Returns JSON:
+        name (str): The new name of the deleted subgraph.
+        error (str): An error message if something went wrong.
+
+    """
     user_id = g.user['id']
     subgraph_id = request.args.get('subgraph_id', 0, type=int)
 
@@ -152,6 +196,18 @@ def delete_subgraph():
 @bp.route('/_undo_delete_subgraph')
 @login_required
 def undo_delete_subgraph():
+    """Marks a subgraph as not deleted.
+
+    Request args:
+        subgraph_id (int): Id of the Subgraph to un-delete.
+
+    Context:
+        g.user (sqlite3.Row): Logged in user. Must have access to the subgraph.
+
+    Returns JSON:
+        error (str): An error message if something went wrong.
+
+    """
     user_id = g.user['id']
     subgraph_id = request.args.get('subgraph_id', 0, type=int)
 
@@ -183,6 +239,19 @@ def undo_delete_subgraph():
 @bp.route('/_add_subgraph')
 @login_required
 def add_subgraph():
+    """Add a new subgraph.
+
+    Request args:
+        name (str): Name of the new subgraph.
+
+    Context:
+        g.user (sqlite3.Row): Logged in user. The new subgraph will be made accessible to this user.
+
+    Returns JSON:
+        redirect (str): URL of the new subgraph.
+        error (str): An error message if something went wrong.
+
+    """
     user_id = g.user['id']
     subgraph_name = request.args.get('name', '', type=str)
 

@@ -1,9 +1,10 @@
 import pytest
-from ratio.db import get_db
-from ratio.tool import MSG_SUBGRAPH_ACCESS
 from flask import url_for
 from lxml import html
 from urllib.parse import urlparse
+
+from ratio.db import get_db
+from ratio.tool import MSG_SUBGRAPH_ACCESS
 
 
 def test_index(client, auth):
@@ -19,10 +20,12 @@ def test_index(client, auth):
     ((1, [True, True, False, False]), (2, [False, True, True, False]))
 )
 def test_subgraph_list(client, auth, user_id, access):
-    """Subgraph 1 is owned by user 1 only
+    """ Tests if users see those and only those subgraphs that they have access to in their lists.
+    Subgraph 1 is owned by user 1 only
     Subgraph 2 is owned by both users
     Subgraph 3 is owned by user 2 only
-    Subgraph 4 is owned by user 1 but deleted"""
+    Subgraph 4 is owned by user 1 but deleted
+    """
     auth.login(user_id=user_id)
     data = html.fromstring(client.get('/').data)
     xpath = './/div[@id="subgraph-list"]//a[@href="/{}"]'
@@ -50,6 +53,7 @@ def test_index_with_subgraph(client, auth, url, name, finished):
      ('/99', 'Subgraph with id 99 does not exist.'))  # does not exist
 )
 def test_index_redirect(client, auth, url, message):
+    """Tests the redirect when a user tries to access a subgraph he has no access to."""
     auth.login()
     response = client.get(url)
     assert response.location == url_for('tool.index', message=message, _external=True)
@@ -57,14 +61,13 @@ def test_index_redirect(client, auth, url, message):
     assert message.encode() in response.data
 
 
-@pytest.mark.usefixtures("reset_db")
+@pytest.mark.usefixtures('reset_db')
 def test_set_finished(client, auth):
     db = get_db()
     assert not db.execute('SELECT * FROM subgraph WHERE id = 1').fetchone()['finished']
     auth.login()
     response = client.get('/_set_finished?subgraph_id=1&finished=true')
     assert 'error' not in response.get_json()
-    assert response.get_json()['finished']
     assert db.execute('SELECT * FROM subgraph WHERE id = 1').fetchone()['finished']
 
 
@@ -84,7 +87,7 @@ def test_set_finished_validate_input(client, auth, query, message):
     assert response.get_json()['error'] == message
 
 
-@pytest.mark.usefixtures("reset_db")
+@pytest.mark.usefixtures('reset_db')
 def test_edit_subgraph_name(client, auth):
     db = get_db()
     assert db.execute('SELECT * FROM subgraph WHERE id = 1').fetchone()['name'] == 'subgraph1'
@@ -111,7 +114,7 @@ def test_edit_subgraph_name_validate_input(client, auth, query, message):
     assert response.get_json()['error'] == message
 
 
-@pytest.mark.usefixtures("reset_db")
+@pytest.mark.usefixtures('reset_db')
 def test_delete_subgraph(client, auth):
     db = get_db()
     assert not db.execute('SELECT * FROM subgraph WHERE id = 1').fetchone()['deleted']
@@ -136,7 +139,7 @@ def test_delete_subgraph_validate_input(client, auth, query, message):
     assert response.get_json()['error'] == message
 
 
-@pytest.mark.usefixtures("reset_db")
+@pytest.mark.usefixtures('reset_db')
 def test_undo_delete_subgraph(client, auth):
     db = get_db()
     assert db.execute('SELECT * FROM subgraph WHERE id = 4').fetchone()['deleted']
@@ -159,7 +162,7 @@ def test_undo_delete_subgraph_validate_input(client, auth, query, message):
     assert response.get_json()['error'] == message
 
 
-@pytest.mark.usefixtures("reset_db")
+@pytest.mark.usefixtures('reset_db')
 def test_add_subgraph(client, auth):
     db = get_db()
     assert not db.execute('SELECT EXISTS (SELECT 1 FROM subgraph WHERE name = "new")').fetchone()[0]

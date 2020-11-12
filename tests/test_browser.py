@@ -1,22 +1,22 @@
 import os
 import pytest
 from flask import url_for
-from selenium.webdriver import Firefox
 from selenium.webdriver import ActionChains
-from selenium.webdriver.firefox.options import Options
+from selenium.webdriver import Firefox
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.support import expected_conditions as ec
+from selenium.webdriver.support.ui import WebDriverWait
 
 
 @pytest.fixture
 def browser():
+    """Provides a driver for the firefox browser."""
     driver_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'driver', 'geckodriver')
     options = Options()
     options.headless = True
     driver = Firefox(options=options, executable_path=driver_path)
-    driver.implicitly_wait(10)
 
     yield driver
 
@@ -24,8 +24,12 @@ def browser():
 
 
 @pytest.mark.usefixtures('live_server')
-@pytest.mark.usefixtures("reset_db")
+@pytest.mark.usefixtures('reset_db')
 def test_header(browser):
+    """Tests functionality from header.js:
+    Login, logout, overlay, finished checkboxes (in header and list).
+    """
+
     wait = WebDriverWait(browser, 5)
 
     # log in
@@ -61,8 +65,12 @@ def test_header(browser):
 
 
 @pytest.mark.usefixtures('live_server')
-@pytest.mark.usefixtures("reset_db")
+@pytest.mark.usefixtures('reset_db')
 def test_subgraph_list(browser):
+    """Tests functionality from subgraph_menu.js:
+    Filter, change subgraph name, delete subgraph, undo delete, add subgraph.
+    """
+
     wait = WebDriverWait(browser, 5)
 
     # log in
@@ -133,6 +141,9 @@ def test_subgraph_list(browser):
 
 
 @pytest.mark.usefixtures('live_server')
-@pytest.mark.usefixtures("reset_db")
+@pytest.mark.usefixtures('reset_db')
 def test_knowledge(browser):
+    """Tests functionality from knowledge.js:
+    todo
+    """
     pass

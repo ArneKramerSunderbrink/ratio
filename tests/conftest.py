@@ -1,10 +1,8 @@
 import os
+import pytest
 import tempfile
 
-import pytest
-
 from ratio import create_app
-from ratio.db import get_db
 from ratio.db import init_db
 from ratio.db import db_populate_dummy
 
@@ -70,6 +68,7 @@ def runner(app):
 
 
 class AuthActions(object):
+    """A class that provides methods to log the test client in and out."""
     def __init__(self, client):
         self._client = client
         self.usernames = ['test', 'other']

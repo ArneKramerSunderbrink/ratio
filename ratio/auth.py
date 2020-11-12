@@ -46,6 +46,23 @@ def load_logged_in_user():
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
     """Log in a registered user by adding the user id to the session."""
+    """Login view of the tool.
+
+    Returns:
+        The view.
+
+    If method is POST:
+    Request form:
+        username (str): The username of the user to log in.
+        password (str): The (plain text) password of the user.
+        
+    Request args:
+        next_url (str): The URL to redirect to after successful log in.
+        
+    Returns:
+        redirect to the index or next_url if it is not none.
+
+    """
 
     if request.method == 'POST':
         username = request.form['username']

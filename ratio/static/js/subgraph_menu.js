@@ -18,7 +18,7 @@ $(function() {
   });
 });
 
-// edit subgraph
+// edit subgraph name
 $(function() {
   $('div#subgraph-list').on('submit', 'form', function() {
     var data = $(this).serializeArray();
