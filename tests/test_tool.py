@@ -41,7 +41,6 @@ def test_index_with_subgraph(client, auth, url, name, finished):
     assert data.find('.//a[@id="subgraph-name"]').text == name
     # finished-checkbox in header
     assert (data.find('.//input[@id="finished"]').get('checked') is not None) == finished
-    # todo check if knowledge is displayed ...
 
 
 @pytest.mark.parametrize(

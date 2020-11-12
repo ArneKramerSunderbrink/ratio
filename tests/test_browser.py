@@ -130,3 +130,9 @@ def test_subgraph_list(browser):
 
     # log out
     browser.find_element(By.LINK_TEXT, 'Log Out').click()
+
+
+@pytest.mark.usefixtures('live_server')
+@pytest.mark.usefixtures("reset_db")
+def test_knowledge(browser):
+    pass
