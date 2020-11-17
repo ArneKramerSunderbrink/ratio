@@ -71,3 +71,29 @@
     </form>
   </tr>
 {% endmacro %}
+
+{% macro entity_div(entity, root) %}
+<div class="{% if not root %}w3-border-blue w3-hover-border-light-blue{% endif %}">
+  <h1 title="{{ entity.comment }}">{{ entity.label }}</h1>
+  {% if not root %}
+    <button> DELETE </button>
+  {% endif %}
+  <div>
+    {% for field in entity.fields %}
+      <h2 title="{{ field.comment }}">{{ field.label }}:</h2>
+      {% if len(field.values == 0) or not field.functional %}
+        <button>ADD</button>
+      {% endif %}
+      {% if field.is_object_property %}
+        {% for value in field.values%}
+          {{ entity_div(value, False) }}
+        {% endfor %}
+      {% else %}
+        {% for value in field.values %}
+          <div>{{ value }}</div> <!-- todo flip to edit-->
+        {% endfor %}
+      {% endif %}
+    {% endfor%}
+  </div>
+</div>
+{% endmacro %}

@@ -8,7 +8,7 @@ with io.open('README.md', 'rt', encoding='utf8') as f:
 
 setup(
     name='ratio',
-    version='1.0.0',
+    version='0.1',
     maintainer='Arne Kramer-Sunderbrink',
     maintainer_email='herr-kramer-sunderbrink@t-online.de',
     description='RATIO tool.',
@@ -17,6 +17,6 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     zip_safe=False,
-    install_requires=['flask', 'werkzeug', 'click'],
+    install_requires=['flask', 'werkzeug', 'click', 'rdflib'],
     extras_require={'test': ['pytest', 'pytest-flask', 'coverage', 'selenium', 'lxml']}
 )

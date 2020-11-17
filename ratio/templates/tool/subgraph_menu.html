@@ -12,8 +12,8 @@
     </a>
   </div>
   <div class="w3-margin-top" id="subgraph-list">
-    {% for s in subgraph_list %}
-      {{ subgraph_row(s['id'], s['name'], s['finished']) }}
+    {% for subgraph in subgraph_list %}
+      {{ subgraph_row(subgraph['id'], subgraph['name'], subgraph['finished']) }}
     {% endfor %}
   </div>
   <div class="w3-margin-top w3-margin-bottom flex-row flip-frontside" data-flipid="new-subgraph">
