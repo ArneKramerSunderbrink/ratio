@@ -5,16 +5,6 @@ body {
 }
 
 /* Layout of the tool */
-#flex-container {
-  display: flex;
-  flex-flow: column;
-  height: 100%;
-}
-
-#flex-header {
-  flex: 0 0 auto;
-}
-
 #flex-body {
   flex: 1 1 0;
   overflow: auto;
@@ -24,6 +14,7 @@ body {
 #scroll-container {
   height: 100%;
   overflow: auto;
+  padding: 0.5em 0em 0.5em 0em;
   width: 100%;
 }
 
@@ -45,10 +36,17 @@ body {
   padding: 0;
 }
 
+/* Flex */
 .flex-row {
   display: flex;
   flex-direction: row;
   width: 100%;
+}
+
+.flex-column {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
 }
 
 .flex-input {
@@ -80,4 +78,15 @@ body {
 }
 
 /* Knowledge */
+.entity {
+  margin: 5px 0px 5px 0px;
+  padding: 0.5em 1em 0.5em 1.5em;
+}
 
+.entity-border {
+  border: 2px solid #2196F3;
+}
+
+.entity-border:hover {
+  border: 2px solid #ccc;
+}

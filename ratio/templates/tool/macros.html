@@ -31,6 +31,7 @@
 {% endmacro %}
 
 
+<!-- todo can be deleted? -->
 {% macro knowledge_row(knowledge_id, subgraph_id, subject, predicate, object) %}
   <tr id="tr-{{ knowledge_id }}">
     <td>{{ subject }}</td>
@@ -73,27 +74,34 @@
 {% endmacro %}
 
 {% macro entity_div(entity, is_root) %}
-<div class="w3-container {% if not is_root %}w3-border w3-border-blue w3-hover-border-light-blue{% endif %}">
-  <p {% if entity.comment %}title="{{ entity.comment }}"{% endif %}>{{ entity.label }}</p>
-  {% if not is_root %}
-    <button> DELETE </button>
-  {% endif %}
-  <div>
-    {% for field in entity.fields %}
-      <p {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}:</p>
+<div class="entity{% if not is_root %} entity-border{% endif %}">
+  <div class="flex-row">
+    <div class="flex-text" {% if entity.comment %}title="{{ entity.comment }}"{% endif %}>{{ entity.label }}</div>
+    <a href="#" class="w3-button flex-fix" title="Edit entity">
+      <i class="fas fa-pen fa-lg"></i>
+    </a>
+  </div>
+
+  {% for field in entity.fields %}
+    <div class="flex-row">
+      <div class="flex-fix" {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}:</div>
       {% if not field.values or not field.functional %}
-        <button>ADD</button>
+        <button type="submit" class="w3-button flex-fix" title="Add subgraph">
+          <i class="fas fa-plus fa-lg"></i>
+        </button>
       {% endif %}
       {% if field.is_described %}
         {% for value in field.values%}
           {{ entity_div(value, False) }}
         {% endfor %}
       {% else %}
+        <div class="flex-column">
         {% for value in field.values %}
-          <div>{{ value }}</div> <!-- todo flip to edit-->
+          <div class="flex-fix">{{ value }}</div> <!-- todo flip to edit-->
         {% endfor %}
+        </div>
       {% endif %}
-    {% endfor%}
-  </div>
+    </div>
+  {% endfor%}
 </div>
 {% endmacro %}
