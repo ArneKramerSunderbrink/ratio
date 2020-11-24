@@ -73,18 +73,18 @@
 {% endmacro %}
 
 {% macro entity_div(entity, is_root) %}
-<div class="{% if not is_root %}w3-border-blue w3-hover-border-light-blue{% endif %}">
-  <h1 title="{{ entity.comment }}">{{ entity.label }}</h1>
+<div class="w3-container {% if not is_root %}w3-border w3-border-blue w3-hover-border-light-blue{% endif %}">
+  <p {% if entity.comment %}title="{{ entity.comment }}"{% endif %}>{{ entity.label }}</p>
   {% if not is_root %}
     <button> DELETE </button>
   {% endif %}
   <div>
     {% for field in entity.fields %}
-      <h2 title="{{ field.comment }}">{{ field.label }}:</h2>
+      <p {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}:</p>
       {% if not field.values or not field.functional %}
         <button>ADD</button>
       {% endif %}
-      {% if field.is_object_property %}
+      {% if field.is_described %}
         {% for value in field.values%}
           {{ entity_div(value, False) }}
         {% endfor %}

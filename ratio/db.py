@@ -45,14 +45,17 @@ def init_db_command():
 
 def db_populate_dummy():
     """Populates database with dummy data for testing and development."""
-    with current_app.open_resource('data_dummy.sql') as f:
+    with current_app.open_resource('dummy/admin.sql') as f:
         get_db().executescript(f.read().decode('utf8'))
 
     from ratio.knowledge_model import get_ontology
-    with current_app.open_resource('ontology_dummy.ttl') as f:
-        get_ontology().load_ontology_file(f, 'turtle')
+    with current_app.open_resource('dummy/ontology.ttl') as f:
+        get_ontology().load_rdf_file(f, 'turtle')
 
-    # todo add dummy knowledge about the dummy subgraphs
+    from ratio.knowledge_model import get_subgraph_knowledge
+    for i in range(1, 5):
+        with current_app.open_resource('dummy/knowledge_{}.ttl'.format(i)) as f:
+            get_subgraph_knowledge(i).load_rdf_file(f, 'turtle')
 
 
 @click.command('db-add-dummy')

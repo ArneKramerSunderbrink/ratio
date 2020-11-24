@@ -34,7 +34,7 @@ class Ontology:
         for row in rows:
             self.graph.add(row_to_rdf(row))
 
-    def load_ontology_file(self, file, rdf_format='turtle'):
+    def load_rdf_file(self, file, rdf_format='turtle'):
         self.graph = Graph()
         self.graph.parse(file=file, format=rdf_format)
 
@@ -81,6 +81,20 @@ class SubgraphKnowledge:
 
     def new_individual(self, class_uri):
         pass  # create the triples for a new individual, give it an unique uri
+
+    def load_rdf_file(self, file, rdf_format='turtle'):
+        self.graph = Graph()
+        self.graph.parse(file=file, format=rdf_format)
+
+        db = get_db()
+        db.execute('DELETE FROM knowledge WHERE subgraph_id = ?', (self.id,))
+
+        for subject, predicate, object_ in self.graph[::]:
+            db.execute('INSERT INTO knowledge (subgraph_id, subject, predicate, object, object_is_uri)'
+                       ' VALUES (?, ?, ?, ?, ?)',
+                       (self.id, str(subject), str(predicate), str(object_), 1 if type(object_) == URIRef else 0))
+
+        db.commit()
 
 
 def get_subgraph_knowledge(subgraph_id):
@@ -155,7 +169,7 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
     is_described = RATIO.Described in ontology.objects(range_class_uri, RDF.type)
 
     values = list(knowledge.objects(individual_uri, property_uri))
-    if is_object_property and is_described:
+    if is_described:
         values = [build_entity_from_knowledge(ontology, knowledge, value) for value in values]
 
     return Field(property_uri, label, comment, is_object_property, is_described, is_functional, range_class_uri, values)

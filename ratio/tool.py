@@ -272,5 +272,7 @@ def add_subgraph():
         (user_id, subgraph_id)
     )
 
+    # todo create new root individual, add uri to subgraph and knowledge to knowledge
+
     db.commit()
     return jsonify(redirect=url_for('tool.index', subgraph_id=subgraph_id))

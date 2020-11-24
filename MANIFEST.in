@@ -1,5 +1,7 @@
 include ratio/schema.sql
-include ratio/data_dummy.sql
+include ratio/dummy/admin.sql
+include ratio/dummy/knowledge.ttl
+include ratio/dummy/ontology.ttl
 graft ratio/static
 graft ratio/templates
 graft tests

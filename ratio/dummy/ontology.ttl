@@ -761,7 +761,7 @@ owl:Thing rdf:type owl:Class .
 
 @prefix ratio: <http://www.example.org/ratio-tool#> .
 
-ctro:ClinicalTrial rdf:type ratio:SubgraphRoot .
+ctro:Publication rdf:type ratio:SubgraphRoot .
 
 ctro:Arm rdf:type ratio:Described .
 ctro:ClinicalTrial rdf:type ratio:Described .
