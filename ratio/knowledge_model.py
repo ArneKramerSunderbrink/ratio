@@ -18,13 +18,10 @@ RATIO = Namespace('http://www.example.org/ratio-tool#')
 
 
 def row_to_rdf(row):
-    print(row['subject'])
-    print(row['predicate'])
-    print(row['object'])
-    print(row['object_is_uri'])
-    return URIRef(row['subject']), \
-           URIRef(row['predicate']), \
-           URIRef(row['object']) if row['object_is_uri'] else Literal(row['object'])
+    subject = URIRef(row['subject'])
+    predicate = URIRef(row['predicate'])
+    object_ = URIRef(row['object']) if row['object_is_uri'] else Literal(row['object'])
+    return subject, predicate, object_
 
 
 class Ontology:
