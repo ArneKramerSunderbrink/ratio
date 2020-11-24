@@ -10,6 +10,7 @@ from flask import url_for
 
 from ratio.auth import login_required, subgraph_access
 from ratio.db import get_db
+from ratio.knowledge_model import get_subgraph_knowledge
 
 MSG_SUBGRAPH_ACCESS = 'Subgraph with id {} does not exist or is not owned by user {} currently logged in.'
 
@@ -62,11 +63,9 @@ def index(subgraph_id=None, message=None):
     if not subgraph_access(user_id, subgraph_id):
         return redirect(url_for('tool.index', message='You have no access to subgraph with id {}.'.format(subgraph_id)))
 
-    knowledge = db.execute(
-        'SELECT * FROM knowledge WHERE subgraph_id = ?', (subgraph_id,)
-    )
+    root = get_subgraph_knowledge(subgraph_id).get_root()
 
-    return render_template('tool/index.html', subgraph=subgraph, knowledge=knowledge, subgraph_list=subgraph_list)
+    return render_template('tool/index.html', subgraph=subgraph, root=root, subgraph_list=subgraph_list)
 
 
 @bp.route('/_set_finished')

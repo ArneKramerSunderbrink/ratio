@@ -72,16 +72,16 @@
   </tr>
 {% endmacro %}
 
-{% macro entity_div(entity, root) %}
-<div class="{% if not root %}w3-border-blue w3-hover-border-light-blue{% endif %}">
+{% macro entity_div(entity, is_root) %}
+<div class="{% if not is_root %}w3-border-blue w3-hover-border-light-blue{% endif %}">
   <h1 title="{{ entity.comment }}">{{ entity.label }}</h1>
-  {% if not root %}
+  {% if not is_root %}
     <button> DELETE </button>
   {% endif %}
   <div>
     {% for field in entity.fields %}
       <h2 title="{{ field.comment }}">{{ field.label }}:</h2>
-      {% if len(field.values == 0) or not field.functional %}
+      {% if not field.values or not field.functional %}
         <button>ADD</button>
       {% endif %}
       {% if field.is_object_property %}

@@ -10,12 +10,21 @@ from rdflib import Namespace
 from rdflib import RDF
 from rdflib import RDFS
 from rdflib import URIRef
-from rdflib.term import _is_valid_uri
 
 from ratio.db import get_db
 
 
 RATIO = Namespace('http://www.example.org/ratio-tool#')
+
+
+def row_to_rdf(row):
+    print(row['subject'])
+    print(row['predicate'])
+    print(row['object'])
+    print(row['object_is_uri'])
+    return URIRef(row['subject']), \
+           URIRef(row['predicate']), \
+           URIRef(row['object']) if row['object_is_uri'] else Literal(row['object'])
 
 
 class Ontology:
@@ -24,12 +33,9 @@ class Ontology:
         self.graph = Graph()
 
         db = get_db()
-        triples = db.execute('SELECT * FROM ontology').fetchall()
-        for triple in triples:
-            subject = URIRef(triple['subject'])
-            predicate = URIRef(triple['predicate'])
-            object_ = URIRef(triple['object']) if _is_valid_uri(triple['object']) else Literal(triple['object'])
-            self.graph.add((subject, predicate, object_))
+        rows = db.execute('SELECT * FROM ontology').fetchall()
+        for row in rows:
+            self.graph.add(row_to_rdf(row))
 
     def load_ontology_file(self, file, rdf_format='turtle'):
         self.graph = Graph()
@@ -39,8 +45,8 @@ class Ontology:
         db.execute('DELETE FROM ontology')
 
         for subject, predicate, object_ in self.graph[::]:
-            db.execute('INSERT INTO ontology (subject, predicate, object) VALUES (?, ?, ?)',
-                       (str(subject), str(predicate), str(object_)))
+            db.execute('INSERT INTO ontology (subject, predicate, object, object_is_uri) VALUES (?, ?, ?, ?)',
+                       (str(subject), str(predicate), str(object_), 1 if type(object_) == URIRef else 0))
 
         db.commit()
 
@@ -60,7 +66,21 @@ class SubgraphKnowledge:
 
     def __init__(self, subgraph_id):
         self.graph = Graph()
-        # todo load graph from db
+        self.id = subgraph_id
+
+        db = get_db()
+
+        self.root_uri = URIRef(db.execute('SELECT root FROM subgraph WHERE id = ?', (subgraph_id,)).fetchone()['root'])
+
+        rows = db.execute(
+            'SELECT subject, predicate, object, object_is_uri FROM knowledge WHERE subgraph_id = ?',
+            (subgraph_id,)
+        ).fetchall()
+        for row in rows:
+            self.graph.add(row_to_rdf(row))
+
+    def get_root(self):
+        return build_entity_from_knowledge(get_ontology().graph, self.graph, self.root_uri)
 
     def new_individual(self, class_uri):
         pass  # create the triples for a new individual, give it an unique uri

@@ -1,3 +1,5 @@
+{% from "tool/macros.html" import entity_div %}
+
 {% extends 'base.html' %}
 
 {% block title %}RATIO {{ '- '+subgraph['name'] if subgraph['name'] }}{% endblock %}
@@ -12,7 +14,7 @@
 
   <section id="flex-body">
     <div class="w3-padding" id="scroll-container">
-      {% if subgraph['id'] %}{% include 'tool/knowledge.html' %}{% endif %}
+      {% if subgraph['id'] %}{{ entity_div(root, true) }}{% endif %}
     </div>
 
     <div class="w3-modal" id="overlay" {% if not subgraph['id'] %}style="display: block"{% endif %}>
