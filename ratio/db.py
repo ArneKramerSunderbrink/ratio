@@ -23,7 +23,7 @@ def get_db():
 def close_db(e=None):
     """If this request connected to the database, close the connection."""
     ontology = g.pop('ontology', None)
-    db = g.pop('db', None)
+    db = g.pop('db', None)  # todo knowledge needs to be popped as well
 
     if db is not None:
         db.close()
@@ -48,6 +48,12 @@ def db_populate_dummy():
     with current_app.open_resource('data_dummy.sql') as f:
         get_db().executescript(f.read().decode('utf8'))
 
+    from ratio.knowledge_model import get_ontology
+    with current_app.open_resource('ontology_dummy.ttl') as f:
+        get_ontology().load_ontology_file(f, 'turtle')
+
+    # todo add dummy knowledge about the dummy subgraphs
+
 
 @click.command('db-add-dummy')
 @with_appcontext
@@ -58,12 +64,12 @@ def db_populate_dummy_command():
 
 
 @click.command('load-ontology-file')
-@click.argument('path', type=click.Path(exists=True))
+@click.argument('file', type=click.File('rb'))
 @click.option('-f', '--format', 'rdf_format', default='turtle')
 @with_appcontext
-def load_ontology_file_command(path, rdf_format):
+def load_ontology_file_command(file, rdf_format):
     from ratio.knowledge_model import get_ontology
-    get_ontology().load_ontology_file(path, rdf_format)
+    get_ontology().load_ontology_file(file, rdf_format)
     click.echo('Loaded ontology into the database.')
 
 
