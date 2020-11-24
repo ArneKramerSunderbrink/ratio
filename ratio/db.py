@@ -22,6 +22,7 @@ def get_db():
 
 def close_db(e=None):
     """If this request connected to the database, close the connection."""
+    ontology = g.pop('ontology', None)
     db = g.pop('db', None)
 
     if db is not None:
@@ -56,6 +57,16 @@ def db_populate_dummy_command():
     click.echo('Added dummy data to the database.')
 
 
+@click.command('load-ontology-file')
+@click.argument('path', type=click.Path(exists=True))
+@click.option('-f', '--format', 'rdf_format', default='turtle')
+@with_appcontext
+def load_ontology_file_command(path, rdf_format):
+    from ratio.knowledge_model import get_ontology
+    get_ontology().load_ontology_file(path, rdf_format)
+    click.echo('Loaded ontology into the database.')
+
+
 def init_app(app):
     """Register database functions with the Flask app.
     This is called by the application factory.
@@ -63,3 +74,4 @@ def init_app(app):
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
     app.cli.add_command(db_populate_dummy_command)
+    app.cli.add_command(load_ontology_file_command)

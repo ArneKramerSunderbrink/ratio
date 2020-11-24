@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS subgraph;
 DROP TABLE IF EXISTS access;
 DROP TABLE IF EXISTS knowledge;
+DROP TABLE IF EXISTS ontology;
 
 CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -26,16 +27,18 @@ CREATE TABLE access (
   FOREIGN KEY (subgraph_id) REFERENCES subgraph (id)
 );
 
--- RDF triples with additional information about
--- the subgraph of the knowledge base, e.g. specifying that it's knowledge about a specific clinical trial,
--- and the author who added the triple to the knowledgebase
+-- RDF triples that represent knowledge about a certain subgraph
 CREATE TABLE knowledge (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
   subgraph_id INTEGER NOT NULL,
-  author_id INTEGER NOT NULL,
   subject TEXT NOT NULL,
   predicate TEXT NOT NULL,
   object TEXT NOT NULL,
   FOREIGN KEY (subgraph_id) REFERENCES subgraph (id)
-  FOREIGN KEY (author_id) REFERENCES user (id)
 );
+
+-- RDF triples that represent the ontology
+CREATE TABLE ontology (
+  subject TEXT NOT NULL,
+  predicate TEXT NOT NULL,
+  object TEXT NOT NULL
+)

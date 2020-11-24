@@ -20,6 +20,6 @@ VALUES
   (2, 2),
   (2, 3);
 
-INSERT INTO knowledge (subgraph_id, author_id, subject, predicate, object)
+INSERT INTO knowledge (subgraph_id, subject, predicate, object)
 VALUES
-  (1, 1, 'Fritz', 'loves', 'Franz');
+  (1, 'Fritz', 'loves', 'Franz');
