@@ -6,7 +6,7 @@ python3 -m venv venv
 source venv/bin/activate
 
 # install modules for deployment and the tool
-pip install meinheld gunicorn ratio-1.0.0-py2.py3-none-any.whl
+pip install meinheld gunicorn ratio-0.1-py2.py3-none-any.whl
 
 # Tell Flask what app to use
 export FLASK_APP=ratio
