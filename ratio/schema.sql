@@ -34,7 +34,6 @@ CREATE TABLE knowledge (
   subject TEXT NOT NULL,
   predicate TEXT NOT NULL,
   object TEXT NOT NULL,
-  object_is_uri BIT NOT NULL,
   FOREIGN KEY (subgraph_id) REFERENCES subgraph (id)
 );
 
@@ -42,6 +41,5 @@ CREATE TABLE knowledge (
 CREATE TABLE ontology (
   subject TEXT NOT NULL,
   predicate TEXT NOT NULL,
-  object TEXT NOT NULL,
-  object_is_uri BIT NOT NULL
+  object TEXT NOT NULL
 )

@@ -2,27 +2,28 @@
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 
 ctro:Pub_1 rdf:type owl:NamedIndividual ,
                     ctro:Publication ;
-           rdfs:label "Publication 9098273" ;
+           rdfs:label "Publication 9098273"^^xsd:string ;
            ctro:describes ctro:CT_1 ;
-           ctro:hasAbstract "PURPOSE: To compare the effect on intraocular pressure (IOP) and side effects of 0.005% latanoprost applied once daily, morning or evening, with 0.5% timolol applied twice daily. METHODS: A 6-month randomized, double-masked, multicenter study with three parallel groups was undertaken. Two hundred sixty-seven patients were randomized, 84 to timolol, 89 to latanoprost in the morning for 3 months and then in the evening for another 3 months, and 94 to latanoprost with the treatment schedule reversed. RESULTS: After 6 months, timolol reduced diurnal IOP from 24.6 to 17.9 mmHg (27%); latanoprost applied in the morning, from 25.5 to 17.7 mmHg (31%); and latanoprost applied in the evening, from 24.8 to 16.2 mmHg (35%). The efficacy of latanoprost applied in the evening was statistically superior to latanoprost applied in the morning and to timolol (P < 0.001). Latanoprost induced a slight increase in conjunctival hyperemia in 31.4% of treated patients, compared with 15.9% for timolol. Sporadic episodes of mild punctate corneal epithelial erosions were three times as frequent in latanoprost-treated eyes as in timolol-treated eyes. The most significant ocular side effect was increased pigmentation of the iris observed in five and suspected in seven more latanoprost-treated eyes. All these eyes had a mixed green-brown or blue/gray-brown iris color. Timolol reduced heart rate by 3 beats/minute (P < 0.005). CONCLUSIONS: The effect on diurnal IOP of latanoprost applied once daily in the evening is superior to that of timolol. The main difference in side effects is increased pigmentation of the iris induced by latanoprost, most likely due to stimulation of melanogenesis in iris stromal melanocytes." ;
-           ctro:hasAuthor "Alm A" ,
-                          "Stjernschantz J." ;
-           ctro:hasJournal "Ophthalmology" ;
-           ctro:hasPMID 9098273 ;
-           ctro:hasPublicationYear 1995 ;
-           ctro:hasTitle "Effects on intraocular pressure and side effects of 0.005% latanoprost applied once daily, evening or morning. A comparison with timolol. Scandinavian Latanoprost Study Group" .
+           ctro:hasAbstract "PURPOSE: To compare the effect on intraocular pressure (IOP) and side effects of 0.005% latanoprost applied once daily, morning or evening, with 0.5% timolol applied twice daily. METHODS: A 6-month randomized, double-masked, multicenter study with three parallel groups was undertaken. Two hundred sixty-seven patients were randomized, 84 to timolol, 89 to latanoprost in the morning for 3 months and then in the evening for another 3 months, and 94 to latanoprost with the treatment schedule reversed. RESULTS: After 6 months, timolol reduced diurnal IOP from 24.6 to 17.9 mmHg (27%); latanoprost applied in the morning, from 25.5 to 17.7 mmHg (31%); and latanoprost applied in the evening, from 24.8 to 16.2 mmHg (35%). The efficacy of latanoprost applied in the evening was statistically superior to latanoprost applied in the morning and to timolol (P < 0.001). Latanoprost induced a slight increase in conjunctival hyperemia in 31.4% of treated patients, compared with 15.9% for timolol. Sporadic episodes of mild punctate corneal epithelial erosions were three times as frequent in latanoprost-treated eyes as in timolol-treated eyes. The most significant ocular side effect was increased pigmentation of the iris observed in five and suspected in seven more latanoprost-treated eyes. All these eyes had a mixed green-brown or blue/gray-brown iris color. Timolol reduced heart rate by 3 beats/minute (P < 0.005). CONCLUSIONS: The effect on diurnal IOP of latanoprost applied once daily in the evening is superior to that of timolol. The main difference in side effects is increased pigmentation of the iris induced by latanoprost, most likely due to stimulation of melanogenesis in iris stromal melanocytes."^^xsd:string ;
+           ctro:hasAuthor "Alm A"^^xsd:string ,
+                          "Stjernschantz J."^^xsd:string ;
+           ctro:hasJournal "Ophthalmology"^^xsd:string ;
+           ctro:hasPMID "9098273"^^xsd:integer ;
+           ctro:hasPublicationYear "1995"^^xsd:integer ;
+           ctro:hasTitle "Effects on intraocular pressure and side effects of 0.005% latanoprost applied once daily, evening or morning. A comparison with timolol. Scandinavian Latanoprost Study Group"^^xsd:string .
 
 ctro:CT_1 rdf:type owl:NamedIndividual ,
                    ctro:ClinicalTrial ;
-          rdfs:label 'Clinical Trial 1' ;
+          rdfs:label "Clinical Trial 1"^^xsd:string ;
           ctro:analysesHealthCondition ctro:Glaucoma ;
           ctro:hasArm ctro:Arm_11 .
 
 ctro:Arm_11 rdf:type owl:NamedIndividual ,
                      ctro:Arm ;
-            rdfs:label 'Arm 1' ;
-            ctro:hasNumberPatientsArm 84 .
+            rdfs:label "Arm 1"^^xsd:string ;
+            ctro:hasNumberPatientsArm "84"^^xsd:integer .

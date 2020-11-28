@@ -2,26 +2,9 @@
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 
 ctro:Pub_2 rdf:type owl:NamedIndividual ,
                     ctro:Publication ;
-           rdfs:label "Publication 9098273" ;
-           ctro:describes ctro:CT_2 ;
-           ctro:hasAuthor "Alm A" ,
-                          "Stjernschantz J." ;
-           ctro:hasJournal "Ophthalmology" ;
-           ctro:hasPMID 9098273 ;
-           ctro:hasPublicationYear 1995 ;
-           ctro:hasTitle "Effects on intraocular pressure and side effects of 0.005% latanoprost applied once daily, evening or morning. A comparison with timolol. Scandinavian Latanoprost Study Group" .
-
-ctro:CT_2 rdf:type owl:NamedIndividual ,
-                   ctro:ClinicalTrial ;
-          rdfs:label 'Clinical Trial 1' ;
-          ctro:analysesHealthCondition ctro:Glaucoma ;
-          ctro:hasArm ctro:Arm_21 .
-
-ctro:Arm_21 rdf:type owl:NamedIndividual ,
-                     ctro:Arm ;
-            rdfs:label 'Arm 1' ;
-            ctro:hasNumberPatientsArm 84 .
+           rdfs:label "Publication 123123"^^xsd:string .

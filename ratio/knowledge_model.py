@@ -3,6 +3,7 @@ Specifically the translation of an rdf ontology into Python classes
 """
 
 from flask import g
+from rdflib import BNode
 from rdflib import Graph
 from rdflib import Literal
 from rdflib import OWL
@@ -17,10 +18,35 @@ from ratio.db import get_db
 RATIO = Namespace('http://www.example.org/ratio-tool#')
 
 
+def parse_n3_term(s):
+    """Translates a n3 string s to an rdflib.URIRef, rdflib.Literal or rdflib.BNode.
+
+    Only used to parse rows in the database stored using .n3(), not for parsing general rdf files!
+    """
+
+    if s.startswith('<') and s.endswith('>'):
+        return URIRef(s[1:-1])
+    elif s.startswith('"'):
+        _, value, suffix = s.split('"')
+        if suffix:
+            if suffix.startswith('@'):
+                return Literal(value, lang=suffix[1:])
+            elif suffix.startswith('^^'):
+                return Literal(value, datatype=URIRef(suffix[3:-1]))
+            else:
+                raise ValueError('{} cannot be parsed'.format(s))
+        else:
+            return Literal(value)
+    elif s.startswith('_:'):
+        return BNode(s[2:])
+    else:
+        raise ValueError('{} cannot be parsed'.format(s))
+
+
 def row_to_rdf(row):
-    subject = URIRef(row['subject'])
-    predicate = URIRef(row['predicate'])
-    object_ = URIRef(row['object']) if row['object_is_uri'] else Literal(row['object'])
+    subject = parse_n3_term(row['subject'])
+    predicate = parse_n3_term(row['predicate'])
+    object_ = parse_n3_term(row['object'])
     return subject, predicate, object_
 
 
@@ -42,8 +68,8 @@ class Ontology:
         db.execute('DELETE FROM ontology')
 
         for subject, predicate, object_ in self.graph[::]:
-            db.execute('INSERT INTO ontology (subject, predicate, object, object_is_uri) VALUES (?, ?, ?, ?)',
-                       (str(subject), str(predicate), str(object_), 1 if type(object_) == URIRef else 0))
+            db.execute('INSERT INTO ontology (subject, predicate, object) VALUES (?, ?, ?)',
+                       (subject.n3(), predicate.n3(), object_.n3()))
 
         db.commit()
 
@@ -70,7 +96,7 @@ class SubgraphKnowledge:
         self.root_uri = URIRef(db.execute('SELECT root FROM subgraph WHERE id = ?', (subgraph_id,)).fetchone()['root'])
 
         rows = db.execute(
-            'SELECT subject, predicate, object, object_is_uri FROM knowledge WHERE subgraph_id = ?',
+            'SELECT subject, predicate, object FROM knowledge WHERE subgraph_id = ?',
             (subgraph_id,)
         ).fetchall()
         for row in rows:
@@ -90,9 +116,9 @@ class SubgraphKnowledge:
         db.execute('DELETE FROM knowledge WHERE subgraph_id = ?', (self.id,))
 
         for subject, predicate, object_ in self.graph[::]:
-            db.execute('INSERT INTO knowledge (subgraph_id, subject, predicate, object, object_is_uri)'
-                       ' VALUES (?, ?, ?, ?, ?)',
-                       (self.id, str(subject), str(predicate), str(object_), 1 if type(object_) == URIRef else 0))
+            db.execute('INSERT INTO knowledge (subgraph_id, subject, predicate, object)'
+                       ' VALUES (?, ?, ?, ?)',
+                       (self.id, subject.n3(), predicate.n3(), object_.n3()))
 
         db.commit()
 

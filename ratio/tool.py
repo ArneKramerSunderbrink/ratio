@@ -260,9 +260,12 @@ def add_subgraph():
     db = get_db()
     db_cursor = db.cursor()
 
+    # todo create new root individual, add uri to subgraph and knowledge to knowledge
+    root_uri = 'http://abc.de/root'
+
     db_cursor.execute(
-        'INSERT INTO subgraph (name, finished, deleted) VALUES (?, ?, ?)',
-        (subgraph_name, False, False)
+        'INSERT INTO subgraph (name, root, finished, deleted) VALUES (?, ?, ?, ?)',
+        (subgraph_name, root_uri, False, False)
     )
 
     subgraph_id = db_cursor.lastrowid
@@ -272,7 +275,6 @@ def add_subgraph():
         (user_id, subgraph_id)
     )
 
-    # todo create new root individual, add uri to subgraph and knowledge to knowledge
 
     db.commit()
     return jsonify(redirect=url_for('tool.index', subgraph_id=subgraph_id))
