@@ -4,7 +4,7 @@
 
 <div class="w3-container w3-card-4 w3-blue">
   <div class="flex-row w3-margin-top">
-    <input class="w3-input flex-input w3-border w3-padding" style="width: {{90 if subgraph['id'] else 100 }}%"
+    <input class="w3-input flex-flex w3-border w3-padding" style="width: {{90 if subgraph['id'] else 100 }}%"
            type="text" placeholder="Search for subgraphs.." id="subgraph-filter">
     <a href="#" class="w3-button flex-fix w3-margin-left" title="Close" id="close-overlay"
        style="display: {{ 'block' if subgraph['id'] else 'none' }}">
@@ -21,7 +21,7 @@
   </div>
   <div class="w3-margin-top w3-margin-bottom flip-flipside" data-flipid="new-subgraph" style="display: none">
     <form class="flex-row" id="new-subgraph-form" method="post">
-      <input class="w3-input flex-input"
+      <input class="w3-input flex-flex"
              type="text" placeholder="Subgraph name.." name="name" id="new-subgraph-name" required>
       <button type="submit" class="w3-button flex-fix" title="Add subgraph">
         <i class="fas fa-plus fa-lg"></i>

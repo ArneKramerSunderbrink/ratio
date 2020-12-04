@@ -15,7 +15,7 @@
     </div>
     <div class="flip-flipside" data-flipid="subgraph-list-{{ subgraph_id }}" style="display: none">
       <form class="flex-row">
-        <input class="w3-input flex-input" type="text" name="name" value="{{ subgraph_name }}" required>
+        <input class="w3-input flex-flex" type="text" name="name" value="{{ subgraph_name }}" required>
         <button type="submit" class="w3-button flex-fix w3-right" title="Save changes">
           <i class="fas fa-save fa-lg"></i>
         </button>
@@ -30,49 +30,6 @@
   </div>
 {% endmacro %}
 
-
-<!-- todo can be deleted? -->
-{% macro knowledge_row(knowledge_id, subgraph_id, subject, predicate, object) %}
-  <tr id="tr-{{ knowledge_id }}">
-    <td>{{ subject }}</td>
-    <td>{{ predicate }}</td>
-    <td>{{ object }}</td>
-    <td>
-      <a href="#" class="w3-button" title="Edit knowledge" id="edit-{{ knowledge_id }}">
-        <i class="fas fa-pen fa-lg"></i>
-      </a>
-    </td>
-  </tr>
-  <tr class="w3-animate-opacity" style="display: none" id="tr-edit-{{ knowledge_id }}">
-    <form id="edit-knowledge-form-{{ knowledge_id }}">
-      <td>
-        <input class="w3-input" type="text" name="subject" value="{{ subject }}"
-               form="edit-knowledge-form-{{ knowledge_id }}" required>
-      </td>
-      <td>
-        <input class="w3-input" type="text" name="predicate" value="{{ predicate }}"
-               form="edit-knowledge-form-{{ knowledge_id }}" required>
-      </td>
-      <td>
-        <input class="w3-input" type="text" name="object" value="{{ object }}"
-               form="edit-knowledge-form-{{ knowledge_id }}" required>
-      </td>
-      <td>
-        <button type="submit" class="w3-button" title="Save changes"
-                form="edit-knowledge-form-{{ knowledge_id }}">
-          <i class="fas fa-save fa-lg"></i>
-        </button>
-        <a href="#" class="w3-button" title="Delete knowledge" id="delete-{{ knowledge_id }}">
-          <i class="fas fa-trash fa-lg"></i>
-        </a>
-        <a href="#" class="w3-button" title="Cancel" id="cancel-edit-{{ knowledge_id }}">
-          <i class="fas fa-times fa-lg"></i>
-        </a>
-      </td>
-    </form>
-  </tr>
-{% endmacro %}
-
 {% macro entity_div(entity, is_root) %}
 <div class="entity{% if not is_root %} entity-border{% endif %}">
   <div class="entity-underline" style="padding: 0.2em; margin-bottom: 1em;">
@@ -83,37 +40,39 @@
   </div>
 
   {% for field in entity.fields %}
-  {% if field.is_described %}
-  <div style="margin: 0.5em 0; padding: 0.2em;">
-    <span {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}:</span>
+  <div class="flex-row" style="padding: 0.2em; margin: 0.5em 0;">
+    <span class="flex-fix" {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}:</span>
+
+    {% if not field.is_described %}
+    <div class="flex-flex flex-column field-value-list">
+      {% for value in field.values %}
+      <div class="flex-row field-value">
+        <span class="flex-text">{{ value }}</span>
+        <a href="#" class="w3-button w3-right flex-fix" title="Edit {{ field.range_label }}" style="padding: 0px 6px; vertical-align: text-bottom;">
+          <i class="fas fa-pen"></i>
+        </a>
+      </div>  <!-- todo flip to edit -->
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="flex-flex"></div>
+    {% endif %}
+
     {% if not field.values or not field.functional %}
-    <a href="#" class="w3-button w3-right" title="add {{ field.range_label }}" style="padding: 0px 6px; vertical-align: text-bottom;">
-      <i class="fas fa-plus"></i>
-    </a>
+    <div class="flex-fix" style="line_height: 0">
+      <a href="#" class="w3-button flex-fix" title="Add {{ field.range_label }}" style="padding: 0px 6px; vertical-align: text-bottom;">
+        <i class="fas fa-plus"></i>
+      </a>
+    </div>
     {% endif %}
   </div>
 
+  {% if field.is_described %}
   {% for value in field.values%}
     {{ entity_div(value, False) }}
   {% endfor %}
-
-  {% else %}
-  <!--
-  <div class="flex-row">
-    <div class="flex-fix" {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}:</div>
-    {% if not field.values or not field.functional %}
-    <button type="submit" class="w3-button flex-fix" title="Add subgraph">
-      <i class="fas fa-plus fa-lg"></i>
-    </button>
-    {% endif %}
-
-    <div class="flex-column">
-    {% for value in field.values %}
-      <div class="flex-fix">{{ value }}</div>  todo flip to edit
-    {% endfor %}
-    </div>
-  </div>-->
   {% endif %}
+
   {% endfor%}
 </div>
 {% endmacro %}
