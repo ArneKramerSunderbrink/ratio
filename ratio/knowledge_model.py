@@ -140,7 +140,7 @@ class Field:
     """Represents a possible owl:ObjectProperty or owl:DatatypeProperty of an Entity"""
     def __init__(self, property_uri, label, comment,
                  is_object_property, is_described, is_functional,
-                 range_uri, values):
+                 range_uri, range_label, values):
         self.property_uri = property_uri
         self.label = label
         self.comment = comment
@@ -148,6 +148,7 @@ class Field:
         self.is_described = is_described
         self.is_functional = is_functional
         self.range_uri = range_uri
+        self.range_label = range_label
         self.values = values
 
 
@@ -165,6 +166,12 @@ def build_empty_field(ontology, property_uri, range_class_uri):
     except StopIteration:
         comment = None
 
+    range_label = ontology.objects(range_class_uri, RDFS.label)
+    try:
+        range_label = next(range_label)
+    except StopIteration:
+        range_label = range_class_uri.split('#')[-1]
+
     # if false, the field belongs to a owl:DatatypeProperty
     is_object_property = OWL.ObjectProperty in ontology.objects(property_uri, RDF.type)
     is_functional = OWL.FunctionalProperty in ontology.objects(property_uri, RDF.type)
@@ -172,7 +179,8 @@ def build_empty_field(ontology, property_uri, range_class_uri):
 
     values = []
 
-    return Field(property_uri, label, comment, is_object_property, is_described, is_functional, range_class_uri, values)
+    return Field(property_uri, label, comment, is_object_property, is_described, is_functional,
+                 range_class_uri, range_label, values)
 
 
 def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri, range_class_uri):
@@ -189,6 +197,12 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
     except StopIteration:
         comment = None
 
+    range_label = ontology.objects(range_class_uri, RDFS.label)
+    try:
+        range_label = next(range_label)
+    except StopIteration:
+        range_label = range_class_uri.split('#')[-1]
+
     # if false, the field belongs to a owl:DatatypeProperty
     is_object_property = OWL.ObjectProperty in ontology.objects(property_uri, RDF.type)
     is_functional = OWL.FunctionalProperty in ontology.objects(property_uri, RDF.type)
@@ -198,15 +212,17 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
     if is_described:
         values = [build_entity_from_knowledge(ontology, knowledge, value) for value in values]
 
-    return Field(property_uri, label, comment, is_object_property, is_described, is_functional, range_class_uri, values)
+    return Field(property_uri, label, comment, is_object_property, is_described, is_functional,
+                 range_class_uri, range_label, values)
 
 
 class Entity:
     """Represents a owl:NamedIndividual"""
-    def __init__(self, uri, label, comment, fields):
+    def __init__(self, uri, label, comment, class_label, fields):
         self.uri = uri
         self.label = label
         self.comment = comment
+        self.class_label = class_label
         self.fields = fields  # fields s.t. field.property_uri rdfs:domain self.uri
 
 
@@ -220,7 +236,7 @@ def build_empty_entity(ontology, class_uri):
         class_label = next(class_label)
     except StopIteration:
         # default label is the substring after the last '/' or '#' of the URI
-        split = [s2 for s1 in class_label.split("#") for s2 in s1.split("/")]
+        split = [s2 for s1 in class_uri.split("#") for s2 in s1.split("/")]
         class_label = split[-1]
     label = class_label + ' ' + str(nr)  # just a default, can be changed by user
 
@@ -236,7 +252,7 @@ def build_empty_entity(ontology, class_uri):
         for range_uri in ontology.objects(property_uri, RDFS.range)
     ]
 
-    return Entity(uri, label, comment, fields)
+    return Entity(uri, label, comment, class_label, fields)
 
 
 def build_entity_from_knowledge(ontology, knowledge, uri):
@@ -256,10 +272,18 @@ def build_entity_from_knowledge(ontology, knowledge, uri):
     except StopIteration:
         comment = None
 
+    class_label = ontology.objects(class_uri, RDFS.label)
+    try:
+        class_label = next(class_label)
+    except StopIteration:
+        # default label is the substring after the last '/' or '#' of the URI
+        split = [s2 for s1 in class_uri.split("#") for s2 in s1.split("/")]
+        class_label = split[-1]
+
     fields = [
         build_field_from_knowledge(ontology, knowledge, uri, property_uri, range_uri)
         for property_uri in ontology.subjects(RDFS.domain, class_uri)
         for range_uri in ontology.objects(property_uri, RDFS.range)
     ]
 
-    return Entity(uri, label, comment, fields)
+    return Entity(uri, label, comment, class_label, fields)
