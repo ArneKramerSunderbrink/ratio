@@ -44,6 +44,7 @@ def parse_n3_term(s):
 
 
 def row_to_rdf(row):
+    """Turns a row from the database into a rdf triple."""
     subject = parse_n3_term(row['subject'])
     predicate = parse_n3_term(row['predicate'])
     object_ = parse_n3_term(row['object'])
@@ -211,6 +212,7 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
     values = list(knowledge.objects(individual_uri, property_uri))
     if is_described:
         values = [build_entity_from_knowledge(ontology, knowledge, value) for value in values]
+    # todo do I need to order values or are they ordered in order of creation automatically?
 
     return Field(property_uri, label, comment, is_object_property, is_described, is_functional,
                  range_class_uri, range_label, values)
@@ -251,6 +253,7 @@ def build_empty_entity(ontology, class_uri):
         for property_uri in ontology.subjects(RDFS.domain, class_uri)
         for range_uri in ontology.objects(property_uri, RDFS.range)
     ]
+    # todo order fields
 
     return Entity(uri, label, comment, class_label, fields)
 
@@ -285,5 +288,6 @@ def build_entity_from_knowledge(ontology, knowledge, uri):
         for property_uri in ontology.subjects(RDFS.domain, class_uri)
         for range_uri in ontology.objects(property_uri, RDFS.range)
     ]
+    # todo order fields
 
     return Entity(uri, label, comment, class_label, fields)
