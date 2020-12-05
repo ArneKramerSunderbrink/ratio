@@ -102,10 +102,17 @@ body {
   width: 0px;
 }
 
-.field-value-list div {
+.field-value-list div,
+.field-value-list form {
   padding-bottom: 0.5em;
 }
 
-.field-value-list div:last-of-type {
+.field-value-list div:last-of-type,
+.field-value-list form:last-of-type {
   padding-bottom: 0;
+}
+
+.tiny-buttom {
+  padding: 0px 6px;
+  vertical-align: text-bottom;
 }
