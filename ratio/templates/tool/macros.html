@@ -83,7 +83,7 @@
 
         <div class="flip-flipside" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}" style="display: none">
           <form class="flex-row">
-            <input class="w3-input flex-flex" type="text" name="value" value="{{ value }}" required style="padding: 0 8px; border-bottom: 0">
+            <input class="w3-input flex-flex" type="text" name="value" placeholder="{{ field.range_label }} name..." required style="padding: 0 8px; border-bottom: 0">
             <button type="submit" class="w3-button tiny-button flex-fix" title="Add {{ field.range_label }}">
               <i class="fas fa-plus"></i>
             </button>
@@ -91,7 +91,15 @@
         </div>
       </div>
       {% else %}
-      <div class="flex-flex"></div>
+      <div class="flex-flex flip-frontside" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}"></div>
+      <div class="flex-flex flip-flipside" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}" style="display: none; margin-left: 0.5em;">
+        <form class="flex-row">
+            <input class="w3-input flex-flex" type="text" name="label" placeholder="{{ field.range_label }} name..." required style="padding: 0 8px; border-bottom: 0">
+            <button type="submit" class="w3-button tiny-button flex-fix" title="Add {{ field.range_label }}">
+              <i class="fas fa-plus"></i>
+            </button>
+          </form>
+      </div>
       {% endif %}
 
       {% if not field.values or not field.functional %}

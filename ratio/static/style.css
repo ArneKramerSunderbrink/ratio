@@ -104,10 +104,12 @@ body {
   width: 0px;
 }
 
-.field > div > span,
+/*.field > div > span,
 .field > div > a,
-.field-value-list div,
-.field-value-list form {
+.field > div > div:not(.field-value-list),*/
+.field > div:not(.entity) > :not(.field-value-list),
+.field-value-list > div,
+.field-value-list > form {
   margin: 0.5em 0;
 }
 
