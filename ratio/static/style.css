@@ -81,7 +81,7 @@ body {
 
 /* Knowledge */
 .entity {
-  margin: 5px 0px 5px 0px;
+  margin: -3px 0px 5px 0px;
   padding: 0.5em 1em 0.5em 1.5em;
 }
 
@@ -99,24 +99,16 @@ body {
   padding: 0.2em;
 }
 
-.field {
-  margin: 0.5em 0;
-  padding: 0.2em;
-}
-
 .field-value-list {
   margin-left: 0.5em;
   width: 0px;
 }
 
+.field > div > span,
+.field > div > a,
 .field-value-list div,
 .field-value-list form {
-  padding-bottom: 0.5em;
-}
-
-.field-value-list div:last-of-type,
-.field-value-list form:last-of-type {
-  padding-bottom: 0;
+  margin: 0.5em 0;
 }
 
 .tiny-button {
