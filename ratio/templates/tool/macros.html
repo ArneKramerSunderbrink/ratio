@@ -32,58 +32,71 @@
 
 {% macro entity_div(entity, is_root) %}
 <div class="entity{% if not is_root %} entity-border{% endif %}">
-  <div class="entity-underline" style="padding: 0.2em; margin-bottom: 1em;">
-    <span {% if entity.comment %}title="{{ entity.comment }}"{% endif %} style="font-weight: bold;">
-      {{ entity.label }}
-    </span>
-    <a href="#" class="w3-button w3-right" title="Edit {{ entity.class_label }}" style="padding: 0px 6px;">
-      <i class="fas fa-pen"></i>
-    </a>
+  <div class="entity-title">
+    <div class="flex-row flip-frontside" data-flipid="{{ entity.uri }}">
+      <div class="flex-text" {% if entity.comment %}title="{{ entity.comment }}"{% endif %} style="font-weight: bold;">{{ entity.label }}</div>
+      <a href="#" class="w3-button tiny-button flex-fix flip-flipbutton" data-flipid="{{ entity.uri }}" title="Edit {{ entity.class_label }}">
+        <i class="fas fa-pen"></i>
+      </a>
+    </div>
+    <from class="flex-row flip-flipside" data-flipid="{{ entity.uri }}" style="display: none">
+      <input class="w3-input flex-flex" type="text" name="label" value="{{ entity.label }}" required style="padding: 0 8px; border-bottom: 0">
+      <button type="submit" class="w3-button tiny-button flex-fix" title="Save changes">
+        <i class="fas fa-save"></i>
+      </button>
+      <a href="#" class="w3-button tiny-button flex-fix w3-right" title="Delete {{ entity.class_label }}">
+        <i class="fas fa-trash"></i>
+      </a>
+      <a href="#" class="w3-button tiny-button flex-fix flip-frontbutton" data-flipid="{{ entity.uri }}" title="Cancel">
+        <i class="fas fa-times"></i>
+      </a>
+    </from>
   </div>
 
   {% for field in entity.fields %}
-  <div class="flex-row" style="padding: 0.2em; margin: 0.5em 0;">
-    <span class="flex-fix" {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}:</span>
+  <div class="field">
+    <div class="flex-row">
+      <span class="flex-fix" {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}:</span>
 
-    {% if not field.is_described %}
-    <div class="flex-flex flex-column field-value-list">
-      {% for value in field.values %}
-      <div class="flex-row flip-frontside" data-flipid="{{ entity.uri + '::' + field.property_uri + '::' + loop.index|string }}">
-        <span class="flex-text">{{ value }}</span>
-        <a href="#" class="w3-button flex-fix flip-flipbutton" data-flipid="{{ entity.uri + '::' + field.property_uri + '::' + loop.index|string }}" title="Edit {{ field.range_label }}" style="padding: 0px 6px;">
-          <i class="fas fa-pen"></i>
-        </a>
+      {% if not field.is_described %}
+      <div class="flex-flex flex-column field-value-list">
+        {% for value in field.values %}
+        <div class="flex-row flip-frontside" data-flipid="{{ entity.uri + '::' + field.property_uri + '::' + loop.index|string }}">
+          <span class="flex-text">{{ value }}</span>
+          <a href="#" class="w3-button tiny-button flex-fix flip-flipbutton" data-flipid="{{ entity.uri + '::' + field.property_uri + '::' + loop.index|string }}" title="Edit {{ field.range_label }}">
+            <i class="fas fa-pen"></i>
+          </a>
+        </div>
+        <form class="flex-row flip-flipside" data-flipid="{{ entity.uri + '::' + field.property_uri + '::' + loop.index|string }}" style="display: none">
+          <input class="w3-input flex-flex" type="text" name="value" value="{{ value }}" required style="padding: 0 8px; border-bottom: 0">
+          <button type="submit" class="w3-button tiny-button flex-fix" title="Save changes">
+            <i class="fas fa-save"></i>
+          </button>
+          <a href="#" class="w3-button tiny-button flex-fix w3-right" title="Delete {{ field.range_label }}">
+            <i class="fas fa-trash"></i>
+          </a>
+          <a href="#" class="w3-button tiny-button flex-fix flip-frontbutton" data-flipid="{{ entity.uri + '::' + field.property_uri + '::' + loop.index|string }}" title="Cancel">
+            <i class="fas fa-times"></i>
+          </a>
+        </form>
+        {% endfor %}
       </div>
-      <form class="flex-row flip-flipside" data-flipid="{{ entity.uri + '::' + field.property_uri + '::' + loop.index|string }}" style="display: none">
-        <input class="w3-input flex-flex" type="text" name="value" value="{{ value }}" required style="padding: 0 8px; border-bottom: 0">
-        <button type="submit" class="w3-button flex-fix" title="Save changes" style="padding: 0px 6px;">
-          <i class="fas fa-save"></i>
-        </button>
-        <a href="#" class="w3-button flex-fix w3-right" title="Delete {{ field.range_label }}" style="padding: 0px 6px;">
-          <i class="fas fa-trash"></i>
-        </a>
-        <a href="#" class="w3-button flex-fix flip-frontbutton" data-flipid="{{ entity.uri + '::' + field.property_uri + '::' + loop.index|string }}" title="Cancel edit" style="padding: 0px 6px;">
-          <i class="fas fa-times"></i>
-        </a>
-      </form>
-      {% endfor %}
-    </div>
-    {% else %}
-    <div class="flex-flex"></div>
-    {% endif %}
+      {% else %}
+      <div class="flex-flex"></div>
+      {% endif %}
 
-    {% if not field.values or not field.functional %}
-    <a href="#" class="w3-button flex-fix" title="Add {{ field.range_label }}" style="padding: 0px 6px;">
-      <i class="fas fa-plus"></i>
-    </a>
+      {% if not field.values or not field.functional %}
+      <a href="#" class="w3-button tiny-button flex-fix" title="Add {{ field.range_label }}">
+        <i class="fas fa-plus"></i>
+      </a>
+      {% endif %}
+    </div>
+    {% if field.is_described %}
+    {% for value in field.values%}
+      {{ entity_div(value, False) }}
+    {% endfor %}
     {% endif %}
   </div>
-
-  {% if field.is_described %}
-  {% for value in field.values%}
-    {{ entity_div(value, False) }}
-  {% endfor %}
-  {% endif %}
 
   {% endfor%}
 </div>
