@@ -40,7 +40,7 @@ def test_login_redirect(client):
     # redirects to /1
     url = urlparse(response.location)
     response = client.get(url.path)
-    assert b'subgraph1' in response.data
+    assert b'Clinical trial 1' in response.data
 
 
 def test_logout(client, auth):

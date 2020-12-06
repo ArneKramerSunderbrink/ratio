@@ -79,6 +79,25 @@ body {
   animation: opac 0.5s;
 }
 
+/* Colors */
+
+.color1 {
+  color: var(--font-color1);
+  background: var(--color1);
+}
+
+.color2 {
+  color: var(--font-color2);
+  background: var(--color2);
+}
+
+/* Menus */
+
+.button-border {
+  border: 2px solid var(--font-color1);
+  border-radius: 4px;
+}
+
 /* Knowledge */
 .entity {
   margin: -3px 0px 5px 0px;
@@ -86,15 +105,16 @@ body {
 }
 
 .entity-border {
-  border: 2px solid #2196F3;
+  border: 2px solid var(--color1);
+  border-radius: 10px;
 }
 
 .entity-border:hover {
-  border: 2px solid #ccc;
+  border: 2px solid var(--font-color1);
 }
 
 .entity-title {
-  border-bottom: 2px solid #2196F3;
+  border-bottom: 2px solid var(--color1);
   margin-bottom: 1em;
   padding: 0.2em;
 }

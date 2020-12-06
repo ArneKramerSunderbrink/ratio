@@ -25,5 +25,14 @@ echo "SECRET_KEY = b'\x99<\xa5\xd5Q\xd5\xc3\xa8\x8b\x11R\xc7\xd54\x93j'" > venv/
 echo "URL_PREFIX = '/ratio'" >> venv/var/ratio-instance/config.py
 # Do logging via gunicorn and with the gunicorn level
 echo "GUNICORN_LOGGER = True" >> venv/var/ratio-instance/config.py
+# Configure frontend
+echo "FRONTEND_CONFIG=dict(
+            Subgraph_term='Clinical trial',
+            subgraph_term='clinical trial',
+            color1='#39A0ED',
+            color2='#71816D',
+            font_color1='#edfce8',
+            font_color2='#cfedc7'
+        )" >> venv/var/ratio-instance/config.py
 
 touch log.txt

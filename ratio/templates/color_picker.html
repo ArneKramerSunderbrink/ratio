@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="utf-8">
+<title>Ratio - Color picker</title>
+
+<form method="post">
+  <input type="color" id="color1" name="color1" value="{{ frontend_config['color1'] }}">
+  <label for="color1">Color 1</label><br>
+  <input type="color" id="color2" name="color2" value="{{ frontend_config['color2'] }}">
+  <label for="color2">Color 2</label><br>
+  <input type="color" id="font-color1" name="font-color1" value="{{ frontend_config['font_color1'] }}">
+  <label for="font-color1">Font color 1</label><br>
+  <input type="color" id="font-color2" name="font-color2" value="{{ frontend_config['font_color2'] }}">
+  <label for="font-color2">Font color 2</label><br>
+  <input type="submit">
+</form>

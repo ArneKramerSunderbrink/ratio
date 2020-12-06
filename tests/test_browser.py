@@ -42,9 +42,9 @@ def test_header(browser):
     assert browser.find_element(By.LINK_TEXT, 'Log Out')
 
     # go to /1
-    browser.find_element(By.LINK_TEXT, 'subgraph1').click()
+    browser.find_element(By.LINK_TEXT, 'Clinical trial 1').click()
     wait.until(ec.url_to_be(url_for('tool.index', subgraph_id=1, _external=True)))
-    assert browser.find_element(By.ID, 'subgraph-name').text == 'subgraph1'
+    assert browser.find_element(By.ID, 'subgraph-name').text == 'Clinical trial 1'
 
     # test toggling the overlay
     browser.find_element(By.ID, 'subgraph-name').click()
@@ -90,9 +90,9 @@ def test_subgraph_list(browser):
     assert not item.is_displayed()
 
     # go to /1
-    browser.find_element(By.LINK_TEXT, 'subgraph1').click()
+    browser.find_element(By.LINK_TEXT, 'Clinical trial 1').click()
     wait.until(ec.url_to_be(url_for('tool.index', subgraph_id=1, _external=True)))
-    assert browser.find_element(By.ID, 'subgraph-name').text == 'subgraph1'
+    assert browser.find_element(By.ID, 'subgraph-name').text == 'Clinical trial 1'
 
     # test change subgraph name to empty
     browser.find_element(By.ID, 'subgraph-name').click()
@@ -102,7 +102,7 @@ def test_subgraph_list(browser):
     item.find_element(By.CSS_SELECTOR, 'form input[name="name"]').send_keys('   ')
     item.find_element(By.CSS_SELECTOR, 'form button[type="submit"]').click()
     wait.until(ec.visibility_of(browser.find_element(By.ID, 'subgraph-menu-edit-msg')))
-    assert browser.find_element(By.ID, 'subgraph-menu-edit-msg').text == 'Subgraph name cannot be empty.'
+    assert browser.find_element(By.ID, 'subgraph-menu-edit-msg').text == 'Clinical trial name cannot be empty.'
 
     # test change subgraph name to new name
     item.find_element(By.CSS_SELECTOR, 'form input[name="name"]').clear()

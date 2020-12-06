@@ -7,6 +7,15 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
+<style>
+  :root {
+    --color1: {{ frontend_config['color1'] }};
+    --color2: {{ frontend_config['color2'] }};
+    --font-color1: {{ frontend_config['font_color1'] }};
+    --font-color2: {{ frontend_config['font_color2'] }};
+  }
+</style>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js" defer></script>
 <script src="{{ url_for('static', filename='js/flip_pattern.js') }}" defer></script>
 

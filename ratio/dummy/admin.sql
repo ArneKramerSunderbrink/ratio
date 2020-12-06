@@ -7,9 +7,9 @@ VALUES
 
 INSERT INTO subgraph (name, root, finished, deleted)
 VALUES
-  ('subgraph1', 'http://www.semanticweb.org/root/ontologies/2018/6/ctro#Pub_1', 0, 0),
-  ('subgraph2', 'http://www.semanticweb.org/root/ontologies/2018/6/ctro#Pub_2', 1, 0),
-  ('subgraph3', 'http://www.semanticweb.org/root/ontologies/2018/6/ctro#Pub_3', 0, 0),
+  ('Clinical trial 1', 'http://www.semanticweb.org/root/ontologies/2018/6/ctro#Pub_1', 0, 0),
+  ('Clinical trial 2', 'http://www.semanticweb.org/root/ontologies/2018/6/ctro#Pub_2', 1, 0),
+  ('Clinical trial 3', 'http://www.semanticweb.org/root/ontologies/2018/6/ctro#Pub_3', 0, 0),
   ('deleted', 'http://www.semanticweb.org/root/ontologies/2018/6/ctro#Pub_4', 1, 1);
 
 INSERT INTO access (user_id, subgraph_id)

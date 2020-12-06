@@ -6,6 +6,9 @@ from urllib.parse import urlparse
 from ratio.db import get_db
 from ratio.tool import MSG_SUBGRAPH_ACCESS
 
+Subgraph_term = 'Clinical trial'
+subgraph_term = 'clinical trial'
+
 
 def test_index(client, auth):
     auth.login()
@@ -35,7 +38,7 @@ def test_subgraph_list(client, auth, user_id, access):
 
 @pytest.mark.parametrize(
     ('url', 'name', 'finished'),
-    (('/1', 'subgraph1', False), ('/2', 'subgraph2', True))
+    (('/1', 'Clinical trial 1', False), ('/2', 'Clinical trial 2', True))
 )
 def test_index_with_subgraph(client, auth, url, name, finished):
     auth.login()
@@ -48,9 +51,9 @@ def test_index_with_subgraph(client, auth, url, name, finished):
 
 @pytest.mark.parametrize(
     ('url', 'message'),
-    (('/3', 'You have no access to subgraph with id 3.'),  # not owned by user 1
-     ('/4', 'You have no access to subgraph with id 4.'),  # owned but deleted
-     ('/99', 'Subgraph with id 99 does not exist.'))  # does not exist
+    (('/3', 'You have no access to {} with id 3.'.format(subgraph_term)),  # not owned by user 1
+     ('/4', 'You have no access to {} with id 4.'.format(subgraph_term)),  # owned but deleted
+     ('/99', '{} with id 99 does not exist.'.format(Subgraph_term)))  # does not exist
 )
 def test_index_redirect(client, auth, url, message):
     """Tests the redirect when a user tries to access a subgraph he has no access to."""
@@ -73,10 +76,10 @@ def test_set_finished(client, auth):
 
 @pytest.mark.parametrize(
     ('query', 'message'),
-    (('finished=true', 'Subgraph id cannot be empty.'),
-     ('subgraph_id=3&finished=true', MSG_SUBGRAPH_ACCESS.format(3, 1)),  # not owned
-     ('subgraph_id=4&finished=true', MSG_SUBGRAPH_ACCESS.format(4, 1)),  # owned but deleted
-     ('subgraph_id=99&finished=true', MSG_SUBGRAPH_ACCESS.format(99, 1)),  # doesn't exist
+    (('finished=true', '{} id cannot be empty.'.format(Subgraph_term)),
+     ('subgraph_id=3&finished=true', MSG_SUBGRAPH_ACCESS.format(Subgraph_term, 3, 1)),  # not owned
+     ('subgraph_id=4&finished=true', MSG_SUBGRAPH_ACCESS.format(Subgraph_term, 4, 1)),  # owned but deleted
+     ('subgraph_id=99&finished=true', MSG_SUBGRAPH_ACCESS.format(Subgraph_term, 99, 1)),  # doesn't exist
      ('subgraph_id=1', 'Argument "finished" has to be "true" or "false"'),
      ('subgraph_id=1&finished=123', 'Argument "finished" has to be "true" or "false"'))
 )
@@ -90,7 +93,7 @@ def test_set_finished_validate_input(client, auth, query, message):
 @pytest.mark.usefixtures('reset_db')
 def test_edit_subgraph_name(client, auth):
     db = get_db()
-    assert db.execute('SELECT * FROM subgraph WHERE id = 1').fetchone()['name'] == 'subgraph1'
+    assert db.execute('SELECT * FROM subgraph WHERE id = 1').fetchone()['name'] == 'Clinical trial 1'
     auth.login()
     response = client.get('/_edit_subgraph_name?subgraph_id=1&name=test')
     assert 'error' not in response.get_json()
@@ -100,12 +103,12 @@ def test_edit_subgraph_name(client, auth):
 
 @pytest.mark.parametrize(
     ('query', 'message'),
-    (('name=test', 'Subgraph id cannot be empty.'),
-     ('subgraph_id=3', 'Subgraph name cannot be empty.'),
-     ('subgraph_id=3&name=%20', 'Subgraph name cannot be empty.'),
-     ('subgraph_id=3&name=test', MSG_SUBGRAPH_ACCESS.format(3, 1)),  # not owned
-     ('subgraph_id=4&name=test', MSG_SUBGRAPH_ACCESS.format(4, 1)),  # owned but deleted
-     ('subgraph_id=99&name=test', MSG_SUBGRAPH_ACCESS.format(99, 1)))  # doesn't exist
+    (('name=test', '{} id cannot be empty.'.format(Subgraph_term)),
+     ('subgraph_id=3', '{} name cannot be empty.'.format(Subgraph_term)),
+     ('subgraph_id=3&name=%20', '{} name cannot be empty.'.format(Subgraph_term)),
+     ('subgraph_id=3&name=test', MSG_SUBGRAPH_ACCESS.format(Subgraph_term, 3, 1)),  # not owned
+     ('subgraph_id=4&name=test', MSG_SUBGRAPH_ACCESS.format(Subgraph_term, 4, 1)),  # owned but deleted
+     ('subgraph_id=99&name=test', MSG_SUBGRAPH_ACCESS.format(Subgraph_term, 99, 1)))  # doesn't exist
 )
 def test_edit_subgraph_name_validate_input(client, auth, query, message):
     auth.login()
@@ -121,16 +124,16 @@ def test_delete_subgraph(client, auth):
     auth.login()
     response = client.get('/_delete_subgraph?subgraph_id=1')
     assert 'error' not in response.get_json()
-    assert response.get_json()['name'] == 'subgraph1'
+    assert response.get_json()['name'] == 'Clinical trial 1'
     assert db.execute('SELECT * FROM subgraph WHERE id = 1').fetchone()['deleted']
 
 
 @pytest.mark.parametrize(
     ('query', 'message'),
-    (('', 'Subgraph id cannot be empty.'),
-     ('subgraph_id=3', MSG_SUBGRAPH_ACCESS.format(3, 1)),  # not owned
-     ('subgraph_id=4', MSG_SUBGRAPH_ACCESS.format(4, 1)),  # owned but deleted
-     ('subgraph_id=99', MSG_SUBGRAPH_ACCESS.format(99, 1)))  # doesn't exist
+    (('', '{} id cannot be empty.'.format(Subgraph_term)),
+     ('subgraph_id=3', MSG_SUBGRAPH_ACCESS.format(Subgraph_term, 3, 1)),  # not owned
+     ('subgraph_id=4', MSG_SUBGRAPH_ACCESS.format(Subgraph_term, 4, 1)),  # owned but deleted
+     ('subgraph_id=99', MSG_SUBGRAPH_ACCESS.format(Subgraph_term, 99, 1)))  # doesn't exist
 )
 def test_delete_subgraph_validate_input(client, auth, query, message):
     auth.login()
@@ -151,9 +154,9 @@ def test_undo_delete_subgraph(client, auth):
 
 @pytest.mark.parametrize(
     ('query', 'message'),
-    (('', 'Subgraph id cannot be empty.'),
-     ('subgraph_id=3', MSG_SUBGRAPH_ACCESS.format(3, 1)),  # not owned
-     ('subgraph_id=99', MSG_SUBGRAPH_ACCESS.format(99, 1)))  # doesn't exist
+    (('', '{} id cannot be empty.'.format(Subgraph_term)),
+     ('subgraph_id=3', MSG_SUBGRAPH_ACCESS.format(Subgraph_term, 3, 1)),  # not owned
+     ('subgraph_id=99', MSG_SUBGRAPH_ACCESS.format(Subgraph_term, 99, 1)))  # doesn't exist
 )
 def test_undo_delete_subgraph_validate_input(client, auth, query, message):
     auth.login()
@@ -176,7 +179,7 @@ def test_add_subgraph(client, auth):
 
 @pytest.mark.parametrize(
     ('query', 'message'),
-    (('', 'Subgraph name cannot be empty.'),)  # doesn't exist
+    (('', '{} name cannot be empty.'.format(Subgraph_term)),)  # doesn't exist
 )
 def test_add_subgraph_validate_input(client, auth, query, message):
     auth.login()

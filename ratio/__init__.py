@@ -3,6 +3,8 @@ import os
 
 from flask import Flask
 from flask import jsonify
+from flask import render_template
+from flask import request
 
 
 class URLPrefixMiddleware:
@@ -35,6 +37,15 @@ def create_app(test_config=None):
         URL_PREFIX='',
         # Don't do logging via gunicorn and with the gunicorn level
         GUNICORN_LOGGER=False,
+        # Frontend config dictionary
+        FRONTEND_CONFIG=dict(
+            Subgraph_term='Clinical trial',
+            subgraph_term='clinical trial',
+            color1='#39A0ED',
+            color2='#71816D',
+            font_color1='#edfce8',
+            font_color2='#cfedc7'
+        )
     )
 
     if test_config is None:
@@ -45,6 +56,10 @@ def create_app(test_config=None):
         app.config.update(test_config)
 
     app.wsgi_app = URLPrefixMiddleware(app.wsgi_app, url_prefix=app.config['URL_PREFIX'])
+
+    @app.context_processor
+    def inject_frontend_config():
+        return dict(frontend_config=app.config['FRONTEND_CONFIG'])
 
     if app.config['GUNICORN_LOGGER']:  # pragma: no cover
         # do logging via gunicorn and with the gunicorn level
@@ -60,6 +75,17 @@ def create_app(test_config=None):
         app.logger.error('this is an ERROR message')
         app.logger.critical('this is a CRITICAL message')
         return jsonify('Debug, info, warning, error and critical message logged.')
+
+    @app.route('/_color_picker', methods=('GET', 'POST'))
+    def color_picker():  # pragma: no cover
+        # only for development
+        if request.method == 'POST':
+            app.config['FRONTEND_CONFIG']['color1'] = request.form['color1']
+            app.config['FRONTEND_CONFIG']['color2'] = request.form['color2']
+            app.config['FRONTEND_CONFIG']['font_color1'] = request.form['font-color1']
+            app.config['FRONTEND_CONFIG']['font_color2'] = request.form['font-color2']
+
+        return render_template('color_picker.html')
 
     # ensure the instance folder exists
     try:

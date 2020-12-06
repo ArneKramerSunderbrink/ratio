@@ -1,11 +1,11 @@
-{% from "tool/macros.html" import subgraph_row %}
+{% from "tool/macros.html" import subgraph_row with context%}
 
 <script src="{{ url_for('static', filename='js/subgraph_menu.js') }}" defer></script>
 
-<div class="w3-container w3-card-4 w3-blue">
+<div class="w3-container w3-card-4 color1">
   <div class="flex-row w3-margin-top">
     <input class="w3-input flex-flex w3-border w3-padding" style="width: {{90 if subgraph['id'] else 100 }}%"
-           type="search" placeholder="Search for subgraphs.." id="subgraph-filter">
+           type="search" placeholder="Search for {{ frontend_config['subgraph_term'] }}..." id="subgraph-filter">
     <a href="#" class="w3-button flex-fix w3-margin-left" title="Close" id="close-overlay"
        style="display: {{ 'block' if subgraph['id'] else 'none' }}">
       <i class="fas fa-times fa-lg"></i>
@@ -17,13 +17,13 @@
     {% endfor %}
   </div>
   <div class="w3-margin-top w3-margin-bottom flex-row flip-frontside" data-flipid="new-subgraph">
-    <button class="w3-button flex-fix w3-light-blue flip-flipbutton" data-flipid="new-subgraph">New subgraph</button>
+    <button class="w3-button button-border flex-fix flip-flipbutton" data-flipid="new-subgraph">New {{ frontend_config['subgraph_term'] }}</button>
   </div>
   <div class="w3-margin-top w3-margin-bottom flip-flipside" data-flipid="new-subgraph" style="display: none">
     <form class="flex-row" id="new-subgraph-form" method="post">
       <input class="w3-input flex-flex"
-             type="text" placeholder="Subgraph name..." name="name" id="new-subgraph-name" required>
-      <button type="submit" class="w3-button flex-fix" title="Add subgraph">
+             type="text" placeholder="{{ frontend_config['Subgraph_term'] }} name..." name="name" id="new-subgraph-name" required>
+      <button type="submit" class="w3-button flex-fix" title="Add {{ frontend_config['subgraph_term'] }}">
         <i class="fas fa-plus fa-lg"></i>
       </button>
       <a href="#" class="w3-button flex-fix flip-frontbutton" data-flipid="new-subgraph" title="Cancel">

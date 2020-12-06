@@ -1,6 +1,7 @@
 """Functionality to display and edit subgraphs"""
 
 from flask import Blueprint
+from flask import current_app
 from flask import g
 from flask import jsonify
 from flask import render_template
@@ -12,7 +13,7 @@ from ratio.auth import login_required, subgraph_access
 from ratio.db import get_db
 from ratio.knowledge_model import get_subgraph_knowledge
 
-MSG_SUBGRAPH_ACCESS = 'Subgraph with id {} does not exist or is not owned by user {} currently logged in.'
+MSG_SUBGRAPH_ACCESS = '{} with id {} does not exist or is not owned by user {} currently logged in.'
 
 bp = Blueprint('tool', __name__)
 
@@ -58,10 +59,12 @@ def index(subgraph_id=None, message=None):
     ).fetchone()
 
     if subgraph is None:
-        return redirect(url_for('tool.index', message='Subgraph with id {} does not exist.'.format(subgraph_id)))
+        return redirect(url_for('tool.index', message='{} with id {} does not exist.'
+                                .format(current_app.config['FRONTEND_CONFIG']['Subgraph_term'], subgraph_id)))
 
     if not subgraph_access(user_id, subgraph_id):
-        return redirect(url_for('tool.index', message='You have no access to subgraph with id {}.'.format(subgraph_id)))
+        return redirect(url_for('tool.index', message='You have no access to {} with id {}.'
+                                .format(current_app.config['FRONTEND_CONFIG']['subgraph_term'], subgraph_id)))
 
     root = get_subgraph_knowledge(subgraph_id).get_root()
 
@@ -89,12 +92,13 @@ def set_finished():
     finished = request.args.get('finished', '', type=str)
 
     if not subgraph_id:
-        return jsonify(error='Subgraph id cannot be empty.')
+        return jsonify(error='{} id cannot be empty.'.format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
 
     db = get_db()
 
     if not subgraph_access(user_id, subgraph_id):
-        return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
+        return jsonify(error=MSG_SUBGRAPH_ACCESS.format(current_app.config['FRONTEND_CONFIG']['Subgraph_term'],
+                                                        subgraph_id, user_id))
 
     if finished == 'true' or finished == 'false':
         finished = finished == 'true'
@@ -129,15 +133,16 @@ def edit_subgraph_name():
     subgraph_name = request.args.get('name', '', type=str)
 
     if not subgraph_id:
-        return jsonify(error='Subgraph id cannot be empty.')
+        return jsonify(error='{} id cannot be empty.'.format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
     if not subgraph_name or subgraph_name.isspace():
-        return jsonify(error='Subgraph name cannot be empty.')
+        return jsonify(error='{} name cannot be empty.'.format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
 
     db = get_db()
     db_cursor = db.cursor()
 
     if not subgraph_access(user_id, subgraph_id):
-        return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
+        return jsonify(error=MSG_SUBGRAPH_ACCESS.format(current_app.config['FRONTEND_CONFIG']['Subgraph_term'],
+                                                        subgraph_id, user_id))
 
     db_cursor.execute(
         'UPDATE subgraph SET name = ? WHERE id = ?',
@@ -171,13 +176,14 @@ def delete_subgraph():
     subgraph_id = request.args.get('subgraph_id', 0, type=int)
 
     if not subgraph_id:
-        return jsonify(error='Subgraph id cannot be empty.')
+        return jsonify(error='{} id cannot be empty.'.format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
 
     db = get_db()
     db_cursor = db.cursor()
 
     if not subgraph_access(user_id, subgraph_id):
-        return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
+        return jsonify(error=MSG_SUBGRAPH_ACCESS.format(current_app.config['FRONTEND_CONFIG']['Subgraph_term'],
+                                                        subgraph_id, user_id))
 
     subgraph_name = db_cursor.execute(
         'SELECT name FROM subgraph WHERE id = ?', (subgraph_id,)
@@ -211,7 +217,7 @@ def undo_delete_subgraph():
     subgraph_id = request.args.get('subgraph_id', 0, type=int)
 
     if not subgraph_id:
-        return jsonify(error='Subgraph id cannot be empty.')
+        return jsonify(error='{} id cannot be empty.'.format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
 
     db = get_db()
     db_cursor = db.cursor()
@@ -224,7 +230,8 @@ def undo_delete_subgraph():
     ).fetchone()[0]
 
     if not access:
-        return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
+        return jsonify(error=MSG_SUBGRAPH_ACCESS.format(current_app.config['FRONTEND_CONFIG']['Subgraph_term'],
+                                                        subgraph_id, user_id))
 
     db_cursor.execute(
         'UPDATE subgraph SET deleted = 0 WHERE id = ?', (subgraph_id,)
@@ -255,7 +262,7 @@ def add_subgraph():
     subgraph_name = request.args.get('name', '', type=str)
 
     if not subgraph_name or subgraph_name.isspace():
-        return jsonify(error='Subgraph name cannot be empty.')
+        return jsonify(error='{} name cannot be empty.'.format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
 
     db = get_db()
     db_cursor = db.cursor()

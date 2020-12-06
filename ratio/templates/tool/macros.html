@@ -9,7 +9,7 @@
            title="{{ 'Finished' if subgraph_finished else 'Not finished' }}">
       <i class="fa {{ 'fa-check-square' if subgraph_finished else 'fa-square' }} fa-lg"></i>
     </label>
-    <a href="#" class="w3-button flex-fix flip-flipbutton" data-flipid="subgraph-list-{{ subgraph_id }}" title="Edit subgraph">
+    <a href="#" class="w3-button flex-fix flip-flipbutton" data-flipid="subgraph-list-{{ subgraph_id }}" title="Edit {{ frontend_config['subgraph_term'] }}">
       <i class="fas fa-pen fa-lg"></i>
     </a>
   </div>
@@ -19,7 +19,7 @@
       <button type="submit" class="w3-button flex-fix w3-right" title="Save changes">
         <i class="fas fa-save fa-lg"></i>
       </button>
-      <a href="#" class="w3-button flex-fix w3-right delete-subgraph-button" title="Delete subgraph">
+      <a href="#" class="w3-button flex-fix w3-right delete-subgraph-button" title="Delete {{ frontend_config['subgraph_term'] }}">
         <i class="fas fa-trash fa-lg"></i>
       </a>
       <a href="#" class="w3-button flex-fix w3-right flip-frontbutton" data-flipid="subgraph-list-{{ subgraph_id }}" title="Cancel">

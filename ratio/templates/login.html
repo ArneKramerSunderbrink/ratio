@@ -3,9 +3,9 @@
 {% block title %}RATIO - Log In{% endblock %}
 
 {% block content %}
-<div class="w3-display-container w3-green" style="height:100vh">
+<div class="w3-display-container color2" style="height:100vh">
     <div class="w3-display-middle">
-        <form class="w3-container w3-card-4 w3-blue" method="post">
+        <form class="w3-container w3-card-4 color1" method="post">
             <p>
                 <input class="w3-input" style="width:90%"
                        type="text" name="username" id="username" value="{{ request.form['username'] or '' }}" required>
@@ -14,7 +14,7 @@
                 <input class="w3-input" style="width:90%" type="password" name="password" id="password" required>
                 <label for="password">Password</label>
             <p>
-                <input class="w3-button w3-section w3-light-blue w3-ripple" type="submit" value="Log In">
+                <input class="w3-button button-border w3-section w3-ripple" type="submit" value="Log In">
         </form>
 
         {% for message in get_flashed_messages() %}
