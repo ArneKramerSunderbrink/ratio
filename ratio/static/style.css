@@ -105,16 +105,12 @@ body {
 }
 
 .entity-border {
-  border: 2px solid var(--color1);
+  border: 2px solid var(--font-color2);
   border-radius: 10px;
 }
 
-.entity-border:hover {
-  border: 2px solid var(--font-color1);
-}
-
 .entity-title {
-  border-bottom: 2px solid var(--color1);
+  border-bottom: 2px solid var(--font-color2);
   margin-bottom: 1em;
   padding: 0.2em;
 }
