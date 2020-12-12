@@ -41,10 +41,10 @@ def create_app(test_config=None):
         FRONTEND_CONFIG=dict(
             Subgraph_term='Clinical trial',
             subgraph_term='clinical trial',
-            color1='#39A0ED',
-            color2='#71816D',
-            font_color1='#edfce8',
-            font_color2='#cfedc7'
+            color1='#E6F7FF',
+            color2='#FFFFFF',
+            font_color1='#000000',
+            font_color2='#000000'
         )
     )
 

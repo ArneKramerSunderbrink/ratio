@@ -27,12 +27,12 @@ echo "URL_PREFIX = '/ratio'" >> venv/var/ratio-instance/config.py
 echo "GUNICORN_LOGGER = True" >> venv/var/ratio-instance/config.py
 # Configure frontend
 echo "FRONTEND_CONFIG=dict(
-            Subgraph_term='Clinical trial',
-            subgraph_term='clinical trial',
-            color1='#39A0ED',
-            color2='#71816D',
-            font_color1='#edfce8',
-            font_color2='#cfedc7'
-        )" >> venv/var/ratio-instance/config.py
+    Subgraph_term='Clinical trial',
+    subgraph_term='clinical trial',
+    color1='#E6F7FF',
+    color2='#FFFFFF',
+    font_color1='#000000',
+    font_color2='#000000'
+)" >> venv/var/ratio-instance/config.py
 
 touch log.txt
