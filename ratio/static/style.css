@@ -5,6 +5,10 @@ body {
 }
 
 /* Layout of the tool */
+header {
+    z-index: 100;
+}
+
 #flex-body {
   flex: 1 1 0;
   overflow: auto;
@@ -100,13 +104,14 @@ body {
 
 /* Knowledge */
 .entity {
-  margin: -3px 0px 5px 0px;
+  margin: 0.2em 0;
   padding: 0.5em 1em 0.5em 1.5em;
 }
 
 .entity-border {
   border: 2px solid var(--font-color2);
   border-radius: 10px;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.16),0 2px 5px 0 rgba(0,0,0,0.12)
 }
 
 .entity-title {
@@ -114,33 +119,45 @@ body {
   padding: 0.2em;
 }
 
-.field-value-list {
-  margin-left: 0.5em;
-  width: 0px;
+.entity-field,
+.field {
+  margin: 0.5em;
 }
 
-/*.field > div > span,
-.field > div > a,
-.field > div > div:not(.field-value-list),*/
-.field > div:not(.entity) > :not(.field-value-list),
-.field-value-list > div,
+.field {
+  display: inline-block;
+  max-width: 100%;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.16),0 2px 5px 0 rgba(0,0,0,0.12);
+  padding: 0.2em 0.5em;
+  border-radius: 5px;
+}
+
+.field-value-list {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
 .field-value-list > form {
-  margin: 0.5em 0;
+  margin: 0 0.5em 0.2em 0.5em;
+}
+
+.field-value-list > form > * {
+  display: inline-block;
 }
 
 .tiny-button {
-  padding: 0px 6px;
+  padding: 0;
+  width: 1.5em;
+  height: 1.5em;
+  vertical-align: text-bottom;
 }
 
-/* Remove input type="number" arrows */
-/* Chrome, Safari, Edge, Opera */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-/* Firefox */
-input[type=number] {
-  -moz-appearance: textfield;
+.literal-input {
+    padding: 0;
+    min-width: 3em;
+    width: auto;
+    max-width: calc(100% - 1.5em);
+    min-height: 1em;
+    word-wrap: break-word;
+    border-bottom: 1px solid #ccc;
 }

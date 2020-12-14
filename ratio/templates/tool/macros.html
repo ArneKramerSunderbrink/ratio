@@ -31,18 +31,9 @@
 {% endmacro %}
 
 
-{% macro field_input_attributes(field) %}
-{% if field.range_uri.n3() == '<http://www.w3.org/2001/XMLSchema#string>' or field.range_uri.n3() == '<http://www.w3.org/2000/01/rdf-schema#Literal>' %}type="text"
-{% elif field.range_uri.n3() == '<http://www.w3.org/2001/XMLSchema#float>' %}type="number" step="any"
-{% elif field.range_uri.n3() == '<http://www.w3.org/2001/XMLSchema#integer>' %}type="number"
-{% elif field.range_uri.n3() == '<http://www.w3.org/2001/XMLSchema#positiveInteger>' %}type="number" min="0"
-{% else %}type="text"{% endif %}
-{# <!-- todo non-described entities (analysesHealthCondition), external non-described entities (hasCountry), lists (hasGender) --> #}
-{% endmacro %}
-
-
 {% macro entity_div(entity, is_root) %}
 <div class="entity{% if not is_root %} entity-border{% endif %}">
+  {# collapse button #}
   <div class="flex-row">
     {% if not is_root %}
     <a href="#" class="w3-button tiny-button flex-fix flip-frontside flip-flipbutton" data-flipid="collapse-{{ entity.uri }}" style="width: 30px; height: 30px; margin-left: -15px;">
@@ -52,6 +43,7 @@
       <i class="fas fa-chevron-down"></i>
     </a>
     {% endif %}
+    {# entity header #}
     <div class="entity-title flex-flex">
       <div class="flex-row flip-frontside" data-flipid="edit-{{ entity.uri }}">
         <div class="flex-text" {% if entity.comment %}title="{{ entity.comment }}"{% endif %} style="font-weight: bold;">{{ entity.label }}</div>
@@ -80,46 +72,10 @@
 
   <div {%if not is_root %} class="flip-flipside" data-flipid="collapse-{{ entity.uri }}" {% endif %}style="{%if not is_root %}display: none; {% endif %}margin-top: 1em;">
     {% for field in entity.fields %}
-    <div class="field">
+    {% if field.is_described %}
+    <div class="entity-field">
       <div class="flex-row">
         <span class="flex-fix" {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}:</span>
-
-        {% if not field.is_described %}
-        <div class="flex-flex field-value-list">
-          {% for value in field.values %}
-          {# display value #}
-          <div class="flex-row flip-frontside" data-flipid="{{ entity.uri + '::' + field.property_uri + '::' + loop.index|string }}">
-            <span class="flex-text">{{ value }}</span>
-            <a href="#" class="w3-button tiny-button flex-fix flip-flipbutton" data-flipid="{{ entity.uri + '::' + field.property_uri + '::' + loop.index|string }}" title="Edit {{ field.range_label }}">
-              <i class="fas fa-pen"></i>
-            </a>
-          </div>
-          {# edit value #}
-          <form class="flex-row flip-flipside" data-flipid="{{ entity.uri + '::' + field.property_uri + '::' + loop.index|string }}" style="display: none">
-            <input class="w3-input flex-flex" {{ field_input_attributes(field) }} name="value" value="{{ value }}" required style="padding: 0 8px; border-bottom: 0">
-            <button type="submit" class="w3-button tiny-button flex-fix" title="Save changes">
-              <i class="fas fa-save"></i>
-            </button>
-            <a href="#" class="w3-button tiny-button flex-fix w3-right" title="Delete {{ field.range_label }}">
-              <i class="fas fa-trash"></i>
-            </a>
-            <a href="#" class="w3-button tiny-button flex-fix flip-frontbutton" data-flipid="{{ entity.uri + '::' + field.property_uri + '::' + loop.index|string }}" title="Cancel">
-              <i class="fas fa-times"></i>
-            </a>
-          </form>
-          {% endfor %}
-
-          {# add value #}
-          <div class="flip-flipside" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}" style="display: none">
-            <form class="flex-row">
-              <input class="w3-input flex-flex" {{ field_input_attributes(field) }} name="value" placeholder="{{ field.range_label }}..." required style="padding: 0 8px; border-bottom: 0">
-              <button type="submit" class="w3-button tiny-button flex-fix" title="Add {{ field.range_label }}">
-                <i class="fas fa-plus"></i>
-              </button>
-            </form>
-          </div>
-        </div>
-        {% else %}
         <div class="flex-flex flip-frontside" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}"></div>
         {# add described entity value #}
         <div class="flex-flex flip-flipside" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}" style="display: none; margin-left: 0.5em;">
@@ -130,24 +86,101 @@
               </button>
             </form>
         </div>
-        {% endif %}
-
-        {% if not field.values or not field.functional %}
+        {# if not field.values or not field.functional #}
         <a href="#" class="w3-button tiny-button flex-fix flip-frontside flip-flipbutton" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}" title="Add {{ field.range_label }}">
           <i class="fas fa-plus"></i>
         </a>
         <a href="#" class="w3-button tiny-button flex-fix flip-flipside flip-frontbutton" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}" title="Cancel" style="display: none;">
           <i class="fas fa-times"></i>
         </a>
-        {% endif %}
+        {# endif #}
+      </div>
+      {% for value in field.values %}
+      {{ entity_div(value, False) }}
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="field color1">
+      <div class="flex-row">
+        <span class="flex-fix" {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}:</span>
+        <div class="field-value-list">
+          {% for value in field.values %}
+          <form>
+            <div class="w3-input literal-input" contentEditable>{{ value }}</div>
+            <a href="#" class="w3-button tiny-button w3-right" title="Delete {{ field.range_label }}" style="display: inline-block">
+              <i class="fas fa-trash"></i>
+            </a>
+          </form>
+          {% endfor %}
+        </div>
+        {# if not field.values or not field.functional #}
+        <a href="#" class="w3-button tiny-button flex-fix flip-frontside flip-flipbutton" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}" title="Add {{ field.range_label }}">
+          <i class="fas fa-plus"></i>
+        </a>
+        <a href="#" class="w3-button tiny-button flex-fix flip-flipside flip-frontbutton" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}" title="Cancel" style="display: none;">
+          <i class="fas fa-times"></i>
+        </a>
+        {# endif #}
       </div>
     </div>
-    {% if field.is_described %}
-    {% for value in field.values%}
-      {{ entity_div(value, False) }}
-    {% endfor %}
     {% endif %}
-    {% endfor%}
+    {% endfor %}
   </div>
+
+      <!--{#
+      <div class="flex-row">
+        <span class="flex-fix" {# if field.comment #}title="{# field.comment #}"{# endif #}>{# field.label #}:</span>
+
+        {# if not field.is_described #}
+        <div class="flex-flex field-value-list">
+          {# for value in field.values #}
+          <form class="flex-row">
+            <div class="w3-input literal-input" contentEditable>{# value #}</div>
+            <a href="#" class="w3-button tiny-button flex-fix w3-right" title="Delete {# field.range_label #}">
+              <i class="fas fa-trash"></i>
+            </a>
+          </form>
+          {# endfor #}
+
+          {# add value #}
+          <div class="flip-flipside" data-flipid="{# entity.uri + '::' + field.property_uri + '::new_value' #}" style="display: none">
+            <form class="flex-row">
+              <input class="w3-input flex-flex" {# field_input_attributes(field) #} name="value" placeholder="{# field.range_label #}..." required style="padding: 0 8px; border-bottom: 0">
+              <button type="submit" class="w3-button tiny-button flex-fix" title="Add {# field.range_label #}">
+                <i class="fas fa-plus"></i>
+              </button>
+            </form>
+          </div>
+        </div>
+        {# else #}
+        <div class="flex-flex flip-frontside" data-flipid="{# entity.uri + '::' + field.property_uri + '::new_value' #}"></div>
+        {# add described entity value #}
+        <div class="flex-flex flip-flipside" data-flipid="{# entity.uri + '::' + field.property_uri + '::new_value' #}" style="display: none; margin-left: 0.5em;">
+          <form class="flex-row">
+              <input class="w3-input flex-flex" type="text" name="label" placeholder="{# field.range_label #} name..." required style="padding: 0 8px; border-bottom: 0">
+              <button type="submit" class="w3-button tiny-button flex-fix" title="Add {# field.range_label #}">
+                <i class="fas fa-plus"></i>
+              </button>
+            </form>
+        </div>
+        {# endif #}
+
+        {# if not field.values or not field.functional #}
+        <a href="#" class="w3-button tiny-button flex-fix flip-frontside flip-flipbutton" data-flipid="{# entity.uri + '::' + field.property_uri + '::new_value' #}" title="Add {# field.range_label #}">
+          <i class="fas fa-plus"></i>
+        </a>
+        <a href="#" class="w3-button tiny-button flex-fix flip-flipside flip-frontbutton" data-flipid="{# entity.uri + '::' + field.property_uri + '::new_value' #}" title="Cancel" style="display: none;">
+          <i class="fas fa-times"></i>
+        </a>
+        {# endif #}
+      </div>
+    </div>
+    {# if field.is_described #}
+    {# for value in field.values#}
+      {# entity_div(value, False) #}
+    {# endfor #}
+    {# endif #}
+    {# endfor#}
+    #}-->
 </div>
 {% endmacro %}
