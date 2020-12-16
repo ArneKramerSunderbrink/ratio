@@ -141,7 +141,7 @@ class Field:
     """Represents a possible owl:ObjectProperty or owl:DatatypeProperty of an Entity"""
     def __init__(self, property_uri, label, comment,
                  is_object_property, is_described, is_functional,
-                 range_uri, range_label, values):
+                 range_uri, range_label, order, values):
         self.property_uri = property_uri
         self.label = label
         self.comment = comment
@@ -150,6 +150,7 @@ class Field:
         self.is_functional = is_functional
         self.range_uri = range_uri
         self.range_label = range_label
+        self.order = order
         self.values = values
 
 
@@ -178,10 +179,12 @@ def build_empty_field(ontology, property_uri, range_class_uri):
     is_functional = OWL.FunctionalProperty in ontology.objects(property_uri, RDF.type)
     is_described = RATIO.Described in ontology.objects(range_class_uri, RDF.type)
 
+    order = next(ontology.objects(property_uri, RATIO.order)).value
+
     values = []
 
     return Field(property_uri, label, comment, is_object_property, is_described, is_functional,
-                 range_class_uri, range_label, values)
+                 range_class_uri, range_label, order, values)
 
 
 def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri, range_class_uri):
@@ -209,13 +212,17 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
     is_functional = OWL.FunctionalProperty in ontology.objects(property_uri, RDF.type)
     is_described = RATIO.Described in ontology.objects(range_class_uri, RDF.type)
 
+    order = next(ontology.objects(property_uri, RATIO.order)).value
+
     values = list(knowledge.objects(individual_uri, property_uri))
     if is_described:
         values = [build_entity_from_knowledge(ontology, knowledge, value) for value in values]
-    # todo do I need to order values or are they ordered in order of creation automatically?
+        values.sort(key=lambda entity: entity.label)
+    else:
+        values.sort()
 
     return Field(property_uri, label, comment, is_object_property, is_described, is_functional,
-                 range_class_uri, range_label, values)
+                 range_class_uri, range_label, order, values)
 
 
 class Entity:
@@ -253,7 +260,7 @@ def build_empty_entity(ontology, class_uri):
         for property_uri in ontology.subjects(RDFS.domain, class_uri)
         for range_uri in ontology.objects(property_uri, RDFS.range)
     ]
-    # todo order fields
+    fields.sort(key=lambda field: field.order)
 
     return Entity(uri, label, comment, class_label, fields)
 
@@ -288,6 +295,6 @@ def build_entity_from_knowledge(ontology, knowledge, uri):
         for property_uri in ontology.subjects(RDFS.domain, class_uri)
         for range_uri in ontology.objects(property_uri, RDFS.range)
     ]
-    # todo order fields
+    fields.sort(key=lambda field: field.order)
 
     return Entity(uri, label, comment, class_label, fields)

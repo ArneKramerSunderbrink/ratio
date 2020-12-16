@@ -4,10 +4,8 @@
 @prefix xml: <http://www.w3.org/XML/1998/namespace> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix ctro: <http://www.semanticweb.org/root/ontologies/2018/6/ctro#> .
+@prefix ratio: <http://www.example.org/ratio-tool#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@base <http://www.semanticweb.org/root/ontologies/2018/6/ctro> .
-
-<http://www.semanticweb.org/root/ontologies/2018/6/ctro> rdf:type owl:Ontology .
 
 #################################################################
 #    Datatypes
@@ -21,754 +19,94 @@
 #    Object Properties
 #################################################################
 
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#analysesHealthCondition
-ctro:analysesHealthCondition rdf:type owl:ObjectProperty ;
-                             rdfs:domain ctro:ClinicalTrial ;
-                             rdfs:range ctro:DisorderOrSyndrome .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#describes
-ctro:describes rdf:type owl:ObjectProperty ;
-               rdfs:domain ctro:Publication ;
-               rdfs:range ctro:ClinicalTrial .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasAEname
-ctro:hasAEname rdf:type owl:ObjectProperty ;
-               rdfs:domain ctro:AdverseEffect ;
-               rdfs:range ctro:AdverseEffectName .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasAdverseEffect
-ctro:hasAdverseEffect rdf:type owl:ObjectProperty ;
-                      rdfs:domain ctro:Arm ;
-                      rdfs:range ctro:AdverseEffect .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasAggregationMethod
-ctro:hasAggregationMethod rdf:type owl:ObjectProperty ;
-                          rdfs:domain ctro:EndPoint ;
-                          rdfs:range ctro:AgreggationMethod .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasAnalysisApproach
-ctro:hasAnalysisApproach rdf:type owl:ObjectProperty ;
-                         rdfs:domain ctro:ClinicalTrial ;
-                         rdfs:range ctro:CTAnalysisApproach .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasAnalysisMetric
-ctro:hasAnalysisMetric rdf:type owl:ObjectProperty ;
-                       rdfs:domain ctro:Outcome ;
-                       rdfs:range ctro:AnalysisMetric .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasArm
-ctro:hasArm rdf:type owl:ObjectProperty ;
-            rdfs:domain ctro:ClinicalTrial ;
-            rdfs:range ctro:Arm .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasCTDesign
-ctro:hasCTDesign rdf:type owl:ObjectProperty ;
-                 rdfs:domain ctro:ClinicalTrial ;
-                 rdfs:range ctro:CTDesign .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasConfidenceInterval
-ctro:hasConfidenceInterval rdf:type owl:ObjectProperty ;
-                           rdfs:subPropertyOf owl:topObjectProperty ;
-                           rdfs:domain ctro:StatisticalMeasure ;
-                           rdfs:range ctro:ConfidenceInterval .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasCountry
-ctro:hasCountry rdf:type owl:ObjectProperty ;
-                rdfs:domain ctro:Population ;
-                rdfs:range <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasDeliveryMethod
-ctro:hasDeliveryMethod rdf:type owl:ObjectProperty ;
-                       rdfs:domain ctro:Medication ;
-                       rdfs:range ctro:DeliveryMethod .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasDesiredEffectDirection
-ctro:hasDesiredEffectDirection rdf:type owl:ObjectProperty ;
-                               rdfs:domain ctro:DesiredOutcome .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasDesiredEndpoint
-ctro:hasDesiredEndpoint rdf:type owl:ObjectProperty ;
-                        rdfs:domain ctro:DesiredOutcome ;
-                        rdfs:range ctro:EndPoint .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasDesiredOutcome
-ctro:hasDesiredOutcome rdf:type owl:ObjectProperty ;
-                       rdfs:subPropertyOf owl:topObjectProperty ;
-                       rdfs:domain ctro:ClinicalTrial ;
-                       rdfs:range ctro:DesiredOutcome .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasDoseUnit
-ctro:hasDoseUnit rdf:type owl:ObjectProperty ;
-                 rdfs:domain ctro:Medication ;
-                 rdfs:range <http://data.nasa.gov/qudt/owl/qudt#BioAndMedicalUnit> .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasDrug
-ctro:hasDrug rdf:type owl:ObjectProperty ,
-                      owl:FunctionalProperty ;
-             rdfs:domain ctro:Medication ;
-             rdfs:range ctro:Drug .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasEffectSize
-ctro:hasEffectSize rdf:type owl:ObjectProperty ;
-                   rdfs:domain ctro:Outcome ;
-                   rdfs:range ctro:EffectSize .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasEffectSizeMethod
-ctro:hasEffectSizeMethod rdf:type owl:ObjectProperty ;
-                         rdfs:domain ctro:EffectSize ;
-                         rdfs:range ctro:EffectSizeMethod .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasEndPoint
-ctro:hasEndPoint rdf:type owl:ObjectProperty ;
-                 rdfs:domain ctro:Outcome ;
-                 rdfs:range ctro:EndPoint .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasEndpointDescription
-ctro:hasEndpointDescription rdf:type owl:ObjectProperty ;
-                            rdfs:subPropertyOf owl:topObjectProperty ;
-                            rdfs:domain ctro:EndPoint ;
-                            rdfs:range ctro:EndpointDescription .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasEndpointUnit
-ctro:hasEndpointUnit rdf:type owl:ObjectProperty ;
-                     rdfs:domain ctro:EndPoint ;
-                     rdfs:range <http://data.nasa.gov/qudt/owl/qudt#BioAndMedicalUnit> .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasEthnicity
-ctro:hasEthnicity rdf:type owl:ObjectProperty ;
-                  rdfs:domain ctro:Population ;
-                  rdfs:range ctro:Ethnicity .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasIntervention
-ctro:hasIntervention rdf:type owl:ObjectProperty ,
-                              owl:FunctionalProperty ;
-                     rdfs:domain ctro:Arm ;
-                     rdfs:range ctro:Intervention .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasMeasurementDevice
-ctro:hasMeasurementDevice rdf:type owl:ObjectProperty ;
-                          rdfs:domain ctro:Outcome ;
-                          rdfs:range ctro:MeasurementDevice .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasMedication
-ctro:hasMedication rdf:type owl:ObjectProperty ,
-                            owl:TransitiveProperty ;
-                   rdfs:domain ctro:Intervention ;
-                   rdfs:range ctro:Medication .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasOutcome
-ctro:hasOutcome rdf:type owl:ObjectProperty ;
-                rdfs:domain ctro:Arm ;
-                rdfs:range ctro:Outcome .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasPopulation
-ctro:hasPopulation rdf:type owl:ObjectProperty ,
+ratio:described_by rdf:type owl:ObjectProperty ,
                             owl:FunctionalProperty ;
+                   ratio:order "1"^^xsd:positiveInteger ;
                    rdfs:domain ctro:ClinicalTrial ;
-                   rdfs:range ctro:Population .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasPopulationUnit
-ctro:hasPopulationUnit rdf:type owl:ObjectProperty ;
-                       rdfs:domain ctro:Population ;
-                       rdfs:range ctro:PopulationUnity .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasQualityIndicator
-ctro:hasQualityIndicator rdf:type owl:ObjectProperty ;
-                         rdfs:subPropertyOf owl:topObjectProperty ;
-                         rdfs:domain ctro:ClinicalTrial ;
-                         rdfs:range ctro:EvidenceQuality .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasResult
-ctro:hasResult rdf:type owl:ObjectProperty ;
-               rdfs:domain ctro:Outcome ;
-               rdfs:range ctro:Result .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasResultAE
-ctro:hasResultAE rdf:type owl:ObjectProperty ;
-                 rdfs:domain ctro:AdverseEffect ;
-                 rdfs:range ctro:Result .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasStatisticalMeasure
-ctro:hasStatisticalMeasure rdf:type owl:ObjectProperty ;
-                           rdfs:domain ctro:Result ;
-                           rdfs:range ctro:StatisticalMeasure .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasStatisticalTestName
-ctro:hasStatisticalTestName rdf:type owl:ObjectProperty ;
-                            rdfs:domain ctro:StatisticalMeasure ;
-                            rdfs:range ctro:StatisticalTest .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasValue
-ctro:hasValue rdf:type owl:ObjectProperty ,
-                       owl:TransitiveProperty ;
-              rdfs:domain ctro:DesiredOutcome ;
-              rdfs:range ctro:Result .
+                   rdfs:range ctro:Publication ;
+                   rdfs:label "is described by Publication" .
 
 
 #################################################################
 #    Data properties
 #################################################################
 
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasAbsoluteValue
-ctro:hasAbsoluteValue rdf:type owl:DatatypeProperty ,
-                               owl:FunctionalProperty ;
-                      rdfs:domain ctro:Result ;
-                      rdfs:range xsd:float .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasAbstract
-ctro:hasAbstract rdf:type owl:DatatypeProperty ;
-                 rdfs:domain ctro:Publication ;
-                 rdfs:range xsd:string .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasAllocationRatio
-ctro:hasAllocationRatio rdf:type owl:DatatypeProperty ,
-                                 owl:FunctionalProperty ;
-                        rdfs:domain ctro:ClinicalTrial ;
-                        rdfs:range rdfs:Literal .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasAuthor
-ctro:hasAuthor rdf:type owl:DatatypeProperty ,
-                        owl:FunctionalProperty ;
-               rdfs:domain ctro:Publication ;
-               rdfs:range xsd:string .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasAuthorAffilation
-ctro:hasAuthorAffilation rdf:type owl:DatatypeProperty ;
-                         rdfs:domain ctro:EvidenceQuality ;
-                         rdfs:range rdfs:Literal .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasAvgAge
-ctro:hasAvgAge rdf:type owl:DatatypeProperty ;
-               rdfs:domain ctro:Population ;
-               rdfs:range xsd:integer .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasBaselineValue
-ctro:hasBaselineValue rdf:type owl:DatatypeProperty ,
-                               owl:FunctionalProperty ;
-                      rdfs:domain ctro:Outcome ;
-                      rdfs:range xsd:float .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasCIvalue
-ctro:hasCIvalue rdf:type owl:DatatypeProperty ;
-                rdfs:domain ctro:ConfidenceInterval ;
-                rdfs:range xsd:float .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasCTduration
-ctro:hasCTduration rdf:type owl:DatatypeProperty ,
-                            owl:FunctionalProperty ;
-                   rdfs:domain ctro:ClinicalTrial ;
-                   rdfs:range rdfs:Literal .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasConclusionComment
-ctro:hasConclusionComment rdf:type owl:DatatypeProperty ;
-                          rdfs:domain ctro:ClinicalTrial ;
-                          rdfs:range xsd:string .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasConflictInterest
-ctro:hasConflictInterest rdf:type owl:DatatypeProperty ;
-                         rdfs:domain ctro:EvidenceQuality ;
-                         rdfs:range xsd:string .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasDBdisease
-ctro:hasDBdisease rdf:type owl:DatatypeProperty ;
-                  rdfs:domain ctro:DisorderOrSyndrome ;
-                  rdfs:range xsd:string .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasDesiredEffectDir
-ctro:hasDesiredEffectDir rdf:type owl:DatatypeProperty ;
-                         rdfs:domain ctro:EndPoint ;
-                         rdfs:range xsd:string .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasDiseaseId
-ctro:hasDiseaseId rdf:type owl:DatatypeProperty ,
-                           owl:FunctionalProperty ;
-                  rdfs:domain ctro:DisorderOrSyndrome ;
-                  rdfs:range rdfs:Literal .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasDoseValue
-ctro:hasDoseValue rdf:type owl:DatatypeProperty ,
-                           owl:FunctionalProperty ;
-                  rdfs:domain ctro:Medication ;
-                  rdfs:range rdfs:Literal .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasDrug_Id
-ctro:hasDrug_Id rdf:type owl:DatatypeProperty ,
-                         owl:FunctionalProperty ;
-                rdfs:domain ctro:Drug ;
-                rdfs:range xsd:string .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasDuration
-ctro:hasDuration rdf:type owl:DatatypeProperty ;
-                 rdfs:domain ctro:Intervention ;
-                 rdfs:range rdfs:Literal .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasEffectSizeValue
-ctro:hasEffectSizeValue rdf:type owl:DatatypeProperty ;
-                        rdfs:domain ctro:EffectSize ;
-                        rdfs:range xsd:float .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasFinalNumberPatients
-ctro:hasFinalNumberPatients rdf:type owl:DatatypeProperty ,
-                                     owl:FunctionalProperty ;
-                            rdfs:domain ctro:Outcome ;
-                            rdfs:range xsd:positiveInteger .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasFrequency
-ctro:hasFrequency rdf:type owl:DatatypeProperty ;
-                  rdfs:domain ctro:Intervention ;
-                  rdfs:range rdfs:Literal .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasGender
-ctro:hasGender rdf:type owl:DatatypeProperty ,
-                        owl:FunctionalProperty ;
-               rdfs:domain ctro:Population ;
-               rdfs:range [ rdf:type rdfs:Datatype ;
-                            owl:oneOf [ rdf:type rdf:List ;
-                                        rdf:first "Female" ;
-                                        rdf:rest [ rdf:type rdf:List ;
-                                                   rdf:first "Male" ;
-                                                   rdf:rest [ rdf:type rdf:List ;
-                                                              rdf:first "Mixed" ;
-                                                              rdf:rest rdf:nil
-                                                            ]
-                                                 ]
-                                      ]
-                          ] .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasInfMargin
-ctro:hasInfMargin rdf:type owl:DatatypeProperty ;
-                  rdfs:domain ctro:ConfidenceInterval ;
-                  rdfs:range xsd:float .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasJournal
-ctro:hasJournal rdf:type owl:DatatypeProperty ,
-                         owl:FunctionalProperty ;
-                rdfs:domain ctro:Publication ;
-                rdfs:range xsd:string .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasMarginError
-ctro:hasMarginError rdf:type owl:DatatypeProperty ;
-                    rdfs:domain ctro:ConfidenceInterval ;
-                    rdfs:range xsd:float .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasMaxAge
-ctro:hasMaxAge rdf:type owl:DatatypeProperty ,
-                        owl:FunctionalProperty ;
-               rdfs:domain ctro:Population ;
-               rdfs:range xsd:positiveInteger .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasMinAge
-ctro:hasMinAge rdf:type owl:DatatypeProperty ,
-                        owl:FunctionalProperty ;
-               rdfs:domain ctro:Population ;
-               rdfs:range xsd:positiveInteger .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasNumberAffected
-ctro:hasNumberAffected rdf:type owl:DatatypeProperty ,
-                                owl:FunctionalProperty ;
-                       rdfs:domain ctro:Result ;
-                       rdfs:range xsd:integer .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasNumberPatientsArm
-ctro:hasNumberPatientsArm rdf:type owl:DatatypeProperty ,
-                                   owl:FunctionalProperty ;
-                          rdfs:domain ctro:Arm ;
-                          rdfs:range xsd:positiveInteger .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasNumberPatientsCT
-ctro:hasNumberPatientsCT rdf:type owl:DatatypeProperty ,
-                                  owl:FunctionalProperty ;
-                         rdfs:domain ctro:ClinicalTrial ;
-                         rdfs:range xsd:positiveInteger .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasObjectiveDescription
-ctro:hasObjectiveDescription rdf:type owl:DatatypeProperty ,
-                                      owl:FunctionalProperty ;
-                             rdfs:domain ctro:ClinicalTrial ;
-                             rdfs:range xsd:string .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasObservedResult
-ctro:hasObservedResult rdf:type owl:DatatypeProperty ,
-                                owl:FunctionalProperty ;
-                       rdfs:domain ctro:Result ;
-                       rdfs:range xsd:string .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasPMID
-ctro:hasPMID rdf:type owl:DatatypeProperty ,
-                      owl:FunctionalProperty ;
-             rdfs:domain ctro:Publication ;
-             rdfs:range rdfs:Literal .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasPValue
-ctro:hasPValue rdf:type owl:DatatypeProperty ,
-                        owl:FunctionalProperty ;
-               rdfs:domain ctro:StatisticalMeasure ;
-               rdfs:range xsd:string ;
-               rdfs:comment "P value gives the statistical significance (i.e., the probability that the observed difference between two groups is due to chance). If the P value is larger than the alpha level chosen (eg, .05), any observed difference is assumed to be explained by sampling variability" .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasPercentageAffected
-ctro:hasPercentageAffected rdf:type owl:DatatypeProperty ,
-                                    owl:FunctionalProperty ;
-                           rdfs:domain ctro:Result ;
-                           rdfs:range xsd:float .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasPreconditionDescription
-ctro:hasPreconditionDescription rdf:type owl:DatatypeProperty ;
-                                rdfs:domain ctro:Population ;
-                                rdfs:range xsd:string .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasPublicationYear
-ctro:hasPublicationYear rdf:type owl:DatatypeProperty ,
-                                 owl:FunctionalProperty ;
-                        rdfs:domain ctro:Publication ;
-                        rdfs:range xsd:positiveInteger .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasRelativeValue
-ctro:hasRelativeValue rdf:type owl:DatatypeProperty ;
-                      rdfs:domain ctro:Result ;
-                      rdfs:range xsd:float .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasResultDirection
-ctro:hasResultDirection rdf:type owl:DatatypeProperty ;
-                        rdfs:domain ctro:Result ;
-                        rdfs:range xsd:string .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasSponsor
-ctro:hasSponsor rdf:type owl:DatatypeProperty ;
-                rdfs:domain ctro:EvidenceQuality ;
-                rdfs:range xsd:string .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasStandardDev
-ctro:hasStandardDev rdf:type owl:DatatypeProperty ,
-                             owl:FunctionalProperty ;
-                    rdfs:domain ctro:StatisticalMeasure ;
-                    rdfs:range xsd:float .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasStandardError
-ctro:hasStandardError rdf:type owl:DatatypeProperty ;
-                      rdfs:domain ctro:StatisticalMeasure ;
-                      rdfs:range xsd:float .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasStatisticalTestName
-ctro:hasStatisticalTestName rdf:type owl:DatatypeProperty ,
-                                     owl:FunctionalProperty ;
-                            rdfs:domain ctro:StatisticalTest ;
-                            rdfs:range xsd:string .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasStatisticalTestValue
-ctro:hasStatisticalTestValue rdf:type owl:DatatypeProperty ,
-                                      owl:FunctionalProperty ;
-                             rdfs:domain ctro:StatisticalMeasure ;
-                             rdfs:range xsd:float ;
-                             rdfs:comment "The result of the statistical test that was applied" .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasSupMargin
-ctro:hasSupMargin rdf:type owl:DatatypeProperty ;
-                  rdfs:subPropertyOf owl:topDataProperty ;
-                  rdfs:domain ctro:ConfidenceInterval ;
-                  rdfs:range xsd:float .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasTimePoints
-ctro:hasTimePoints rdf:type owl:DatatypeProperty ;
-                   rdfs:domain ctro:Outcome ;
-                   rdfs:range rdfs:Literal .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasTitle
 ctro:hasTitle rdf:type owl:DatatypeProperty ,
                        owl:FunctionalProperty ;
+              ratio:order "1"^^xsd:positiveInteger ;
               rdfs:domain ctro:Publication ;
-              rdfs:range xsd:string .
+              rdfs:range xsd:string ;
+              rdfs:label "Title" .
 
+ctro:hasJournal rdf:type owl:DatatypeProperty ,
+                         owl:FunctionalProperty ;
+                ratio:order "2"^^xsd:positiveInteger ;
+                rdfs:domain ctro:Publication ;
+                rdfs:range xsd:string ;
+                rdfs:label "Journal" .
 
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasdiseaseName
-ctro:hasdiseaseName rdf:type owl:DatatypeProperty ;
-                    rdfs:subPropertyOf owl:topDataProperty ;
-                    rdfs:domain ctro:DisorderOrSyndrome ;
-                    rdfs:range xsd:string .
+ctro:hasAuthor rdf:type owl:DatatypeProperty ;
+               ratio:order "3"^^xsd:positiveInteger ;
+               rdfs:domain ctro:Publication ;
+               rdfs:range xsd:string ;
+               rdfs:label "Author" .
 
+ctro:hasPublicationYear rdf:type owl:DatatypeProperty ,
+                                 owl:FunctionalProperty ;
+                        ratio:order "4"^^xsd:positiveInteger ;
+                        rdfs:domain ctro:Publication ;
+                        rdfs:range xsd:positiveInteger ;
+                        rdfs:label "Publication year" .
 
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#isControl
-ctro:isControl rdf:type owl:DatatypeProperty ;
-               rdfs:domain ctro:Medication ;
-               rdfs:range xsd:boolean .
+ctro:hasPMID rdf:type owl:DatatypeProperty ,
+                      owl:FunctionalProperty ;
+             ratio:order "4"^^xsd:positiveInteger ;
+             rdfs:domain ctro:Publication ;
+             rdfs:range rdfs:Literal ;
+             rdfs:label "PMID" .
 
 
 #################################################################
 #    Classes
 #################################################################
 
-###  http://data.nasa.gov/qudt/owl/qudt#BioAndMedicalUnit
-<http://data.nasa.gov/qudt/owl/qudt#BioAndMedicalUnit> rdf:type owl:Class .
-
-
-###  http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country
-<http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> rdf:type owl:Class .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#AdverseEffect
-ctro:AdverseEffect rdf:type owl:Class .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#AdverseEffectName
-ctro:AdverseEffectName rdf:type owl:Class .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#AgreggationMethod
-ctro:AgreggationMethod rdf:type owl:Class .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#AnalysisMetric
-ctro:AnalysisMetric rdf:type owl:Class .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Arm
-ctro:Arm rdf:type owl:Class ;
-         rdfs:comment "An arm of a clinical trial is a group of patients (or study subjects) receiving a specific treatment (or no treatment- i.e. placebo)"^^xsd:string .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#CTAnalysisApproach
-ctro:CTAnalysisApproach rdf:type owl:Class ;
-                        rdfs:comment "Type of analysis carried out in the clinical trial (i.e, Intention To Treat, Per Protocol) relative to the number of patients treated" .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#CTDesign
-ctro:CTDesign rdf:type owl:Class .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#ClinicalTrial
 ctro:ClinicalTrial rdf:type owl:Class ;
-                   rdfs:comment "Controlled study that assigns groups of humans to one or more health-related interventions to evaluate the respective effects on health outcomes"^^xsd:string .
+                   owl:equivalentClass [ rdf:type owl:Restriction ;
+                                         owl:onProperty ctro:analysesHealthCondition ;
+                                         owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                         owl:onClass ctro:DisorderOrSyndrome
+                                       ] ,
+                                       [ rdf:type owl:Restriction ;
+                                         owl:onProperty ctro:hasArm ;
+                                         owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                         owl:onClass ctro:Arm
+                                       ] ;
+                   rdfs:label "Clinical Trial" .
+
+ctro:Publication rdf:type owl:Class ;
+                 owl:equivalentClass [ rdf:type owl:Restriction ;
+                                       owl:onProperty ctro:describes ;
+                                       owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                       owl:onClass ctro:ClinicalTrial
+                                     ] ,
+                                     [ rdf:type owl:Restriction ;
+                                       owl:onProperty ctro:hasAuthor ;
+                                       owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                                       owl:onDataRange xsd:string
+                                     ] ;
+                 rdfs:label "Publication" .
 
 
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Concentration
-ctro:Concentration rdf:type owl:Class ;
-                   rdfs:subClassOf <http://data.nasa.gov/qudt/owl/qudt#BioAndMedicalUnit> .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#ConfidenceInterval
-ctro:ConfidenceInterval rdf:type owl:Class .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#DeliveryMethod
-ctro:DeliveryMethod rdf:type owl:Class .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#DesiredOutcome
-ctro:DesiredOutcome rdf:type owl:Class .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#DisorderOrSyndrome
-ctro:DisorderOrSyndrome rdf:type owl:Class ;
-                        rdfs:comment "Name of the disease or problem that is studied in the clinical trial"^^xsd:string .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Drug
-ctro:Drug rdf:type owl:Class .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#EffectSize
-ctro:EffectSize rdf:type owl:Class ;
-                rdfs:comment "An effect size estimate can place an easily interpretable value on the direction and magnitude of an effect of a treatment. It allows clinically meaningful comparisons of efficacy between treatment trials. Several measures of effect size are in current practice."^^xsd:string .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#EffectSizeMethod
-ctro:EffectSizeMethod rdf:type owl:Class ;
-                      rdfs:comment "The type of size of effect reported (e.g. relative risk)"^^xsd:string .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#EndPoint
-ctro:EndPoint rdf:type owl:Class ;
-              rdfs:comment "Corresponds to the data collected directly from the trial participants (e.g., IOP pressure)"^^xsd:string .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#EndpointDescription
-ctro:EndpointDescription rdf:type owl:Class .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Ethnicity
-ctro:Ethnicity rdf:type owl:Class ;
-               rdfs:comment "Ethnicity of the population"^^xsd:string .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#EvidenceQuality
-ctro:EvidenceQuality rdf:type owl:Class .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Frequency
-ctro:Frequency rdf:type owl:Class .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Intervention
-ctro:Intervention rdf:type owl:Class ;
-                  rdfs:comment "A treatment or action taken to prevent or treat disease, or improve health in other ways. Interventions include but are not restricted to drugs."^^xsd:string .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#MeasurementDevice
-ctro:MeasurementDevice rdf:type owl:Class .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Medication
-ctro:Medication rdf:type owl:Class .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Other
-ctro:Other rdf:type owl:Class ;
-           rdfs:subClassOf <http://data.nasa.gov/qudt/owl/qudt#BioAndMedicalUnit> .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Outcome
-ctro:Outcome rdf:type owl:Class ;
-             rdfs:comment "What is expected to be accomplish, measure, improve, or affect in the clinical trial. There are primary or not primary outcomes."^^xsd:string .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Population
-ctro:Population rdf:type owl:Class ;
-                rdfs:comment "Population of patients or any other study unit (e.g. eyes) with certain characteristics and preconditions according with the problem/disease studied"^^xsd:string .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#PopulationUnity
-ctro:PopulationUnity rdf:type owl:Class .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Pressure
-ctro:Pressure rdf:type owl:Class ;
-              rdfs:subClassOf <http://data.nasa.gov/qudt/owl/qudt#BioAndMedicalUnit> .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#PrimaryOutcomeName
-ctro:PrimaryOutcomeName rdf:type owl:Class ;
-                        rdfs:subClassOf ctro:EndpointDescription .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Publication
-ctro:Publication rdf:type owl:Class .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Result
-ctro:Result rdf:type owl:Class ;
-            rdfs:comment "Results of an outcome reported in different ways"^^xsd:string .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#SecondaryOutcomeName
-ctro:SecondaryOutcomeName rdf:type owl:Class ;
-                          rdfs:subClassOf ctro:EndpointDescription .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#StatisticalMeasure
-ctro:StatisticalMeasure rdf:type owl:Class .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#StatisticalTest
-ctro:StatisticalTest rdf:type owl:Class ;
-                     rdfs:comment "It is a group of mathematical operations used to determine the statistical significance of an intervention"^^xsd:string .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#TimeUnit
-ctro:TimeUnit rdf:type owl:Class .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Weight
-ctro:Weight rdf:type owl:Class ;
-            rdfs:subClassOf <http://data.nasa.gov/qudt/owl/qudt#BioAndMedicalUnit> .
-
-
-###  http://www.w3.org/2002/07/owl#Thing
-owl:Thing rdf:type owl:Class .
+#################################################################
+#    Individuals
+#################################################################
 
 
 #################################################################
 #    Ratio Tool Configuration
 #################################################################
 
-@prefix ratio: <http://www.example.org/ratio-tool#> .
+ctro:ClinicalTrial rdf:type ratio:SubgraphRoot .
 
-ctro:Publication rdf:type ratio:SubgraphRoot .
-
-ctro:Arm rdf:type ratio:Described .
 ctro:ClinicalTrial rdf:type ratio:Described .
-ctro:EndPoint rdf:type ratio:Described .
-ctro:Intervention rdf:type ratio:Described .
-ctro:Medication rdf:type ratio:Described .
-ctro:Outcome rdf:type ratio:Described .
-ctro:Population rdf:type ratio:Described .
 ctro:Publication rdf:type ratio:Described .
-ctro:Result rdf:type ratio:Described .
