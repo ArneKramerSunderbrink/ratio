@@ -26,10 +26,36 @@ ratio:described_by rdf:type owl:ObjectProperty ,
                    rdfs:range ctro:Publication ;
                    rdfs:label "is described by Publication" .
 
+ctro:hasCTDesign rdf:type owl:ObjectProperty ;
+                 ratio:order "3"^^xsd:positiveInteger ;
+                 rdfs:domain ctro:ClinicalTrial ;
+                 rdfs:range ctro:CTDesign ;
+                 rdfs:label "Clinical trial design" .
+
+ctro:analysesHealthCondition rdf:type owl:ObjectProperty ;
+                             ratio:order "1"^^xsd:positiveInteger ;
+                             rdfs:domain ctro:CTDesign ;
+                             rdfs:range ctro:DisorderOrSyndrome ;
+                             rdfs:label "Disease" .
+
+ctro:hasAnalysisApproach rdf:type owl:ObjectProperty ,
+                                  owl:FunctionalProperty ;
+                         ratio:order "4"^^xsd:positiveInteger ;
+                         rdfs:domain ctro:CTDesign ;
+                         rdfs:range ctro:CTAnalysisApproach ;
+                         rdfs:label "Analysis approach" .
+
 
 #################################################################
 #    Data properties
 #################################################################
+
+ctro:hasObjectiveDescription rdf:type owl:DatatypeProperty ,
+                                      owl:FunctionalProperty ;
+                             ratio:order "2"^^xsd:positiveInteger ;
+                             rdfs:domain ctro:ClinicalTrial ;
+                             rdfs:range xsd:string ;
+                             rdfs:label "Objective" .
 
 ctro:hasTitle rdf:type owl:DatatypeProperty ,
                        owl:FunctionalProperty ;
@@ -65,12 +91,29 @@ ctro:hasPMID rdf:type owl:DatatypeProperty ,
              rdfs:range rdfs:Literal ;
              rdfs:label "PMID" .
 
+ctro:hasNumberPatientsCT rdf:type owl:DatatypeProperty ,
+                                  owl:FunctionalProperty ;
+                         ratio:order "2"^^xsd:positiveInteger ;
+                         rdfs:domain ctro:CTDesign ;
+                         rdfs:range xsd:positiveInteger ;
+                         rdfs:label "Initial number of patients" .
+
+ctro:hasCTduration rdf:type owl:DatatypeProperty ,
+                            owl:FunctionalProperty ;
+                   ratio:order "3"^^xsd:positiveInteger ;
+                   rdfs:domain ctro:CTDesign ;
+                   rdfs:range xsd:positiveInteger ;
+                   rdfs:comment "Duration of the trial given in WEEKS" ;
+                   rdfs:label "Trial duration" .
+
 
 #################################################################
 #    Classes
 #################################################################
 
-ctro:ClinicalTrial rdf:type owl:Class ;
+ctro:ClinicalTrial rdf:type owl:Class ,
+                            ratio:SubgraphRoot ,
+                            ratio:Described ;
                    owl:equivalentClass [ rdf:type owl:Restriction ;
                                          owl:onProperty ctro:analysesHealthCondition ;
                                          owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
@@ -83,7 +126,8 @@ ctro:ClinicalTrial rdf:type owl:Class ;
                                        ] ;
                    rdfs:label "Clinical Trial" .
 
-ctro:Publication rdf:type owl:Class ;
+ctro:Publication rdf:type owl:Class ,
+                          ratio:Described ;
                  owl:equivalentClass [ rdf:type owl:Restriction ;
                                        owl:onProperty ctro:describes ;
                                        owl:qualifiedCardinality "1"^^xsd:nonNegativeInteger ;
@@ -96,17 +140,23 @@ ctro:Publication rdf:type owl:Class ;
                                      ] ;
                  rdfs:label "Publication" .
 
+ctro:CTDesign rdf:type owl:Class ,
+                       ratio:Described;
+              rdfs:label "Trial design" .
+
+ctro:DisorderOrSyndrome rdf:type owl:Class ;
+                        rdfs:label "Disease" .
 
 #################################################################
 #    Individuals
 #################################################################
 
+ctro:Glaucoma rdf:type owl:NamedIndividual ,
+                       ctro:DisorderOrSyndrome ;
+              rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/23986001> ;
+              rdfs:label "Glaucoma" .
 
-#################################################################
-#    Ratio Tool Configuration
-#################################################################
-
-ctro:ClinicalTrial rdf:type ratio:SubgraphRoot .
-
-ctro:ClinicalTrial rdf:type ratio:Described .
-ctro:Publication rdf:type ratio:Described .
+ctro:T2DM rdf:type owl:NamedIndividual ,
+                   ctro:DisorderOrSyndrome ;
+          rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/44054006> ;
+          rdfs:label "Type 2 Diabetes Mellitus" .

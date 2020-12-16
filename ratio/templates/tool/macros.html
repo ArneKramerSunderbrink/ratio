@@ -104,6 +104,20 @@
       <div class="flex-row">
         <span class="flex-fix" {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}:</span>
         <div class="field-value-list">
+          {% if field.is_object_property %}
+          {% for value in field.values %}
+          <form>
+            <select class="w3-select literal-input" name="value">
+              {% for option in field.options %}
+              <option value="{{ option.uri }}" {% if option.uri == value %}selected{% endif %}>{{ option.label }}</option>
+              {% endfor %}
+            </select>
+            <a href="#" class="w3-button tiny-button w3-right" title="Delete {{ field.range_label }}">
+              <i class="fas fa-trash"></i>
+            </a>
+          </form>
+          {% endfor %}
+          {% else %}
           {% for value in field.values %}
           <form>
             <div class="w3-input literal-input" contentEditable>{{ value }}</div>
@@ -112,6 +126,7 @@
             </a>
           </form>
           {% endfor %}
+          {% endif %}
         </div>
         {% if not field.values or not field.is_functional %}
         <a href="#" class="w3-button tiny-button flex-fix" title="Add {{ field.range_label }}">

@@ -141,7 +141,7 @@ class Field:
     """Represents a possible owl:ObjectProperty or owl:DatatypeProperty of an Entity"""
     def __init__(self, property_uri, label, comment,
                  is_object_property, is_described, is_functional,
-                 range_uri, range_label, order, values):
+                 range_uri, range_label, order, values, options=None):
         self.property_uri = property_uri
         self.label = label
         self.comment = comment
@@ -152,10 +152,29 @@ class Field:
         self.range_label = range_label
         self.order = order
         self.values = values
+        self.options = options
+
+
+class Option:
+    def __init__(self, uri, label, defined_by):
+        self.uri = uri
+        self.label = label
+        self.defined_by = defined_by
+
+
+def build_option(ontology, uri):
+    label = ontology.objects(uri, RDFS.label)
+    try:
+        label = next(label)
+    except StopIteration:
+        label = uri.split('#')[-1]
+
+    defined_by = ontology.objects(uri, RDFS.isDefinedBy)
+
+    return Option(uri, label, defined_by)
 
 
 def build_empty_field(ontology, property_uri, range_class_uri):
-    # currently properties don't have labels in the ontology but would be nice...
     label = ontology.objects(property_uri, RDFS.label)
     try:
         label = next(label)
@@ -183,8 +202,14 @@ def build_empty_field(ontology, property_uri, range_class_uri):
 
     values = []
 
+    if is_object_property and not is_described:
+        options = list(build_option(ontology, uri) for uri in ontology.subjects(RDF.type, range_class_uri))
+        options.sort(key=lambda option: option.label)
+    else:
+        options = None
+
     return Field(property_uri, label, comment, is_object_property, is_described, is_functional,
-                 range_class_uri, range_label, order, values)
+                 range_class_uri, range_label, order, values, options)
 
 
 def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri, range_class_uri):
@@ -221,8 +246,14 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
     else:
         values.sort()
 
+    if is_object_property and not is_described:
+        options = list(build_option(ontology, uri) for uri in ontology.subjects(RDF.type, range_class_uri))
+        options.sort(key=lambda option: option.label)
+    else:
+        options = None
+
     return Field(property_uri, label, comment, is_object_property, is_described, is_functional,
-                 range_class_uri, range_label, order, values)
+                 range_class_uri, range_label, order, values, options)
 
 
 class Entity:
