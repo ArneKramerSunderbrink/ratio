@@ -243,6 +243,9 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
     if is_described:
         values = [build_entity_from_knowledge(ontology, knowledge, value) for value in values]
         values.sort(key=lambda entity: entity.label)
+    elif is_object_property:
+        values = [build_option(ontology, value) for value in values]
+        values.sort(key=lambda option: option.label)
     else:
         values.sort()
 

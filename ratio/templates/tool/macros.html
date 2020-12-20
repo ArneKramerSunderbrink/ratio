@@ -107,11 +107,21 @@
           {% if field.is_object_property %}
           {% for value in field.values %}
           <form>
-            <select class="w3-select literal-input" name="value">
-              {% for option in field.options %}
-              <option value="{{ option.uri }}" {% if option.uri == value %}selected{% endif %}>{{ option.label }}</option>
-              {% endfor %}
-            </select>
+            <input type="hidden" autofocus>
+            <div>
+              <input class="w3-input option-input" type="text" name="value" value="{{ value.label }}" required>
+              <div class="options"><div class="color1">
+                {% for option in field.options %}
+                <div class="option">{{ option.label }}</div>
+                {% endfor %}
+                <div>
+                  <input class="w3-input" type="text" name="value" placeholder="Add option..." style="display: inline-block"><!--
+                  --><a href="#" class="w3-button tiny-button" title="Add {{ field.range_label }} to the list of options." style="display: inline-block">
+                    <i class="fas fa-plus"></i>
+                  </a>
+                </div>
+              </div></div>
+            </div>
             <a href="#" class="w3-button tiny-button w3-right" title="Delete {{ field.range_label }}">
               <i class="fas fa-trash"></i>
             </a>
