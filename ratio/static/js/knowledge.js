@@ -24,6 +24,19 @@ $(function() {
   });
 });
 
+// Mark option invalid
+$(function() {
+  $('input.option-input').on('focusout', function() {
+    // if value not in options, .setCustomValidity("Invalid option.")
+    if ($(this).next('.options').find('.option').text().includes(this.value)) {
+      this.setCustomValidity('');
+    } else {
+      this.setCustomValidity('Choose an option from the list.');
+    }
+  });
+});
+
+
 /*
 $(function() {
   var as, i;
