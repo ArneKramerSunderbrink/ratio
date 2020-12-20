@@ -52,6 +52,58 @@ ctro:hasPopulation rdf:type owl:ObjectProperty ,
                    rdfs:range ctro:Population ;
                    rdfs:label "Population" .
 
+ctro:hasEthnicity rdf:type owl:ObjectProperty ;
+                  ratio:order "4"^^xsd:positiveInteger ;
+                  rdfs:domain ctro:Population ;
+                  rdfs:range ctro:Ethnicity ;
+                  rdfs:label "Ethnicity" .
+
+ctro:hasCountry rdf:type owl:ObjectProperty ;
+                ratio:order "6"^^xsd:positiveInteger ;
+                rdfs:domain ctro:Population ;
+                rdfs:range <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+                rdfs:label "Country" .
+
+ctro:hasQualityIndicator rdf:type owl:ObjectProperty ;
+                         ratio:order "5"^^xsd:positiveInteger ;
+                         rdfs:subPropertyOf owl:topObjectProperty ;
+                         rdfs:domain ctro:ClinicalTrial ;
+                         rdfs:range ctro:EvidenceQuality ;
+                         rdfs:label "Quality / bias indicator" .
+
+ctro:hasArm rdf:type owl:ObjectProperty ;
+            ratio:order "6"^^xsd:positiveInteger ;
+            rdfs:domain ctro:ClinicalTrial ;
+            rdfs:range ctro:Arm ;
+            rdfs:label "Interventional-Arm" .
+
+ctro:hasIntervention rdf:type owl:ObjectProperty ;
+                     ratio:order "2"^^xsd:positiveInteger ;
+                     rdfs:domain ctro:Arm ;
+                     rdfs:range ctro:Intervention ;
+                     rdfs:label "Intervention" .
+
+ctro:hasDrug rdf:type owl:ObjectProperty ,
+                      owl:FunctionalProperty ;
+             ratio:order "3"^^xsd:positiveInteger ;
+             rdfs:domain ctro:Intervention ;
+             rdfs:range ctro:Drug ;
+             rdfs:label "Drug" .
+
+ctro:hasDoseUnit rdf:type owl:ObjectProperty ,
+                          owl:FunctionalProperty ;
+                 ratio:order "4"^^xsd:positiveInteger ;
+                 rdfs:domain ctro:Intervention ;
+                 rdfs:range ctro:BioAndMedicalUnit ;
+                 rdfs:label "Dose unit" .
+
+ctro:hasDeliveryMethod rdf:type owl:ObjectProperty ;
+                       ratio:order "5"^^xsd:positiveInteger ;
+                       rdfs:domain ctro:Medication ;
+                       rdfs:range ctro:DeliveryMethod ;
+                       rdfs:label "Delivery method" .
+
+
 #################################################################
 #    Data properties
 #################################################################
@@ -130,6 +182,89 @@ ctro:hasGender rdf:type owl:DatatypeProperty ,
                           ] ;
                rdfs:label "Gender" .
 
+ctro:hasMinAge rdf:type owl:DatatypeProperty ,
+                        owl:FunctionalProperty ;
+               ratio:order "2"^^xsd:positiveInteger ;
+               rdfs:domain ctro:Population ;
+               rdfs:range xsd:positiveInteger ;
+               rdfs:label "Min. age" .
+
+ctro:hasMaxAge rdf:type owl:DatatypeProperty ,
+                        owl:FunctionalProperty ;
+               ratio:order "3"^^xsd:positiveInteger ;
+               rdfs:domain ctro:Population ;
+               rdfs:range xsd:positiveInteger ;
+               rdfs:label "Max. age" .
+
+ctro:hasPreconditionDescription rdf:type owl:DatatypeProperty ;
+                                ratio:order "3"^^xsd:positiveInteger ;
+                                rdfs:domain ctro:Population ;
+                                rdfs:range xsd:string ;
+                                rdfs:label "Precondition" .
+
+ctro:hasAuthorAffilation rdf:type owl:DatatypeProperty ;
+                         ratio:order "3"^^xsd:positiveInteger ;
+                         rdfs:domain ctro:EvidenceQuality ;
+                         rdfs:range xsd:string ;
+                         rdfs:label "Author affilation" .
+
+ctro:hasConflictInterest rdf:type owl:DatatypeProperty ;
+                         ratio:order "2"^^xsd:positiveInteger ;
+                         rdfs:domain ctro:EvidenceQuality ;
+                         rdfs:range xsd:string ;
+                         rdfs:label "Conflict of interest" .
+
+ctro:hasSponsor rdf:type owl:DatatypeProperty ;
+                ratio:order "1"^^xsd:positiveInteger ;
+                rdfs:domain ctro:EvidenceQuality ;
+                rdfs:range xsd:string ;
+                rdfs:label "Sponsor" .
+
+ctro:hasNumberPatientsArm rdf:type owl:DatatypeProperty ,
+                                   owl:FunctionalProperty ;
+                          ratio:order "1"^^xsd:positiveInteger ;
+                          rdfs:domain ctro:Arm ;
+                          rdfs:range xsd:positiveInteger ;
+                          rdfs:label "Number of patients in arm" .
+
+ctro:hasDuration rdf:type owl:DatatypeProperty ;
+                 ratio:order "1"^^xsd:positiveInteger ;
+                 rdfs:domain ctro:Intervention ;
+                 rdfs:range rdfs:Literal ;
+                 rdfs:label "Intervention duration" .
+
+ctro:hasFrequency rdf:type owl:DatatypeProperty ,
+                           owl:FunctionalProperty ;
+                  ratio:order "2"^^xsd:positiveInteger ;
+                  rdfs:domain ctro:Intervention ;
+                  rdfs:range [ rdf:type rdfs:Datatype ;
+                               owl:oneOf [ rdf:type rdf:List ;
+                                           rdf:first "b.i.d." ;
+                                           rdf:rest [ rdf:type rdf:List ;
+                                                      rdf:first "every 2 hrs." ;
+                                                      rdf:rest [ rdf:type rdf:List ;
+                                                                 rdf:first "every 3 hours" ;
+                                                                 rdf:rest [ rdf:type rdf:List ;
+                                                                            rdf:first "every day" ;
+                                                                            rdf:rest [ rdf:type rdf:List ;
+                                                                                       rdf:first "every other day" ;
+                                                                                       rdf:rest [ rdf:type rdf:List ;
+                                                                                                  rdf:first "other" ;
+                                                                                                  rdf:rest [ rdf:type rdf:List ;
+                                                                                                             rdf:first "q.i.d" ;
+                                                                                                             rdf:rest [ rdf:type rdf:List ;
+                                                                                                                        rdf:first "t.i.d" ;
+                                                                                                                        rdf:rest rdf:nil
+                                                                                                                      ]
+                                                                                                           ]
+                                                                                                ]
+                                                                                     ]
+                                                                          ]
+                                                               ]
+                                                    ]
+                                         ]
+                             ] ;
+                  rdfs:label "Frequency" .
 
 #################################################################
 #    Classes
@@ -175,6 +310,44 @@ ctro:Population rdf:type owl:Class ,
                          ratio:Described;
                 rdfs:label "Population" .
 
+ctro:Ethnicity rdf:type owl:Class ;
+               rdfs:label "Ethnicity" .
+
+<http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> rdf:type owl:Class ;
+                                                                   rdfs:label "Country" .
+
+ctro:EvidenceQuality rdf:type owl:Class ,
+                              ratio:Described;
+                     rdfs:label "Quality of the Evidence" .
+
+ctro:Arm rdf:type owl:Class ,
+                  ratio:Described;
+         owl:equivalentClass [ rdf:type owl:Restriction ;
+                               owl:onProperty ctro:hasIntervention ;
+                               owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                               owl:onClass ctro:Intervention
+                             ] ,
+                             [ rdf:type owl:Restriction ;
+                               owl:onProperty ctro:hasOutcome ;
+                               owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
+                               owl:onClass ctro:Outcome
+                             ] ;
+         rdfs:comment "Group of patients (or study subjects) receiving a treatment or placebo."^^xsd:string ;
+         rdfs:label "Interventional-Arm" .
+
+ctro:Intervention rdf:type owl:Class ,
+                           ratio:Described;
+                  rdfs:label "Intervention" .
+
+ctro:Drug rdf:type owl:Class ;
+          rdfs:label "Drug name" .
+
+ctro:BioAndMedicalUnit rdf:type owl:Class ;
+                       rdfs:label "Bio-medical unit" .
+
+ctro:DeliveryMethod rdf:type owl:Class ;
+                    rdfs:label "Delivery method" .
+
 #################################################################
 #    Individuals
 #################################################################
@@ -188,3 +361,33 @@ ctro:T2DM rdf:type owl:NamedIndividual ,
                    ctro:DisorderOrSyndrome ;
           rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/44054006> ;
           rdfs:label "Type 2 Diabetes Mellitus" .
+
+ctro:China rdf:type owl:NamedIndividual ,
+                    <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+           rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223581004> ;
+           rdfs:label "China" .
+
+ctro:USA rdf:type owl:NamedIndividual ,
+                  <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+         rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223688001> ;
+         rdfs:label "USA" .
+
+ctro:Latanoprost rdf:type owl:NamedIndividual ,
+                          ctro:Drug ;
+                 rdfs:isDefinedBy <http://linkedlifedata.com/resource/drug/DB00654> ;
+                 rdfs:label "Latanoprost" .
+
+ctro:Timolol rdf:type owl:NamedIndividual ,
+                      ctro:Drug ;
+             rdfs:isDefinedBy <http://linkedlifedata.com/resource/drug/DB00373> ;
+             rdfs:label "Timolol" .
+
+ctro:Injection rdf:type owl:NamedIndividual ,
+                        ctro:DeliveryMethod ;
+               rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/740685003> ;
+               rdfs:label "Injection" .
+
+ctro:Oral rdf:type owl:NamedIndividual ,
+                   ctro:DeliveryMethod ;
+          rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/738956005> ;
+          rdfs:label "Oral" .
