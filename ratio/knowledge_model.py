@@ -102,8 +102,6 @@ class SubgraphKnowledge:
 
         db = get_db()
 
-        self.root_uri = URIRef(db.execute('SELECT root FROM subgraph WHERE id = ?', (subgraph_id,)).fetchone()['root'])
-
         rows = db.execute(
             'SELECT subject, predicate, object FROM knowledge WHERE subgraph_id = ?',
             (subgraph_id,)
@@ -111,8 +109,39 @@ class SubgraphKnowledge:
         for row in rows:
             self.graph.add(row_to_rdf(row))
 
+        self.root_uri = URIRef(db.execute('SELECT root FROM subgraph WHERE id = ?', (subgraph_id,)).fetchone()['root'])
+        self.root = None
+
     def get_root(self):
-        return build_entity_from_knowledge(get_ontology().graph, self.graph, self.root_uri)
+        if self.root is None:
+            self.root = build_entity_from_knowledge(get_ontology().graph, self.graph, self.root_uri)
+        return self.root
+
+    def get_entity(self, entity_uri):
+        if type(entity_uri) == str:
+            entity_uri = URIRef(entity_uri)
+
+        stack = [self.get_root()]
+        while stack:
+            e = stack.pop()
+            if e.uri == entity_uri:
+                return e
+            stack += [e2 for f in e.fields for e2 in f.values if f.is_described]
+
+        raise KeyError('No entity with URI {} found.'.format(entity_uri))
+
+    def get_field(self, entity_uri, property_uri):
+        if type(entity_uri) == str:
+            entity_uri = URIRef(entity_uri)
+        if type(property_uri) == str:
+            property_uri = URIRef(property_uri)
+
+        e = self.get_entity(entity_uri)
+        for f in e.fields:
+            if f.property_uri == property_uri:
+                return f
+
+        raise KeyError('No field with URI {} found.'.format(property_uri))
 
     def new_individual(self, class_uri):
         pass  # create the triples for a new individual, give it an unique uri
@@ -320,6 +349,7 @@ def build_empty_entity(ontology, class_uri):
 
 
 def build_entity_from_knowledge(ontology, knowledge, uri):
+    # todo do it with sparql https://rdflib.readthedocs.io/en/stable/intro_to_sparql.html
     class_uri = None
     for o in knowledge.objects(uri, RDF.type):
         if o in ontology.subjects(RDF.type, RATIO.Described):

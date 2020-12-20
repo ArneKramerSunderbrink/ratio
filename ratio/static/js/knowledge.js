@@ -3,9 +3,38 @@
  * todo
  */
 
+// Add value
+$(function () {
+  $('div#scroll-container').on('click', 'div.field > div > a', function() {
+    var property_uri = $(this).closest('div.field').attr('data-property-uri');
+    var entity_uri = $(this).closest('div.entity').attr('data-entity-uri');
+    var data = [
+      { name: "subgraph_id", value: $SUBGRAPH_ID },
+      { name: "property_uri", value: property_uri },
+      { name: "entity_uri", value: entity_uri }
+    ];
+
+    $.getJSON($SCRIPT_ROOT + '/_add_value', data, function(data) {
+      if (data.error) {
+        alert(data.error); //todo add element to page to display error
+      } else {
+        var entity = $('div.entity[data-entity-uri="' + data.entity_uri + '"]');
+        var field = entity.find('div.field[data-property-uri="' + data.property_uri + '"]');
+        var list = field.find('div.field-value-list');
+        list.append(data.value_div);
+        list.children().last().find('.literal-input, .option-input').focus();
+      }
+    })
+    .fail(function() { alert('getJSON request failed!'); });
+
+    return false;
+
+  });
+});
+
 // Filter
 $(function() {
-  $('input.option-input').on('keyup', function() {
+  $('div#scroll-container').on('keyup', 'input.option-input', function() {
     var filter_string = this.value.toUpperCase();
     $(this).next('.options').find('.option').each(function() {
       if ($(this).text().toUpperCase().indexOf(filter_string) > -1) {
@@ -15,7 +44,7 @@ $(function() {
       }
     });
   });
-  $('input.option-input').on('focus', function() {
+  $('div#scroll-container').on('focus', 'input.option-input', function() {
     $(this).next('.options').find('.option').each(function() {
       $(this).css('display', '');
     });
@@ -24,7 +53,7 @@ $(function() {
 
 // Select option
 $(function() {
-  $('.option').on('click', function() {
+  $('div#scroll-container').on('click', '.option', function() {
     var input = $(this).parent().parent('.options').prev('.option-input')
     input.val($(this).text());
     input.get(0).setCustomValidity('');
@@ -33,9 +62,11 @@ $(function() {
 
 // Mark option invalid
 $(function() {
-  $('input.option-input').on('focusout', function() {
+  // todo would be better to check if focus leaves the whole value options form or just switches to the
+  // todo custom option field
+  $('div#scroll-container').on('focusout', 'input.option-input', function() {
     // if value not in options, .setCustomValidity("Invalid option.")
-    if ($(this).next('.options').find('.option').text().includes(this.value)) {
+    if (this.value && $(this).next('.options').find('.option').text().includes(this.value)) {
       this.setCustomValidity('');
     } else {
       this.setCustomValidity('Choose an option from the list.');

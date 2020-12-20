@@ -153,48 +153,48 @@ header {
 }
 
 .literal-input {
-    min-width: 3em;
-    width: auto;
-    max-width: calc(100% - 1.5em);
-    min-height: 1em;
-    word-wrap: break-word;
+  min-width: 3em;
+  width: auto;
+  max-width: calc(100% - 1.5em);
+  min-height: 1em;
+  word-wrap: break-word;
 }
 
 .literal-input,
 .option-input {
-    padding: 0 2px;
-    border-bottom: 1px solid #ccc;
+  padding: 0 2px;
+  border-bottom: 1px solid #ccc;
 }
 
 .option-input {
-    width: 100%;
-    background-color: inherit;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  width: 100%;
+  background-color: inherit;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .options {
-    display: none;
-    position: relative;
-    background-color: var(--);
+  display: none;
+  position: relative;
+  background-color: var(--);
 }
 
 .option-input:focus + .options,
 .options:hover,
 .options:focus-within {
-    display: block;
+  display: block;
 }
 
 .option-input + .options > div {
-    position: absolute;
-    border: 1px solid #ccc;
+  position: absolute;
+  border: 1px solid #ccc;
 }
 
 .option {
-    -webkit-user-select: none; /* Safari */
-    -ms-user-select: none; /* IE 10 and IE 11 */
-    user-select: none;
-    cursor: pointer;
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none;
+  cursor: pointer;
 }
 
 .options > div {
@@ -203,18 +203,22 @@ header {
 }
 
 .options > div > div {
-    padding: 3px;
+  padding: 3px;
 }
 
 .option:hover {
-    color: #000 !important;
-    background-color: #ccc !important;
+  color: #000 !important;
+  background-color: #ccc !important;
 }
 
 .options input {
-    padding: 0 2px;
-    width: calc(100% - 1.5em);
-    border-bottom: 1px solid #ccc;
-    background-color: inherit;
-    display: inline-block;
+  padding: 0 2px;
+  width: calc(100% - 1.5em);
+  border-bottom: 1px solid #ccc;
+  background-color: inherit;
+  display: inline-block;
+}
+
+.options a {
+  display: inline-block;
 }

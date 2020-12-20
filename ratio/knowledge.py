@@ -1,4 +1,4 @@
-"""Functionality related to display and editing of knowledge."""
+"""Functionality related to editing of knowledge."""
 
 from flask import Blueprint
 from flask import g
@@ -9,6 +9,7 @@ from flask import request
 from ratio.auth import login_required
 from ratio.auth import subgraph_access
 from ratio.db import get_db
+from ratio.knowledge_model import get_subgraph_knowledge
 
 MSG_SUBGRAPH_ACCESS = 'Subgraph with id {} does not exist or is not owned by user {} currently logged in.'
 
@@ -95,40 +96,43 @@ def delete_knowledge():
     return jsonify()
 
 
-@bp.route('/_add_knowledge')
+@bp.route('/_add_value')
 @login_required
-def add_knowledge():
+def add_value():
     user_id = g.user['id']
     subgraph_id = request.args.get('subgraph_id', 0, type=int)
-    rdf_subject = request.args.get('subject', '', type=str)
-    rdf_predicate = request.args.get('predicate', '', type=str)
-    rdf_object = request.args.get('object', '', type=str)
+    property_uri = request.args.get('property_uri', '', type=str)
+    entity_uri = request.args.get('entity_uri', '', type=str)
 
     if not subgraph_id:
         return jsonify(error='Subgraph id cannot be empty.')
-    if not rdf_subject or rdf_subject.isspace():
-        return jsonify(error='Subject cannot be empty.')
-    if not rdf_predicate or rdf_predicate.isspace():
-        return jsonify(error='Predicate cannot be empty.')
-    if not rdf_object or rdf_object.isspace():
-        return jsonify(error='Object cannot be empty.')
-
-    db = get_db()
-    db_cursor = db.cursor()
+    if not property_uri or property_uri.isspace():
+        return jsonify(error='Property URI cannot be empty.')
+    if not entity_uri or entity_uri.isspace():
+        return jsonify(error='Entity URI cannot be empty.')
 
     if not subgraph_access(user_id, subgraph_id):
         return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
 
-    db_cursor.execute(
-        'INSERT INTO knowledge (subgraph_id, author_id, subject, predicate, object) VALUES (?, ?, ?, ?, ?)',
-        (subgraph_id, user_id, rdf_subject, rdf_predicate, rdf_object)
-    )
-    knowledge_id = db_cursor.lastrowid
+    subgraph_knowledge = get_subgraph_knowledge(subgraph_id)
+    field = subgraph_knowledge.get_field(entity_uri, property_uri)
 
-    db.commit()
+    # todo add knowledge to database
+    #db = get_db()
+    #db_cursor = db.cursor()
 
-    render_knowledge_row = get_template_attribute('tool/macros.html', 'knowledge_row')
-    knowledge_row = render_knowledge_row(knowledge_id, subgraph_id, rdf_subject, rdf_predicate, rdf_object)
+    #db_cursor.execute(
+    #    'INSERT INTO knowledge (subgraph_id, author_id, subject, predicate, object) VALUES (?, ?, ?, ?, ?)',
+    #    (subgraph_id, user_id, rdf_subject, rdf_predicate, rdf_object)
+    #)
+    #knowledge_id = db_cursor.lastrowid
 
-    return jsonify(knowledge_id=knowledge_id, subject=rdf_subject, predicate=rdf_predicate, object=rdf_object,
-                   knowledge_row=knowledge_row)
+    #db.commit()
+
+    if field.options is None:
+        render_value_div = get_template_attribute('tool/macros.html', 'value_free')
+    else:
+        render_value_div = get_template_attribute('tool/macros.html', 'value_options')
+    value_div = render_value_div(field, '')
+
+    return jsonify(value_div=value_div, property_uri=property_uri, entity_uri=entity_uri)
