@@ -31,11 +31,41 @@
 {% endmacro %}
 
 
+{% macro entity_field(entity, field) %}
+<div class="entity-field">
+  <div class="flex-row">
+    <span class="flex-fix" {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}:</span>
+    <div class="flex-flex flip-frontside" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}"></div>
+    {# add described entity value #}
+    <div class="flex-flex flip-flipside" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}" style="display: none; margin-left: 0.5em;">
+      <form class="flex-row">
+          <input class="w3-input flex-flex" type="text" name="label" placeholder="{{ field.range_label }} name..." required style="padding: 0 8px; border-bottom: 0">
+          <button type="submit" class="w3-button tiny-button flex-fix" title="Add {{ field.range_label }}">
+            <i class="fas fa-plus"></i>
+          </button>
+        </form>
+    </div>
+    {% if not field.values or not field.is_functional %}
+    <a href="#" class="w3-button tiny-button flex-fix flip-frontside flip-flipbutton" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}" title="Add {{ field.range_label }}">
+      <i class="fas fa-plus"></i>
+    </a>
+    <a href="#" class="w3-button tiny-button flex-fix flip-flipside flip-frontbutton" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}" title="Cancel" style="display: none;">
+      <i class="fas fa-times"></i>
+    </a>
+    {% endif %}
+  </div>
+  {% for value in field.values %}
+  {{ entity_div(value, False) }}
+  {% endfor %}
+</div>
+{% endmacro %}
+
+
 {% macro entity_div(entity, is_root) %}
 <div class="entity{% if not is_root %} entity-border{% endif %}">
-  {# collapse button #}
   <div class="flex-row">
     {% if not is_root %}
+    {# collapse button #}
     <a href="#" class="w3-button tiny-button flex-fix flip-frontside flip-flipbutton" data-flipid="collapse-{{ entity.uri }}" style="width: 30px; height: 30px; margin-left: -15px;">
       <i class="fas fa-chevron-right"></i>
     </a>
@@ -73,50 +103,24 @@
   <div {%if not is_root %} class="flip-flipside" data-flipid="collapse-{{ entity.uri }}" {% endif %}style="{%if not is_root %}display: none; {% endif %}margin-top: 1em;">
     {% for field in entity.fields %}
     {% if field.is_described %}
-    <div class="entity-field">
-      <div class="flex-row">
-        <span class="flex-fix" {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}:</span>
-        <div class="flex-flex flip-frontside" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}"></div>
-        {# add described entity value #}
-        <div class="flex-flex flip-flipside" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}" style="display: none; margin-left: 0.5em;">
-          <form class="flex-row">
-              <input class="w3-input flex-flex" type="text" name="label" placeholder="{{ field.range_label }} name..." required style="padding: 0 8px; border-bottom: 0">
-              <button type="submit" class="w3-button tiny-button flex-fix" title="Add {{ field.range_label }}">
-                <i class="fas fa-plus"></i>
-              </button>
-            </form>
-        </div>
-        {% if not field.values or not field.is_functional %}
-        <a href="#" class="w3-button tiny-button flex-fix flip-frontside flip-flipbutton" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}" title="Add {{ field.range_label }}">
-          <i class="fas fa-plus"></i>
-        </a>
-        <a href="#" class="w3-button tiny-button flex-fix flip-flipside flip-frontbutton" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}" title="Cancel" style="display: none;">
-          <i class="fas fa-times"></i>
-        </a>
-        {% endif %}
-      </div>
-      {% for value in field.values %}
-      {{ entity_div(value, False) }}
-      {% endfor %}
-    </div>
+    {{ entity_field(entity, field) }}
     {% else %}
     <div class="field color1">
       <div class="flex-row">
         <span class="flex-fix" {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}:</span>
         <div class="field-value-list">
-          {% if field.is_object_property %}
+          {% if field.options %}
           {% for value in field.values %}
           <form>
             <input type="hidden" autofocus>
             <div>
-              <input class="w3-input option-input" type="text" name="label" value="{{ value.label }}" required>
+              <input class="w3-input option-input" type="text" name="label" value="{{ value.label or value }}" required>
               <div class="options"><div class="color1">
                 {% for option in field.options %}
-                <div class="option">{{ option.label }}</div>
+                <div class="option">{{ option.label or option }}</div>
                 {% endfor %}
-                <div class="option">This is an option with a verryverry long name</div>
                 <div>
-                  <input class="w3-input" type="text" name="value" placeholder="Add option..." style="display: inline-block"><!--
+                  <input class="w3-input" type="text" name="value" placeholder="Add option..."><!--
                   --><a href="#" class="w3-button tiny-button" title="Add {{ field.range_label }} to the list of options." style="display: inline-block">
                     <i class="fas fa-plus"></i>
                   </a>

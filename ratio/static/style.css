@@ -216,4 +216,5 @@ header {
     width: calc(100% - 1.5em);
     border-bottom: 1px solid #ccc;
     background-color: inherit;
+    display: inline-block;
 }

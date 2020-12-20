@@ -45,6 +45,12 @@ ctro:hasAnalysisApproach rdf:type owl:ObjectProperty ,
                          rdfs:range ctro:CTAnalysisApproach ;
                          rdfs:label "Analysis approach" .
 
+ctro:hasPopulation rdf:type owl:ObjectProperty ,
+                            owl:FunctionalProperty ;
+                   ratio:order "4"^^xsd:positiveInteger ;
+                   rdfs:domain ctro:ClinicalTrial ;
+                   rdfs:range ctro:Population ;
+                   rdfs:label "Population" .
 
 #################################################################
 #    Data properties
@@ -106,6 +112,24 @@ ctro:hasCTduration rdf:type owl:DatatypeProperty ,
                    rdfs:comment "Duration of the trial given in WEEKS" ;
                    rdfs:label "Trial duration" .
 
+ctro:hasGender rdf:type owl:DatatypeProperty ,
+                        owl:FunctionalProperty ;
+               ratio:order "1"^^xsd:positiveInteger ;
+               rdfs:domain ctro:Population ;
+               rdfs:range [ rdf:type rdfs:Datatype ;
+                            owl:oneOf [ rdf:type rdf:List ;
+                                        rdf:first "Female" ;
+                                        rdf:rest [ rdf:type rdf:List ;
+                                                   rdf:first "Male" ;
+                                                   rdf:rest [ rdf:type rdf:List ;
+                                                              rdf:first "Mixed" ;
+                                                              rdf:rest rdf:nil
+                                                            ]
+                                                 ]
+                                      ]
+                          ] ;
+               rdfs:label "Gender" .
+
 
 #################################################################
 #    Classes
@@ -146,6 +170,10 @@ ctro:CTDesign rdf:type owl:Class ,
 
 ctro:DisorderOrSyndrome rdf:type owl:Class ;
                         rdfs:label "Disease" .
+
+ctro:Population rdf:type owl:Class ,
+                         ratio:Described;
+                rdfs:label "Population" .
 
 #################################################################
 #    Individuals

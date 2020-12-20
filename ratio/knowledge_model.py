@@ -43,6 +43,14 @@ def parse_n3_term(s):
         raise ValueError('{} cannot be parsed'.format(s))
 
 
+def construct_list(ontology, list_node):
+    list_ = []
+    while list_node != RDF.nil:
+        list_.append(next(ontology.objects(list_node, RDF.first)))
+        list_node = next(ontology.objects(list_node, RDF.rest))
+    return list_
+
+
 def row_to_rdf(row):
     """Turns a row from the database into a rdf triple."""
     subject = parse_n3_term(row['subject'])
@@ -187,11 +195,14 @@ def build_empty_field(ontology, property_uri, range_class_uri):
     except StopIteration:
         comment = None
 
-    range_label = ontology.objects(range_class_uri, RDFS.label)
-    try:
-        range_label = next(range_label)
-    except StopIteration:
-        range_label = range_class_uri.split('#')[-1]
+    if type(range_class_uri) == BNode:
+        range_label = 'Literal'
+    else:
+        range_label = ontology.objects(range_class_uri, RDFS.label)
+        try:
+            range_label = next(range_label)
+        except StopIteration:
+            range_label = range_class_uri.split('#')[-1]
 
     # if false, the field belongs to a owl:DatatypeProperty
     is_object_property = OWL.ObjectProperty in ontology.objects(property_uri, RDF.type)
@@ -202,9 +213,12 @@ def build_empty_field(ontology, property_uri, range_class_uri):
 
     values = []
 
+    one_of = list(ontology.objects(range_class_uri, OWL.oneOf))
     if is_object_property and not is_described:
         options = list(build_option(ontology, uri) for uri in ontology.subjects(RDF.type, range_class_uri))
         options.sort(key=lambda option: option.label)
+    elif one_of:
+        options = construct_list(ontology, one_of[0])
     else:
         options = None
 
@@ -226,11 +240,14 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
     except StopIteration:
         comment = None
 
-    range_label = ontology.objects(range_class_uri, RDFS.label)
-    try:
-        range_label = next(range_label)
-    except StopIteration:
-        range_label = range_class_uri.split('#')[-1]
+    if type(range_class_uri) == BNode:
+        range_label = 'Literal'
+    else:
+        range_label = ontology.objects(range_class_uri, RDFS.label)
+        try:
+            range_label = next(range_label)
+        except StopIteration:
+            range_label = range_class_uri.split('#')[-1]
 
     # if false, the field belongs to a owl:DatatypeProperty
     is_object_property = OWL.ObjectProperty in ontology.objects(property_uri, RDF.type)
@@ -249,9 +266,12 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
     else:
         values.sort()
 
+    one_of = list(ontology.objects(range_class_uri, OWL.oneOf))
     if is_object_property and not is_described:
         options = list(build_option(ontology, uri) for uri in ontology.subjects(RDF.type, range_class_uri))
         options.sort(key=lambda option: option.label)
+    elif one_of:
+        options = construct_list(ontology, one_of[0])
     else:
         options = None
 

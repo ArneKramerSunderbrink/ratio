@@ -10,7 +10,8 @@ ctro:CT_1 rdf:type owl:NamedIndividual ,
                    ctro:ClinicalTrial ;
           rdfs:label "Clinical Trial 1"^^xsd:string ;
           ratio:described_by ctro:Pub_1 ;
-          ctro:hasCTDesign ctro:Design_1 .
+          ctro:hasCTDesign ctro:Design_1 ;
+          ctro:hasPopulation ctro:Population_1 .
 
 ctro:Pub_1 rdf:type owl:NamedIndividual ,
                     ctro:Publication ;
@@ -26,3 +27,8 @@ ctro:Design_1 rdf:type owl:NamedIndividual ,
                        ctro:CTDesign ;
            rdfs:label "Design"^^xsd:string ;
            ctro:analysesHealthCondition ctro:T2DM .
+
+ctro:Population_1 rdf:type owl:NamedIndividual ,
+                           ctro:Population ;
+                  rdfs:label "Population"^^xsd:string ;
+                  ctro:hasGender "Female" .

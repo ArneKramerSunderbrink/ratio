@@ -15,12 +15,19 @@ $(function() {
       }
     });
   });
+  $('input.option-input').on('focus', function() {
+    $(this).next('.options').find('.option').each(function() {
+      $(this).css('display', '');
+    });
+  });
 });
 
 // Select option
 $(function() {
   $('.option').on('click', function() {
-    $(this).parent().parent('.options').prev('.option-input').val($(this).text());
+    var input = $(this).parent().parent('.options').prev('.option-input')
+    input.val($(this).text());
+    input.get(0).setCustomValidity('');
   });
 });
 
