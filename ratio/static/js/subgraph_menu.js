@@ -1,27 +1,7 @@
 /**
  * Javascript code related to the subgraph list:
- * The filter, editing subgraph names, adding new subgraphs, deleting subgraphs and undoing that delete.
+ * Editing subgraph names, adding new subgraphs, deleting subgraphs and undoing that delete.
  */
-
-// Filter
-$(function() {
-  $('input#subgraph-filter').on('keyup', function() {
-    var input, filter, div, entries, i, a, txtValue;
-    input = document.getElementById('subgraph-filter');
-    filter = input.value.toUpperCase();
-    div = document.getElementById('subgraph-list');
-    entries = div.children;
-    for (i = 0; i < entries.length; i++) {
-      a = entries[i].getElementsByTagName('a')[0];
-      txtValue = a.textContent || a.innerText;
-      if (txtValue.toUpperCase().indexOf(filter) > -1) {
-        entries[i].style.display = '';
-      } else {
-        entries[i].style.display = 'none';
-      }
-    }
-  });
-});
 
 // edit subgraph name
 $(function() {

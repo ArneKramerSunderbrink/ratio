@@ -3,21 +3,28 @@
  * todo
  */
 
-// toggle edit knowledge
-function display_edit_knowledge() {
-  var knowledge_id = parseInt(this.id.substring(5));  // 'edit-123' without 'edit-'
-  $('tr#tr-' + knowledge_id).css('display', 'none');
-  $('tr#tr-edit-' + knowledge_id).css('display', 'table-row');
-  return false;
-}
+// Filter
+$(function() {
+  $('input.option-input').on('keyup', function() {
+    var filter_string = this.value.toUpperCase();
+    $(this).next('.options').find('.option').each(function() {
+      if ($(this).text().toUpperCase().indexOf(filter_string) > -1) {
+        $(this).css('display', '');
+      } else {
+        $(this).css('display', 'none');
+      }
+    });
+  });
+});
 
-function hide_edit_knowledge() {
-  var knowledge_id = parseInt(this.id.substring(12));  // 'cancel-edit-123' without 'cancel-edit-'
-  $('tr#tr-' + knowledge_id).css('display', 'table-row');
-  $('tr#tr-edit-' + knowledge_id).css('display', 'none');
-  return false;
-}
+// Select option
+$(function() {
+  $('.option').on('click', function() {
+    $(this).parent().parent('.options').prev('.option-input').val($(this).text());
+  });
+});
 
+/*
 $(function() {
   var as, i;
   as = $('a[id^="edit-"]'); // todo more efficient with $(subgraph).on('click', 'a[id^="edit-"]', display_edit_knowledge)
@@ -116,3 +123,4 @@ $(function() {
     return false;
   });
 });
+*/

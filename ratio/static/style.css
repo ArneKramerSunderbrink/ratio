@@ -169,6 +169,8 @@ header {
 .option-input {
     width: 100%;
     background-color: inherit;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .options {
@@ -195,7 +197,11 @@ header {
     cursor: pointer;
 }
 
-.option,
+.options > div {
+  max-height: 10em;
+  overflow: auto;
+}
+
 .options > div > div {
     padding: 3px;
 }
