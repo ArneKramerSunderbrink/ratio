@@ -1,7 +1,33 @@
 /**
  * Javascript code related to the subgraph list:
- * Editing subgraph names, adding new subgraphs, deleting subgraphs and undoing that delete.
+ * Toggling the finished-checkboxes,
+ * editing subgraph names, adding new subgraphs, deleting subgraphs and undoing that delete.
  */
+
+// finished checkboxes
+$(function() {
+  $('div#subgraph-list').on('change', ':checkbox', function() {
+    var finished = $(this).prop('checked');
+    var subgraph_id = parseInt(this.id.substring(9));
+
+    // change checkbox in the subgraph menu
+    var menu_box = $('label[for="finished-'+subgraph_id+'"]').children('i');
+    if (finished) {
+      menu_box.removeClass().addClass('fa fa-check-square fa-lg');
+      menu_box.prop('title', 'Finished');
+    } else {
+      menu_box.removeClass().addClass('fa fa-square fa-lg');
+      menu_box.prop('title', 'Not finished');
+    }
+
+    $.getJSON($SCRIPT_ROOT + '/_set_finished', {subgraph_id: subgraph_id, finished: finished}, function (data) {
+      if (data.error) { alert(data.error); }
+    })
+    .fail(function() { alert('getJSON request failed!'); });
+
+    return false;
+  });
+});
 
 // edit subgraph name
 $(function() {
