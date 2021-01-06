@@ -117,6 +117,9 @@ def add_value():
     subgraph_knowledge = get_subgraph_knowledge(subgraph_id)
     field = subgraph_knowledge.get_field(entity_uri, property_uri)
 
+    if field.is_functional and field.values:
+        return jsonify(error='You cannot add more than one value to this field.')
+
     # todo add knowledge to database
     #db = get_db()
     #db_cursor = db.cursor()
@@ -135,4 +138,6 @@ def add_value():
         render_value_div = get_template_attribute('tool/macros.html', 'value_options')
     value_div = render_value_div(field, '')
 
-    return jsonify(value_div=value_div, property_uri=property_uri, entity_uri=entity_uri)
+    return jsonify(value_div=value_div,
+                   property_uri=property_uri, entity_uri=entity_uri,
+                   remove_plus=field.is_functional)

@@ -164,11 +164,11 @@ header {
 .option-input {
   padding: 0 2px;
   border-bottom: 1px solid #ccc;
+  background-color: white;
 }
 
 .option-input {
   width: 100%;
-  background-color: inherit;
   overflow: hidden;
   text-overflow: ellipsis;
 }

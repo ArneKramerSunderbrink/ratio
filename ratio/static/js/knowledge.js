@@ -23,6 +23,9 @@ $(function () {
         var list = field.find('div.field-value-list');
         list.append(data.value_div);
         list.children().last().find('.literal-input, .option-input').focus();
+        if (data.remove_plus) {
+          field.children('div').children('a').css('display', 'none');
+        }
       }
     })
     .fail(function() { alert('getJSON request failed!'); });
@@ -62,14 +65,15 @@ $(function() {
 
 // Mark option invalid
 $(function() {
-  // todo would be better to check if focus leaves the whole value options form or just switches to the
-  // todo custom option field
-  $('div#scroll-container').on('focusout', 'input.option-input', function() {
+  // I found no way to discriminate between focus switching within the form (to the custom option input)
+  // or out of the form and only then check validity
+  $('div#scroll-container').on('focusout', 'form.option-form', function() {
     // if value not in options, .setCustomValidity("Invalid option.")
-    if (this.value && $(this).next('.options').find('.option').text().includes(this.value)) {
-      this.setCustomValidity('');
+    var input = $(this).find('.option-input')[0];
+    if (input.value && $(this).find('.option').text().includes(input.value)) {
+      input.setCustomValidity('');
     } else {
-      this.setCustomValidity('Choose an option from the list.');
+      input.setCustomValidity('Choose an option from the list.');
     }
   });
 });

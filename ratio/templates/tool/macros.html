@@ -62,7 +62,7 @@
 
 
 {% macro value_options(field, value) %}
-<form>
+<form class="option-form">
   <input type="hidden" autofocus>
   <div>
     <input class="w3-input option-input" type="text" name="label" value="{{ value.label or value }}" required>
@@ -153,11 +153,10 @@
           {% endfor %}
           {% endif %}
         </div>
-        {% if not field.values or not field.is_functional %}
-        <a href="#" class="w3-button tiny-button flex-fix" title="Add {{ field.range_label }}">
+        <a href="#" class="w3-button tiny-button flex-fix" title="Add {{ field.range_label }}"
+           {% if field.values and field.is_functional %}style="display: none;"{% endif %}>
           <i class="fas fa-plus"></i>
         </a>
-        {% endif %}
       </div>
     </div>
     {% endif %}

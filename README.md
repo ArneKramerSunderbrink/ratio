@@ -70,7 +70,6 @@ Adapt the deploy script to you environment, especially the secret key and the ur
 Comment out `flask db-add-dummy` if no dummy data is needed.
 Call:
 
-    $ chmod +x deploy.sh
     $ source deploy.sh
     
 Run the app from the venv with:
