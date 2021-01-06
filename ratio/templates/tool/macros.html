@@ -110,26 +110,13 @@
     {# entity header #}
     <div class="entity-title flex-flex">
       <div class="flex-row flip-frontside" data-flipid="edit-{{ entity.uri }}">
-        <div class="flex-text" {% if entity.comment %}title="{{ entity.comment }}"{% endif %} style="font-weight: bold;">{{ entity.label }}</div>
-        <a href="#" class="w3-button tiny-button flex-fix flip-flipbutton" data-flipid="edit-{{ entity.uri }}" title="Edit {{ entity.class_label }}">
-          <i class="fas fa-pen"></i>
-        </a>
-      </div>
-      {# edit described entity #}
-      <from class="flex-row flip-flipside" data-flipid="edit-{{ entity.uri }}" style="display: none">
-        <input class="w3-input flex-flex" type="text" name="label" value="{{ entity.label }}" required style="padding: 0 8px; border-bottom: 0">
-        <button type="submit" class="w3-button tiny-button flex-fix" title="Save changes">
-          <i class="fas fa-save"></i>
-        </button>
+        <div class="flex-text" {% if entity.comment %}title="{{ entity.comment }}"{% endif %} style="font-weight: bold;" contentEditable>{{ entity.label }}</div>
         {% if not is_root %}
         <a href="#" class="w3-button tiny-button flex-fix w3-right" title="Delete {{ entity.class_label }}">
           <i class="fas fa-trash"></i>
         </a>
         {% endif %}
-        <a href="#" class="w3-button tiny-button flex-fix flip-frontbutton" data-flipid="edit-{{ entity.uri }}" title="Cancel">
-          <i class="fas fa-times"></i>
-        </a>
-      </from>
+      </div>
     </div>
   </div>
 
