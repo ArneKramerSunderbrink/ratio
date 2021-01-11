@@ -42,7 +42,7 @@ def create_app(test_config=None):
             Subgraph_term='Clinical trial',
             subgraph_term='clinical trial',
             color1='#E6F7FF',
-            color2='#FFFFFF',
+            color2='#F3F3DB',
             font_color1='#000000',
             font_color2='#000000'
         )

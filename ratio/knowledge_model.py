@@ -236,7 +236,7 @@ def build_empty_field(ontology, property_uri, range_class_uri):
     # if false, the field belongs to a owl:DatatypeProperty
     is_object_property = OWL.ObjectProperty in ontology.objects(property_uri, RDF.type)
     is_functional = OWL.FunctionalProperty in ontology.objects(property_uri, RDF.type)
-    is_described = RATIO.Described in ontology.objects(range_class_uri, RDF.type)
+    is_described = RATIO.Described in ontology.objects(property_uri, RDF.type)
 
     order = next(ontology.objects(property_uri, RATIO.order)).value
 
@@ -281,7 +281,7 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
     # if false, the field belongs to a owl:DatatypeProperty
     is_object_property = OWL.ObjectProperty in ontology.objects(property_uri, RDF.type)
     is_functional = OWL.FunctionalProperty in ontology.objects(property_uri, RDF.type)
-    is_described = RATIO.Described in ontology.objects(range_class_uri, RDF.type)
+    is_described = RATIO.Described in ontology.objects(property_uri, RDF.type)
 
     order = next(ontology.objects(property_uri, RATIO.order)).value
 
@@ -352,7 +352,7 @@ def build_entity_from_knowledge(ontology, knowledge, uri):
     # todo do it with sparql https://rdflib.readthedocs.io/en/stable/intro_to_sparql.html
     class_uri = None
     for o in knowledge.objects(uri, RDF.type):
-        if o in ontology.subjects(RDF.type, RATIO.Described):
+        if o in ontology.subjects(RDF.type, OWL.Class):  # A class defined in the ontology
             class_uri = o
             break
     if class_uri is None:

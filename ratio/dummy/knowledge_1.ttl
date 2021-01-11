@@ -9,12 +9,16 @@
 ctro:CT_1 rdf:type owl:NamedIndividual ,
                    ctro:ClinicalTrial ;
           rdfs:label "Clinical Trial 1"^^xsd:string ;
-          ratio:described_by ctro:Pub_1 ;
+          ctro:described_by ctro:Pub_1 ;
           ctro:hasCTDesign ctro:Design_1 ;
           ctro:hasPopulation ctro:Population_1 ;
           ctro:hasQualityIndicator ctro:Evidence_1 ;
-          ctro:hasArm ctro:Arm_1,
-                      ctro:Arm_2 .
+          ctro:hasArm ctro:Arm_1 ,
+                      ctro:Arm_2 ;
+          ctro:hasOutcome ctro:Out_1 ;
+          ctro:hasResult ctro:Res_1 ;
+          ctro:hasResult ctro:Res_2 ;
+          ctro:hasAdverseEffect ctro:AE_1 .
 
 ctro:Pub_1 rdf:type owl:NamedIndividual ,
                     ctro:Publication ;
@@ -67,3 +71,24 @@ ctro:Interv_2 rdf:type owl:NamedIndividual ,
               ctro:hasFrequency "every 2 hrs." ;
               ctro:hasDrug ctro:Timolol ;
               ctro:hasDeliveryMethod ctro:Injection .
+
+ctro:Out_1 rdf:type owl:NamedIndividual ,
+                    ctro:Outcome ;
+           rdfs:label "Outcome HBA"^^xsd:string .
+
+ctro:Res_1 rdf:type owl:NamedIndividual ,
+                    ctro:Result ;
+           rdfs:label "Result HBA Arm 1"^^xsd:string ;
+           ctro:hasStatisticalMeasure ctro:Stat_1 .
+
+ctro:Res_2 rdf:type owl:NamedIndividual ,
+                    ctro:Result ;
+           rdfs:label "Result HBA Arm 2"^^xsd:string .
+
+ctro:Stat_1 rdf:type owl:NamedIndividual ,
+                     ctro:StatisticalMeasure ;
+            rdfs:label "Stat 1"^^xsd:string .
+
+ctro:AE_1 rdf:type owl:NamedIndividual ,
+                   ctro:AdverseEffect ;
+          rdfs:label "AE 1"^^xsd:string .
