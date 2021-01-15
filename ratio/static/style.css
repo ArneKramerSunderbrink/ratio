@@ -84,7 +84,6 @@ header {
 }
 
 /* Colors */
-
 .color1 {
   color: var(--font-color1);
   background: var(--color1);
@@ -93,6 +92,17 @@ header {
 .color2 {
   color: var(--font-color2);
   background: var(--color2);
+}
+
+.fa-times,
+.fa-plus,
+.fa-minus,
+.fa-pen,
+.fa-square,
+.fa-check-square,
+.fa-save,
+.fa-project-diagram {
+  opacity: 0.75;
 }
 
 /* Menus */
@@ -117,6 +127,12 @@ header {
 .entity-title {
   border-bottom: 2px solid var(--font-color2);
   padding: 0.2em;
+  font-weight: bold;
+}
+
+.entity-field > div:first-of-type {
+  font-weight: bold;
+  margin-top: 1em;
 }
 
 .entity-field,
@@ -126,14 +142,14 @@ header {
 
 .field {
   display: inline-block;
-  max-width: 100%;
+  width: 47%;
   box-shadow: 0 1px 2px 0 rgba(0,0,0,0.16),0 2px 5px 0 rgba(0,0,0,0.12);
   padding: 0.2em 0.5em;
   border-radius: 5px;
 }
 
 .field-value-list {
-  flex: 0 1 auto;
+  flex: 1 1 auto;
   min-width: 0;
 }
 
@@ -154,8 +170,7 @@ header {
 
 .literal-input {
   min-width: 3em;
-  width: auto;
-  max-width: calc(100% - 1.5em);
+  width: calc(100% - 1.5em);
   min-height: 1em;
   word-wrap: break-word;
 }
@@ -171,6 +186,10 @@ header {
   width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.option-form > div:first-of-type {
+  width: calc(100% - 1.5em);
 }
 
 .options {
@@ -200,6 +219,7 @@ header {
 .options > div {
   max-height: 10em;
   overflow: auto;
+  width: 100%
 }
 
 .options > div > div {

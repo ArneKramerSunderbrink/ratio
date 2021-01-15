@@ -9,6 +9,9 @@
            title="{{ 'Finished' if subgraph_finished else 'Not finished' }}">
       <i class="fa {{ 'fa-check-square' if subgraph_finished else 'fa-square' }} fa-lg"></i>
     </label>
+    <a href="#" class="w3-button flex-fix" title="Download RDF">
+      <i class="fas fa-project-diagram"></i>
+    </a>
     <a href="#" class="w3-button flex-fix flip-flipbutton" data-flipid="subgraph-list-{{ subgraph_id }}" title="Edit {{ frontend_config['subgraph_term'] }}">
       <i class="fas fa-pen fa-lg"></i>
     </a>
@@ -20,7 +23,7 @@
         <i class="fas fa-save fa-lg"></i>
       </button>
       <a href="#" class="w3-button flex-fix w3-right delete-subgraph-button" title="Delete {{ frontend_config['subgraph_term'] }}">
-        <i class="fas fa-trash fa-lg"></i>
+        <i class="fas fa-minus fa-lg"></i>
       </a>
       <a href="#" class="w3-button flex-fix w3-right flip-frontbutton" data-flipid="subgraph-list-{{ subgraph_id }}" title="Cancel">
         <i class="fas fa-times fa-lg"></i>
@@ -35,6 +38,10 @@
 <div class="entity-field">
   <div class="flex-row">
     <span class="flex-fix" {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}:</span>
+    {% if not field.values or not field.is_functional %}
+    <a href="#" class="w3-button tiny-button flex-fix flip-frontside flip-flipbutton" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}" title="Add {{ field.range_label }}">
+      <i class="fas fa-plus"></i>
+    </a>
     <div class="flex-flex flip-frontside" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}"></div>
     {# add described entity value #}
     <div class="flex-flex flip-flipside" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}" style="display: none; margin-left: 0.5em;">
@@ -45,10 +52,6 @@
           </button>
         </form>
     </div>
-    {% if not field.values or not field.is_functional %}
-    <a href="#" class="w3-button tiny-button flex-fix flip-frontside flip-flipbutton" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}" title="Add {{ field.range_label }}">
-      <i class="fas fa-plus"></i>
-    </a>
     <a href="#" class="w3-button tiny-button flex-fix flip-flipside flip-frontbutton" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}" title="Cancel" style="display: none;">
       <i class="fas fa-times"></i>
     </a>
@@ -79,7 +82,7 @@
     </div></div>
   </div>
   <a href="#" class="w3-button tiny-button w3-right" title="Delete {{ field.range_label }}">
-    <i class="fas fa-trash"></i>
+    <i class="fas fa-minus"></i>
   </a>
 </form>
 {% endmacro %}
@@ -89,7 +92,7 @@
 <form>
   <div class="w3-input literal-input" contentEditable>{{ value }}</div>
   <a href="#" class="w3-button tiny-button w3-right" title="Delete {{ field.range_label }}">
-    <i class="fas fa-trash"></i>
+    <i class="fas fa-minus"></i>
   </a>
 </form>
 {% endmacro %}
@@ -110,10 +113,10 @@
     {# entity header #}
     <div class="entity-title flex-flex">
       <div class="flex-row flip-frontside" data-flipid="edit-{{ entity.uri }}">
-        <div class="flex-text" {% if entity.comment %}title="{{ entity.comment }}"{% endif %} style="font-weight: bold;" contentEditable>{{ entity.label }}</div>
+        <div class="flex-text" {% if entity.comment %}title="{{ entity.comment }}"{% endif %} contentEditable>{{ entity.label }}</div>
         {% if not is_root %}
         <a href="#" class="w3-button tiny-button flex-fix w3-right" title="Delete {{ entity.class_label }}">
-          <i class="fas fa-trash"></i>
+          <i class="fas fa-minus"></i>
         </a>
         {% endif %}
       </div>
