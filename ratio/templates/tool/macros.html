@@ -75,17 +75,19 @@
       {% for option in field.options %}
       <div class="option">{{ option.label or option }}</div>
       {% endfor %}
-      <div>
-        <input class="w3-input" type="text" name="value" placeholder="Add option...">
-        <a href="#" class="w3-button tiny-button" title="Add {{ field.range_label }} to the list of options.">{#
+      <div class="flex-row">
+        <input class="w3-input flex-flex" type="text" name="value" placeholder="Add option...">
+        <a href="#" class="w3-button tiny-button flex-fix" title="Add {{ field.range_label }} to the list of options.">{#
           #}<i class="fas fa-plus"></i>
         </a>
       </div>
     </div></div>
   </div>
+  {% if not field.is_functional %}
   <a href="#" class="w3-button tiny-button flex-fix" title="Delete {{ field.range_label }}">{#
     #}<i class="fas fa-minus"></i>
   </a>
+  {% endif %}
 </form>
 {% endmacro %}
 
@@ -93,9 +95,11 @@
 {% macro value_free(field, value) %}
 <form class="flex-row">
   <div class="w3-input literal-input flex-flex" contentEditable>{{ value }}</div>
+  {% if not field.is_functional %}
   <a href="#" class="w3-button tiny-button flex-fix" title="Delete {{ field.range_label }}">{#
     #}<i class="fas fa-minus"></i>
   </a>
+  {% endif %}
 </form>
 {% endmacro %}
 
@@ -136,19 +140,28 @@
         <span class="field-label flex-fix" {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}:</span>
         <div class="field-value-list">
           {% if field.options is not none %}
-          {% for value in field.values %}
-          {{ value_options(field, value) }}
-          {% endfor %}
+            {% if field.values %}
+            {% for value in field.values %}
+            {{ value_options(field, value) }}
+            {% endfor %}
+            {% elif field.is_functional %}
+            {{ value_options(field, '') }}
+            {% endif %}
           {% else %}
-          {% for value in field.values %}
-          {{ value_free(field, value) }}
-          {% endfor %}
+            {% if field.values %}
+            {% for value in field.values %}
+            {{ value_free(field, value) }}
+            {% endfor %}
+            {% elif field.is_functional %}
+            {{ value_free(field, '') }}
+            {% endif %}
           {% endif %}
         </div>
-        <a href="#" class="w3-button tiny-button flex-fix" title="Add {{ field.range_label }}"
-           {% if field.values and field.is_functional %}style="display: none;"{% endif %}>{#
+        {% if not field.is_functional %}
+        <a href="#" class="w3-button tiny-button flex-fix" title="Add {{ field.range_label }}">{#
           #}<i class="fas fa-plus"></i>
         </a>
+        {% endif %}
       </div>
     </div>
     {% endif %}

@@ -70,7 +70,7 @@ $(function() {
   $('div#scroll-container').on('focusout', 'form.option-form', function() {
     // if value not in options, .setCustomValidity("Invalid option.")
     var input = $(this).find('.option-input')[0];
-    if (input.value && $(this).find('.option').text().includes(input.value)) {
+    if (input.value == '' || input.value && $(this).find('.option').text().includes(input.value)) {
       input.setCustomValidity('');
     } else {
       input.setCustomValidity('Choose an option from the list.');
