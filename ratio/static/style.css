@@ -44,7 +44,6 @@ header {
 .flex-row {
   display: flex;
   flex-direction: row;
-  width: 100%;
 }
 
 .flex-column {
@@ -105,6 +104,34 @@ header {
   opacity: 0.75;
 }
 
+/* Icon button */
+.big-button {
+  padding: 0;
+  width: 2.5em;
+  height: 2.5em;
+  text-align: center;
+}
+
+.tiny-button {
+  padding: 0;
+  width: 1.5em;
+  height: 1.5em;
+  text-align: center;
+}
+
+.big-button:before,
+.tiny-button:before {
+    content: "";
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.big-button > i,
+.tiny-button > i {
+    vertical-align: middle;
+}
+
 /* Menus */
 
 .button-border {
@@ -148,30 +175,24 @@ header {
   border-radius: 5px;
 }
 
+.field > div {
+  margin-top: 0.1em;
+}
+
+.field-label {
+  margin-bottom: calc(0.2em + 1px); /* Margin + border of field-values */
+}
+
 .field-value-list {
   flex: 1 1 auto;
-  min-width: 0;
 }
 
 .field-value-list > form {
-  margin: 0 0 0.2em 0.5em;
-}
-
-.field-value-list > form > * {
-  display: inline-block;
-}
-
-.tiny-button {
-  padding: 0;
-  width: 1.5em;
-  height: 1.5em;
-  vertical-align: text-bottom;
+  margin-left: 0.5em;
+  margin-bottom: 0.2em;
 }
 
 .literal-input {
-  min-width: 3em;
-  width: calc(100% - 1.5em);
-  min-height: 1em;
   word-wrap: break-word;
 }
 
@@ -183,7 +204,6 @@ header {
 }
 
 .option-input {
-  width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -195,7 +215,7 @@ header {
 .options {
   display: none;
   position: relative;
-  background-color: var(--);
+  z-index: 100;
 }
 
 .option-input:focus + .options,
