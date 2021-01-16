@@ -20,15 +20,15 @@
 #################################################################
 
 ctro:described_by rdf:type owl:ObjectProperty ,
-                           owl:FunctionalProperty ,
-                           ratio:Described ;
+                           owl:FunctionalProperty ;
+                  ratio:described "true"^^xsd:boolean ;
                   ratio:order "1"^^xsd:positiveInteger ;
                   rdfs:domain ctro:ClinicalTrial ;
                   rdfs:range ctro:Publication ;
                   rdfs:label "is described by Publication" .
 
-ctro:hasCTDesign rdf:type owl:ObjectProperty ,
-                          ratio:Described ;
+ctro:hasCTDesign rdf:type owl:ObjectProperty ;
+                 ratio:described "true"^^xsd:boolean ;
                  ratio:order "3"^^xsd:positiveInteger ;
                  rdfs:domain ctro:ClinicalTrial ;
                  rdfs:range ctro:CTDesign ;
@@ -48,8 +48,8 @@ ctro:hasAnalysisApproach rdf:type owl:ObjectProperty ,
                          rdfs:label "Analysis approach" .
 
 ctro:hasPopulation rdf:type owl:ObjectProperty ,
-                            owl:FunctionalProperty ,
-                            ratio:Described ;
+                            owl:FunctionalProperty ;
+                   ratio:described "true"^^xsd:boolean ;
                    ratio:order "4"^^xsd:positiveInteger ;
                    rdfs:domain ctro:ClinicalTrial ;
                    rdfs:range ctro:Population ;
@@ -67,23 +67,23 @@ ctro:hasCountry rdf:type owl:ObjectProperty ;
                 rdfs:range <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
                 rdfs:label "Country" .
 
-ctro:hasQualityIndicator rdf:type owl:ObjectProperty ,
-                                  ratio:Described ;
+ctro:hasQualityIndicator rdf:type owl:ObjectProperty ;
+                         ratio:described "true"^^xsd:boolean ;
                          ratio:order "5"^^xsd:positiveInteger ;
                          rdfs:subPropertyOf owl:topObjectProperty ;
                          rdfs:domain ctro:ClinicalTrial ;
                          rdfs:range ctro:EvidenceQuality ;
                          rdfs:label "Quality / bias indicator" .
 
-ctro:hasArm rdf:type owl:ObjectProperty ,
-                     ratio:Described ;
+ctro:hasArm rdf:type owl:ObjectProperty ;
+            ratio:described "true"^^xsd:boolean ;
             ratio:order "6"^^xsd:positiveInteger ;
             rdfs:domain ctro:ClinicalTrial ;
             rdfs:range ctro:Arm ;
             rdfs:label "Interventional-Arm" .
 
-ctro:hasIntervention rdf:type owl:ObjectProperty ,
-                              ratio:Described ;
+ctro:hasIntervention rdf:type owl:ObjectProperty ;
+                     ratio:described "true"^^xsd:boolean ;
                      ratio:order "2"^^xsd:positiveInteger ;
                      rdfs:domain ctro:Arm ;
                      rdfs:range ctro:Intervention ;
@@ -109,8 +109,8 @@ ctro:hasDeliveryMethod rdf:type owl:ObjectProperty ;
                        rdfs:range ctro:DeliveryMethod ;
                        rdfs:label "Delivery method" .
 
-ctro:hasOutcome rdf:type owl:ObjectProperty ,
-                         ratio:Described ;
+ctro:hasOutcome rdf:type owl:ObjectProperty ;
+                ratio:described "true"^^xsd:boolean ;
                 ratio:order "7"^^xsd:positiveInteger ;
                 rdfs:domain ctro:ClinicalTrial ;
                 rdfs:range ctro:Outcome ;
@@ -138,8 +138,8 @@ ctro:hasEndpointUnit rdf:type owl:ObjectProperty ,
                      rdfs:range ctro:BioAndMedicalUnit ;
                      rdfs:label "Endpoint unit" .
 
-ctro:hasResult rdf:type owl:ObjectProperty ,
-                        ratio:Described ;
+ctro:hasResult rdf:type owl:ObjectProperty ;
+               ratio:described "true"^^xsd:boolean ;
                ratio:order "8"^^xsd:positiveInteger ;
                rdfs:domain ctro:ClinicalTrial ;
                rdfs:range ctro:Result ;
@@ -157,15 +157,15 @@ ctro:hasOutcomeRes rdf:type owl:ObjectProperty ;          # todo mark that this 
                    rdfs:range ctro:Outcome ;
                    rdfs:label "Outcome" .
 
-ctro:hasStatisticalMeasure rdf:type owl:ObjectProperty ,
-                                    ratio:Described ;
+ctro:hasStatisticalMeasure rdf:type owl:ObjectProperty ;
+                           ratio:described "true"^^xsd:boolean ;
                            ratio:order "8"^^xsd:positiveInteger ;
                            rdfs:domain ctro:Result ;
                            rdfs:range ctro:StatisticalMeasure ;
                            rdfs:label "Statistical measure" .
 
-ctro:hasAdverseEffect rdf:type owl:ObjectProperty ,
-                               ratio:Described ;
+ctro:hasAdverseEffect rdf:type owl:ObjectProperty ;
+                      ratio:described "true"^^xsd:boolean ;
                       ratio:order "9"^^xsd:positiveInteger ;
                       rdfs:domain ctro:ClinicalTrial ;
                       rdfs:range ctro:AdverseEffect ;

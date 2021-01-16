@@ -11,11 +11,14 @@ from rdflib import Namespace
 from rdflib import RDF
 from rdflib import RDFS
 from rdflib import URIRef
+from rdflib import XSD
 
 from ratio.db import get_db
 
 
 RATIO = Namespace('http://www.example.org/ratio-tool#')
+TRUE = Literal('True', datatype=XSD.boolean)
+FALSE = Literal('False', datatype=XSD.boolean)
 
 
 def parse_n3_term(s):
@@ -236,7 +239,7 @@ def build_empty_field(ontology, property_uri, range_class_uri):
     # if false, the field belongs to a owl:DatatypeProperty
     is_object_property = OWL.ObjectProperty in ontology.objects(property_uri, RDF.type)
     is_functional = OWL.FunctionalProperty in ontology.objects(property_uri, RDF.type)
-    is_described = RATIO.Described in ontology.objects(property_uri, RDF.type)
+    is_described = TRUE in ontology.objects(property_uri, RATIO.described)
 
     order = next(ontology.objects(property_uri, RATIO.order)).value
 
@@ -281,7 +284,7 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
     # if false, the field belongs to a owl:DatatypeProperty
     is_object_property = OWL.ObjectProperty in ontology.objects(property_uri, RDF.type)
     is_functional = OWL.FunctionalProperty in ontology.objects(property_uri, RDF.type)
-    is_described = RATIO.Described in ontology.objects(property_uri, RDF.type)
+    is_described = TRUE in ontology.objects(property_uri, RATIO.described)
 
     order = next(ontology.objects(property_uri, RATIO.order)).value
 
