@@ -20,7 +20,7 @@ $(function() {
       menu_box.prop('title', 'Not finished');
     }
 
-    $.getJSON($SCRIPT_ROOT + '/_set_finished', {subgraph_id: subgraph_id, finished: finished}, function (data) {
+    $.getJSON(window.SCRIPT_ROOT + '/_set_finished', {subgraph_id: subgraph_id, finished: finished}, function (data) {
       if (data.error) { alert(data.error); }
     })
     .fail(function() { alert('getJSON request failed!'); });
@@ -38,14 +38,14 @@ $(function() {
     var flipid = 'subgraph-list-' + subgraph_id;
     data.push({ name: 'subgraph_id', value: subgraph_id });
 
-    $.getJSON($SCRIPT_ROOT + '/_edit_subgraph_name', data, function(data) {
+    $.getJSON(window.SCRIPT_ROOT + '/_edit_subgraph_name', data, function(data) {
       if (data.error) {
         $('div#subgraph-menu-edit-msg').text(data.error);
         $('div#subgraph-menu-edit-msg').attr('data-flipid', flipid)
         $('div#subgraph-menu-edit-msg').css('display', 'block');
         list_item.find('form > input').focus();
       } else {
-        if (subgraph_id == $SUBGRAPH_ID) {
+        if (subgraph_id == window.SUBGRAPH_ID) {
           $('a#subgraph-name').text(data.name);
         }
         list_item.children().eq(0).children().eq(0).text(data.name);
@@ -63,13 +63,13 @@ $(function() {
   $('div#subgraph-list').on('click', 'form > a.delete-subgraph-button', function() {
     var item = $(this.parentNode.parentNode.parentNode);
     var subgraph_id = item.attr('data-subgraph-id');
-    $.getJSON($SCRIPT_ROOT + '/_delete_subgraph', {subgraph_id: subgraph_id}, function(data) {
+    $.getJSON(window.SCRIPT_ROOT + '/_delete_subgraph', {subgraph_id: subgraph_id}, function(data) {
       if (data.error) {
         $('div#subgraph-menu-edit-msg').text(data.error);
         $('div#subgraph-menu-edit-msg').attr('data-flipid', 'subgraph-list-' + subgraph_id)
         $('div#subgraph-menu-edit-msg').css('display', 'block');
       } else {
-        if (subgraph_id == $SUBGRAPH_ID) {
+        if (subgraph_id == window.SUBGRAPH_ID) {
           // prevent user from going back to editing the subgraph
           $('a#close-overlay').css('display', 'none');
           $(document).off('keyup', overlay_escape_handler);
@@ -91,11 +91,11 @@ $(function() {
   $('div#subgraph-menu-delete-msg > a').on('click', function() {
     var subgraph_id = this.parentNode.getAttribute('data-subgraph-id');
     var item = $('div#subgraph-list > div.item[data-subgraph-id="' + subgraph_id + '"]')
-    $.getJSON($SCRIPT_ROOT + '/_undo_delete_subgraph', {subgraph_id: subgraph_id}, function(data) {
+    $.getJSON(window.SCRIPT_ROOT + '/_undo_delete_subgraph', {subgraph_id: subgraph_id}, function(data) {
       if (data.error) {
         alert(data.error);  // if everything runs correctly this will never happen
       } else {
-        if (subgraph_id == $SUBGRAPH_ID) {
+        if (subgraph_id == window.SUBGRAPH_ID) {
           $('a#close-overlay').css('display', 'block');
           $(document).on('keyup', overlay_escape_handler);
         }
@@ -114,7 +114,7 @@ $(function() {
   $('form#new-subgraph-form').on('submit', function() {
     var data = $(this).serialize();
 
-    $.getJSON($SCRIPT_ROOT + '/_add_subgraph', data, function(data) {
+    $.getJSON(window.SCRIPT_ROOT + '/_add_subgraph', data, function(data) {
       if (data.error) {
         $('div#subgraph-menu-add-msg').text(data.error);
         $('div#subgraph-menu-add-msg').css('display', 'block');

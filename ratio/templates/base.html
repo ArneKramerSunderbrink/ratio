@@ -20,7 +20,7 @@
 <script src="{{ url_for('static', filename='js/flip_pattern.js') }}" defer></script>
 
 <script>
-  $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+  window.SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 </script>
 
 {% block content %}{% endblock %}

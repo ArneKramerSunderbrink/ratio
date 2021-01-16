@@ -17,7 +17,7 @@ $(function() {
   }
 
   function overlay_escape_handler(e) {
-    if (e.key === "Escape" && $('div#overlay').css('display') == 'block' && $SUBGRAPH_ID != 0) {
+    if (e.key === "Escape" && $('div#overlay').css('display') == 'block' && window.SUBGRAPH_ID != 0) {
       toggle_overlay();
     }
   }

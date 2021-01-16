@@ -9,12 +9,12 @@ $(function () {
     var property_uri = $(this).closest('div.field').attr('data-property-uri');
     var entity_uri = $(this).closest('div.entity').attr('data-entity-uri');
     var data = [
-      { name: "subgraph_id", value: $SUBGRAPH_ID },
+      { name: "subgraph_id", value: window.SUBGRAPH_ID },
       { name: "property_uri", value: property_uri },
       { name: "entity_uri", value: entity_uri }
     ];
 
-    $.getJSON($SCRIPT_ROOT + '/_add_value', data, function(data) {
+    $.getJSON(window.SCRIPT_ROOT + '/_add_value', data, function(data) {
       if (data.error) {
         alert(data.error); //todo add element to page to display error
       } else {
@@ -97,9 +97,9 @@ function edit_knowledge() {
   var data = $(this).serializeArray();
   var knowledge_id = parseInt(this.id.substring(20));  // 'edit-knowledge-form-123' without 'edit-knowledge-form-'
   data.push({ name: "knowledge_id", value: knowledge_id });
-  data.push({ name: "subgraph_id", value: $SUBGRAPH_ID });
+  data.push({ name: "subgraph_id", value: window.SUBGRAPH_ID });
 
-  $.getJSON($SCRIPT_ROOT + '/_edit_knowledge', data, function(data) {
+  $.getJSON(window.SCRIPT_ROOT + '/_edit_knowledge', data, function(data) {
     if (data.error) {
       alert(data.error); //todo add element to page to display error
     } else {
@@ -129,7 +129,7 @@ function delete_knowledge() {
 
   // todo: add a "are you sure?" - dialog?
 
-  $.getJSON($SCRIPT_ROOT + '/_delete_knowledge', {knowledge_id: knowledge_id, subgraph_id: $SUBGRAPH_ID}, function(data) {
+  $.getJSON(window.SCRIPT_ROOT + '/_delete_knowledge', {knowledge_id: knowledge_id, subgraph_id: window.SUBGRAPH_ID}, function(data) {
       if (data.error) {
         alert(data.error); //todo add element to page to display error
       } else {
@@ -155,9 +155,9 @@ $(function() {
 $(function() {
   $('form#new-knowledge-form').submit(function() {
     var data = $(this).serializeArray();
-    data.push({ name: "subgraph_id", value: $SUBGRAPH_ID });
+    data.push({ name: "subgraph_id", value: window.SUBGRAPH_ID });
 
-    $.getJSON($SCRIPT_ROOT + '/_add_knowledge', data, function(data) {
+    $.getJSON(window.SCRIPT_ROOT + '/_add_knowledge', data, function(data) {
       if (data.error) {
         alert(data.error); //todo add element to page to display error
       } else {
