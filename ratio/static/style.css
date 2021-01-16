@@ -101,24 +101,35 @@ header {
 .fa-check-square,
 .fa-save,
 .fa-project-diagram {
-  opacity: 0.75;
+  opacity: 0.6;
 }
 
 /* Icon button */
 .big-button {
-  padding: 0;
   width: 2.5em;
   height: 2.5em;
-  text-align: center;
 }
 
 .tiny-button {
-  padding: 0;
   width: 1.5em;
   height: 1.5em;
+}
+
+.collapse-button {
+  width: 2em;
+  height: 2em;
+  border-radius: 4px;
+  margin-right: 0.5em;
+}
+
+.big-button,
+.tiny-button,
+.collapse-button {
+  padding: 0;
   text-align: center;
 }
 
+.collapse-button:before,
 .big-button:before,
 .tiny-button:before {
     content: "";
@@ -127,6 +138,7 @@ header {
     vertical-align: middle;
 }
 
+.collapse-button > i,
 .big-button > i,
 .tiny-button > i {
     vertical-align: middle;
@@ -141,8 +153,8 @@ header {
 
 /* Knowledge */
 .entity {
-  margin: 0.2em 0;
-  padding: 0.5em 1em 0.5em 1.5em;
+  margin: 0.5em 0;
+  background: white;
 }
 
 .entity-border {
@@ -152,24 +164,30 @@ header {
 }
 
 .entity-title {
-  border-bottom: 2px solid var(--font-color2);
+  align-items: center;
+  border: 2px solid var(--font-color2);
+  border-radius: 10px;
   padding: 0.2em;
   font-weight: bold;
+  margin: -2px;
 }
 
-.entity-field > div:first-of-type {
+.entity-body {
+  padding: 0.5em 1em 0.5em 1.5em;
+}
+
+.entity-field-label {
   font-weight: bold;
-  margin-top: 1em;
 }
 
-.entity-field,
-.field {
-  margin: 0.5em;
+.entity-field {
+  margin: 1em 0.5em 0.5em 0.5em;
 }
 
 .field {
   display: inline-block;
   width: 47%;
+  margin: 0.5em;
   box-shadow: 0 1px 2px 0 rgba(0,0,0,0.16),0 2px 5px 0 rgba(0,0,0,0.12);
   padding: 0.2em 0.5em;
   border-radius: 5px;

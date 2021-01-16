@@ -40,7 +40,7 @@
 <div class="entity-field">
   {% if field.show_label %}
   <div class="flex-row">
-    <span class="flex-fix" {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}:</span>
+    <span class="flex-fix entity-field-label" {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}:</span>
     {% if not field.values or not field.is_functional %}
     <a href="#" class="w3-button tiny-button flex-fix flip-frontside flip-flipbutton" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}" title="Add {{ field.range_label }}">{#
       #}<i class="fas fa-plus"></i>
@@ -108,31 +108,26 @@
 
 {% macro entity_div(entity, is_root) %}
 <div class="entity{% if not is_root %} entity-border{% endif %}" data-entity-uri="{{ entity.uri }}">
-  <div class="flex-row">
-    {% if not is_root %}
+  {# entity header #}
+  {% if not is_root %}
+  <div class="entity-title color2 flex-row">
     {# collapse button #}
-    <a href="#" class="w3-button tiny-button flex-fix flip-frontside flip-flipbutton" data-flipid="collapse-{{ entity.uri }}" style="width: 30px; height: 30px; margin-left: -15px;">{#
+    <a href="#" class="w3-button collapse-button flex-fix flip-frontside flip-flipbutton" data-flipid="collapse-{{ entity.uri }}">{#
       #}<i class="fas fa-chevron-right"></i>
     </a>
-    <a href="#" class="w3-button tiny-button flex-fix flip-flipside flip-frontbutton" data-flipid="collapse-{{ entity.uri }}" style="width: 30px; height: 30px; margin-left: -15px; display: none;">{#
+    <a href="#" class="w3-button collapse-button flex-fix flip-flipside flip-frontbutton" data-flipid="collapse-{{ entity.uri }}" style="display: none;">{#
       #}<i class="fas fa-chevron-down"></i>
     </a>
-    {% endif %}
-    {# entity header #}
-    <div class="entity-title flex-flex">
-      <div class="flex-row flip-frontside" data-flipid="edit-{{ entity.uri }}">
-        <div class="flex-text" {% if entity.comment %}title="{{ entity.comment }}"{% endif %} contentEditable>{{ entity.label }}</div>
-        {% if not is_root %}
-        <a href="#" class="w3-button tiny-button flex-fix w3-right" title="Delete {{ entity.class_label }}">{#
-          #}<i class="fas fa-minus"></i>
-        </a>
-        {% endif %}
-      </div>
-    </div>
+
+    <div class="flex-text" {% if entity.comment %}title="{{ entity.comment }}"{% endif %} contentEditable>{{ entity.label }}</div>
+    <a href="#" class="w3-button tiny-button flex-fix" title="Delete {{ entity.class_label }}">{#
+      #}<i class="fas fa-minus"></i>
+    </a>
   </div>
+  {% endif %}
 
 
-  <div {%if not is_root %} class="flip-flipside" data-flipid="collapse-{{ entity.uri }}" {% endif %}style="{%if not is_root %}display: none; {% endif %}margin-top: 1em;">
+  <div class="entity-body{%if not is_root %} flip-flipside{% endif %}"{%if not is_root %} data-flipid="collapse-{{ entity.uri }}" style="display: none;"{% endif %}>
     {% for field in entity.fields %}
     {% if field.is_described %}
     {{ entity_field(entity, field) }}
