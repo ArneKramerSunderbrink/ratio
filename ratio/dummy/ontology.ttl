@@ -22,13 +22,16 @@
 ctro:described_by rdf:type owl:ObjectProperty ,
                            owl:FunctionalProperty ;
                   ratio:described "true"^^xsd:boolean ;
+                  ratio:show_label "false"^^xsd:boolean ;
                   ratio:order "1"^^xsd:positiveInteger ;
                   rdfs:domain ctro:ClinicalTrial ;
                   rdfs:range ctro:Publication ;
                   rdfs:label "is described by Publication" .
 
-ctro:hasCTDesign rdf:type owl:ObjectProperty ;
+ctro:hasCTDesign rdf:type owl:ObjectProperty ,
+                          owl:FunctionalProperty ;
                  ratio:described "true"^^xsd:boolean ;
+                 ratio:show_label "false"^^xsd:boolean ;
                  ratio:order "3"^^xsd:positiveInteger ;
                  rdfs:domain ctro:ClinicalTrial ;
                  rdfs:range ctro:CTDesign ;
@@ -50,6 +53,7 @@ ctro:hasAnalysisApproach rdf:type owl:ObjectProperty ,
 ctro:hasPopulation rdf:type owl:ObjectProperty ,
                             owl:FunctionalProperty ;
                    ratio:described "true"^^xsd:boolean ;
+                   ratio:show_label "false"^^xsd:boolean ;
                    ratio:order "4"^^xsd:positiveInteger ;
                    rdfs:domain ctro:ClinicalTrial ;
                    rdfs:range ctro:Population ;
@@ -67,8 +71,10 @@ ctro:hasCountry rdf:type owl:ObjectProperty ;
                 rdfs:range <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
                 rdfs:label "Country" .
 
-ctro:hasQualityIndicator rdf:type owl:ObjectProperty ;
+ctro:hasQualityIndicator rdf:type owl:ObjectProperty ,
+                                  owl:FunctionalProperty;
                          ratio:described "true"^^xsd:boolean ;
+                         ratio:show_label "false"^^xsd:boolean ;
                          ratio:order "5"^^xsd:positiveInteger ;
                          rdfs:subPropertyOf owl:topObjectProperty ;
                          rdfs:domain ctro:ClinicalTrial ;

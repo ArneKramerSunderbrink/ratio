@@ -180,13 +180,14 @@ def get_subgraph_knowledge(subgraph_id):
 class Field:
     """Represents a possible owl:ObjectProperty or owl:DatatypeProperty of an Entity"""
     def __init__(self, property_uri, label, comment,
-                 is_object_property, is_described, is_functional,
+                 is_object_property, is_described, show_label, is_functional,
                  range_uri, range_label, order, values, options=None):
         self.property_uri = property_uri
         self.label = label
         self.comment = comment
         self.is_object_property = is_object_property
         self.is_described = is_described
+        self.show_label = show_label
         self.is_functional = is_functional
         self.range_uri = range_uri
         self.range_label = range_label
@@ -240,6 +241,7 @@ def build_empty_field(ontology, property_uri, range_class_uri):
     is_object_property = OWL.ObjectProperty in ontology.objects(property_uri, RDF.type)
     is_functional = OWL.FunctionalProperty in ontology.objects(property_uri, RDF.type)
     is_described = TRUE in ontology.objects(property_uri, RATIO.described)
+    show_label = FALSE not in ontology.objects(property_uri, RATIO.show_label)
 
     order = next(ontology.objects(property_uri, RATIO.order)).value
 
@@ -254,7 +256,7 @@ def build_empty_field(ontology, property_uri, range_class_uri):
     else:
         options = None
 
-    return Field(property_uri, label, comment, is_object_property, is_described, is_functional,
+    return Field(property_uri, label, comment, is_object_property, is_described, show_label, is_functional,
                  range_class_uri, range_label, order, values, options)
 
 
@@ -285,6 +287,7 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
     is_object_property = OWL.ObjectProperty in ontology.objects(property_uri, RDF.type)
     is_functional = OWL.FunctionalProperty in ontology.objects(property_uri, RDF.type)
     is_described = TRUE in ontology.objects(property_uri, RATIO.described)
+    show_label = FALSE not in ontology.objects(property_uri, RATIO.show_label)
 
     order = next(ontology.objects(property_uri, RATIO.order)).value
 
@@ -307,7 +310,7 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
     else:
         options = None
 
-    return Field(property_uri, label, comment, is_object_property, is_described, is_functional,
+    return Field(property_uri, label, comment, is_object_property, is_described, show_label, is_functional,
                  range_class_uri, range_label, order, values, options)
 
 

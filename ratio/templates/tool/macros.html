@@ -38,6 +38,7 @@
 
 {% macro entity_field(entity, field) %}
 <div class="entity-field">
+  {% if field.show_label %}
   <div class="flex-row">
     <span class="flex-fix" {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}:</span>
     {% if not field.values or not field.is_functional %}
@@ -59,6 +60,7 @@
     </a>
     {% endif %}
   </div>
+  {% endif %}
   {% for value in field.values %}
   {{ entity_div(value, False) }}
   {% endfor %}

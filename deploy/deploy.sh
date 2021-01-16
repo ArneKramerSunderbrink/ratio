@@ -12,7 +12,7 @@ pip install meinheld gunicorn ratio-0.1-py2.py3-none-any.whl
 export FLASK_APP=ratio
 
 # Initialize the database
-flask init-db
+flask db-init
 
 # Fill the database with dummy data
 # including a user test with password test

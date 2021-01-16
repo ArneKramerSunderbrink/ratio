@@ -29,17 +29,17 @@ def close_db(e=None):
         db.close()
 
 
-def init_db():
+def db_init():
     """Clear existing data and create new tables."""
     with current_app.open_resource('schema.sql') as f:
         get_db().executescript(f.read().decode('utf8'))
 
 
-@click.command('init-db')
+@click.command('db-init')
 @with_appcontext
-def init_db_command():
+def db_init_command():
     """Command to clear existing data and create new tables."""
-    init_db()
+    db_init()
     click.echo('Initialized the database.')
 
 
@@ -81,6 +81,6 @@ def init_app(app):
     This is called by the application factory.
     """
     app.teardown_appcontext(close_db)
-    app.cli.add_command(init_db_command)
+    app.cli.add_command(db_init_command)
     app.cli.add_command(db_populate_dummy_command)
     app.cli.add_command(load_ontology_file_command)
