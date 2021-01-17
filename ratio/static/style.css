@@ -219,6 +219,9 @@ header {
   padding: 0 2px;
   border-bottom: 1px solid #ccc;
   background-color: white;
+  min-height: 1.5em;
+  max-height: calc(4.5em + 1px);  /* Three lines + border */
+  overflow: auto;
 }
 
 .option-input {

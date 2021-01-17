@@ -141,7 +141,7 @@
             {% for value in field.values %}
             {{ value_options(field, value) }}
             {% endfor %}
-            {% elif field.is_functional %}
+            {% else %}
             {{ value_options(field, '') }}
             {% endif %}
           {% else %}
@@ -149,7 +149,7 @@
             {% for value in field.values %}
             {{ value_free(field, value) }}
             {% endfor %}
-            {% elif field.is_functional %}
+            {% else %}
             {{ value_free(field, '') }}
             {% endif %}
           {% endif %}
