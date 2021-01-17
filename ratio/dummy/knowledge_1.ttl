@@ -10,7 +10,7 @@ ctro:CT_1_1 rdf:type owl:NamedIndividual ,
                      ctro:ClinicalTrial ;
             rdfs:label "Clinical Trial 1"^^xsd:string ;
             ctro:described_by ctro:Pub_1_1 ;
-            ctro:hasCTDesign ctro:Design_1_1 ;
+            ctro:hasDesignGroup ctro:Design_1_1 ;
             ctro:hasPopulation ctro:Population_1_1 ;
             ctro:hasQualityIndicator ctro:Evidence_1_1 ;
             ctro:hasArm ctro:Arm_1_1 ,
@@ -31,7 +31,7 @@ ctro:Pub_1_1 rdf:type owl:NamedIndividual ,
              ctro:hasTitle "Effects on intraocular pressure and side effects of 0.005% latanoprost applied once daily, evening or morning. A comparison with timolol. Scandinavian Latanoprost Study Group"^^xsd:string .
 
 ctro:Design_1_1 rdf:type owl:NamedIndividual ,
-                         ctro:CTDesign ;
+                         ctro:DesignGroup ;
                 rdfs:label "Design"^^xsd:string ;
                 ctro:analysesHealthCondition ctro:T2DM .
 

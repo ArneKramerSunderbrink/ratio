@@ -241,6 +241,7 @@ ctro:hasPopulationUnit rdf:type owl:ObjectProperty ;
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasQualityIndicator
 ctro:hasQualityIndicator rdf:type owl:ObjectProperty ;
                          rdfs:subPropertyOf owl:topObjectProperty ;
+                         rdf:type owl:FunctionalProperty ;
                          rdfs:domain ctro:ClinicalTrial ;
                          rdfs:range ctro:EvidenceQuality ;
                          rdfs:label "Quality / bias indicator" .
@@ -968,6 +969,46 @@ owl:Thing rdf:type owl:Class .
 #    Individuals
 #################################################################
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Argentina
+ctro:Argentina rdf:type owl:NamedIndividual ,
+                        <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+               rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223713009> ;
+               rdfs:label "Argentina" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Australia
+ctro:Australia rdf:type owl:NamedIndividual ,
+                        <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+               rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223621005> ;
+               rdfs:label "Australia" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Austria
+ctro:Austria rdf:type owl:NamedIndividual ,
+                      <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+             rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223635007> ;
+             rdfs:label "Austria" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Blind
+ctro:Blind rdf:type owl:NamedIndividual ,
+                    ctro:CTDesign .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Brazil
+ctro:Brazil rdf:type owl:NamedIndividual ,
+                     <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+            rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223715002> ;
+            rdfs:label "Brazil" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Canada
+ctro:Canada rdf:type owl:NamedIndividual ,
+                     <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+            rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223686002> ;
+            rdfs:label "Canada" .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#China
 ctro:China rdf:type owl:NamedIndividual ,
                     <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
@@ -975,11 +1016,79 @@ ctro:China rdf:type owl:NamedIndividual ,
            rdfs:label "China" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Colombia
+ctro:Colombia rdf:type owl:NamedIndividual ,
+                       <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+              rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223717005> ;
+              rdfs:label "Colombia" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Croatia
+ctro:Croatia rdf:type owl:NamedIndividual ,
+                      <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+             rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223662004> ;
+             rdfs:label "Croatia" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Double-blind
+ctro:Double-blind rdf:type owl:NamedIndividual ,
+                           ctro:CTDesign .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Egypt
+ctro:Egypt rdf:type owl:NamedIndividual ,
+                    <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+           rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223511009> ;
+           rdfs:label "Egypt" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#England
+ctro:England rdf:type owl:NamedIndividual ,
+                      <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+             rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223664003> ;
+             rdfs:label "England" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Finland
+ctro:Finland rdf:type owl:NamedIndividual ,
+                      <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+             rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223665002> ;
+             rdfs:label "Finland" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#France
+ctro:France rdf:type owl:NamedIndividual ,
+                     <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+            rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223666001> ;
+            rdfs:label "France" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Georgia
+ctro:Georgia rdf:type owl:NamedIndividual ,
+                      <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+             rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223375006> ;
+             rdfs:label "Georgia" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Germany
+ctro:Germany rdf:type owl:NamedIndividual ,
+                      <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+             rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223637004> ;
+             rdfs:label "Germany" .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Glaucoma
 ctro:Glaucoma rdf:type owl:NamedIndividual ,
                        ctro:DisorderOrSyndrome ;
               rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/23986001> ;
               rdfs:label "Glaucoma" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Greece
+ctro:Greece rdf:type owl:NamedIndividual ,
+                     <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+            rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223651004> ;
+            rdfs:label "Greece" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#HbA1c
@@ -996,11 +1105,53 @@ ctro:IOP rdf:type owl:NamedIndividual ,
                     "IOP reduction" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#India
+ctro:India rdf:type owl:NamedIndividual ,
+                    <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+           rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223600005> ;
+           rdfs:label "India" .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Injection
 ctro:Injection rdf:type owl:NamedIndividual ,
                         ctro:DeliveryMethod ;
                rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/740685003> ;
                rdfs:label "Injection" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Iran
+ctro:Iran rdf:type owl:NamedIndividual ,
+                   <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+          rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223607008> ;
+          rdfs:label "Iran" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Ireland
+ctro:Ireland rdf:type owl:NamedIndividual ,
+                      <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+             rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223676003> ;
+             rdfs:label "Republic of Ireland" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Israel
+ctro:Israel rdf:type owl:NamedIndividual ,
+                     <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+            rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223609006> ;
+            rdfs:label "Israel" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Italy
+ctro:Italy rdf:type owl:NamedIndividual ,
+                    <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+           rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223668000> ;
+           rdfs:label "Italy" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Japan
+ctro:Japan rdf:type owl:NamedIndividual ,
+                    <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+           rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223583001> ;
+           rdfs:label "Japan" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Latanoprost
@@ -1010,11 +1161,86 @@ ctro:Latanoprost rdf:type owl:NamedIndividual ,
                  rdfs:label "Latanoprost" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Mexico
+ctro:Mexico rdf:type owl:NamedIndividual ,
+                     <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+            rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223687006> ;
+            rdfs:label "Mexico" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Netherlands
+ctro:Netherlands rdf:type owl:NamedIndividual ,
+                          <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+                 rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223672001> ;
+                 rdfs:label "Netherlands" .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Oral
 ctro:Oral rdf:type owl:NamedIndividual ,
                    ctro:DeliveryMethod ;
           rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/738956005> ;
           rdfs:label "Oral" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Peru
+ctro:Peru rdf:type owl:NamedIndividual ,
+                   <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+          rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223721003> ;
+          rdfs:label "Peru" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Philippines
+ctro:Philippines rdf:type owl:NamedIndividual ,
+                          <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+                 rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223592003> ;
+                 rdfs:label "Japan" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Poland
+ctro:Poland rdf:type owl:NamedIndividual ,
+                     <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+            rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223640004> ;
+            rdfs:label "Poland" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Randomized
+ctro:Randomized rdf:type owl:NamedIndividual ,
+                         ctro:CTDesign .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Singapore
+ctro:Singapore rdf:type owl:NamedIndividual ,
+                        <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+               rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223593008> ;
+               rdfs:label "Singapore" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#SouthKorea
+ctro:SouthKorea rdf:type owl:NamedIndividual ,
+                         <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+                rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223584007> ;
+                rdfs:label "Republic of Korea" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Spain
+ctro:Spain rdf:type owl:NamedIndividual ,
+                    <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+           rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223680008> ;
+           rdfs:label "Spain" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Sweden
+ctro:Sweden rdf:type owl:NamedIndividual ,
+                     <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+            rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223681007> ;
+            rdfs:label "Sweden" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Switzerland
+ctro:Switzerland rdf:type owl:NamedIndividual ,
+                          <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+                 rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223642007> ;
+                 rdfs:label "Switzerland" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#T2DM
@@ -1024,6 +1250,13 @@ ctro:T2DM rdf:type owl:NamedIndividual ,
           rdfs:label "Type 2 Diabetes Mellitus" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Taiwan
+ctro:Taiwan rdf:type owl:NamedIndividual ,
+                     <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+            rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/428675004> ;
+            rdfs:label "Taiwan" .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Timolol
 ctro:Timolol rdf:type owl:NamedIndividual ,
                       ctro:Drug ;
@@ -1031,11 +1264,32 @@ ctro:Timolol rdf:type owl:NamedIndividual ,
              rdfs:label "Timolol" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Turkey
+ctro:Turkey rdf:type owl:NamedIndividual ,
+                     <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+            rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/278900006> ;
+            rdfs:label "Turkey - country" .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#USA
 ctro:USA rdf:type owl:NamedIndividual ,
                   <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
          rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223688001> ;
          rdfs:label "USA" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Uganda
+ctro:Uganda rdf:type owl:NamedIndividual ,
+                     <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+            rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223538002> ;
+            rdfs:label "Uganda" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Venezuela
+ctro:Venezuela rdf:type owl:NamedIndividual ,
+                        <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
+               rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223724006> ;
+               rdfs:label "Venezuela" .
 
 
 ###  Generated by the OWL API (version 4.2.8.20170104-2310) https://github.com/owlcs/owlapi
