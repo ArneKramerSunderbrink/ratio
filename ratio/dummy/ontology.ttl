@@ -7,6 +7,9 @@
 @prefix ratio: <http://www.example.org/ratio-tool#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
+### Base for new URIs created in the tool
+ratio:Configuration ratio:hasBase "http://www.semanticweb.org/root/ontologies/2018/6/ctro#" .
+
 #################################################################
 #    Datatypes
 #################################################################

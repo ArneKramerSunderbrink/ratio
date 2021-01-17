@@ -6,89 +6,89 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 
-ctro:CT_1 rdf:type owl:NamedIndividual ,
-                   ctro:ClinicalTrial ;
-          rdfs:label "Clinical Trial 1"^^xsd:string ;
-          ctro:described_by ctro:Pub_1 ;
-          ctro:hasCTDesign ctro:Design_1 ;
-          ctro:hasPopulation ctro:Population_1 ;
-          ctro:hasQualityIndicator ctro:Evidence_1 ;
-          ctro:hasArm ctro:Arm_1 ,
-                      ctro:Arm_2 ;
-          ctro:hasOutcome ctro:Out_1 ;
-          ctro:hasResult ctro:Res_1 ;
-          ctro:hasResult ctro:Res_2 ;
-          ctro:hasAdverseEffect ctro:AE_1 .
+ctro:CT_1_1 rdf:type owl:NamedIndividual ,
+                     ctro:ClinicalTrial ;
+            rdfs:label "Clinical Trial 1"^^xsd:string ;
+            ctro:described_by ctro:Pub_1_1 ;
+            ctro:hasCTDesign ctro:Design_1_1 ;
+            ctro:hasPopulation ctro:Population_1_1 ;
+            ctro:hasQualityIndicator ctro:Evidence_1_1 ;
+            ctro:hasArm ctro:Arm_1_1 ,
+                        ctro:Arm_1_2 ;
+            ctro:hasOutcome ctro:Out_1_1 ;
+            ctro:hasResult ctro:Res_1_1 ;
+            ctro:hasResult ctro:Res_1_2 ;
+            ctro:hasAdverseEffect ctro:AE_1_1 .
 
-ctro:Pub_1 rdf:type owl:NamedIndividual ,
-                    ctro:Publication ;
-           rdfs:label "Publication 9098273"^^xsd:string ;
-           ctro:hasAuthor "Alm A"^^xsd:string ,
-                          "Stjernschantz J."^^xsd:string ;
-           ctro:hasJournal "Ophthalmology"^^xsd:string ;
-           ctro:hasPMID "9098273"^^xsd:integer ;
-           ctro:hasPublicationYear "1995"^^xsd:integer ;
-           ctro:hasTitle "Effects on intraocular pressure and side effects of 0.005% latanoprost applied once daily, evening or morning. A comparison with timolol. Scandinavian Latanoprost Study Group"^^xsd:string .
+ctro:Pub_1_1 rdf:type owl:NamedIndividual ,
+                      ctro:Publication ;
+             rdfs:label "Publication 9098273"^^xsd:string ;
+             ctro:hasAuthor "Alm A"^^xsd:string ,
+                            "Stjernschantz J."^^xsd:string ;
+             ctro:hasJournal "Ophthalmology"^^xsd:string ;
+             ctro:hasPMID "9098273"^^xsd:integer ;
+             ctro:hasPublicationYear "1995"^^xsd:integer ;
+             ctro:hasTitle "Effects on intraocular pressure and side effects of 0.005% latanoprost applied once daily, evening or morning. A comparison with timolol. Scandinavian Latanoprost Study Group"^^xsd:string .
 
-ctro:Design_1 rdf:type owl:NamedIndividual ,
-                       ctro:CTDesign ;
-           rdfs:label "Design"^^xsd:string ;
-           ctro:analysesHealthCondition ctro:T2DM .
+ctro:Design_1_1 rdf:type owl:NamedIndividual ,
+                         ctro:CTDesign ;
+                rdfs:label "Design"^^xsd:string ;
+                ctro:analysesHealthCondition ctro:T2DM .
 
-ctro:Population_1 rdf:type owl:NamedIndividual ,
-                           ctro:Population ;
-                  rdfs:label "Population"^^xsd:string ;
-                  ctro:hasGender "Female" .
+ctro:Population_1_1 rdf:type owl:NamedIndividual ,
+                             ctro:Population ;
+                    rdfs:label "Population"^^xsd:string ;
+                    ctro:hasGender "Female" .
 
-ctro:Evidence_1 rdf:type owl:NamedIndividual ,
-                         ctro:EvidenceQuality;
-                rdfs:label "Evidence quality"^^xsd:string .
+ctro:Evidence_1_1 rdf:type owl:NamedIndividual ,
+                           ctro:EvidenceQuality;
+                  rdfs:label "Evidence quality"^^xsd:string .
 
-ctro:Arm_1 rdf:type owl:NamedIndividual ,
-                    ctro:Arm;
-           rdfs:label "Latanoprost Arm"^^xsd:string ;
-           ctro:hasNumberPatientsArm "123"^^xsd:positiveInteger ;
-           ctro:hasIntervention ctro:Interv_1 .
+ctro:Arm_1_1 rdf:type owl:NamedIndividual ,
+                      ctro:Arm;
+             rdfs:label "Latanoprost Arm"^^xsd:string ;
+             ctro:hasNumberPatientsArm "123"^^xsd:positiveInteger ;
+             ctro:hasIntervention ctro:Interv_1_1 .
 
-ctro:Interv_1 rdf:type owl:NamedIndividual ,
-                       ctro:Intervention ;
-              rdfs:label "Latanoprost"^^xsd:string ;
-              ctro:hasDuration "12 months" ;
-              ctro:hasFrequency "every 2 hrs." ;
-              ctro:hasDrug ctro:Latanoprost ;
-              ctro:hasDeliveryMethod ctro:Injection .
+ctro:Interv_1_1 rdf:type owl:NamedIndividual ,
+                         ctro:Intervention ;
+                rdfs:label "Latanoprost"^^xsd:string ;
+                ctro:hasDuration "12 months" ;
+                ctro:hasFrequency "every 2 hrs." ;
+                ctro:hasDrug ctro:Latanoprost ;
+                ctro:hasDeliveryMethod ctro:Injection .
 
-ctro:Arm_2 rdf:type owl:NamedIndividual ,
-                    ctro:Arm;
-           rdfs:label "Timolol Arm"^^xsd:string ;
-           ctro:hasNumberPatientsArm "111"^^xsd:positiveInteger ;
-           ctro:hasIntervention ctro:Interv_2 .
+ctro:Arm_1_2 rdf:type owl:NamedIndividual ,
+                      ctro:Arm;
+             rdfs:label "Timolol Arm"^^xsd:string ;
+             ctro:hasNumberPatientsArm "111"^^xsd:positiveInteger ;
+             ctro:hasIntervention ctro:Interv_1_2 .
 
-ctro:Interv_2 rdf:type owl:NamedIndividual ,
-                       ctro:Intervention ;
-              rdfs:label "Timolol"^^xsd:string ;
-              ctro:hasDuration "12 months" ;
-              ctro:hasFrequency "every 2 hrs." ;
-              ctro:hasDrug ctro:Timolol ;
-              ctro:hasDeliveryMethod ctro:Injection .
+ctro:Interv_1_2 rdf:type owl:NamedIndividual ,
+                         ctro:Intervention ;
+                rdfs:label "Timolol"^^xsd:string ;
+                ctro:hasDuration "12 months" ;
+                ctro:hasFrequency "every 2 hrs." ;
+                ctro:hasDrug ctro:Timolol ;
+                ctro:hasDeliveryMethod ctro:Injection .
 
-ctro:Out_1 rdf:type owl:NamedIndividual ,
-                    ctro:Outcome ;
-           rdfs:label "Outcome HBA"^^xsd:string .
+ctro:Out_1_1 rdf:type owl:NamedIndividual ,
+                      ctro:Outcome ;
+             rdfs:label "Outcome HBA"^^xsd:string .
 
-ctro:Res_1 rdf:type owl:NamedIndividual ,
-                    ctro:Result ;
-           rdfs:label "Result HBA Arm 1"^^xsd:string ;
-           ctro:hasStatisticalMeasure ctro:Stat_1 .
+ctro:Res_1_1 rdf:type owl:NamedIndividual ,
+                      ctro:Result ;
+             rdfs:label "Result HBA Arm 1"^^xsd:string ;
+             ctro:hasStatisticalMeasure ctro:Stat_1_1 .
 
-ctro:Res_2 rdf:type owl:NamedIndividual ,
-                    ctro:Result ;
-           rdfs:label "Result HBA Arm 2"^^xsd:string .
+ctro:Res_1_2 rdf:type owl:NamedIndividual ,
+                      ctro:Result ;
+             rdfs:label "Result HBA Arm 2"^^xsd:string .
 
-ctro:Stat_1 rdf:type owl:NamedIndividual ,
-                     ctro:StatisticalMeasure ;
-            rdfs:label "Stat 1"^^xsd:string .
+ctro:Stat_1_1 rdf:type owl:NamedIndividual ,
+                       ctro:StatisticalMeasure ;
+              rdfs:label "Stat 1"^^xsd:string .
 
-ctro:AE_1 rdf:type owl:NamedIndividual ,
-                   ctro:AdverseEffect ;
-          rdfs:label "AE 1"^^xsd:string .
+ctro:AE_1_1 rdf:type owl:NamedIndividual ,
+                     ctro:AdverseEffect ;
+            rdfs:label "AE 1"^^xsd:string .

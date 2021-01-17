@@ -92,6 +92,9 @@ class Ontology:
 
         db.commit()
 
+    def get_base(self):
+        return next(self.graph.objects(RATIO.Configuration, RATIO.hasBase))
+
 
 def get_ontology():
     """Get the Ontology.
@@ -139,7 +142,8 @@ class SubgraphKnowledge:
             e = stack.pop()
             if e.uri == entity_uri:
                 return e
-            stack += [e2 for f in e.fields for e2 in f.values if f.is_described]
+            if isinstance(e, Entity):
+                stack += [e2 for f in e.fields for e2 in f.values if f.is_object_property]
 
         raise KeyError('No entity with URI {} found.'.format(entity_uri))
 
@@ -156,13 +160,68 @@ class SubgraphKnowledge:
 
         raise KeyError('No field with URI {} found.'.format(property_uri))
 
-    def new_individual(self, class_uri, label=None):
-        # create the triples for a new individual, give it an unique uri
-        nr = 123  # todo nr of objects of this type in db + 1 ?
-        uri = URIRef(class_uri + '_' + str(nr))
+    def new_individual(self, class_uri, label, parent_uri, property_uri):
+        class_uri = URIRef(class_uri)
+        parent_uri = URIRef(parent_uri)
+        property_uri = URIRef(property_uri)
+
+        # find an unique uri
+        class_list = []
+        stack = [self.get_root()]
+        while stack:
+            e = stack.pop()
+            if e.class_uri == class_uri:
+                class_list.append(int(e.uri.split('_')[-1]))
+            if isinstance(e, Entity):
+                stack += [e2 for f in e.fields for e2 in f.values if f.is_object_property]
+
+        # todo I also have to check if there are deleted objects in memory that could be reanimated
+
+        nr = next(i for i in range(1, max(class_list)+2) if i not in class_list)
+
+        # construct a unique uri
+        uri = URIRef('{}{}_{}_{}'.format(
+            get_ontology().get_base(),
+            class_uri.n3(get_ontology().graph.namespace_manager).split(':')[-1],  # try to remove the prefix
+            self.id,
+            nr
+        ))
+
+        #if label is None:
+        #    class_label = get_ontology().graph.objects(class_uri, RDFS.label)
+        #    try:
+        #        class_label = next(class_label)
+        #    except StopIteration:
+        #        # default label
+        #        class_label = class_uri.n3(get_ontology().graph.namespace_manager).split(':')[-1]
+        #    label = '{} {}'.format(class_label, nr)
+
         entity = build_empty_entity(get_ontology().graph, class_uri, uri, label)
-        # todo add entity to the correct field
-        # todo save entity in the database
+
+        # add entity to the field
+        field = self.get_field(parent_uri, property_uri)
+        field.values.append(entity)
+
+        # new triples
+        triples = [
+            (parent_uri, property_uri, uri),
+            (uri, RDF.type, OWL.NamedIndividual),
+            (uri, RDF.type, class_uri),
+            (uri, RDFS.label, Literal(label))
+        ]
+
+        # add triples to graph
+        for t in triples:
+            self.graph.add(t)
+
+        # save add triples to database
+        db = get_db()
+        db.executemany(
+            'INSERT INTO knowledge (subgraph_id, subject, predicate, object) VALUES (?, ?, ?, ?)',
+            [(self.id, s.n3(), p.n3(), o.n3()) for s, p, o in triples]
+        )
+        db.commit()
+
         return entity
 
     def load_rdf_file(self, file, rdf_format='turtle'):
@@ -213,9 +272,10 @@ class Field:
 
 
 class Option:
-    def __init__(self, uri, label, defined_by):
+    def __init__(self, uri, label, class_uri, defined_by):
         self.uri = uri
         self.label = label
+        self.class_uri = class_uri
         self.defined_by = defined_by
 
 
@@ -224,11 +284,20 @@ def build_option(ontology, uri):
     try:
         label = next(label)
     except StopIteration:
-        label = uri.split('#')[-1]
+        label = uri.n3(get_ontology().graph.namespace_manager).split(':')[-1]
+
+    # todo do it with sparql https://rdflib.readthedocs.io/en/stable/intro_to_sparql.html
+    class_uri = None
+    for o in ontology.objects(uri, RDF.type):
+        if o in ontology.subjects(RDF.type, OWL.Class):  # A class defined in the ontology
+            class_uri = o
+            break
+    if class_uri is None:
+        raise KeyError('No type found for individual ' + str(uri))
 
     defined_by = ontology.objects(uri, RDFS.isDefinedBy)
 
-    return Option(uri, label, defined_by)
+    return Option(uri, label, class_uri, defined_by)
 
 
 def build_empty_field(ontology, property_uri, range_class_uri):
@@ -236,7 +305,7 @@ def build_empty_field(ontology, property_uri, range_class_uri):
     try:
         label = next(label)
     except StopIteration:
-        label = property_uri.split('#')[-1]
+        label = property_uri.n3(get_ontology().graph.namespace_manager).split(':')[-1]
 
     comment = ontology.objects(property_uri, RDFS.comment)
     try:
@@ -251,7 +320,7 @@ def build_empty_field(ontology, property_uri, range_class_uri):
         try:
             range_label = next(range_label)
         except StopIteration:
-            range_label = range_class_uri.split('#')[-1]
+            range_label = range_class_uri.n3(get_ontology().graph.namespace_manager).split(':')[-1]
 
     # if false, the field belongs to a owl:DatatypeProperty
     is_object_property = OWL.ObjectProperty in ontology.objects(property_uri, RDF.type)
@@ -281,7 +350,7 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
     try:
         label = next(label)
     except StopIteration:
-        label = property_uri.split('#')[-1]
+        label = property_uri.n3(get_ontology().graph.namespace_manager).split(':')[-1]
 
     comment = ontology.objects(property_uri, RDFS.comment)
     try:
@@ -296,7 +365,7 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
         try:
             range_label = next(range_label)
         except StopIteration:
-            range_label = range_class_uri.split('#')[-1]
+            range_label = range_class_uri.n3(get_ontology().graph.namespace_manager).split(':')[-1]
 
     # if false, the field belongs to a owl:DatatypeProperty
     is_object_property = OWL.ObjectProperty in ontology.objects(property_uri, RDF.type)
@@ -331,25 +400,21 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
 
 class Entity:
     """Represents a owl:NamedIndividual"""
-    def __init__(self, uri, label, comment, class_label, fields):
+    def __init__(self, uri, label, comment, class_uri, class_label, fields):
         self.uri = uri
         self.label = label
         self.comment = comment
+        self.class_uri = class_uri
         self.class_label = class_label
         self.fields = fields  # fields s.t. field.property_uri rdfs:domain self.uri
 
 
-def build_empty_entity(ontology, class_uri, uri, label=None):
+def build_empty_entity(ontology, class_uri, uri, label):
     class_label = ontology.objects(class_uri, RDFS.label)
     try:
         class_label = next(class_label)
     except StopIteration:
-        # default label is the substring after the last '/' or '#' of the URI
-        split = [s2 for s1 in class_uri.split("#") for s2 in s1.split("/")]
-        class_label = split[-1]
-
-    if label is None:
-        label = class_label + ' ' + str(nr)
+        class_label = class_uri.n3(get_ontology().graph.namespace_manager).split(':')[-1]
 
     comment = ontology.objects(class_uri, RDFS.comment)
     try:
@@ -364,7 +429,7 @@ def build_empty_entity(ontology, class_uri, uri, label=None):
     ]
     fields.sort(key=lambda field: field.order)
 
-    return Entity(uri, label, comment, class_label, fields)
+    return Entity(uri, label, comment, class_uri, class_label, fields)
 
 
 def build_entity_from_knowledge(ontology, knowledge, uri):
@@ -389,9 +454,7 @@ def build_entity_from_knowledge(ontology, knowledge, uri):
     try:
         class_label = next(class_label)
     except StopIteration:
-        # default label is the substring after the last '/' or '#' of the URI
-        split = [s2 for s1 in class_uri.split("#") for s2 in s1.split("/")]
-        class_label = split[-1]
+        class_label = class_uri.n3(get_ontology().graph.namespace_manager).split(':')[-1]
 
     fields = [
         build_field_from_knowledge(ontology, knowledge, uri, property_uri, range_uri)
@@ -400,4 +463,4 @@ def build_entity_from_knowledge(ontology, knowledge, uri):
     ]
     fields.sort(key=lambda field: field.order)
 
-    return Entity(uri, label, comment, class_label, fields)
+    return Entity(uri, label, comment, class_uri, class_label, fields)

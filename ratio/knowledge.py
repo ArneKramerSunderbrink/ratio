@@ -170,18 +170,7 @@ def add_entity():
     if field.is_functional and field.values:
         return jsonify(error='You cannot add more than one value to this field.')
 
-    entity = subgraph_knowledge.new_individual(field.range_uri, entity_label)
-
-    #db = get_db()
-    #db_cursor = db.cursor()
-
-    #db_cursor.execute(
-    #    'INSERT INTO knowledge (subgraph_id, author_id, subject, predicate, object) VALUES (?, ?, ?, ?, ?)',
-    #    (subgraph_id, user_id, rdf_subject, rdf_predicate, rdf_object)
-    #)
-    #knowledge_id = db_cursor.lastrowid
-
-    #db.commit()
+    entity = subgraph_knowledge.new_individual(field.range_uri, entity_label, parent_uri, property_uri)
 
     render_entity_div = get_template_attribute('tool/macros.html', 'entity_div')
     entity_div = render_entity_div(entity, False)

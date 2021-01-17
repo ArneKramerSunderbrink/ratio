@@ -109,7 +109,7 @@ $(function () {
       if (data.error) {
         alert(data.error);
       } else {
-        // todo add entity
+        // add entity
         var parent_entity = $('div.entity[data-entity-uri="' + data.parent_uri + '"]');
         var field = parent_entity.find('div.entity-field[data-property-uri="' + data.property_uri + '"]').first();
         var list = field.find('div.entity-field-value-list').first();
@@ -192,33 +192,5 @@ $(function() {
   for (i = 0; i < as.length; i++) {
     $(as[i]).bind('click', delete_knowledge);
   }
-});
-
-// add knowledge
-$(function() {
-  $('form#new-knowledge-form').submit(function() {
-    var data = $(this).serializeArray();
-    data.push({ name: "subgraph_id", value: window.SUBGRAPH_ID });
-
-    $.getJSON(window.SCRIPT_ROOT + '/_add_knowledge', data, function(data) {
-      if (data.error) {
-        alert(data.error); //todo add element to page to display error
-      } else {
-        // add row to table above the form
-        $('form#new-knowledge-form').parent().before(data.knowledge_row);
-
-        // todo mit on statt bind muss ich handler für neue elemente nicht mehr explizit hinzufügen
-        $('a#edit-' + data.knowledge_id).bind('click', display_edit_knowledge);
-        $('form#edit-knowledge-form-' + data.knowledge_id).submit(edit_knowledge);
-        $('a#delete-' + data.knowledge_id).bind('click', delete_knowledge);
-        $('a#cancel-edit-' + data.knowledge_id).bind('click', hide_edit_knowledge);
-
-        $('form#new-knowledge-form')[0].reset();
-      }
-    })
-    .fail(function() { alert('getJSON request failed!'); });
-
-    return false;
-  });
 });
 */
