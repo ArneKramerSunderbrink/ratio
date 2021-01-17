@@ -64,12 +64,14 @@ ctro:hasPopulation rdf:type owl:ObjectProperty ,
 
 ctro:hasEthnicity rdf:type owl:ObjectProperty ;
                   ratio:order "5"^^xsd:positiveInteger ;
+                  ratio:width "25"^^xsd:positiveInteger ;
                   rdfs:domain ctro:Population ;
                   rdfs:range ctro:Ethnicity ;
                   rdfs:label "Ethnicity" .
 
 ctro:hasCountry rdf:type owl:ObjectProperty ;
                 ratio:order "6"^^xsd:positiveInteger ;
+                ratio:width "25"^^xsd:positiveInteger ;
                 rdfs:domain ctro:Population ;
                 rdfs:range <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
                 rdfs:label "Country" .
@@ -101,6 +103,7 @@ ctro:hasIntervention rdf:type owl:ObjectProperty ;
 ctro:hasDrug rdf:type owl:ObjectProperty ,
                       owl:FunctionalProperty ;
              ratio:order "3"^^xsd:positiveInteger ;
+             ratio:width "25"^^xsd:positiveInteger ;
              rdfs:domain ctro:Intervention ;
              rdfs:range ctro:Drug ;
              rdfs:label "Drug" .
@@ -108,6 +111,7 @@ ctro:hasDrug rdf:type owl:ObjectProperty ,
 ctro:hasDoseUnit rdf:type owl:ObjectProperty ,
                           owl:FunctionalProperty ;
                  ratio:order "4"^^xsd:positiveInteger ;
+                 ratio:width "25"^^xsd:positiveInteger ;
                  rdfs:domain ctro:Intervention ;
                  rdfs:range ctro:BioAndMedicalUnit ;
                  rdfs:label "Dose unit" .
@@ -143,6 +147,7 @@ ctro:hasAggregationMethod rdf:type owl:ObjectProperty ,
 ctro:hasEndpointUnit rdf:type owl:ObjectProperty ,
                               owl:FunctionalProperty ;
                      ratio:order "4"^^xsd:positiveInteger ;
+                     ratio:width "25"^^xsd:positiveInteger ;
                      rdfs:domain ctro:Outcome ;
                      rdfs:range ctro:BioAndMedicalUnit ;
                      rdfs:label "Endpoint unit" .
@@ -200,6 +205,7 @@ ctro:hasOutcomeAE rdf:type owl:ObjectProperty ;          # todo mark that this r
 ctro:hasObjectiveDescription rdf:type owl:DatatypeProperty ,
                                       owl:FunctionalProperty ;
                              ratio:order "2"^^xsd:positiveInteger ;
+                             ratio:width "100"^^xsd:positiveInteger ;
                              rdfs:domain ctro:ClinicalTrial ;
                              rdfs:range xsd:string ;
                              rdfs:label "Objective" .
@@ -207,6 +213,7 @@ ctro:hasObjectiveDescription rdf:type owl:DatatypeProperty ,
 ctro:hasTitle rdf:type owl:DatatypeProperty ,
                        owl:FunctionalProperty ;
               ratio:order "1"^^xsd:positiveInteger ;
+              ratio:width "100"^^xsd:positiveInteger ;
               rdfs:domain ctro:Publication ;
               rdfs:range xsd:string ;
               rdfs:label "Title" .
@@ -227,6 +234,7 @@ ctro:hasAuthor rdf:type owl:DatatypeProperty ;
 ctro:hasPublicationYear rdf:type owl:DatatypeProperty ,
                                  owl:FunctionalProperty ;
                         ratio:order "4"^^xsd:positiveInteger ;
+                        ratio:width "25"^^xsd:positiveInteger ;
                         rdfs:domain ctro:Publication ;
                         rdfs:range xsd:positiveInteger ;
                         rdfs:label "Publication year" .
@@ -234,6 +242,7 @@ ctro:hasPublicationYear rdf:type owl:DatatypeProperty ,
 ctro:hasPMID rdf:type owl:DatatypeProperty ,
                       owl:FunctionalProperty ;
              ratio:order "4"^^xsd:positiveInteger ;
+             ratio:width "25"^^xsd:positiveInteger ;
              rdfs:domain ctro:Publication ;
              rdfs:range rdfs:Literal ;
              rdfs:label "PMID" .
@@ -241,6 +250,7 @@ ctro:hasPMID rdf:type owl:DatatypeProperty ,
 ctro:hasNumberPatientsCT rdf:type owl:DatatypeProperty ,
                                   owl:FunctionalProperty ;
                          ratio:order "2"^^xsd:positiveInteger ;
+                         ratio:width "25"^^xsd:positiveInteger ;
                          rdfs:domain ctro:CTDesign ;
                          rdfs:range xsd:positiveInteger ;
                          rdfs:label "Initial number of patients" .
@@ -248,6 +258,7 @@ ctro:hasNumberPatientsCT rdf:type owl:DatatypeProperty ,
 ctro:hasCTduration rdf:type owl:DatatypeProperty ,
                             owl:FunctionalProperty ;
                    ratio:order "3"^^xsd:positiveInteger ;
+                   ratio:width "25"^^xsd:positiveInteger ;
                    rdfs:domain ctro:CTDesign ;
                    rdfs:range xsd:positiveInteger ;
                    rdfs:comment "Duration of the trial given in WEEKS" ;
@@ -256,6 +267,7 @@ ctro:hasCTduration rdf:type owl:DatatypeProperty ,
 ctro:hasGender rdf:type owl:DatatypeProperty ,
                         owl:FunctionalProperty ;
                ratio:order "1"^^xsd:positiveInteger ;
+               ratio:width "25"^^xsd:positiveInteger ;
                rdfs:domain ctro:Population ;
                rdfs:range [ rdf:type rdfs:Datatype ;
                             owl:oneOf [ rdf:type rdf:List ;
@@ -274,6 +286,7 @@ ctro:hasGender rdf:type owl:DatatypeProperty ,
 ctro:hasMinAge rdf:type owl:DatatypeProperty ,
                         owl:FunctionalProperty ;
                ratio:order "2"^^xsd:positiveInteger ;
+               ratio:width "25"^^xsd:positiveInteger ;
                rdfs:domain ctro:Population ;
                rdfs:range xsd:positiveInteger ;
                rdfs:label "Min. age" .
@@ -281,24 +294,27 @@ ctro:hasMinAge rdf:type owl:DatatypeProperty ,
 ctro:hasMaxAge rdf:type owl:DatatypeProperty ,
                         owl:FunctionalProperty ;
                ratio:order "3"^^xsd:positiveInteger ;
+               ratio:width "25"^^xsd:positiveInteger ;
                rdfs:domain ctro:Population ;
                rdfs:range xsd:positiveInteger ;
                rdfs:label "Max. age" .
 
 ctro:hasPreconditionDescription rdf:type owl:DatatypeProperty ;
                                 ratio:order "4"^^xsd:positiveInteger ;
+                                ratio:width "100"^^xsd:positiveInteger ;
                                 rdfs:domain ctro:Population ;
                                 rdfs:range xsd:string ;
                                 rdfs:label "Precondition" .
 
 ctro:hasAuthorAffilation rdf:type owl:DatatypeProperty ;
-                         ratio:order "3"^^xsd:positiveInteger ;
+                         ratio:order "2"^^xsd:positiveInteger ;
                          rdfs:domain ctro:EvidenceQuality ;
                          rdfs:range xsd:string ;
                          rdfs:label "Author affilation" .
 
 ctro:hasConflictInterest rdf:type owl:DatatypeProperty ;
-                         ratio:order "2"^^xsd:positiveInteger ;
+                         ratio:order "3"^^xsd:positiveInteger ;
+                         ratio:width "100"^^xsd:positiveInteger ;
                          rdfs:domain ctro:EvidenceQuality ;
                          rdfs:range xsd:string ;
                          rdfs:label "Conflict of interest" .
@@ -312,6 +328,7 @@ ctro:hasSponsor rdf:type owl:DatatypeProperty ;
 ctro:hasNumberPatientsArm rdf:type owl:DatatypeProperty ,
                                    owl:FunctionalProperty ;
                           ratio:order "1"^^xsd:positiveInteger ;
+                          ratio:width "25"^^xsd:positiveInteger ;
                           rdfs:domain ctro:Arm ;
                           rdfs:range xsd:positiveInteger ;
                           rdfs:label "Number of patients in arm" .
@@ -325,6 +342,7 @@ ctro:hasDuration rdf:type owl:DatatypeProperty ;
 ctro:hasFrequency rdf:type owl:DatatypeProperty ,
                            owl:FunctionalProperty ;
                   ratio:order "2"^^xsd:positiveInteger ;
+                  ratio:width "25"^^xsd:positiveInteger ;
                   rdfs:domain ctro:Intervention ;
                   rdfs:range [ rdf:type rdfs:Datatype ;
                                owl:oneOf [ rdf:type rdf:List ;
@@ -358,6 +376,7 @@ ctro:hasFrequency rdf:type owl:DatatypeProperty ,
 ctro:hasBaselineValue rdf:type owl:DatatypeProperty ,
                                owl:FunctionalProperty ;
                       ratio:order "3"^^xsd:positiveInteger ;
+                      ratio:width "25"^^xsd:positiveInteger ;
                       rdfs:domain ctro:Outcome ;
                       rdfs:range xsd:float ;
                       rdfs:label "Baseline value" .
@@ -365,6 +384,7 @@ ctro:hasBaselineValue rdf:type owl:DatatypeProperty ,
 ctro:hasFinalNumberPatients rdf:type owl:DatatypeProperty ,
                                      owl:FunctionalProperty ;
                             ratio:order "3"^^xsd:positiveInteger ;
+                            ratio:width "25"^^xsd:positiveInteger ;
                             rdfs:domain ctro:Result ;
                             rdfs:range xsd:positiveInteger ;
                             rdfs:label "Final number of patients" .
@@ -372,6 +392,7 @@ ctro:hasFinalNumberPatients rdf:type owl:DatatypeProperty ,
 ctro:hasTimePoints rdf:type owl:DatatypeProperty ;
                    rdfs:domain ctro:Result ;
                    ratio:order "4"^^xsd:positiveInteger ;
+                   ratio:width "25"^^xsd:positiveInteger ;
                    rdfs:range xsd:string ;
                    rdfs:comment "Point of time when an outcome was measured. E.g. study end, after two weeks, etc." ;
                    rdfs:label "Time point" .
@@ -403,6 +424,7 @@ ctro:hasDesiredEffectDir rdf:type owl:DatatypeProperty ,
 ctro:hasObservedResult rdf:type owl:DatatypeProperty ,
                                 owl:FunctionalProperty ;
                        ratio:order "7"^^xsd:positiveInteger ;
+                       ratio:width "100"^^xsd:positiveInteger ;
                        rdfs:domain ctro:Result ;
                        rdfs:range xsd:string ;
                        rdfs:label "Observed results" .
@@ -417,6 +439,7 @@ ctro:hasStatisticalTestName rdf:type owl:DatatypeProperty ,
 ctro:hasStatisticalTestValue rdf:type owl:DatatypeProperty ,
                                       owl:FunctionalProperty ;
                              ratio:order "2"^^xsd:positiveInteger ;
+                             ratio:width "25"^^xsd:positiveInteger ;
                              rdfs:domain ctro:StatisticalMeasure ;
                              rdfs:range xsd:float ;
                              rdfs:label "Statistical test value" .
@@ -424,6 +447,7 @@ ctro:hasStatisticalTestValue rdf:type owl:DatatypeProperty ,
 ctro:hasPValue rdf:type owl:DatatypeProperty ,
                         owl:FunctionalProperty ;
                ratio:order "3"^^xsd:positiveInteger ;
+               ratio:width "25"^^xsd:positiveInteger ;
                rdfs:domain ctro:StatisticalMeasure ;
                rdfs:range xsd:string ;
                rdfs:label "P-value" .
@@ -431,6 +455,7 @@ ctro:hasPValue rdf:type owl:DatatypeProperty ,
 ctro:hasStandardDev rdf:type owl:DatatypeProperty ,
                              owl:FunctionalProperty ;
                     ratio:order "4"^^xsd:positiveInteger ;
+                    ratio:width "25"^^xsd:positiveInteger ;
                     rdfs:domain ctro:StatisticalMeasure ;
                     rdfs:range xsd:float ;
                     rdfs:label "Standard Deviation" .
@@ -445,6 +470,7 @@ ctro:hasConfidenceInterval rdf:type owl:DatatypeProperty,
 ctro:hasNumberAffected rdf:type owl:DatatypeProperty ,
                                 owl:FunctionalProperty ;
                        ratio:order "3"^^xsd:positiveInteger ;
+                       ratio:width "25"^^xsd:positiveInteger ;
                        rdfs:domain ctro:AdverseEffect ;
                        rdfs:range xsd:integer ;
                        rdfs:label "Number of patients affected" .
@@ -452,6 +478,7 @@ ctro:hasNumberAffected rdf:type owl:DatatypeProperty ,
 ctro:hasObservedResultAE rdf:type owl:DatatypeProperty ,
                                   owl:FunctionalProperty ;
                          ratio:order "4"^^xsd:positiveInteger ;
+                         ratio:width "100"^^xsd:positiveInteger ;
                          rdfs:domain ctro:AdverseEffect ;
                          rdfs:range xsd:string ;
                          rdfs:label "Observed results" .
@@ -467,8 +494,7 @@ ctro:hasConclusionComment rdf:type owl:DatatypeProperty ,
 #    Classes
 #################################################################
 
-ctro:ClinicalTrial rdf:type owl:Class ,
-                            ratio:SubgraphRoot ;
+ctro:ClinicalTrial rdf:type owl:Class ;
                    owl:equivalentClass [ rdf:type owl:Restriction ;
                                          owl:onProperty ctro:analysesHealthCondition ;
                                          owl:minQualifiedCardinality "1"^^xsd:nonNegativeInteger ;
