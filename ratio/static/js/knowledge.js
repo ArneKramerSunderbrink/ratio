@@ -3,8 +3,8 @@
  * todo
  */
 
-// Add value
 $(function () {
+  // Add value
   $('div#scroll-container').on('click', 'div.field > div > a', function() {
     var property_uri = $(this).closest('div.field').attr('data-property-uri');
     var entity_uri = $(this).closest('div.entity').attr('data-entity-uri');
@@ -33,10 +33,31 @@ $(function () {
     return false;
 
   });
-});
 
-// Filter
-$(function() {
+  // Delete Value
+  $('div#scroll-container').on('click', '.delete-value-button', function() {
+    var form = $(this).closest('form');
+    form.css('display', 'none');
+    // TODO communicate deletion to server
+    // Display message
+    $('div#knowledge-delete-msg > span').text('Value has been deleted.');
+    $('div#knowledge-delete-msg > a:first').on('click', function() {
+      form.css('display', '');
+      // TODO communicate undo to server
+      $('div#knowledge-delete-msg').css('display', 'none');
+      return false;
+    });
+    $('div#knowledge-delete-msg').css('display', 'flex');
+    return false;
+  });
+
+  $('div#knowledge-delete-msg > a:last').on('click', function() {
+    $('div#knowledge-delete-msg').css('display', 'none');
+    return false;
+  });
+
+  // Special functionality for Options-Fields
+  // Filter
   $('div#scroll-container').on('keyup', 'input.option-input', function() {
     var filter_string = this.value.toUpperCase();
     $(this).next('.options').find('.option').each(function() {
@@ -52,19 +73,16 @@ $(function() {
       $(this).css('display', '');
     });
   });
-});
 
-// Select option
-$(function() {
+  // Select option
   $('div#scroll-container').on('click', '.option', function() {
     var input = $(this).parent().parent('.options').prev('.option-input')
     input.val($(this).text());
     input.get(0).setCustomValidity('');
   });
-});
 
-// Mark option invalid
-$(function() {
+  // Mark option invalid
+
   // I found no way to discriminate between focus switching within the form (to the custom option input)
   // or out of the form and only then check validity
   $('div#scroll-container').on('focusout', 'form.option-form', function() {
@@ -72,6 +90,7 @@ $(function() {
     var input = $(this).find('.option-input')[0];
     if (input.value == '' || input.value && $(this).find('.option').text().includes(input.value)) {
       input.setCustomValidity('');
+      // TODO communicate choice to server
     } else {
       input.setCustomValidity('Choose an option from the list.');
     }
@@ -80,18 +99,6 @@ $(function() {
 
 
 /*
-$(function() {
-  var as, i;
-  as = $('a[id^="edit-"]'); // todo more efficient with $(subgraph).on('click', 'a[id^="edit-"]', display_edit_knowledge)
-  for (i = 0; i < as.length; i++) {
-    $(as[i]).bind('click', display_edit_knowledge);
-  }
-  as = $('a[id^="cancel-edit-"]');
-  for (i = 0; i < as.length; i++) {
-    $(as[i]).bind('click', hide_edit_knowledge);
-  }
-});
-
 // edit knowledge
 function edit_knowledge() {
   var data = $(this).serializeArray();

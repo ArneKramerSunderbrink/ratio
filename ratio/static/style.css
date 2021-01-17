@@ -283,3 +283,15 @@ header {
 .options a {
   display: inline-block;
 }
+
+/* Message */
+#knowledge-delete-msg {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  width: 80%;
+  left: 10%;
+  right: 10%;
+  padding: 0.5em 1em;
+  align-items: center;
+}

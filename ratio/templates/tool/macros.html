@@ -27,7 +27,7 @@
       <a href="#" class="w3-button big-button flex-fix w3-right delete-subgraph-button" title="Delete {{ frontend_config['subgraph_term'] }}">{#
         #}<i class="fas fa-minus fa-lg"></i>
       </a>
-      <a href="#" class="w3-button big-button flex-fix w3-right flip-frontbutton" data-flipid="subgraph-list-{{ subgraph_id }}" title="Cancel">{#
+      <a href="#" class="w3-button big-button flex-fix flip-frontbutton" data-flipid="subgraph-list-{{ subgraph_id }}" title="Cancel">{#
         #}<i class="fas fa-times fa-lg"></i>
       </a>
     </form>
@@ -74,9 +74,15 @@
   <div class="flex-flex">
     <input class="w3-input option-input" type="text" name="label" value="{{ value.label or value }}" required>
     <div class="options"><div class="color1">
+      {% if field.is_object_property %}
       {% for option in field.options %}
-      <div class="option">{{ option.label or option }}</div>
+      <div class="option" data-option-uri="{{ option.uri }}">{{ option.label }}</div>
       {% endfor %}
+      {% else %}
+      {% for option in field.options %}
+      <div class="option">{{ option.label }}</div>
+      {% endfor %}
+      {% endif %}
       <div class="flex-row">
         <input class="w3-input flex-flex" type="text" name="value" placeholder="Add option...">
         <a href="#" class="w3-button tiny-button flex-fix" title="Add {{ field.range_label }} to the list of options.">{#
@@ -86,7 +92,7 @@
     </div></div>
   </div>
   {% if not field.is_functional %}
-  <a href="#" class="w3-button tiny-button flex-fix" title="Delete {{ field.range_label }}">{#
+  <a href="#" class="w3-button tiny-button flex-fix delete-value-button" title="Delete value">{#
     #}<i class="fas fa-minus"></i>
   </a>
   {% endif %}
@@ -98,7 +104,7 @@
 <form class="flex-row">
   <div class="w3-input literal-input flex-flex" contentEditable>{{ value }}</div>
   {% if not field.is_functional %}
-  <a href="#" class="w3-button tiny-button flex-fix" title="Delete {{ field.range_label }}">{#
+  <a href="#" class="w3-button tiny-button flex-fix delete-value-button" title="Delete value">{#
     #}<i class="fas fa-minus"></i>
   </a>
   {% endif %}
