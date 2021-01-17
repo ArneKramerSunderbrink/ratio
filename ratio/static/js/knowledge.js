@@ -95,6 +95,42 @@ $(function () {
       input.setCustomValidity('Choose an option from the list.');
     }
   });
+
+  // Add entity
+  $('div#scroll-container').on('submit', 'form.add-entity-form', function() {
+    var property_uri = $(this).closest('div.entity-field').attr('data-property-uri');
+    var entity_uri = $(this).closest('div.entity').attr('data-entity-uri');
+    var data = $(this).serializeArray();
+    data.push({ name: "subgraph_id", value: window.SUBGRAPH_ID });
+    data.push({ name: "property_uri", value: property_uri });
+    data.push({ name: "entity_uri", value: entity_uri });
+
+    $.getJSON(window.SCRIPT_ROOT + '/_add_entity', data, function(data) {
+      if (data.error) {
+        alert(data.error);
+      } else {
+        // todo add entity
+        var parent_entity = $('div.entity[data-entity-uri="' + data.parent_uri + '"]');
+        var field = parent_entity.find('div.entity-field[data-property-uri="' + data.property_uri + '"]').first();
+        var list = field.find('div.entity-field-value-list').first();
+        list.append(data.entity_div);
+        // expand entity body
+        flip_flip(list.children().last().find('.entity-title > a:first').attr('data-flipid'));
+        // reset add entity input
+        field.find('form.add-entity-form').first()[0].reset();
+        flip_front(field.find('div.add-entity-div > div.flip-flipside').first().attr('data-flipid'));
+        if (data.remove_plus) {
+          field.find('add-entity-div').css('display', 'none');
+        }
+      }
+    })
+    .fail(function() { alert('getJSON request failed!'); });
+
+    return false;
+  });
+
+  // Delete entity
+
 });
 
 

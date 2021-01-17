@@ -156,8 +156,14 @@ class SubgraphKnowledge:
 
         raise KeyError('No field with URI {} found.'.format(property_uri))
 
-    def new_individual(self, class_uri):
-        pass  # create the triples for a new individual, give it an unique uri
+    def new_individual(self, class_uri, label=None):
+        # create the triples for a new individual, give it an unique uri
+        nr = 123  # todo nr of objects of this type in db + 1 ?
+        uri = URIRef(class_uri + '_' + str(nr))
+        entity = build_empty_entity(get_ontology().graph, class_uri, uri, label)
+        # todo add entity to the correct field
+        # todo save entity in the database
+        return entity
 
     def load_rdf_file(self, file, rdf_format='turtle'):
         self.graph = Graph()
@@ -271,7 +277,6 @@ def build_empty_field(ontology, property_uri, range_class_uri):
 
 
 def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri, range_class_uri):
-    # currently properties don't have labels in the ontology but would be nice...
     label = ontology.objects(property_uri, RDFS.label)
     try:
         label = next(label)
@@ -334,11 +339,7 @@ class Entity:
         self.fields = fields  # fields s.t. field.property_uri rdfs:domain self.uri
 
 
-def build_empty_entity(ontology, class_uri):
-    nr = 123  # todo nr of objects of this type in db + 1
-    uri = URIRef(class_uri + '_' + str(nr))
-
-    # currently classes don't have labels in the ontology but would be nice
+def build_empty_entity(ontology, class_uri, uri, label=None):
     class_label = ontology.objects(class_uri, RDFS.label)
     try:
         class_label = next(class_label)
@@ -346,7 +347,9 @@ def build_empty_entity(ontology, class_uri):
         # default label is the substring after the last '/' or '#' of the URI
         split = [s2 for s1 in class_uri.split("#") for s2 in s1.split("/")]
         class_label = split[-1]
-    label = class_label + ' ' + str(nr)  # just a default, can be changed by user
+
+    if label is None:
+        label = class_label + ' ' + str(nr)
 
     comment = ontology.objects(class_uri, RDFS.comment)
     try:

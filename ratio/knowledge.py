@@ -120,7 +120,7 @@ def add_value():
     if field.is_functional and field.values:
         return jsonify(error='You cannot add more than one value to this field.')
 
-    # todo add knowledge to database
+    # todo add knowledge to database, should be done in method of knowledge class
     #db = get_db()
     #db_cursor = db.cursor()
 
@@ -140,4 +140,52 @@ def add_value():
 
     return jsonify(value_div=value_div,
                    property_uri=property_uri, entity_uri=entity_uri,
+                   remove_plus=field.is_functional)
+
+
+@bp.route('/_add_entity')
+@login_required
+def add_entity():
+    user_id = g.user['id']
+    subgraph_id = request.args.get('subgraph_id', 0, type=int)
+    property_uri = request.args.get('property_uri', '', type=str)
+    parent_uri = request.args.get('entity_uri', '', type=str)
+    entity_label = request.args.get('label', '', type=str)
+
+    if not subgraph_id:
+        return jsonify(error='Subgraph id cannot be empty.')
+    if not property_uri or property_uri.isspace():
+        return jsonify(error='Property URI cannot be empty.')
+    if not parent_uri or parent_uri.isspace():
+        return jsonify(error='Parent URI cannot be empty.')
+    if not entity_label or entity_label.isspace():
+        return jsonify(error='Entity label cannot be empty.')
+
+    if not subgraph_access(user_id, subgraph_id):
+        return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
+
+    subgraph_knowledge = get_subgraph_knowledge(subgraph_id)
+    field = subgraph_knowledge.get_field(parent_uri, property_uri)
+
+    if field.is_functional and field.values:
+        return jsonify(error='You cannot add more than one value to this field.')
+
+    entity = subgraph_knowledge.new_individual(field.range_uri, entity_label)
+
+    #db = get_db()
+    #db_cursor = db.cursor()
+
+    #db_cursor.execute(
+    #    'INSERT INTO knowledge (subgraph_id, author_id, subject, predicate, object) VALUES (?, ?, ?, ?, ?)',
+    #    (subgraph_id, user_id, rdf_subject, rdf_predicate, rdf_object)
+    #)
+    #knowledge_id = db_cursor.lastrowid
+
+    #db.commit()
+
+    render_entity_div = get_template_attribute('tool/macros.html', 'entity_div')
+    entity_div = render_entity_div(entity, False)
+
+    return jsonify(entity_div=entity_div,
+                   property_uri=property_uri, parent_uri=parent_uri,
                    remove_plus=field.is_functional)
