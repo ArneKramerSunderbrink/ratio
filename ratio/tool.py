@@ -6,8 +6,10 @@ from flask import g
 from flask import jsonify
 from flask import render_template
 from flask import request
+from flask import Response
 from flask import redirect
 from flask import url_for
+from time import strftime
 
 from ratio.auth import login_required, subgraph_access
 from ratio.db import get_db
@@ -285,3 +287,28 @@ def add_subgraph():
 
     db.commit()
     return jsonify(redirect=url_for('tool.index', subgraph_id=subgraph_id))
+
+
+@bp.route('/<int:subgraph_id>/_download_rdf')
+@login_required
+def download_rdf(subgraph_id):
+    user_id = g.user['id']
+
+    if not subgraph_id:
+        return jsonify(error='{} id cannot be empty.'.format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
+
+    if not subgraph_access(user_id, subgraph_id):
+        return jsonify(error=MSG_SUBGRAPH_ACCESS.format(current_app.config['FRONTEND_CONFIG']['Subgraph_term'],
+                                                        subgraph_id, user_id))
+
+    filename = "{}_{}_{}.n-triples".format(
+        current_app.config['FRONTEND_CONFIG']['Subgraph_term'],
+        subgraph_id,
+        strftime('%Y-%m-%d-%H-%M-%S')
+    )
+    content = get_subgraph_knowledge(subgraph_id).graph.serialize(format='turtle')
+
+    return Response(
+        content,
+        mimetype="text/plain",
+        headers={"Content-disposition": "attachment; filename="+filename})

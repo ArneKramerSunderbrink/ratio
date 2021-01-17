@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS subgraph;
 DROP TABLE IF EXISTS access;
 DROP TABLE IF EXISTS knowledge;
 DROP TABLE IF EXISTS ontology;
+DROP TABLE IF EXISTS namespace;
 
 CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -42,4 +43,9 @@ CREATE TABLE ontology (
   subject TEXT NOT NULL,
   predicate TEXT NOT NULL,
   object TEXT NOT NULL
-)
+);
+
+CREATE TABLE namespace (
+  prefix TEXT,
+  uri TEXT NOT NULL
+);

@@ -68,9 +68,12 @@ class Ontology:
         self.graph = Graph()
 
         db = get_db()
-        rows = db.execute('SELECT * FROM ontology').fetchall()
-        for row in rows:
+        for row in db.execute('SELECT * FROM ontology').fetchall():
             self.graph.add(row_to_rdf(row))
+
+        for row in db.execute('SELECT * FROM namespace').fetchall():
+            self.graph.namespace_manager.bind(row['prefix'], parse_n3_term(row['uri']))
+
 
     def load_rdf_file(self, file, rdf_format='turtle'):
         self.graph = Graph()
@@ -82,6 +85,10 @@ class Ontology:
         for subject, predicate, object_ in self.graph[::]:
             db.execute('INSERT INTO ontology (subject, predicate, object) VALUES (?, ?, ?)',
                        (subject.n3(), predicate.n3(), object_.n3()))
+
+        for prefix, uri in self.graph.namespaces():
+            db.execute('INSERT INTO namespace (prefix, uri) VALUES (?, ?)',
+                       (prefix, uri.n3()))
 
         db.commit()
 
@@ -111,6 +118,9 @@ class SubgraphKnowledge:
         ).fetchall()
         for row in rows:
             self.graph.add(row_to_rdf(row))
+
+        for row in db.execute('SELECT * FROM namespace').fetchall():
+            self.graph.namespace_manager.bind(row['prefix'], parse_n3_term(row['uri']))
 
         self.root_uri = URIRef(db.execute('SELECT root FROM subgraph WHERE id = ?', (subgraph_id,)).fetchone()['root'])
         self.root = None
