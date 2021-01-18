@@ -206,7 +206,7 @@ class SubgraphKnowledge:
             (parent_uri, property_uri, uri),
             (uri, RDF.type, OWL.NamedIndividual),
             (uri, RDF.type, class_uri),
-            (uri, RDFS.label, Literal(label))
+            (uri, RDFS.label, Literal(label, datatype=XSD.string))
         ]
 
         # add triples to graph
