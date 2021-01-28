@@ -579,6 +579,28 @@ ctro:hasObservedResult rdf:type owl:DatatypeProperty ,
                        rdfs:label "Observed results" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasOutcomeDescription
+ctro:hasOutcomeDescription rdf:type owl:DatatypeProperty ,
+                                    owl:FunctionalProperty ;
+                           rdfs:domain ctro:Outcome ;
+                           rdfs:range xsd:string .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasOutcomeType
+ctro:hasOutcomeType rdf:type owl:DatatypeProperty ,
+                             owl:FunctionalProperty ;
+                    rdfs:domain ctro:Outcome ;
+                    rdfs:range [ rdf:type rdfs:Datatype ;
+                                 owl:oneOf [ rdf:type rdf:List ;
+                                             rdf:first "Primary" ;
+                                             rdf:rest [ rdf:type rdf:List ;
+                                                        rdf:first "Secondary" ;
+                                                        rdf:rest rdf:nil
+                                                      ]
+                                           ]
+                               ] .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasPMID
 ctro:hasPMID rdf:type owl:DatatypeProperty ,
                       owl:FunctionalProperty ;
@@ -719,7 +741,8 @@ ctro:hasdiseaseName rdf:type owl:DatatypeProperty ;
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#isControl
-ctro:isControl rdf:type owl:DatatypeProperty ;
+ctro:isControl rdf:type owl:DatatypeProperty ,
+                        owl:FunctionalProperty ;
                rdfs:domain ctro:Medication ;
                rdfs:range xsd:boolean ;
                rdfs:label "Control or placebo" .
@@ -860,6 +883,16 @@ ctro:EndPoint rdf:type owl:Class ;
               rdfs:label "Endpoint" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#EndpointDesc_Glaucoma
+ctro:EndpointDesc_Glaucoma rdf:type owl:Class ;
+                           rdfs:subClassOf ctro:EndpointDescription .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#EndpointDesc_T2DM
+ctro:EndpointDesc_T2DM rdf:type owl:Class ;
+                       rdfs:subClassOf ctro:EndpointDescription .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#EndpointDescription
 ctro:EndpointDescription rdf:type owl:Class ;
                          rdfs:label "Endpoint name" .
@@ -867,7 +900,7 @@ ctro:EndpointDescription rdf:type owl:Class ;
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Ethnicity
 ctro:Ethnicity rdf:type owl:Class ;
-               rdfs:label "Ethnicity" .
+               rdfs:label "Ethnic Group" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#EvidenceQuality
@@ -878,6 +911,11 @@ ctro:EvidenceQuality rdf:type owl:Class ;
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Intervention
 ctro:Intervention rdf:type owl:Class ;
                   rdfs:label "Intervention" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Mass
+ctro:Mass rdf:type owl:Class ;
+          rdfs:subClassOf ctro:BioAndMedicalUnit .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#MeasurementDevice
@@ -956,11 +994,6 @@ ctro:StatisticalTest rdf:type owl:Class ;
                      rdfs:label "Statistical test" .
 
 
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Weight
-ctro:Weight rdf:type owl:Class ;
-            rdfs:subClassOf ctro:BioAndMedicalUnit .
-
-
 ###  http://www.w3.org/2002/07/owl#Thing
 owl:Thing rdf:type owl:Class .
 
@@ -976,6 +1009,13 @@ ctro:Argentina rdf:type owl:NamedIndividual ,
                rdfs:label "Argentina" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Asian
+ctro:Asian rdf:type owl:NamedIndividual ,
+                    ctro:Ethnicity ;
+           rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/315280000> ;
+           rdfs:label "Asian" .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Australia
 ctro:Australia rdf:type owl:NamedIndividual ,
                         <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
@@ -988,6 +1028,13 @@ ctro:Austria rdf:type owl:NamedIndividual ,
                       <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
              rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223635007> ;
              rdfs:label "Austria" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Black
+ctro:Black rdf:type owl:NamedIndividual ,
+                    ctro:Ethnicity ;
+           rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/315240009> ;
+           rdfs:label "Black" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Blind
@@ -1028,6 +1075,12 @@ ctro:Croatia rdf:type owl:NamedIndividual ,
                       <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
              rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223662004> ;
              rdfs:label "Croatia" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Diurnal_IOP
+ctro:Diurnal_IOP rdf:type owl:NamedIndividual ,
+                          ctro:EndpointDesc_Glaucoma ;
+                 rdfs:label "Diurnal IOP" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Double-blind
@@ -1093,16 +1146,29 @@ ctro:Greece rdf:type owl:NamedIndividual ,
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#HbA1c
 ctro:HbA1c rdf:type owl:NamedIndividual ,
-                    ctro:EndpointDescription ;
-           rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/408591000> ;
-           rdfs:label "HbA1c reduction" .
+                    ctro:EndpointDesc_T2DM ;
+           rdfs:label "HbA1c" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#HbA1c_target
+ctro:HbA1c_target rdf:type owl:NamedIndividual ,
+                           ctro:EndpointDesc_T2DM ;
+                  rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/408591000> ;
+                  rdfs:label "HbA1c Target" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#IOP
 ctro:IOP rdf:type owl:NamedIndividual ,
-                  ctro:EndpointDescription ;
-         rdfs:label <http://purl.bioontology.org/ontology/SNOMEDCT/41633001> ,
-                    "IOP reduction" .
+                  ctro:EndpointDesc_Glaucoma ;
+         rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/41633001> ;
+         rdfs:label "IOP (Intraocular pressure)" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#IOP_target
+ctro:IOP_target rdf:type owl:NamedIndividual ,
+                         ctro:EndpointDesc_Glaucoma ;
+                rdfs:isDefinedBy <> ;
+                rdfs:label "IOP Target" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#India
@@ -1117,6 +1183,13 @@ ctro:Injection rdf:type owl:NamedIndividual ,
                         ctro:DeliveryMethod ;
                rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/740685003> ;
                rdfs:label "Injection" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#IntentionToTreat
+ctro:IntentionToTreat rdf:type owl:NamedIndividual ,
+                               ctro:CTAnalysisApproach ;
+                      rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MESH/D057194> ;
+                      rdfs:label "Intention to treat" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Iran
@@ -1154,6 +1227,13 @@ ctro:Japan rdf:type owl:NamedIndividual ,
            rdfs:label "Japan" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Kg
+ctro:Kg rdf:type owl:NamedIndividual ,
+                 ctro:Mass ;
+        rdfs:isDefinedBy <http://purl.bioontology.org/ontology/RCD/X800I> ;
+        rdfs:label "Kg." .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Latanoprost
 ctro:Latanoprost rdf:type owl:NamedIndividual ,
                           ctro:Drug ;
@@ -1166,6 +1246,13 @@ ctro:Mexico rdf:type owl:NamedIndividual ,
                      <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
             rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223687006> ;
             rdfs:label "Mexico" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Millimoles_per_litre
+ctro:Millimoles_per_litre rdf:type owl:NamedIndividual ,
+                                   ctro:Concentration ;
+                          rdfs:isDefinedBy <http://purl.bioontology.org/ontology/RCD/X802P> ;
+                          rdfs:label "millimole/litre" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Netherlands
@@ -1182,6 +1269,18 @@ ctro:Oral rdf:type owl:NamedIndividual ,
           rdfs:label "Oral" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Peak_IOP
+ctro:Peak_IOP rdf:type owl:NamedIndividual ,
+                       ctro:EndpointDesc_Glaucoma ;
+              rdfs:label "Peak IOP" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#PerProtocol
+ctro:PerProtocol rdf:type owl:NamedIndividual ,
+                          ctro:CTAnalysisApproach ;
+                 rdfs:label "Per Protocol" .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Peru
 ctro:Peru rdf:type owl:NamedIndividual ,
                    <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
@@ -1194,6 +1293,12 @@ ctro:Philippines rdf:type owl:NamedIndividual ,
                           <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
                  rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223592003> ;
                  rdfs:label "Japan" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Placebo
+ctro:Placebo rdf:type owl:NamedIndividual ,
+                      ctro:Drug ;
+             rdfs:label "Placebo" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Poland
@@ -1264,6 +1369,12 @@ ctro:Timolol rdf:type owl:NamedIndividual ,
              rdfs:label "Timolol" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Trough_IOP
+ctro:Trough_IOP rdf:type owl:NamedIndividual ,
+                         ctro:EndpointDesc_Glaucoma ;
+                rdfs:label "Trough IOP" .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Turkey
 ctro:Turkey rdf:type owl:NamedIndividual ,
                      <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
@@ -1290,6 +1401,20 @@ ctro:Venezuela rdf:type owl:NamedIndividual ,
                         <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
                rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223724006> ;
                rdfs:label "Venezuela" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#White
+ctro:White rdf:type owl:NamedIndividual ,
+                    ctro:Ethnicity ;
+           rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/185984009> ,
+                            "White" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#mmHg
+ctro:mmHg rdf:type owl:NamedIndividual ,
+                   ctro:Pressure ;
+          rdfs:isDefinedBy <http://purl.bioontology.org/ontology/RCD/X805> ;
+          rdfs:label "mmHg" .
 
 
 ###  Generated by the OWL API (version 4.2.8.20170104-2310) https://github.com/owlcs/owlapi

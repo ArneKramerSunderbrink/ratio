@@ -51,7 +51,7 @@ ctro:analysesHealthCondition rdf:type owl:ObjectProperty ;
                              ratio:order "1"^^xsd:positiveInteger ;
                              rdfs:domain ctro:DesignGroup ;
                              rdfs:range ctro:DisorderOrSyndrome ;
-                             rdfs:label "Disease" .
+                             rdfs:label "Condition" .
 
 ctro:hasAnalysisApproach rdf:type owl:ObjectProperty ,
                                   owl:FunctionalProperty ;
@@ -91,7 +91,7 @@ ctro:hasQualityIndicator rdf:type owl:ObjectProperty ,
                          rdfs:subPropertyOf owl:topObjectProperty ;
                          rdfs:domain ctro:ClinicalTrial ;
                          rdfs:range ctro:EvidenceQuality ;
-                         rdfs:label "Quality / bias indicator" .
+                         rdfs:label "Potential Conflicts of Interest" .
 
 ctro:hasArm rdf:type owl:ObjectProperty ;
             ratio:described "true"^^xsd:boolean ;
@@ -117,15 +117,15 @@ ctro:hasDrug rdf:type owl:ObjectProperty ,
 
 ctro:hasDoseUnit rdf:type owl:ObjectProperty ,
                           owl:FunctionalProperty ;
-                 ratio:order "4"^^xsd:positiveInteger ;
+                 ratio:order "5"^^xsd:positiveInteger ;
                  ratio:width "25"^^xsd:positiveInteger ;
                  rdfs:domain ctro:Intervention ;
                  rdfs:range ctro:BioAndMedicalUnit ;
                  rdfs:label "Dose unit" .
 
 ctro:hasDeliveryMethod rdf:type owl:ObjectProperty ;
-                       ratio:order "5"^^xsd:positiveInteger ;
-                       rdfs:domain ctro:Medication ;
+                       ratio:order "6"^^xsd:positiveInteger ;
+                       rdfs:domain ctro:Intervention ;
                        rdfs:range ctro:DeliveryMethod ;
                        rdfs:label "Delivery method" .
 
@@ -134,7 +134,7 @@ ctro:hasOutcome rdf:type owl:ObjectProperty ;
                 ratio:order "7"^^xsd:positiveInteger ;
                 rdfs:domain ctro:ClinicalTrial ;
                 rdfs:range ctro:Outcome ;
-                rdfs:label "Outcome" .
+                rdfs:label "Outcome (Endpoint)" .
 
 ctro:hasEndpointDescription rdf:type owl:ObjectProperty ;
                             ratio:order "1"^^xsd:positiveInteger ;
@@ -142,18 +142,18 @@ ctro:hasEndpointDescription rdf:type owl:ObjectProperty ;
                             rdf:type owl:FunctionalProperty ;
                             rdfs:domain ctro:Outcome ;
                             rdfs:range ctro:EndpointDescription ;
-                            rdfs:label "Endpoint name" .
+                            rdfs:label "Outcome Measure" .
 
 ctro:hasAggregationMethod rdf:type owl:ObjectProperty ,
                                    owl:FunctionalProperty ;
-                          ratio:order "2"^^xsd:positiveInteger ;
+                          ratio:order "4"^^xsd:positiveInteger ;
                           rdfs:domain ctro:Outcome ;
                           rdfs:range ctro:AgreggationMethod ;
                           rdfs:label "Aggregation method" .
 
 ctro:hasEndpointUnit rdf:type owl:ObjectProperty ,
                               owl:FunctionalProperty ;
-                     ratio:order "4"^^xsd:positiveInteger ;
+                     ratio:order "6"^^xsd:positiveInteger ;
                      ratio:width "25"^^xsd:positiveInteger ;
                      rdfs:domain ctro:Outcome ;
                      rdfs:range ctro:BioAndMedicalUnit ;
@@ -164,7 +164,7 @@ ctro:hasResult rdf:type owl:ObjectProperty ;
                ratio:order "8"^^xsd:positiveInteger ;
                rdfs:domain ctro:ClinicalTrial ;
                rdfs:range ctro:Result ;
-               rdfs:label "Result" .
+               rdfs:label "Outcome Measure Data" .
 
 ctro:hasArmRes rdf:type owl:ObjectProperty ;          # todo mark that this refers to an arm described elsewhere
                ratio:order "1"^^xsd:positiveInteger ;
@@ -178,6 +178,12 @@ ctro:hasOutcomeRes rdf:type owl:ObjectProperty ;          # todo mark that this 
                    rdfs:range ctro:Outcome ;
                    rdfs:label "Outcome" .
 
+ctro:hasMeasurementDevice rdf:type owl:ObjectProperty ;
+                          ratio:order "8"^^xsd:positiveInteger ;
+                          rdfs:domain ctro:Outcome ;
+                          rdfs:range ctro:MeasurementDevice ;
+                          rdfs:label "Measurement device" .
+
 ctro:hasStatisticalMeasure rdf:type owl:ObjectProperty ;
                            ratio:described "true"^^xsd:boolean ;
                            ratio:order "8"^^xsd:positiveInteger ;
@@ -190,20 +196,13 @@ ctro:hasAdverseEffect rdf:type owl:ObjectProperty ;
                       ratio:order "9"^^xsd:positiveInteger ;
                       rdfs:domain ctro:ClinicalTrial ;
                       rdfs:range ctro:AdverseEffect ;
-                      rdfs:label "Adverse effect" .
+                      rdfs:label "Adverse Event" .
 
 ctro:hasArmAE rdf:type owl:ObjectProperty ;          # todo mark that this refers to an arm described elsewhere
               ratio:order "1"^^xsd:positiveInteger ;
               rdfs:domain ctro:AdverseEffect ;
               rdfs:range ctro:Arm ;
               rdfs:label "Interventional-Arm" .
-
-ctro:hasOutcomeAE rdf:type owl:ObjectProperty ;          # todo mark that this refers to an outcome described elsewhere
-                   ratio:order "2"^^xsd:positiveInteger ;
-                   rdfs:domain ctro:AdverseEffect ;
-                   rdfs:range ctro:Outcome ;
-                   rdfs:label "Outcome" .
-
 
 #################################################################
 #    Data properties
@@ -313,11 +312,11 @@ ctro:hasPreconditionDescription rdf:type owl:DatatypeProperty ;
                                 rdfs:range xsd:string ;
                                 rdfs:label "Precondition" .
 
-ctro:hasAuthorAffilation rdf:type owl:DatatypeProperty ;
+ctro:hasAuthorAffiliation rdf:type owl:DatatypeProperty ;
                          ratio:order "2"^^xsd:positiveInteger ;
                          rdfs:domain ctro:EvidenceQuality ;
                          rdfs:range xsd:string ;
-                         rdfs:label "Author affilation" .
+                         rdfs:label "Author affiliation" .
 
 ctro:hasConflictInterest rdf:type owl:DatatypeProperty ;
                          ratio:order "3"^^xsd:positiveInteger ;
@@ -380,13 +379,57 @@ ctro:hasFrequency rdf:type owl:DatatypeProperty ,
                              ] ;
                   rdfs:label "Frequency" .
 
+ctro:hasDoseValue rdf:type owl:DatatypeProperty ,
+                           owl:FunctionalProperty ;
+                  ratio:order "4"^^xsd:positiveInteger ;
+                  ratio:width "25"^^xsd:positiveInteger ;
+                  rdfs:domain ctro:Intervention ;
+                  rdfs:range rdfs:Literal ;
+                  rdfs:label "Dose value" .
+
+ctro:isControl rdf:type owl:DatatypeProperty ,
+                        owl:FunctionalProperty ;
+               ratio:order "7"^^xsd:positiveInteger ;
+               ratio:width "25"^^xsd:positiveInteger ;
+               rdfs:domain ctro:Intervention ;
+               rdfs:range xsd:boolean ;
+               rdfs:label "Control or placebo" .
+
 ctro:hasBaselineValue rdf:type owl:DatatypeProperty ,
                                owl:FunctionalProperty ;
-                      ratio:order "3"^^xsd:positiveInteger ;
+                      ratio:order "5"^^xsd:positiveInteger ;
                       ratio:width "25"^^xsd:positiveInteger ;
                       rdfs:domain ctro:Outcome ;
                       rdfs:range xsd:float ;
                       rdfs:label "Baseline value" .
+
+ctro:hasOutcomeDescription rdf:type owl:DatatypeProperty ,
+                                    owl:FunctionalProperty ;
+                           ratio:order "3"^^xsd:positiveInteger ;
+                           ratio:width "100"^^xsd:positiveInteger ;
+                           rdfs:domain ctro:Outcome ;
+                           rdfs:range xsd:string .
+
+ctro:hasOutcomeType rdf:type owl:DatatypeProperty ,
+                             owl:FunctionalProperty ;
+                    ratio:order "2"^^xsd:positiveInteger ;
+                    rdfs:domain ctro:Outcome ;
+                    rdfs:range [ rdf:type rdfs:Datatype ;
+                                 owl:oneOf [ rdf:type rdf:List ;
+                                             rdf:first "Primary" ;
+                                             rdf:rest [ rdf:type rdf:List ;
+                                                        rdf:first "Secondary" ;
+                                                        rdf:rest rdf:nil
+                                                      ]
+                                           ]
+                               ] .
+
+ctro:hasAnalysisMetric rdf:type owl:ObjectProperty ,
+                                owl:FunctionalProperty ;
+                       ratio:order "7"^^xsd:positiveInteger ;
+                       rdfs:domain ctro:Outcome ;
+                       rdfs:range ctro:AnalysisMetric ;
+                       rdfs:label "Analysis metric" .
 
 ctro:hasFinalNumberPatients rdf:type owl:DatatypeProperty ,
                                      owl:FunctionalProperty ;
@@ -410,7 +453,7 @@ ctro:hasDifferenceFromBaseline rdf:type owl:DatatypeProperty ;
                                rdfs:range xsd:float ;
                                rdfs:label "Difference from Baseline" .
 
-ctro:hasDesiredEffectDir rdf:type owl:DatatypeProperty ,
+ctro:hasResultDirection rdf:type owl:DatatypeProperty ,
                                   owl:FunctionalProperty ;
                          ratio:order "6"^^xsd:positiveInteger ;
                          rdfs:domain ctro:Result ;
@@ -426,7 +469,8 @@ ctro:hasDesiredEffectDir rdf:type owl:DatatypeProperty ,
                                                            ]
                                                 ]
                                     ] ;
-                         rdfs:label "Desired direction of the effect" .
+                         rdfs:comment "Direction of the change from baseline: reduction, increment, No change" ;
+                         rdfs:label "Direction of the change" .
 
 ctro:hasObservedResult rdf:type owl:DatatypeProperty ,
                                 owl:FunctionalProperty ;
@@ -476,7 +520,7 @@ ctro:hasConfidenceInterval rdf:type owl:DatatypeProperty,
 
 ctro:hasNumberAffected rdf:type owl:DatatypeProperty ,
                                 owl:FunctionalProperty ;
-                       ratio:order "3"^^xsd:positiveInteger ;
+                       ratio:order "2"^^xsd:positiveInteger ;
                        ratio:width "25"^^xsd:positiveInteger ;
                        rdfs:domain ctro:AdverseEffect ;
                        rdfs:range xsd:integer ;
@@ -484,7 +528,7 @@ ctro:hasNumberAffected rdf:type owl:DatatypeProperty ,
 
 ctro:hasObservedResultAE rdf:type owl:DatatypeProperty ,
                                   owl:FunctionalProperty ;
-                         ratio:order "4"^^xsd:positiveInteger ;
+                         ratio:order "3"^^xsd:positiveInteger ;
                          ratio:width "100"^^xsd:positiveInteger ;
                          rdfs:domain ctro:AdverseEffect ;
                          rdfs:range xsd:string ;
@@ -533,11 +577,15 @@ ctro:DesignGroup rdf:type owl:Class ;
 ctro:DisorderOrSyndrome rdf:type owl:Class ;
                         rdfs:label "Disease" .
 
+ctro:CTAnalysisApproach rdf:type owl:Class ;
+                        rdfs:comment "Type of analysis carried out in the clinical trial (i.e, Intention To Treat, Per Protocol)" ;
+                        rdfs:label "Analysi approach" .
+
 ctro:Population rdf:type owl:Class ;
                 rdfs:label "Population" .
 
 ctro:Ethnicity rdf:type owl:Class ;
-               rdfs:label "Ethnicity" .
+               rdfs:label "Ethnic Group" .
 
 <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> rdf:type owl:Class ;
                                                                    rdfs:label "Country" .
@@ -546,7 +594,7 @@ ctro:CTDesign rdf:type owl:Class ;
               rdfs:label "Trial design" .
 
 ctro:EvidenceQuality rdf:type owl:Class ;
-                     rdfs:label "Quality of the Evidence" .
+                     rdfs:label "Potential Conflicts of Interest" .
 
 ctro:Arm rdf:type owl:Class ;
          owl:equivalentClass [ rdf:type owl:Restriction ;
@@ -576,10 +624,10 @@ ctro:DeliveryMethod rdf:type owl:Class ;
 
 ctro:Outcome rdf:type owl:Class ;
              rdfs:comment "Outcome indicator that is being measured (primary or secundary outcomes)."^^xsd:string ;
-             rdfs:label "Outcome" .
+             rdfs:label "Outcome (Endpoint)" .
 
 ctro:EndpointDescription rdf:type owl:Class ;
-                         rdfs:label "Endpoint name" .
+                         rdfs:label "Outcome Measure" .
 
 ctro:AgreggationMethod rdf:type owl:Class ;
                        rdfs:label "Aggregation Method" .
@@ -588,7 +636,7 @@ ctro:BioAndMedicalUnit rdf:type owl:Class ;
                        rdfs:label "Bio-medical unit" .
 
 ctro:Result rdf:type owl:Class ;
-            rdfs:label "Result" .
+            rdfs:label "Outcome Measure Data" .
 
 ctro:StatisticalMeasure rdf:type owl:Class ;
                         rdfs:label "Statistical measure" .
@@ -600,8 +648,25 @@ ctro:AdverseEffect rdf:type owl:Class ;
                                          owl:onClass ctro:Result
                                        ] ;
                    rdfs:comment "Adverse effect of the intervention" ;
-                   rdfs:label "Adverse Effect" .
+                   rdfs:label "Adverse Event" .
 
+ctro:Concentration rdf:type owl:Class ;
+                   rdfs:subClassOf ctro:BioAndMedicalUnit .
+
+ctro:EndpointDesc_Glaucoma rdf:type owl:Class ;
+                           rdfs:subClassOf ctro:EndpointDescription .
+
+ctro:EndpointDesc_T2DM rdf:type owl:Class ;
+                       rdfs:subClassOf ctro:EndpointDescription .
+
+ctro:Mass rdf:type owl:Class ;
+          rdfs:subClassOf ctro:BioAndMedicalUnit .
+
+ctro:Other rdf:type owl:Class ;
+           rdfs:subClassOf ctro:BioAndMedicalUnit .
+
+ctro:Pressure rdf:type owl:Class ;
+              rdfs:subClassOf ctro:BioAndMedicalUnit .
 
 #################################################################
 #    Individuals
@@ -612,6 +677,11 @@ ctro:Argentina rdf:type owl:NamedIndividual ,
                rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223713009> ;
                rdfs:label "Argentina" .
 
+ctro:Asian rdf:type owl:NamedIndividual ,
+                    ctro:Ethnicity ;
+           rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/315280000> ;
+           rdfs:label "Asian" .
+
 ctro:Australia rdf:type owl:NamedIndividual ,
                         <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
                rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223621005> ;
@@ -621,6 +691,11 @@ ctro:Austria rdf:type owl:NamedIndividual ,
                       <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
              rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223635007> ;
              rdfs:label "Austria" .
+
+ctro:Black rdf:type owl:NamedIndividual ,
+                    ctro:Ethnicity ;
+           rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/315240009> ;
+           rdfs:label "Black" .
 
 ctro:Blind rdf:type owl:NamedIndividual ,
                     ctro:CTDesign .
@@ -649,6 +724,10 @@ ctro:Croatia rdf:type owl:NamedIndividual ,
                       <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
              rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223662004> ;
              rdfs:label "Croatia" .
+
+ctro:Diurnal_IOP rdf:type owl:NamedIndividual ,
+                          ctro:EndpointDesc_Glaucoma ;
+                 rdfs:label "Diurnal IOP" .
 
 ctro:Double-blind rdf:type owl:NamedIndividual ,
                            ctro:CTDesign .
@@ -694,13 +773,23 @@ ctro:Greece rdf:type owl:NamedIndividual ,
             rdfs:label "Greece" .
 
 ctro:HbA1c rdf:type owl:NamedIndividual ,
-                    ctro:EndpointDescription ;
-           rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/408591000> ;
-           rdfs:label "HbA1c reduction" .
+                    ctro:EndpointDesc_T2DM ;
+           rdfs:label "HbA1c" .
+
+ctro:HbA1c_target rdf:type owl:NamedIndividual ,
+                           ctro:EndpointDesc_T2DM ;
+                  rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/408591000> ;
+                  rdfs:label "HbA1c Target" .
 
 ctro:IOP rdf:type owl:NamedIndividual ,
-                  ctro:EndpointDescription ;
-         rdfs:label "IOP reduction" .
+                  ctro:EndpointDesc_Glaucoma ;
+         rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/41633001> ;
+         rdfs:label "IOP (Intraocular pressure)" .
+
+ctro:IOP_target rdf:type owl:NamedIndividual ,
+                         ctro:EndpointDesc_Glaucoma ;
+                rdfs:isDefinedBy <> ;
+                rdfs:label "IOP Target" .
 
 ctro:India rdf:type owl:NamedIndividual ,
                     <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
@@ -711,6 +800,11 @@ ctro:Injection rdf:type owl:NamedIndividual ,
                         ctro:DeliveryMethod ;
                rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/740685003> ;
                rdfs:label "Injection" .
+
+ctro:IntentionToTreat rdf:type owl:NamedIndividual ,
+                               ctro:CTAnalysisApproach ;
+                      rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MESH/D057194> ;
+                      rdfs:label "Intention to treat" .
 
 ctro:Iran rdf:type owl:NamedIndividual ,
                    <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
@@ -737,6 +831,11 @@ ctro:Japan rdf:type owl:NamedIndividual ,
            rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223583001> ;
            rdfs:label "Japan" .
 
+ctro:Kg rdf:type owl:NamedIndividual ,
+                 ctro:Mass ;
+        rdfs:isDefinedBy <http://purl.bioontology.org/ontology/RCD/X800I> ;
+        rdfs:label "Kg." .
+
 ctro:Latanoprost rdf:type owl:NamedIndividual ,
                           ctro:Drug ;
                  rdfs:isDefinedBy <http://linkedlifedata.com/resource/drug/DB00654> ;
@@ -746,6 +845,11 @@ ctro:Mexico rdf:type owl:NamedIndividual ,
                      <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
             rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223687006> ;
             rdfs:label "Mexico" .
+
+ctro:Millimoles_per_litre rdf:type owl:NamedIndividual ,
+                                   ctro:Concentration ;
+                          rdfs:isDefinedBy <http://purl.bioontology.org/ontology/RCD/X802P> ;
+                          rdfs:label "millimole/litre" .
 
 ctro:Netherlands rdf:type owl:NamedIndividual ,
                           <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
@@ -757,6 +861,14 @@ ctro:Oral rdf:type owl:NamedIndividual ,
           rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/738956005> ;
           rdfs:label "Oral" .
 
+ctro:Peak_IOP rdf:type owl:NamedIndividual ,
+                       ctro:EndpointDesc_Glaucoma ;
+              rdfs:label "Peak IOP" .
+
+ctro:PerProtocol rdf:type owl:NamedIndividual ,
+                          ctro:CTAnalysisApproach ;
+                 rdfs:label "Per Protocol" .
+
 ctro:Peru rdf:type owl:NamedIndividual ,
                    <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
           rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223721003> ;
@@ -766,6 +878,10 @@ ctro:Philippines rdf:type owl:NamedIndividual ,
                           <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
                  rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223592003> ;
                  rdfs:label "Japan" .
+
+ctro:Placebo rdf:type owl:NamedIndividual ,
+                      ctro:Drug ;
+             rdfs:label "Placebo" .
 
 ctro:Poland rdf:type owl:NamedIndividual ,
                      <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
@@ -815,6 +931,10 @@ ctro:Timolol rdf:type owl:NamedIndividual ,
              rdfs:isDefinedBy <http://linkedlifedata.com/resource/drug/DB00373> ;
              rdfs:label "Timolol" .
 
+ctro:Trough_IOP rdf:type owl:NamedIndividual ,
+                         ctro:EndpointDesc_Glaucoma ;
+                rdfs:label "Trough IOP" .
+
 ctro:Turkey rdf:type owl:NamedIndividual ,
                      <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
             rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/278900006> ;
@@ -834,3 +954,13 @@ ctro:Venezuela rdf:type owl:NamedIndividual ,
                         <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
                rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223724006> ;
                rdfs:label "Venezuela" .
+
+ctro:White rdf:type owl:NamedIndividual ,
+                    ctro:Ethnicity ;
+           rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/185984009> ,
+                            "White" .
+
+ctro:mmHg rdf:type owl:NamedIndividual ,
+                   ctro:Pressure ;
+          rdfs:isDefinedBy <http://purl.bioontology.org/ontology/RCD/X805> ;
+          rdfs:label "mmHg" .

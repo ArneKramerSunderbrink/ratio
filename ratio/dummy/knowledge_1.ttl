@@ -42,7 +42,7 @@ ctro:Population_1_1 rdf:type owl:NamedIndividual ,
 
 ctro:Evidence_1_1 rdf:type owl:NamedIndividual ,
                            ctro:EvidenceQuality;
-                  rdfs:label "Evidence quality"^^xsd:string .
+                  rdfs:label "Potential Conflicts of Interest"^^xsd:string .
 
 ctro:Arm_1_1 rdf:type owl:NamedIndividual ,
                       ctro:Arm;
@@ -78,12 +78,12 @@ ctro:Out_1_1 rdf:type owl:NamedIndividual ,
 
 ctro:Res_1_1 rdf:type owl:NamedIndividual ,
                       ctro:Result ;
-             rdfs:label "Result HBA Arm 1"^^xsd:string ;
+             rdfs:label "Outcome Measure Data HBA Arm 1"^^xsd:string ;
              ctro:hasStatisticalMeasure ctro:Stat_1_1 .
 
 ctro:Res_1_2 rdf:type owl:NamedIndividual ,
                       ctro:Result ;
-             rdfs:label "Result HBA Arm 2"^^xsd:string .
+             rdfs:label "Outcome Measure Data HBA Arm 2"^^xsd:string .
 
 ctro:Stat_1_1 rdf:type owl:NamedIndividual ,
                        ctro:StatisticalMeasure ;
