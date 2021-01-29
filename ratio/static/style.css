@@ -83,6 +83,11 @@ header {
 }
 
 /* Colors */
+.color0 {
+  color: black;
+  background: #EDEDED;
+}
+
 .color1 {
   color: var(--font-color1);
   background: var(--color1);

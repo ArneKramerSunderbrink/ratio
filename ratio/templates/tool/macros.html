@@ -135,7 +135,7 @@
   {% endif %}
 
 
-  <div class="entity-body{%if not is_root %} flip-flipside{% endif %}"{%if not is_root %} data-flipid="collapse-{{ entity.uri }}" style="display: none;"{% endif %}>
+  <div class="entity-body{%if is_root%} color0{% else %} flip-flipside{% endif %}"{%if not is_root %} data-flipid="collapse-{{ entity.uri }}" style="display: none;"{% endif %}>
     {% for field in entity.fields %}
     {% if field.is_described %}
     {{ entity_field(entity, field) }}
