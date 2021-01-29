@@ -247,7 +247,7 @@ ctro:hasPublicationYear rdf:type owl:DatatypeProperty ,
 
 ctro:hasPMID rdf:type owl:DatatypeProperty ,
                       owl:FunctionalProperty ;
-             ratio:order "4"^^xsd:positiveInteger ;
+             ratio:order "5"^^xsd:positiveInteger ;
              ratio:width "25"^^xsd:positiveInteger ;
              rdfs:domain ctro:Publication ;
              rdfs:range rdfs:Literal ;

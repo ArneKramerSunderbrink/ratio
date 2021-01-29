@@ -341,7 +341,11 @@ def build_empty_field(ontology, property_uri, range_class_uri):
     is_described = TRUE in ontology.objects(property_uri, RATIO.described)
     show_label = FALSE not in ontology.objects(property_uri, RATIO.show_label)
 
-    order = next(ontology.objects(property_uri, RATIO.order)).value
+    try:
+        order = next(ontology.objects(property_uri, RATIO.order)).value
+    except StopIteration:
+        order = 0
+
     try:
         width = next(ontology.objects(property_uri, RATIO.width)).value
     except StopIteration:
@@ -391,7 +395,11 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
     is_described = TRUE in ontology.objects(property_uri, RATIO.described)
     show_label = FALSE not in ontology.objects(property_uri, RATIO.show_label)
 
-    order = next(ontology.objects(property_uri, RATIO.order)).value
+    try:
+        order = next(ontology.objects(property_uri, RATIO.order)).value
+    except StopIteration:
+        order = 0
+
     try:
         width = next(ontology.objects(property_uri, RATIO.width)).value
     except StopIteration:
@@ -451,6 +459,11 @@ def build_empty_entity(ontology, class_uri, uri, label):
     ]
     fields.sort(key=lambda field: field.order)
 
+    # todo just for debugging, should be tested when uploading a new ontology
+    if [f.order for f in fields] != list(range(1, len(fields)+1)):
+        print('There is an error in the order of the fields of {}'.format(uri))
+        print([(f.order, f.label) for f in fields])
+
     return Entity(uri, label, comment, class_uri, class_label, fields)
 
 
@@ -484,5 +497,10 @@ def build_entity_from_knowledge(ontology, knowledge, uri):
         for range_uri in ontology.objects(property_uri, RDFS.range)
     ]
     fields.sort(key=lambda field: field.order)
+
+    # todo just for debugging, should be tested when uploading a new ontology
+    if [f.order for f in fields] != list(range(1, len(fields)+1)):
+        print('There is an error in the order of the fields of {}'.format(uri))
+        print([(f.order, f.label) for f in fields])
 
     return Entity(uri, label, comment, class_uri, class_label, fields)
