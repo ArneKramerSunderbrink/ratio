@@ -203,6 +203,7 @@ header {
 
 .field-value-list {
   flex: 1 1 auto;
+  min-width: 5em;
 }
 
 .field-value-list > form {

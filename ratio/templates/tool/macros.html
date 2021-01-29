@@ -140,9 +140,9 @@
     {% if field.is_described %}
     {{ entity_field(entity, field) }}
     {% else %}
-    <div class="field color1" data-property-uri="{{ field.property_uri }}" style="width: calc({{ field.width }}% - 1.3em)">
+    <div class="field color1" data-property-uri="{{ field.property_uri }}" style="width: calc({{ field.width }}% - 1.3em); min-width: calc(70em * 0.01 * min(50, {{ field.width }}) - 1.3em);">
       <div class="flex-row">
-        <span class="field-label flex-fix" {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}:</span>
+        <span class="field-label flex-lex" {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}:</span>
         <div class="field-value-list">
           {% if field.options is not none %}
             {% if field.values %}
