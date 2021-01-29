@@ -62,6 +62,16 @@ def row_to_rdf(row):
     return subject, predicate, object_
 
 
+def get_tokens(graph, class_):
+    classes = {class_}
+    results = set()
+    while classes:
+        c = classes.pop()
+        classes.update(graph.subjects(RDFS.subClassOf, c))
+        results.update(graph.subjects(RDF.type, c))
+    return results
+
+
 class Ontology:
     """Wrapper for rdflib.Graph that connects it to the database."""
     def __init__(self):
@@ -286,7 +296,10 @@ def build_option(ontology, uri):
     except StopIteration:
         label = uri.n3(get_ontology().graph.namespace_manager).split(':')[-1]
 
-    # todo do it with sparql https://rdflib.readthedocs.io/en/stable/intro_to_sparql.html
+    # todo would be nicer with sparql but unfortunately sparql query are very slow with rdflib
+    # maybe consider using a real triple store?
+    # rdflib works with sleepycat: https://github.com/RDFLib/rdflib/blob/master/examples/sleepycat_example.py
+    # I'd need BerkeleyDB and bsddb3 (python bindings for BerkeleyDB)
     class_uri = None
     for o in ontology.objects(uri, RDF.type):
         if o in ontology.subjects(RDF.type, OWL.Class):  # A class defined in the ontology
@@ -339,6 +352,7 @@ def build_empty_field(ontology, property_uri, range_class_uri):
     one_of = list(ontology.objects(range_class_uri, OWL.oneOf))
     if is_object_property and not is_described:
         options = list(build_option(ontology, uri) for uri in ontology.subjects(RDF.type, range_class_uri))
+        # todo: get individuals in subclasses of range_class also
         options.sort(key=lambda option: option.label)
     elif one_of:
         options = construct_list(ontology, one_of[0])
@@ -395,7 +409,7 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
 
     one_of = list(ontology.objects(range_class_uri, OWL.oneOf))
     if is_object_property and not is_described:
-        options = list(build_option(ontology, uri) for uri in ontology.subjects(RDF.type, range_class_uri))
+        options = list(build_option(ontology, uri) for uri in get_tokens(ontology, range_class_uri))
         options.sort(key=lambda option: option.label)
     elif one_of:
         options = construct_list(ontology, one_of[0])
@@ -441,7 +455,7 @@ def build_empty_entity(ontology, class_uri, uri, label):
 
 
 def build_entity_from_knowledge(ontology, knowledge, uri):
-    # todo do it with sparql https://rdflib.readthedocs.io/en/stable/intro_to_sparql.html
+    # would be nicer with sparql query but that's very slow for some reason
     class_uri = None
     for o in knowledge.objects(uri, RDF.type):
         if o in ontology.subjects(RDF.type, OWL.Class):  # A class defined in the ontology
