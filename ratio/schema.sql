@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS user;
 DROP TABLE IF EXISTS subgraph;
 DROP TABLE IF EXISTS access;
 DROP TABLE IF EXISTS knowledge;
+DROP TABLE IF EXISTS deleted_knowledge;
 DROP TABLE IF EXISTS ontology;
 DROP TABLE IF EXISTS namespace;
 
@@ -32,6 +33,16 @@ CREATE TABLE access (
 -- RDF triples that represent knowledge about a certain subgraph
 CREATE TABLE knowledge (
   subgraph_id INTEGER NOT NULL,
+  subject TEXT NOT NULL,
+  predicate TEXT NOT NULL,
+  object TEXT NOT NULL,
+  FOREIGN KEY (subgraph_id) REFERENCES subgraph (id)
+);
+
+-- RDF triples that have been deleted on a certain occasion, stored here to undo the deletion
+CREATE TABLE deleted_knowledge (
+  subgraph_id INTEGER NOT NULL,
+  occasion TEXT NOT NULL,
   subject TEXT NOT NULL,
   predicate TEXT NOT NULL,
   object TEXT NOT NULL,

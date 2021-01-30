@@ -178,3 +178,45 @@ def add_entity():
     return jsonify(entity_div=entity_div,
                    property_uri=property_uri, parent_uri=parent_uri,
                    remove_plus=field.is_functional)
+
+
+@bp.route('/_delete_entity')
+@login_required
+def delete_entity():
+    user_id = g.user['id']
+    subgraph_id = request.args.get('subgraph_id', 0, type=int)
+    entity_uri = request.args.get('entity_uri', '', type=str)
+
+    if not subgraph_id:
+        return jsonify(error='Subgraph id cannot be empty.')
+    if not entity_uri or entity_uri.isspace():
+        return jsonify(error='Entity URI cannot be empty.')
+
+    if not subgraph_access(user_id, subgraph_id):
+        return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
+
+    subgraph_knowledge = get_subgraph_knowledge(subgraph_id)
+    subgraph_knowledge.delete_individual_recursive(entity_uri)
+
+    return jsonify()
+
+
+@bp.route('/_undo_delete_entity')
+@login_required
+def undo_delete_entity():
+    user_id = g.user['id']
+    subgraph_id = request.args.get('subgraph_id', 0, type=int)
+    entity_uri = request.args.get('entity_uri', '', type=str)
+
+    if not subgraph_id:
+        return jsonify(error='Subgraph id cannot be empty.')
+    if not entity_uri or entity_uri.isspace():
+        return jsonify(error='Entity URI cannot be empty.')
+
+    if not subgraph_access(user_id, subgraph_id):
+        return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
+
+    subgraph_knowledge = get_subgraph_knowledge(subgraph_id)
+    subgraph_knowledge.undo_delete_individual(entity_uri)
+
+    return jsonify()

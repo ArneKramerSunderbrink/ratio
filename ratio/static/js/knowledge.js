@@ -41,6 +41,7 @@ $(function () {
     // TODO communicate deletion to server
     // Display message
     $('div#knowledge-delete-msg > span').text('Value has been deleted.');
+    $('div#knowledge-delete-msg > a:first').off('click');
     $('div#knowledge-delete-msg > a:first').on('click', function() {
       form.css('display', '');
       // TODO communicate undo to server
@@ -82,7 +83,6 @@ $(function () {
   });
 
   // Mark option invalid
-
   // I found no way to discriminate between focus switching within the form (to the custom option input)
   // or out of the form and only then check validity
   $('div#scroll-container').on('focusout', 'form.option-form', function() {
@@ -98,7 +98,8 @@ $(function () {
 
   // Add entity
   $('div#scroll-container').on('submit', 'form.add-entity-form', function() {
-    var property_uri = $(this).closest('div.entity-field').attr('data-property-uri');
+    var field = $(this).closest('div.entity-field');
+    var property_uri = field.attr('data-property-uri');
     var entity_uri = $(this).closest('div.entity').attr('data-entity-uri');
     var data = $(this).serializeArray();
     data.push({ name: "subgraph_id", value: window.SUBGRAPH_ID });
@@ -110,8 +111,6 @@ $(function () {
         alert(data.error);
       } else {
         // add entity
-        var parent_entity = $('div.entity[data-entity-uri="' + data.parent_uri + '"]');
-        var field = parent_entity.find('div.entity-field[data-property-uri="' + data.property_uri + '"]').first();
         var list = field.find('div.entity-field-value-list').first();
         list.append(data.entity_div);
         // expand entity body
@@ -130,6 +129,42 @@ $(function () {
   });
 
   // Delete entity
+  $('div#scroll-container').on('click', 'a.delete-entity-button', function() {
+    var entity = $(this).closest('div.entity');
+    var entity_uri = entity.attr('data-entity-uri');
+    var data = [
+      { name: "subgraph_id", value: window.SUBGRAPH_ID },
+      { name: "entity_uri", value: entity_uri }
+    ];
+
+    $.getJSON(window.SCRIPT_ROOT + '/_delete_entity', data, function(data_return) {
+      if (data_return.error) {
+        alert(data_return.error);
+      } else {
+        // Remove entity div
+        entity.css('display', 'none')
+        // Display message
+        $('div#knowledge-delete-msg > span').text('Entity has been deleted.');
+        $('div#knowledge-delete-msg > a:first').off('click');
+        $('div#knowledge-delete-msg > a:first').on('click', function() {
+          $.getJSON(window.SCRIPT_ROOT + '/_undo_delete_entity', data, function(data_return) {
+            if (data_return.error) {
+              alert(data_return.error);
+            } else {
+              entity.css('display', '');
+              $('div#knowledge-delete-msg').css('display', 'none');
+            }
+          })
+          .fail(function() { alert('getJSON request failed!'); });
+          return false;
+        });
+        $('div#knowledge-delete-msg').css('display', 'flex');
+      }
+    })
+    .fail(function() { alert('getJSON request failed!'); });
+
+    return false;
+  });
 
 });
 

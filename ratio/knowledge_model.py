@@ -2,6 +2,10 @@
 Specifically the translation of an rdf ontology into Python classes
 """
 
+# todo fix the messy class system: make a parent graph class with children ontology and subgraph knowledge
+# todo encapsulate more functions into that classes
+# todo maybe make a single api class for the rest of the system to interact with
+
 from flask import g
 from rdflib import BNode
 from rdflib import Graph
@@ -196,7 +200,7 @@ class SubgraphKnowledge:
             nr
         ))
 
-        #if label is None:
+        #if label is None:  # todo would be nice to propose this default label in the frontend
         #    class_label = get_ontology().graph.objects(class_uri, RDFS.label)
         #    try:
         #        class_label = next(class_label)
@@ -206,10 +210,6 @@ class SubgraphKnowledge:
         #    label = '{} {}'.format(class_label, nr)
 
         entity = build_empty_entity(get_ontology().graph, class_uri, uri, label)
-
-        # add entity to the field
-        field = self.get_field(parent_uri, property_uri)
-        field.values.append(entity)
 
         # new triples
         triples = [
@@ -231,7 +231,79 @@ class SubgraphKnowledge:
         )
         db.commit()
 
+        self.root = None  # forces a rebuild of the root entity from the updated graph on the next request
+
         return entity
+
+    def delete_individual_recursive(self, uri):
+        if type(uri) == str:
+            uri = URIRef(uri)
+
+        db = get_db()
+        db_cursor = db.cursor()
+
+        stack = {uri}
+        while stack:
+            u = stack.pop()
+            stack.update((
+                o for p, o in self.graph[u::] if o in self.graph.subjects()
+            ))
+            # remove links from parents
+            self.graph.remove((None, None, u))
+            db_cursor.execute(
+                'INSERT INTO deleted_knowledge (subgraph_id, occasion, subject, predicate, object)'
+                '   SELECT :subgraph_id, :occasion, subject, predicate, object FROM knowledge'
+                '   WHERE subgraph_id = :subgraph_id AND object = :entity',
+                {'subgraph_id': self.id, 'occasion': uri.n3(), 'entity': u.n3()}
+            )
+            db_cursor.execute(
+                'DELETE FROM knowledge WHERE subgraph_id = :subgraph_id AND object = :entity',
+                {'subgraph_id': self.id, 'entity': uri.n3()}
+            )
+            # remove links to children
+            self.graph.remove((u, None, None))
+            db_cursor.execute(
+                'INSERT INTO deleted_knowledge (subgraph_id, occasion, subject, predicate, object)'
+                '   SELECT :subgraph_id, :occasion, subject, predicate, object FROM knowledge'
+                '   WHERE subgraph_id = :subgraph_id AND subject = :entity',
+                {'subgraph_id': self.id, 'occasion': uri.n3(), 'entity': u.n3()}
+            )
+            db_cursor.execute(
+                'DELETE FROM knowledge WHERE subgraph_id = :subgraph_id AND subject = :entity',
+                {'subgraph_id': self.id, 'entity': u.n3()}
+            )
+        db.commit()
+
+        self.root = None  # forces a rebuild of the root entity from the updated graph on the next request
+
+    def undo_delete_individual(self, uri):
+        if type(uri) == str:
+            uri = URIRef(uri)
+
+        db = get_db()
+        db_cursor = db.cursor()
+
+        rows = db_cursor.execute(
+            'SELECT subject, predicate, object FROM deleted_knowledge'
+            '   WHERE subgraph_id = :subgraph_id AND occasion = :occasion',
+            {'subgraph_id': self.id, 'occasion': uri.n3()}
+        ).fetchall()
+        for row in rows:
+            self.graph.add(row_to_rdf(row))
+
+        db_cursor.execute(
+            'INSERT INTO knowledge (subgraph_id, subject, predicate, object)'
+            '   SELECT :subgraph_id, subject, predicate, object FROM deleted_knowledge'
+            '   WHERE subgraph_id = :subgraph_id AND occasion = :occasion',
+            {'subgraph_id': self.id, 'occasion': uri.n3()}
+        )
+        db_cursor.execute(
+            'DELETE FROM deleted_knowledge WHERE subgraph_id = :subgraph_id AND occasion = :occasion',
+            {'subgraph_id': self.id, 'occasion': uri.n3()}
+        )
+        db.commit()
+
+        self.root = None  # forces a rebuild of the root entity from the updated graph on the next request
 
     def load_rdf_file(self, file, rdf_format='turtle'):
         self.graph = Graph()
