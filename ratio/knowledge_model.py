@@ -352,6 +352,45 @@ class Field:
         self.values = values
         self.options = options
 
+    def check_validity(self, value):
+        if self.is_object_property or self.options:
+            return ''
+
+        if self.range_uri == RDFS.Literal:
+            return ''
+        elif self.range_uri == XSD.string:
+            return ''
+        elif self.range_uri == XSD.float:
+            try:
+                float(value)
+                return ''
+            except ValueError:
+                return '{} is not a valid float.'.format(value)
+        elif self.range_uri == XSD.integer:
+            return self.check_validity_integer(value)
+        elif self.range_uri == XSD.positiveInteger:
+            int_validity = self.check_validity_integer(value)
+            if int_validity:
+                return int_validity
+            elif int(value) < 0:
+                return '{} is not a positive value.'.format(value)
+        elif self.range_uri == XSD.boolean:
+            if value in ('true', 'false', '1', '0'):
+                return ''
+            else:
+                return 'Needs to be one of {"true", "false", "1", "0"}.'
+        else:
+            print('Unknown Datatype: {}'.format(self.range_uri))
+            return ''
+
+    @staticmethod
+    def check_validity_integer(value):
+        try:
+            i = int(value)
+            assert i == float(value)
+            return ''
+        except (ValueError, AssertionError):
+            return '{} is not a valid integer.'.format(value)
 
 class Option:
     def __init__(self, uri, label, class_uri, defined_by):

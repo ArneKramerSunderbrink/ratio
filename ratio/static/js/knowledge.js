@@ -4,6 +4,12 @@
  */
 
 $(function () {
+  // Delete message X-button
+  $('div#knowledge-delete-msg > a:last').on('click', function() {
+    $('div#knowledge-delete-msg').css('display', 'none');
+    return false;
+  });
+
   // Add value
   $('div#scroll-container').on('click', 'div.field > div > a', function() {
     var property_uri = $(this).closest('div.field').attr('data-property-uri');
@@ -31,7 +37,6 @@ $(function () {
     .fail(function() { alert('getJSON request failed!'); });
 
     return false;
-
   });
 
   // Delete Value
@@ -52,14 +57,50 @@ $(function () {
     return false;
   });
 
-  $('div#knowledge-delete-msg > a:last').on('click', function() {
-    $('div#knowledge-delete-msg').css('display', 'none');
+  // Mark invalid
+  function set_validity(element, validity) {
+    if (validity == '') {
+      element.style.boxShadow = '';
+      element.title = '';
+    } else {
+      element.style.boxShadow = '0 0 2px 1px red';
+      element.title = validity;
+    }
+  }
+
+  // Special functionality for literal fields
+  // Change value
+  $('div#scroll-container').on('input', 'div.literal-input', function() {
+    // TODO
+    var input = this;
+    var property = $(this).closest('div.field')
+    var property_uri = property.attr('data-property-uri');
+    var entity_uri = $(this).closest('div.entity').attr('data-entity-uri');
+    var data = [
+      { name: "subgraph_id", value: window.SUBGRAPH_ID },
+      { name: "property_uri", value: property_uri },
+      { name: "entity_uri", value: entity_uri },
+      { name: 'value', value: this.innerText}
+    ];
+
+    $.getJSON(window.SCRIPT_ROOT + '/_change_value', data, function(data) {
+      if (data.error) {
+        alert(data.error);
+      } else if (data.validity) {
+        set_validity(input, data.validity);
+      } else {
+        set_validity(input, '');
+        console.log('success'); // todo
+      }
+    })
+    .fail(function() { alert('getJSON request failed!'); });
+
     return false;
   });
 
-  // Special functionality for Options-Fields
+  // Special functionality for options Fields
   // Filter
-  $('div#scroll-container').on('keyup', 'input.option-input', function() {
+  $('div#scroll-container').on('input', 'input.option-input', function() {
     var filter_string = this.value.toUpperCase();
     $(this).next('.options').find('.option').each(function() {
       if ($(this).text().toUpperCase().indexOf(filter_string) > -1) {
@@ -89,10 +130,10 @@ $(function () {
     // if value not in options, .setCustomValidity("Invalid option.")
     var input = $(this).find('.option-input')[0];
     if (input.value == '' || input.value && $(this).find('.option').text().includes(input.value)) {
-      input.setCustomValidity('');
+      set_validity(input, '');
       // TODO communicate choice to server
     } else {
-      input.setCustomValidity('Choose an option from the list.');
+      set_validity(input, 'Choose an option from the list.');
     }
   });
 
@@ -200,26 +241,6 @@ $(function() {
     $(forms[i]).submit(edit_knowledge);
   }
 });
-
-// delete knowledge
-function delete_knowledge() {
-  var knowledge_id = parseInt(this.id.substring(7));  // 'delete-123' without 'delete-'
-
-  // todo: add a "are you sure?" - dialog?
-
-  $.getJSON(window.SCRIPT_ROOT + '/_delete_knowledge', {knowledge_id: knowledge_id, subgraph_id: window.SUBGRAPH_ID}, function(data) {
-      if (data.error) {
-        alert(data.error); //todo add element to page to display error
-      } else {
-        // remove the corresponding rows
-        $('tr#tr-' + knowledge_id).remove();
-        $('tr#tr-edit-' + knowledge_id).remove();
-      }
-    })
-    .fail(function() { alert('getJSON request failed!'); });
-
-  return false;
-}
 
 $(function() {
   var as, i;

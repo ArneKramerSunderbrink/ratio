@@ -159,6 +159,13 @@ ctro:hasEndpointUnit rdf:type owl:ObjectProperty ,
                      rdfs:range ctro:BioAndMedicalUnit ;
                      rdfs:label "Endpoint unit" .
 
+ctro:hasAnalysisMetric rdf:type owl:ObjectProperty ,
+                                owl:FunctionalProperty ;
+                       ratio:order "7"^^xsd:positiveInteger ;
+                       rdfs:domain ctro:Outcome ;
+                       rdfs:range ctro:AnalysisMetric ;
+                       rdfs:label "Analysis metric" .
+
 ctro:hasResult rdf:type owl:ObjectProperty ;
                ratio:described "true"^^xsd:boolean ;
                ratio:order "8"^^xsd:positiveInteger ;
@@ -423,13 +430,6 @@ ctro:hasOutcomeType rdf:type owl:DatatypeProperty ,
                                                       ]
                                            ]
                                ] .
-
-ctro:hasAnalysisMetric rdf:type owl:ObjectProperty ,
-                                owl:FunctionalProperty ;
-                       ratio:order "7"^^xsd:positiveInteger ;
-                       rdfs:domain ctro:Outcome ;
-                       rdfs:range ctro:AnalysisMetric ;
-                       rdfs:label "Analysis metric" .
 
 ctro:hasFinalNumberPatients rdf:type owl:DatatypeProperty ,
                                      owl:FunctionalProperty ;

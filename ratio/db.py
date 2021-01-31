@@ -22,8 +22,7 @@ def get_db():
 
 def close_db(e=None):
     """If this request connected to the database, close the connection."""
-    ontology = g.pop('ontology', None)
-    db = g.pop('db', None)  # todo knowledge needs to be popped as well
+    db = g.pop('db', None)
 
     if db is not None:
         db.close()

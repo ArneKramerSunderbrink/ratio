@@ -74,7 +74,7 @@
 <form class="option-form flex-row">
   <input type="hidden" autofocus>
   <div class="flex-flex">
-    <input class="w3-input option-input" type="text" name="label" value="{{ value.label or value }}" required>
+    <input class="w3-input option-input" type="text" name="label" value="{{ value.label or value }}">
     <div class="options"><div class="color1">
       {% if field.is_object_property %}
       {% for option in field.options %}
