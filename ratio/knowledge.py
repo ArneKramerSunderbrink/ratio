@@ -170,7 +170,6 @@ def change_value():
         return jsonify()
 
     validity = field.check_validity(value)
-    print('validity:', validity)
     if validity:
         return jsonify(validity=validity)
 

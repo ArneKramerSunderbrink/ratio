@@ -374,11 +374,6 @@ class Field:
                 return int_validity
             elif int(value) < 0:
                 return '{} is not a positive value.'.format(value)
-        elif self.range_uri == XSD.boolean:
-            if value in ('true', 'false', '1', '0'):
-                return ''
-            else:
-                return 'Needs to be one of {"true", "false", "1", "0"}.'
         else:
             print('Unknown Datatype: {}'.format(self.range_uri))
             return ''
@@ -471,6 +466,8 @@ def build_empty_field(ontology, property_uri, range_class_uri):
         options.sort(key=lambda option: option.label)
     elif one_of:
         options = construct_list(ontology, one_of[0])
+    elif range_class_uri == XSD.boolean:
+        options = ['true', 'false']
     else:
         options = None
 
@@ -532,6 +529,8 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
         options.sort(key=lambda option: option.label)
     elif one_of:
         options = construct_list(ontology, one_of[0])
+    elif range_class_uri == XSD.boolean:
+        options = ['true', 'false']
     else:
         options = None
 
