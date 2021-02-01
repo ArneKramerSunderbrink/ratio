@@ -63,7 +63,9 @@
   {% endif %}
   <div class="entity-field-value-list">
     {% for value in field.values %}
-    {{ entity_div(value, False) }}
+    {% if value is not none %}
+    {{ entity_div(value, False, loop.index - 1) }}
+    {% endif %}
     {% endfor %}
   </div>
 </div>
@@ -114,8 +116,8 @@
 {% endmacro %}
 
 
-{% macro entity_div(entity, is_root) %}
-<div class="entity{% if not is_root %} entity-border{% endif %}" data-entity-uri="{{ entity.uri }}">
+{% macro entity_div(entity, is_root, index) %}
+<div class="entity{% if not is_root %} entity-border{% endif %}" data-entity-uri="{{ entity.uri }}" data-index="{{index}}">
   {# entity header #}
   {% if not is_root %}
   <div class="entity-title color2 flex-row">

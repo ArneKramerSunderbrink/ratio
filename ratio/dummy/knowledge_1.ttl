@@ -14,7 +14,7 @@ ctro:CT_1_1 rdf:type owl:NamedIndividual ,
             ctro:hasPopulation_0 ctro:Population_1_1 ;
             ctro:hasQualityIndicator_0 ctro:Evidence_1_1 ;
             ctro:hasArm_0 ctro:Arm_1_1 ;
-            ctro:hasArm_1 ctro:Arm_1_2 ;
+            ctro:hasArm_3 ctro:Arm_1_2 ;
             ctro:hasOutcome_0 ctro:Out_1_1 ;
             ctro:hasResult_0 ctro:Res_1_1 ;
             ctro:hasResult_1 ctro:Res_1_2 ;

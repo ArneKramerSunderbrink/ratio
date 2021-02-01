@@ -43,15 +43,31 @@ $(function () {
   $('div#scroll-container').on('click', '.delete-value-button', function() {
     var form = $(this).closest('form');
     var input = form.find('.literal-input, .option-input');
-    //var old_value = //TODO
+    var old_value;
+    if (input.is('.literal-input')) {
+      old_value = input[0].innerText;
+    } else {
+      old_value = '';
+      form.find('.option').each(function() {
+        if (this.textContent == input[0].value) {
+          if ($(this).is('[data-option-uri]')) {
+            old_value = $(this).attr('data-option-uri');
+          } else {
+            old_value = this.textContent;
+          }
+        }
+      });
+    }
+    get_json_change_value(input[0], '');
     form.css('display', 'none');
-    // TODO communicate deletion to server
     // Display message
     $('div#knowledge-delete-msg > span').text('Value has been deleted.');
     $('div#knowledge-delete-msg > a:first').off('click');
     $('div#knowledge-delete-msg > a:first').on('click', function() {
+      if (old_value != '') {
+        get_json_change_value(input[0], old_value);
+      }
       form.css('display', '');
-      // TODO communicate undo to server
       $('div#knowledge-delete-msg').css('display', 'none');
       return false;
     });

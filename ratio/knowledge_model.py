@@ -158,7 +158,8 @@ class SubgraphKnowledge:
             if e.uri == entity_uri:
                 return e
             if isinstance(e, Entity):
-                stack += [e2 for f in e.fields for e2 in f.values if f.is_object_property]
+                stack += [e2 for f in e.fields for e2 in f.values
+                          if f.is_object_property and e2 is not None]
 
         raise KeyError('No entity with URI {} found.'.format(entity_uri))
 
@@ -179,7 +180,6 @@ class SubgraphKnowledge:
         entity = self.get_entity(entity_uri)
         field = self.get_field(entity_uri, property_uri)
         index = len(field.values)
-        field.values.append('')
 
         property_uri_index = URIRef(str(field.property_uri) + '_' + str(index))
         self.graph.add((entity.uri, property_uri_index, Literal('')))
@@ -189,6 +189,9 @@ class SubgraphKnowledge:
             (self.id, entity.uri.n3(), property_uri_index.n3(), Literal('').n3())
         )
         db.commit()
+
+        self.root = None  # forces a rebuild of the root entity from the updated graph on the next request
+
         return index
 
     def change_value(self, entity_uri, property_uri, index, value):
@@ -198,8 +201,6 @@ class SubgraphKnowledge:
         validity, value = field.check_value(value)
         if validity:
             return validity
-
-        field.values[index] = value
 
         property_uri_index = URIRef(str(property_uri) + '_' + str(index))
         self.graph.remove((entity.uri, property_uri_index, None))
@@ -215,10 +216,16 @@ class SubgraphKnowledge:
         )
         db.commit()
 
+        self.root = None  # forces a rebuild of the root entity from the updated graph on the next request
+
     def new_individual(self, class_uri, label, parent_uri, property_uri):
         class_uri = URIRef(class_uri)
         parent_uri = URIRef(parent_uri)
         property_uri = URIRef(property_uri)
+        field = self.get_field(parent_uri, property_uri)
+        index = len(field.values)
+
+        property_uri_index = URIRef(str(field.property_uri) + '_' + str(index))
 
         # find an unique uri
         class_list = []
@@ -228,7 +235,8 @@ class SubgraphKnowledge:
             if e.class_uri == class_uri:
                 class_list.append(int(e.uri.split('_')[-1]))
             if isinstance(e, Entity):
-                stack += [e2 for f in e.fields for e2 in f.values if f.is_object_property]
+                stack += [e2 for f in e.fields for e2 in f.values
+                          if f.is_object_property and e2 is not None]
 
         # todo I also have to check if there are deleted objects in memory that could be reanimated
 
@@ -255,7 +263,7 @@ class SubgraphKnowledge:
 
         # new triples
         triples = [
-            (parent_uri, property_uri, uri),
+            (parent_uri, property_uri_index, uri),
             (uri, RDF.type, OWL.NamedIndividual),
             (uri, RDF.type, class_uri),
             (uri, RDFS.label, Literal(label, datatype=XSD.string))
@@ -275,7 +283,7 @@ class SubgraphKnowledge:
 
         self.root = None  # forces a rebuild of the root entity from the updated graph on the next request
 
-        return entity
+        return entity, index
 
     def delete_individual_recursive(self, uri):
         if type(uri) == str:
@@ -575,10 +583,12 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
               for i in range(max(indices, default=-1)+1)]
 
     if is_described:
-        values = [None if value is None else build_entity_from_knowledge(ontology, knowledge, value)
+        values = [None if (value is None or str(value) == '')
+                  else build_entity_from_knowledge(ontology, knowledge, value)
                   for value in values]
     elif is_object_property:
-        values = [None if value is None else build_option(ontology, value) for value in values]
+        values = [None if (value is None or str(value) == '') else build_option(ontology, value)
+                  for value in values]
 
     one_of = list(ontology.objects(range_class_uri, OWL.oneOf))
     if is_object_property and not is_described:

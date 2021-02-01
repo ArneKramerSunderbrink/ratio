@@ -163,8 +163,6 @@ def change_value():
     if field.is_described:
         # todo stimmt der link?
         return jsonify(error='You have to use /_change_entity_label to change the label of a described individual')
-    if len(field.values) <= index or field.values[index] is None:
-        return jsonify(error='There is no value at that index.')
 
     validity = subgraph_knowledge.change_value(entity_uri, property_uri, index, value)
     if validity:
@@ -200,10 +198,10 @@ def add_entity():
     if field.is_functional and field.values:
         return jsonify(error='You cannot add more than one value to this field.')
 
-    entity = subgraph_knowledge.new_individual(field.range_uri, entity_label, parent_uri, property_uri)
+    entity, index = subgraph_knowledge.new_individual(field.range_uri, entity_label, parent_uri, property_uri)
 
     render_entity_div = get_template_attribute('tool/macros.html', 'entity_div')
-    entity_div = render_entity_div(entity, False)
+    entity_div = render_entity_div(entity, False, index)
 
     return jsonify(entity_div=entity_div,
                    property_uri=property_uri, parent_uri=parent_uri,
