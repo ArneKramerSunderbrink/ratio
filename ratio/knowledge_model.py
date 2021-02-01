@@ -215,6 +215,8 @@ class SubgraphKnowledge:
         )
         db.commit()
 
+    #def delete_value(self, ):
+
     def new_individual(self, class_uri, label, parent_uri, property_uri):
         class_uri = URIRef(class_uri)
         parent_uri = URIRef(parent_uri)
@@ -404,9 +406,16 @@ class Field:
             # Empty values are allowed but will be deleted on reloading the page
             pass
         elif self.is_object_property and self.options:
-            return 1, 2  # todo
+            uri = URIRef(value)
+            if uri in (o.uri for o in self.options):
+                return '', uri
+            else:
+                return 'Choose an option from the list.', None
         elif self.options:
-            if value not in self.options:
+            lit = Literal(value)
+            if lit in self.options:
+                return '', lit
+            else:
                 return 'Choose an option from the list.', None
         elif self.range_uri == RDFS.Literal:
             pass

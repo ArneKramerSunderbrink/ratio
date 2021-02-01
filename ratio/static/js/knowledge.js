@@ -22,7 +22,7 @@ $(function () {
 
     $.getJSON(window.SCRIPT_ROOT + '/_add_value', data, function(data) {
       if (data.error) {
-        alert(data.error); //todo add element to page to display error
+        alert(data.error);
       } else {
         var entity = $('div.entity[data-entity-uri="' + data.entity_uri + '"]');
         var field = entity.find('div.field[data-property-uri="' + data.property_uri + '"]');
@@ -68,20 +68,17 @@ $(function () {
     }
   }
 
-  // Special functionality for literal fields
-  // Change value
-  $('div#scroll-container').on('input', 'div.literal-input', function() {
-    var input = this;
-    var property = $(this).closest('div.field')
+  function get_json_change_value(input, value) {
+    var property = $(input).closest('div.field');
     var property_uri = property.attr('data-property-uri');
-    var entity_uri = $(this).closest('div.entity').attr('data-entity-uri');
-    var index = $(this).attr('data-index');
+    var entity_uri = $(input).closest('div.entity').attr('data-entity-uri');
+    var index = $(input).attr('data-index');
     var data = [
       { name: 'subgraph_id', value: window.SUBGRAPH_ID },
       { name: 'entity_uri', value: entity_uri },
       { name: 'property_uri', value: property_uri },
       { name: 'index', value: index},
-      { name: 'value', value: this.innerText}
+      { name: 'value', value: value}
     ];
 
     $.getJSON(window.SCRIPT_ROOT + '/_change_value', data, function(data) {
@@ -94,8 +91,12 @@ $(function () {
       }
     })
     .fail(function() { alert('getJSON request failed!'); });
+  }
 
-    return false;
+  // Special functionality for literal fields
+  // Change value
+  $('div#scroll-container').on('input', 'div.literal-input', function() {
+    get_json_change_value(this, this.innerText);
   });
 
   // Special functionality for options Fields
@@ -120,21 +121,36 @@ $(function () {
   $('div#scroll-container').on('click', '.option', function() {
     var input = $(this).parent().parent('.options').prev('.option-input')
     input.val($(this).text());
-    input.get(0).setCustomValidity('');
+    if ($(this).is('[data-option-uri]')) {
+      get_json_change_value(input[0], $(this).attr('data-option-uri'));
+    } else {
+      get_json_change_value(input[0], this.textContent);
+    }
   });
 
-  // Mark option invalid
+  // Check validity of option input
   // I found no way to discriminate between focus switching within the form (to the custom option input)
   // or out of the form and only then check validity
   $('div#scroll-container').on('focusout', 'form.option-form', function() {
     // if value not in options, .setCustomValidity("Invalid option.")
     var input = $(this).find('.option-input')[0];
-    if (input.value == '' || input.value && $(this).find('.option').text().includes(input.value)) {
-      set_validity(input, '');
-      // TODO communicate choice to server
-    } else {
-      set_validity(input, 'Choose an option from the list.');
+    var value = '';
+    if (input.value != '') {
+      $(this).find('.option').each(function() {
+        if (this.textContent == input.value) {
+          if ($(this).is('[data-option-uri]')) {
+            value = $(this).attr('data-option-uri');
+          } else {
+            value = this.textContent;
+          }
+        }
+      });
+      if (value == '') {
+        set_validity(input, 'Choose an option from the list.');
+        return
+      }
     }
+    get_json_change_value(input, value);
   });
 
   // Add entity
