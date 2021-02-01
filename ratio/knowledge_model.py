@@ -5,6 +5,7 @@ Specifically the translation of an rdf ontology into Python classes
 # todo fix the messy class system: make a parent graph class with children ontology and subgraph knowledge
 # todo encapsulate more functions into that classes
 # todo maybe make a single api class for the rest of the system to interact with
+# todo maybe fields don't actually have a list of child entities but a function to build them only when needed
 
 from flask import g
 from rdflib import BNode
@@ -51,6 +52,7 @@ def parse_n3_term(s):
 
 
 def construct_list(ontology, list_node):
+    """For parsing a rdf:List."""
     list_ = []
     while list_node != RDF.nil:
         list_.append(next(ontology.objects(list_node, RDF.first)))
@@ -120,7 +122,7 @@ def get_ontology():
 
 
 class SubgraphKnowledge:
-    """Manages knowledge about in certain subgraph."""
+    """Manages knowledge about certain subgraph."""
 
     def __init__(self, subgraph_id):
         self.graph = Graph()
@@ -172,6 +174,46 @@ class SubgraphKnowledge:
                 return f
 
         raise KeyError('No field with URI {} found.'.format(property_uri))
+
+    def new_value(self, entity_uri, property_uri):
+        entity = self.get_entity(entity_uri)
+        field = self.get_field(entity_uri, property_uri)
+        index = len(field.values)
+        field.values.append('')
+
+        property_uri_index = URIRef(str(field.property_uri) + '_' + str(index))
+        self.graph.add((entity.uri, property_uri_index, Literal('')))
+        db = get_db()
+        db.execute(
+            'INSERT INTO knowledge (subgraph_id, subject, predicate, object) VALUES (?, ?, ?, ?)',
+            (self.id, entity.uri.n3(), property_uri_index.n3(), Literal('').n3())
+        )
+        db.commit()
+        return index
+
+    def change_value(self, entity_uri, property_uri, index, value):
+        entity = self.get_entity(entity_uri)
+        field = self.get_field(entity_uri, property_uri)
+
+        validity, value = field.check_value(value)
+        if validity:
+            return validity
+
+        field.values[index] = value
+
+        property_uri_index = URIRef(str(property_uri) + '_' + str(index))
+        self.graph.remove((entity.uri, property_uri_index, None))
+        self.graph.add((entity.uri, property_uri_index, value))
+        db = get_db()
+        db.execute(
+            'DELETE FROM knowledge WHERE subgraph_id = ? AND subject = ? AND predicate = ?',
+            (self.id, entity.uri.n3(), property_uri_index.n3())
+        )
+        db.execute(
+            'INSERT INTO knowledge (subgraph_id, subject, predicate, object) VALUES (?, ?, ?, ?)',
+            (self.id, entity.uri.n3(), property_uri_index.n3(), value.n3())
+        )
+        db.commit()
 
     def new_individual(self, class_uri, label, parent_uri, property_uri):
         class_uri = URIRef(class_uri)
@@ -311,13 +353,13 @@ class SubgraphKnowledge:
 
         db = get_db()
         db.execute('DELETE FROM knowledge WHERE subgraph_id = ?', (self.id,))
-
         for subject, predicate, object_ in self.graph[::]:
             db.execute('INSERT INTO knowledge (subgraph_id, subject, predicate, object)'
                        ' VALUES (?, ?, ?, ?)',
                        (self.id, subject.n3(), predicate.n3(), object_.n3()))
-
         db.commit()
+
+        self.root = None  # forces a rebuild of the root entity from the updated graph on the next request
 
 
 def get_subgraph_knowledge(subgraph_id):
@@ -352,40 +394,45 @@ class Field:
         self.values = values
         self.options = options
 
-    def check_validity(self, value):
-        if self.is_object_property or self.options:
-            return ''
-
-        if self.range_uri == RDFS.Literal:
-            return ''
+    def check_value(self, value):
+        """Checks if the value is valid and transforms it into a corresponding rdflib.Literal
+        Returns a pair of a validity message and the Literal
+        If the value is valid the validity message is an emptystring.
+        If the value is not valid instead of the literal, None is returned
+        """
+        if value == '':
+            # Empty values are allowed but will be deleted on reloading the page
+            pass
+        elif self.is_object_property and self.options:
+            return 1, 2  # todo
+        elif self.options:
+            if value not in self.options:
+                return 'Choose an option from the list.', None
+        elif self.range_uri == RDFS.Literal:
+            pass
         elif self.range_uri == XSD.string:
-            return ''
+            pass
         elif self.range_uri == XSD.float:
             try:
                 float(value)
-                return ''
-            except ValueError:
-                return '{} is not a valid float.'.format(value)
+            except (ValueError, SyntaxError):
+                return '{} is not a valid float.'.format(value), None
         elif self.range_uri == XSD.integer:
-            return self.check_validity_integer(value)
+            try:
+                int(value)
+            except (ValueError, SyntaxError):
+                return '{} is not a valid integer.'.format(value), None
         elif self.range_uri == XSD.positiveInteger:
-            int_validity = self.check_validity_integer(value)
-            if int_validity:
-                return int_validity
-            elif int(value) < 0:
-                return '{} is not a positive value.'.format(value)
+            try:
+                i = int(value)
+            except (ValueError, SyntaxError):
+                return '{} is not a valid integer.'.format(value), None
+            if i < 0:
+                return '{} is not a positive value.'.format(value), None
         else:
             print('Unknown Datatype: {}'.format(self.range_uri))
-            return ''
+        return '', Literal(value, datatype=self.range_uri)
 
-    @staticmethod
-    def check_validity_integer(value):
-        try:
-            i = int(value)
-            assert i == float(value)
-            return ''
-        except (ValueError, AssertionError):
-            return '{} is not a valid integer.'.format(value)
 
 class Option:
     def __init__(self, uri, label, class_uri, defined_by):
@@ -457,7 +504,7 @@ def build_empty_field(ontology, property_uri, range_class_uri):
     except StopIteration:
         width = 50
 
-    values = []
+    values = []  # todo add empty value to start with?
 
     one_of = list(ontology.objects(range_class_uri, OWL.oneOf))
     if is_object_property and not is_described:
@@ -513,15 +560,18 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
     except StopIteration:
         width = 50
 
-    values = list(knowledge.objects(individual_uri, property_uri))
+    indices = [int(str(p)[len(str(property_uri))+1:])
+               for p, o in knowledge[individual_uri::]
+               if str(p).startswith(str(property_uri))]
+    values = [next(knowledge[individual_uri:URIRef(str(property_uri) + '_' + str(i)):])
+              if i in indices else None
+              for i in range(max(indices, default=-1)+1)]
+
     if is_described:
-        values = [build_entity_from_knowledge(ontology, knowledge, value) for value in values]
-        values.sort(key=lambda entity: entity.label)
+        values = [None if value is None else build_entity_from_knowledge(ontology, knowledge, value)
+                  for value in values]
     elif is_object_property:
-        values = [build_option(ontology, value) for value in values]
-        values.sort(key=lambda option: option.label)
-    else:
-        values.sort()
+        values = [None if value is None else build_option(ontology, value) for value in values]
 
     one_of = list(ontology.objects(range_class_uri, OWL.oneOf))
     if is_object_property and not is_described:

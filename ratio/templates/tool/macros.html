@@ -70,11 +70,11 @@
 {% endmacro %}
 
 
-{% macro value_options(field, value) %}
+{% macro value_options(field, value, index) %}
 <form class="option-form flex-row">
   <input type="hidden" autofocus>
   <div class="flex-flex">
-    <input class="w3-input option-input" type="text" name="label" value="{{ value.label or value }}">
+    <input class="w3-input option-input" type="text" name="label" value="{{ value.label or value }}" data-index="{{index}}">
     <div class="options"><div class="color1">
       {% if field.is_object_property %}
       {% for option in field.options %}
@@ -102,9 +102,9 @@
 {% endmacro %}
 
 
-{% macro value_free(field, value) %}
+{% macro value_free(field, value, index) %}
 <form class="flex-row">
-  <div class="w3-input literal-input flex-flex" contentEditable>{{ value }}</div>
+  <div class="w3-input literal-input flex-flex" data-index="{{index}}" contentEditable>{{ value }}</div>
   {% if not field.is_functional %}
   <a href="#" class="w3-button tiny-button flex-fix delete-value-button" title="Delete value">{#
     #}<i class="fas fa-minus"></i>
@@ -145,21 +145,17 @@
         <span class="field-label flex-lex" {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}:</span>
         <div class="field-value-list">
           {% if field.options is not none %}
-            {% if field.values %}
             {% for value in field.values %}
-            {{ value_options(field, value) }}
-            {% endfor %}
-            {% else %}
-            {{ value_options(field, '') }}
+            {% if value is not none %}
+            {{ value_options(field, value, loop.index - 1) }}
             {% endif %}
+            {% endfor %}
           {% else %}
-            {% if field.values %}
             {% for value in field.values %}
-            {{ value_free(field, value) }}
-            {% endfor %}
-            {% else %}
-            {{ value_free(field, '') }}
+            {% if value is not none %}
+            {{ value_free(field, value, loop.index - 1) }}
             {% endif %}
+            {% endfor %}
           {% endif %}
         </div>
         {% if not field.is_functional %}

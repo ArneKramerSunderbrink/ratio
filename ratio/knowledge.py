@@ -117,26 +117,18 @@ def add_value():
     subgraph_knowledge = get_subgraph_knowledge(subgraph_id)
     field = subgraph_knowledge.get_field(entity_uri, property_uri)
 
+    if field.is_described:
+        return jsonify(error='You have to use /_add_entity to add a described individual')
     if field.is_functional and field.values:
         return jsonify(error='You cannot add more than one value to this field.')
 
-    # todo add knowledge to database, should be done in method of knowledge class
-    #db = get_db()
-    #db_cursor = db.cursor()
-
-    #db_cursor.execute(
-    #    'INSERT INTO knowledge (subgraph_id, author_id, subject, predicate, object) VALUES (?, ?, ?, ?, ?)',
-    #    (subgraph_id, user_id, rdf_subject, rdf_predicate, rdf_object)
-    #)
-    #knowledge_id = db_cursor.lastrowid
-
-    #db.commit()
+    index = subgraph_knowledge.new_value(entity_uri, property_uri)
 
     if field.options is None:
         render_value_div = get_template_attribute('tool/macros.html', 'value_free')
     else:
         render_value_div = get_template_attribute('tool/macros.html', 'value_options')
-    value_div = render_value_div(field, '')
+    value_div = render_value_div(field, '', index)
 
     return jsonify(value_div=value_div,
                    property_uri=property_uri, entity_uri=entity_uri,
@@ -148,16 +140,19 @@ def add_value():
 def change_value():
     user_id = g.user['id']
     subgraph_id = request.args.get('subgraph_id', 0, type=int)
-    property_uri = request.args.get('property_uri', '', type=str)
     entity_uri = request.args.get('entity_uri', '', type=str)
+    property_uri = request.args.get('property_uri', '', type=str)
+    index = request.args.get('index', -1, type=int)
     value = request.args.get('value', '', type=str).strip()
 
     if not subgraph_id:
         return jsonify(error='Subgraph id cannot be empty.')
-    if not property_uri or property_uri.isspace():
-        return jsonify(error='Property URI cannot be empty.')
     if not entity_uri or entity_uri.isspace():
         return jsonify(error='Entity URI cannot be empty.')
+    if not property_uri or property_uri.isspace():
+        return jsonify(error='Property URI cannot be empty.')
+    if index < 0:
+        return jsonify(error='Index cannot be empty.')
 
     if not subgraph_access(user_id, subgraph_id):
         return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
@@ -165,29 +160,15 @@ def change_value():
     subgraph_knowledge = get_subgraph_knowledge(subgraph_id)
     field = subgraph_knowledge.get_field(entity_uri, property_uri)
 
-    if not value:
-        # todo delete value from graph?
-        return jsonify()
+    if field.is_described:
+        # todo stimmt der link?
+        return jsonify(error='You have to use /_change_entity_label to change the label of a described individual')
+    if len(field.values) <= index or field.values[index] is None:
+        return jsonify(error='There is no value at that index.')
 
-    validity = field.check_validity(value)
+    validity = subgraph_knowledge.change_value(entity_uri, property_uri, index, value)
     if validity:
         return jsonify(validity=validity)
-
-    # todo add knowledge to database, should be done in method of knowledge class
-    #db = get_db()
-    #db_cursor = db.cursor()
-
-    #db_cursor.execute(
-    #    'INSERT INTO knowledge (subgraph_id, author_id, subject, predicate, object) VALUES (?, ?, ?, ?, ?)',
-    #    (subgraph_id, user_id, rdf_subject, rdf_predicate, rdf_object)
-    #)
-    #knowledge_id = db_cursor.lastrowid
-
-    #db.commit()
-
-    #print(property_uri)
-    #print(entity_uri)
-    #print(value)
 
     return jsonify()
 

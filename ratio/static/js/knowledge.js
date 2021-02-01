@@ -71,15 +71,16 @@ $(function () {
   // Special functionality for literal fields
   // Change value
   $('div#scroll-container').on('input', 'div.literal-input', function() {
-    // TODO
     var input = this;
     var property = $(this).closest('div.field')
     var property_uri = property.attr('data-property-uri');
     var entity_uri = $(this).closest('div.entity').attr('data-entity-uri');
+    var index = $(this).attr('data-index');
     var data = [
-      { name: "subgraph_id", value: window.SUBGRAPH_ID },
-      { name: "property_uri", value: property_uri },
-      { name: "entity_uri", value: entity_uri },
+      { name: 'subgraph_id', value: window.SUBGRAPH_ID },
+      { name: 'entity_uri', value: entity_uri },
+      { name: 'property_uri', value: property_uri },
+      { name: 'index', value: index},
       { name: 'value', value: this.innerText}
     ];
 
@@ -90,7 +91,6 @@ $(function () {
         set_validity(input, data.validity);
       } else {
         set_validity(input, '');
-        console.log('success'); // todo
       }
     })
     .fail(function() { alert('getJSON request failed!'); });

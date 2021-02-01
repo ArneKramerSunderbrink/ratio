@@ -306,7 +306,7 @@ def download_rdf(subgraph_id):
         subgraph_id,
         strftime('%Y-%m-%d-%H-%M-%S')
     )
-    content = get_subgraph_knowledge(subgraph_id).graph.serialize(format='turtle')
+    content = get_subgraph_knowledge(subgraph_id).graph.serialize(format='turtle')  # todo: I need to filter empty values?
 
     return Response(
         content,
