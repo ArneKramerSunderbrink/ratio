@@ -35,7 +35,7 @@ def parse_n3_term(s):
     if s.startswith('<') and s.endswith('>'):
         return URIRef(s[1:-1])
     elif s.startswith('"'):
-        _, value, suffix = s.split('"')
+        _, value, suffix = s.split('"""' if s.startswith('"""') else '"')
         if suffix:
             if suffix.startswith('@'):
                 return Literal(value, lang=suffix[1:])
@@ -214,8 +214,6 @@ class SubgraphKnowledge:
             (self.id, entity.uri.n3(), property_uri_index.n3(), value.n3())
         )
         db.commit()
-
-    #def delete_value(self, ):
 
     def new_individual(self, class_uri, label, parent_uri, property_uri):
         class_uri = URIRef(class_uri)

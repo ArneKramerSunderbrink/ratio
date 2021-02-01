@@ -42,6 +42,8 @@ $(function () {
   // Delete Value
   $('div#scroll-container').on('click', '.delete-value-button', function() {
     var form = $(this).closest('form');
+    var input = form.find('.literal-input, .option-input');
+    //var old_value = //TODO
     form.css('display', 'none');
     // TODO communicate deletion to server
     // Display message
