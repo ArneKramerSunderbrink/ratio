@@ -174,6 +174,24 @@ $(function () {
     get_json_change_value(input, value);
   });
 
+  // Special functionality for Entities
+  // Change label
+  $('div#scroll-container').on('input', 'div.entity-label', function() {
+    var entity_uri = $(this).closest('div.entity').attr('data-entity-uri');
+    var data = [
+      { name: 'subgraph_id', value: window.SUBGRAPH_ID },
+      { name: 'entity_uri', value: entity_uri },
+      { name: 'label', value: this.innerText}
+    ];
+
+    $.getJSON(window.SCRIPT_ROOT + '/_change_label', data, function(data) {
+      if (data.error) {
+        alert(data.error);
+      }
+    })
+    .fail(function() { alert('getJSON request failed!'); });
+  });
+
   // Add entity
   $('div#scroll-container').on('submit', 'form.add-entity-form', function() {
     var field = $(this).closest('div.entity-field');

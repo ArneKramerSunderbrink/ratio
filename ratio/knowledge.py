@@ -173,6 +173,29 @@ def change_value():
     return jsonify(index=index)
 
 
+@bp.route('/_change_label')
+@login_required
+def change_label():
+    # TODO
+    user_id = g.user['id']
+    subgraph_id = request.args.get('subgraph_id', 0, type=int)
+    entity_uri = request.args.get('entity_uri', '', type=str)
+    label = request.args.get('label', '', type=str)
+
+    if not subgraph_id:
+        return jsonify(error='Subgraph id cannot be empty.')
+    if not entity_uri or entity_uri.isspace():
+        return jsonify(error='Entity URI cannot be empty.')
+
+    if not subgraph_access(user_id, subgraph_id):
+        return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
+
+    subgraph_knowledge = get_subgraph_knowledge(subgraph_id)
+    subgraph_knowledge.change_label(entity_uri, label)
+
+    return jsonify()
+
+
 @bp.route('/_add_entity')
 @login_required
 def add_entity():

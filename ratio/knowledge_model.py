@@ -226,6 +226,25 @@ class SubgraphKnowledge:
 
         self.root = None  # forces a rebuild of the root entity from the updated graph on the next request
 
+    def change_label(self, entity_uri, label):
+        entity_uri = URIRef(entity_uri)
+
+        self.graph.remove((entity_uri, RDFS.label, None))
+        self.graph.add((entity_uri, RDFS.label, Literal(label)))
+
+        db = get_db()
+        db.execute(
+            'DELETE FROM knowledge WHERE subgraph_id = ? AND subject = ? AND predicate = ?',
+            (self.id, entity_uri.n3(), RDFS.label.n3())
+        )
+        db.execute(
+            'INSERT INTO knowledge (subgraph_id, subject, predicate, object) VALUES (?, ?, ?, ?)',
+            (self.id, entity_uri.n3(), RDFS.label.n3(), Literal(label).n3())
+        )
+        db.commit()
+
+        self.root = None  # forces a rebuild of the root entity from the updated graph on the next request
+
     def new_individual(self, class_uri, label, parent_uri, property_uri):
         class_uri = URIRef(class_uri)
         parent_uri = URIRef(parent_uri)
@@ -537,13 +556,12 @@ def build_empty_field(ontology, property_uri, range_class_uri):
     except StopIteration:
         width = 50
 
-    values = dict()  # todo add empty value to start with?
+    values = dict()
     free_index = 0
 
     one_of = list(ontology.objects(range_class_uri, OWL.oneOf))
     if is_object_property and not is_described:
-        options = list(build_option(ontology, uri) for uri in ontology.subjects(RDF.type, range_class_uri))
-        # todo: get individuals in subclasses of range_class also
+        options = list(build_option(ontology, uri) for uri in get_tokens(ontology, range_class_uri))
         options.sort(key=lambda option: option.label)
     elif one_of:
         options = construct_list(ontology, one_of[0])
