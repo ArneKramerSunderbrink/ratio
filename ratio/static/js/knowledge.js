@@ -107,6 +107,9 @@ $(function () {
       } else {
         set_validity(input, '');
       }
+      if (index == -1) {
+        $(input).attr('data-index', String(data.index));
+      }
     })
     .fail(function() { alert('getJSON request failed!'); });
   }

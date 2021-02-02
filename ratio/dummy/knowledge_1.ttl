@@ -10,35 +10,50 @@ ctro:CT_1_1 rdf:type owl:NamedIndividual ,
                      ctro:ClinicalTrial ;
             rdfs:label "Clinical Trial 1"^^xsd:string ;
             ctro:described_by_0 ctro:Pub_1_1 ;
+            ctro:described_by_freeindex "1"^^xsd:positiveInteger ;
             ctro:hasDesignGroup_0 ctro:Design_1_1 ;
+            ctro:hasDesignGroup_freeindex "1"^^xsd:positiveInteger ;
             ctro:hasPopulation_0 ctro:Population_1_1 ;
+            ctro:hasPopulation_freeindex "1"^^xsd:positiveInteger ;
             ctro:hasQualityIndicator_0 ctro:Evidence_1_1 ;
+            ctro:hasQualityIndicator_freeindex "1"^^xsd:positiveInteger ;
             ctro:hasArm_0 ctro:Arm_1_1 ;
             ctro:hasArm_3 ctro:Arm_1_2 ;
+            ctro:hasArm_freeindex "4"^^xsd:positiveInteger ;
             ctro:hasOutcome_0 ctro:Out_1_1 ;
+            ctro:hasOutcome_freeindex "1"^^xsd:positiveInteger ;
             ctro:hasResult_0 ctro:Res_1_1 ;
             ctro:hasResult_1 ctro:Res_1_2 ;
-            ctro:hasAdverseEffect_0 ctro:AE_1_1 .
+            ctro:hasResult_freeindex "2"^^xsd:positiveInteger ;
+            ctro:hasAdverseEffect_0 ctro:AE_1_1 ;
+            ctro:hasAdverseEffect_freeindex "1"^^xsd:positiveInteger .
 
 ctro:Pub_1_1 rdf:type owl:NamedIndividual ,
                       ctro:Publication ;
              rdfs:label "Publication 9098273"^^xsd:string ;
              ctro:hasAuthor_2 "Alm A"^^xsd:string ;
              ctro:hasAuthor_0 "Stjernschantz J."^^xsd:string ;
+             ctro:hasAuthor_freeindex "3"^^xsd:positiveInteger ;
              ctro:hasJournal_0 "Ophthalmology"^^xsd:string ;
+             ctro:hasJournal_freeindex "1"^^xsd:positiveInteger ;
              ctro:hasPMID_0 "9098273"^^xsd:integer ;
+             ctro:hasPMID_freeindex "1"^^xsd:positiveInteger ;
              ctro:hasPublicationYear_0 "1995"^^xsd:integer ;
-             ctro:hasTitle_0 "Effects on intraocular pressure and side effects of 0.005% latanoprost applied once daily, evening or morning. A comparison with timolol. Scandinavian Latanoprost Study Group"^^xsd:string .
+             ctro:hasPublicationYear_freeindex "1"^^xsd:positiveInteger ;
+             ctro:hasTitle_0 "Effects on intraocular pressure and side effects of 0.005% latanoprost applied once daily, evening or morning. A comparison with timolol. Scandinavian Latanoprost Study Group"^^xsd:string ;
+             ctro:hasTitle_freeindex "1"^^xsd:positiveInteger .
 
 ctro:Design_1_1 rdf:type owl:NamedIndividual ,
                          ctro:DesignGroup ;
                 rdfs:label "Design"^^xsd:string ;
-                ctro:analysesHealthCondition_0 ctro:T2DM .
+                ctro:analysesHealthCondition_0 ctro:T2DM ;
+                ctro:analysesHealthCondition_freeindex "1"^^xsd:positiveInteger .
 
 ctro:Population_1_1 rdf:type owl:NamedIndividual ,
                              ctro:Population ;
                     rdfs:label "Population"^^xsd:string ;
-                    ctro:hasGender_0 "Female" .
+                    ctro:hasGender_0 "Female" ;
+                    ctro:hasGender_freeindex "1"^^xsd:positiveInteger .
 
 ctro:Evidence_1_1 rdf:type owl:NamedIndividual ,
                            ctro:EvidenceQuality;
@@ -48,29 +63,41 @@ ctro:Arm_1_1 rdf:type owl:NamedIndividual ,
                       ctro:Arm;
              rdfs:label "Latanoprost Arm"^^xsd:string ;
              ctro:hasNumberPatientsArm_0 "123"^^xsd:positiveInteger ;
-             ctro:hasIntervention_0 ctro:Interv_1_1 .
+             ctro:hasNumberPatientsArm_freeindex "1"^^xsd:positiveInteger ;
+             ctro:hasIntervention_0 ctro:Interv_1_1 ;
+             ctro:hasIntervention_freeindex "1"^^xsd:positiveInteger .
 
 ctro:Interv_1_1 rdf:type owl:NamedIndividual ,
                          ctro:Intervention ;
                 rdfs:label "Latanoprost"^^xsd:string ;
                 ctro:hasDuration_0 "12 months" ;
+                ctro:hasDuration_freeindex "1"^^xsd:positiveInteger ;
                 ctro:hasFrequency_0 "every 2 hrs." ;
+                ctro:hasFrequency_freeindex "1"^^xsd:positiveInteger ;
                 ctro:hasDrug_0 ctro:Latanoprost ;
-                ctro:hasDeliveryMethod_0 ctro:Injection .
+                ctro:hasDrug_freeindex "1"^^xsd:positiveInteger ;
+                ctro:hasDeliveryMethod_0 ctro:Injection ;
+                ctro:hasDeliveryMethod_freeindex "1"^^xsd:positiveInteger .
 
 ctro:Arm_1_2 rdf:type owl:NamedIndividual ,
                       ctro:Arm;
              rdfs:label "Timolol Arm"^^xsd:string ;
              ctro:hasNumberPatientsArm_0 "111"^^xsd:positiveInteger ;
-             ctro:hasIntervention_0 ctro:Interv_1_2 .
+             ctro:hasNumberPatientsArm_freeindex "1"^^xsd:positiveInteger ;
+             ctro:hasIntervention_0 ctro:Interv_1_2 ;
+             ctro:hasIntervention_freeindex "1"^^xsd:positiveInteger .
 
 ctro:Interv_1_2 rdf:type owl:NamedIndividual ,
                          ctro:Intervention ;
                 rdfs:label "Timolol"^^xsd:string ;
                 ctro:hasDuration_0 "12 months" ;
+                ctro:hasDuration_freeindex "1"^^xsd:positiveInteger ;
                 ctro:hasFrequency_0 "every 2 hrs." ;
+                ctro:hasFrequency_freeindex "1"^^xsd:positiveInteger ;
                 ctro:hasDrug_0 ctro:Timolol ;
-                ctro:hasDeliveryMethod_0 ctro:Injection .
+                ctro:hasDrug_freeindex "1"^^xsd:positiveInteger ;
+                ctro:hasDeliveryMethod_0 ctro:Injection ;
+                ctro:hasDeliveryMethod_freeindex "1"^^xsd:positiveInteger .
 
 ctro:Out_1_1 rdf:type owl:NamedIndividual ,
                       ctro:Outcome ;
@@ -79,7 +106,8 @@ ctro:Out_1_1 rdf:type owl:NamedIndividual ,
 ctro:Res_1_1 rdf:type owl:NamedIndividual ,
                       ctro:Result ;
              rdfs:label "Outcome Measure Data HBA Arm 1"^^xsd:string ;
-             ctro:hasStatisticalMeasure_0 ctro:Stat_1_1 .
+             ctro:hasStatisticalMeasure_0 ctro:Stat_1_1 ;
+             ctro:hasStatisticalMeasure_freeindex "1"^^xsd:positiveInteger .
 
 ctro:Res_1_2 rdf:type owl:NamedIndividual ,
                       ctro:Result ;

@@ -158,8 +158,8 @@ class SubgraphKnowledge:
             if e.uri == entity_uri:
                 return e
             if isinstance(e, Entity):
-                stack += [e2 for f in e.fields for e2 in f.values
-                          if f.is_object_property and e2 is not None]
+                stack += [f.values[i] for f in e.fields for i in f.values
+                          if f.is_object_property]
 
         raise KeyError('No entity with URI {} found.'.format(entity_uri))
 
@@ -179,14 +179,22 @@ class SubgraphKnowledge:
     def new_value(self, entity_uri, property_uri):
         entity = self.get_entity(entity_uri)
         field = self.get_field(entity_uri, property_uri)
-        index = len(field.values)
+        index = field.free_index
 
         property_uri_index = URIRef(str(field.property_uri) + '_' + str(index))
+        property_uri_freeindex = URIRef(str(field.property_uri) + '_freeindex')
+        self.graph.remove((entity.uri, property_uri_freeindex, None))
         self.graph.add((entity.uri, property_uri_index, Literal('')))
+        self.graph.add((entity.uri, property_uri_freeindex, Literal(index+1, datatype=XSD.positiveInteger)))
         db = get_db()
         db.execute(
+            'DELETE FROM knowledge WHERE subgraph_id = ? AND subject = ? AND predicate = ?',
+            (self.id, entity.uri.n3(), property_uri_freeindex.n3())
+        )
+        db.executemany(
             'INSERT INTO knowledge (subgraph_id, subject, predicate, object) VALUES (?, ?, ?, ?)',
-            (self.id, entity.uri.n3(), property_uri_index.n3(), Literal('').n3())
+            [(self.id, entity.uri.n3(), property_uri_index.n3(), Literal('').n3()),
+             (self.id, entity.uri.n3(), property_uri_freeindex.n3(), Literal(index+1, datatype=XSD.positiveInteger).n3())]
         )
         db.commit()
 
@@ -223,31 +231,17 @@ class SubgraphKnowledge:
         parent_uri = URIRef(parent_uri)
         property_uri = URIRef(property_uri)
         field = self.get_field(parent_uri, property_uri)
-        index = len(field.values)
+        index = field.free_index
 
         property_uri_index = URIRef(str(field.property_uri) + '_' + str(index))
-
-        # find an unique uri
-        class_list = []
-        stack = [self.get_root()]
-        while stack:
-            e = stack.pop()
-            if e.class_uri == class_uri:
-                class_list.append(int(e.uri.split('_')[-1]))
-            if isinstance(e, Entity):
-                stack += [e2 for f in e.fields for e2 in f.values
-                          if f.is_object_property and e2 is not None]
-
-        # todo I also have to check if there are deleted objects in memory that could be reanimated
-
-        nr = next(i for i in range(1, max(class_list)+2) if i not in class_list)
+        property_uri_freeindex = URIRef(str(field.property_uri) + '_freeindex')
 
         # construct a unique uri
         uri = URIRef('{}{}_{}_{}'.format(
             get_ontology().get_base(),
             class_uri.n3(get_ontology().graph.namespace_manager).split(':')[-1],  # try to remove the prefix
             self.id,
-            nr
+            index
         ))
 
         #if label is None:  # todo would be nice to propose this default label in the frontend
@@ -264,17 +258,23 @@ class SubgraphKnowledge:
         # new triples
         triples = [
             (parent_uri, property_uri_index, uri),
+            (parent_uri, property_uri_freeindex, Literal(index + 1, datatype=XSD.positiveInteger)),
             (uri, RDF.type, OWL.NamedIndividual),
             (uri, RDF.type, class_uri),
             (uri, RDFS.label, Literal(label, datatype=XSD.string))
         ]
 
         # add triples to graph
+        self.graph.remove((parent_uri, property_uri_freeindex, None))
         for t in triples:
             self.graph.add(t)
 
         # save add triples to database
         db = get_db()
+        db.execute(
+            'DELETE FROM knowledge WHERE subgraph_id = ? AND subject = ? AND predicate = ?',
+            (self.id, parent_uri.n3(), property_uri_freeindex.n3())
+        )
         db.executemany(
             'INSERT INTO knowledge (subgraph_id, subject, predicate, object) VALUES (?, ?, ?, ?)',
             [(self.id, s.n3(), p.n3(), o.n3()) for s, p, o in triples]
@@ -369,6 +369,12 @@ class SubgraphKnowledge:
 
         self.root = None  # forces a rebuild of the root entity from the updated graph on the next request
 
+    def get_clean_serialization(self, rdf_format='turtle'):
+        clean_graph = Graph()
+        clean_graph.namespace_manager = self.graph.namespace_manager
+        for t in self.get_root().get_triples():
+            clean_graph.add(t)
+        return clean_graph.serialize(format=rdf_format)
 
 def get_subgraph_knowledge(subgraph_id):
     """Get SubgraphKnowledge of a certain subgraph.
@@ -387,7 +393,7 @@ class Field:
     """Represents a possible owl:ObjectProperty or owl:DatatypeProperty of an Entity"""
     def __init__(self, property_uri, label, comment,
                  is_object_property, is_described, show_label, is_functional,
-                 range_uri, range_label, order, width, values, options=None):
+                 range_uri, range_label, order, width, values, free_index, options=None):
         self.property_uri = property_uri
         self.label = label
         self.comment = comment
@@ -400,6 +406,7 @@ class Field:
         self.order = order
         self.width = width
         self.values = values
+        self.free_index = free_index
         self.options = options
 
     def check_value(self, value):
@@ -447,6 +454,17 @@ class Field:
         else:
             print('Unknown Datatype: {}'.format(self.range_uri))
         return '', Literal(value, datatype=self.range_uri)
+
+    def get_sorted_values(self):
+        """Get (index, value)-pairs for non empty values sorted by index."""
+        if self.is_object_property:
+            if self.is_described:
+                return sorted(self.values.items(), key=lambda i: i[0])
+            else:
+                non_empty = [i for i in self.values if type(self.values[i]) != Literal]
+        else:
+            non_empty = [i for i in self.values if self.values[i].value != '']
+        return [(i, self.values[i]) for i in non_empty]
 
 
 class Option:
@@ -519,7 +537,8 @@ def build_empty_field(ontology, property_uri, range_class_uri):
     except StopIteration:
         width = 50
 
-    values = []  # todo add empty value to start with?
+    values = dict()  # todo add empty value to start with?
+    free_index = 0
 
     one_of = list(ontology.objects(range_class_uri, OWL.oneOf))
     if is_object_property and not is_described:
@@ -534,7 +553,7 @@ def build_empty_field(ontology, property_uri, range_class_uri):
         options = None
 
     return Field(property_uri, label, comment, is_object_property, is_described, show_label, is_functional,
-                 range_class_uri, range_label, order, width, values, options)
+                 range_class_uri, range_label, order, width, values, free_index, options)
 
 
 def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri, range_class_uri):
@@ -575,20 +594,26 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
     except StopIteration:
         width = 50
 
-    indices = [int(str(p)[len(str(property_uri))+1:])
-               for p, o in knowledge[individual_uri::]
-               if str(p).startswith(str(property_uri))]
-    values = [next(knowledge[individual_uri:URIRef(str(property_uri) + '_' + str(i)):])
-              if i in indices else None
-              for i in range(max(indices, default=-1)+1)]
+    values = dict()
+    for i in [str(p)[len(str(property_uri))+1:]
+              for p, o in knowledge[individual_uri::]
+              if str(p).startswith(str(property_uri))]:
+        try:
+            i = int(i)
+        except ValueError:
+            continue
+        values[i] = next(knowledge[individual_uri:URIRef(str(property_uri) + '_' + str(i)):])
 
     if is_described:
-        values = [None if (value is None or str(value) == '')
-                  else build_entity_from_knowledge(ontology, knowledge, value)
-                  for value in values]
+        values = {i: build_entity_from_knowledge(ontology, knowledge, values[i])
+                  for i in values if str(values[i]) != ''}
     elif is_object_property:
-        values = [None if (value is None or str(value) == '') else build_option(ontology, value)
-                  for value in values]
+        values = {i: build_option(ontology, values[i])
+                  for i in values if str(values[i]) != ''}
+    try:
+        free_index = next(knowledge[individual_uri:URIRef(str(property_uri) + '_freeindex'):])
+    except StopIteration:
+        free_index = 0
 
     one_of = list(ontology.objects(range_class_uri, OWL.oneOf))
     if is_object_property and not is_described:
@@ -602,7 +627,7 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
         options = None
 
     return Field(property_uri, label, comment, is_object_property, is_described, show_label, is_functional,
-                 range_class_uri, range_label, order, width, values, options)
+                 range_class_uri, range_label, order, width, values, free_index, options)
 
 
 class Entity:
@@ -614,6 +639,38 @@ class Entity:
         self.class_uri = class_uri
         self.class_label = class_label
         self.fields = fields  # fields s.t. field.property_uri rdfs:domain self.uri
+
+    def get_triples(self):
+        """Returns the clean knowledge about this entity.
+        I.e. all outgoing links, recursively, without indices of values.
+        """
+        triples = [
+            (self.uri, RDF.type, OWL.NamedIndividual),
+            (self.uri, RDF.type, self.class_uri),
+            (self.uri, RDFS.label, self.label)
+        ]
+        for f in self.fields:
+            if f.is_object_property:
+                if f.is_described:
+                    triples += [
+                        (self.uri, f.property_uri, f.values[i].uri)
+                        for i in f.values
+                    ]
+                    for i in f.values:
+                        triples += f.values[i].get_triples()
+                else:
+                    triples += [
+                        (self.uri, f.property_uri, f.values[i].uri)
+                        for i in f.values
+                        if type(f.values[i]) != Literal  # no emmpty values
+                    ]
+            else:
+                triples += [
+                    (self.uri, f.property_uri, f.values[i])
+                    for i in f.values
+                    if f.values[i].value != ''  # no empty values
+                ]
+        return triples
 
 
 def build_empty_entity(ontology, class_uri, uri, label):

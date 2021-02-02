@@ -142,7 +142,7 @@ def change_value():
     subgraph_id = request.args.get('subgraph_id', 0, type=int)
     entity_uri = request.args.get('entity_uri', '', type=str)
     property_uri = request.args.get('property_uri', '', type=str)
-    index = request.args.get('index', -1, type=int)
+    index = request.args.get('index', -2, type=int)
     value = request.args.get('value', '', type=str).strip()
 
     if not subgraph_id:
@@ -151,7 +151,7 @@ def change_value():
         return jsonify(error='Entity URI cannot be empty.')
     if not property_uri or property_uri.isspace():
         return jsonify(error='Property URI cannot be empty.')
-    if index < 0:
+    if index < -1:
         return jsonify(error='Index cannot be empty.')
 
     if not subgraph_access(user_id, subgraph_id):
@@ -164,11 +164,13 @@ def change_value():
         # todo stimmt der link?
         return jsonify(error='You have to use /_change_entity_label to change the label of a described individual')
 
+    if index == -1:
+        index = subgraph_knowledge.new_value(entity_uri, property_uri)
     validity = subgraph_knowledge.change_value(entity_uri, property_uri, index, value)
     if validity:
-        return jsonify(validity=validity)
+        return jsonify(index=index, validity=validity)
 
-    return jsonify()
+    return jsonify(index=index)
 
 
 @bp.route('/_add_entity')

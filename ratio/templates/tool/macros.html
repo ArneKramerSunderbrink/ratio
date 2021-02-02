@@ -62,10 +62,8 @@
   </div>
   {% endif %}
   <div class="entity-field-value-list">
-    {% for value in field.values %}
-    {% if value is not none %}
-    {{ entity_div(value, False, loop.index - 1) }}
-    {% endif %}
+    {% for index, value in field.get_sorted_values() %}
+    {{ entity_div(value, False, index) }}
     {% endfor %}
   </div>
 </div>
@@ -147,17 +145,21 @@
         <span class="field-label flex-lex" {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}:</span>
         <div class="field-value-list">
           {% if field.options is not none %}
-            {% for value in field.values %}
-            {% if value is not none %}
-            {{ value_options(field, value, loop.index - 1) }}
-            {% endif %}
+            {% if not field.get_sorted_values() %}
+            {{ value_options(field, '', -1) }}
+            {% else %}
+            {% for index, value in field.get_sorted_values() %}
+            {{ value_options(field, value, index) }}
             {% endfor %}
+            {% endif %}
           {% else %}
-            {% for value in field.values %}
-            {% if value is not none %}
-            {{ value_free(field, value, loop.index - 1) }}
-            {% endif %}
+            {% if not field.get_sorted_values() %}
+            {{ value_free(field, '', -1) }}
+            {% else %}
+            {% for index, value in field.get_sorted_values() %}
+            {{ value_free(field, value, index) }}
             {% endfor %}
+            {% endif %}
           {% endif %}
         </div>
         {% if not field.is_functional %}
