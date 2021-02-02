@@ -29,10 +29,9 @@ echo "GUNICORN_LOGGER = True" >> venv/var/ratio-instance/config.py
 echo "FRONTEND_CONFIG=dict(
     Subgraph_term='Clinical trial',
     subgraph_term='clinical trial',
+    color0='#EDEDED',
     color1='#E6F7FF',
-    color2='#F3F3DB',
-    font_color1='#000000',
-    font_color2='#000000'
+    color2='#F3F3DB'
 )" >> venv/var/ratio-instance/config.py
 
 touch log.txt

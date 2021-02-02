@@ -84,17 +84,14 @@ header {
 
 /* Colors */
 .color0 {
-  color: black;
-  background: #EDEDED;
+  background: var(--color0);
 }
 
 .color1 {
-  color: var(--font-color1);
   background: var(--color1);
 }
 
 .color2 {
-  color: var(--font-color2);
   background: var(--color2);
 }
 
@@ -152,7 +149,7 @@ header {
 /* Menus */
 
 .button-border {
-  border: 2px solid var(--font-color1);
+  border: 2px solid black;
   border-radius: 4px;
 }
 
@@ -163,14 +160,14 @@ header {
 }
 
 .entity-border {
-  border: 2px solid var(--font-color2);
+  border: 2px solid black;
   border-radius: 10px;
   box-shadow: 0 1px 2px 0 rgba(0,0,0,0.16),0 2px 5px 0 rgba(0,0,0,0.12)
 }
 
 .entity-title {
   align-items: center;
-  border: 2px solid var(--font-color2);
+  border: 2px solid black;
   border-radius: 10px;
   padding: 0.2em;
   font-weight: bold;

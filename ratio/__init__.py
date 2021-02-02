@@ -41,10 +41,9 @@ def create_app(test_config=None):
         FRONTEND_CONFIG=dict(
             Subgraph_term='Clinical trial',
             subgraph_term='clinical trial',
+            color0='#EDEDED',
             color1='#E6F7FF',
-            color2='#F3F3DB',
-            font_color1='#000000',
-            font_color2='#000000'
+            color2='#F3F3DB'
         )
     )
 
@@ -80,10 +79,9 @@ def create_app(test_config=None):
     def color_picker():  # pragma: no cover
         # only for development
         if request.method == 'POST':
+            app.config['FRONTEND_CONFIG']['color0'] = request.form['color0']
             app.config['FRONTEND_CONFIG']['color1'] = request.form['color1']
             app.config['FRONTEND_CONFIG']['color2'] = request.form['color2']
-            app.config['FRONTEND_CONFIG']['font_color1'] = request.form['font-color1']
-            app.config['FRONTEND_CONFIG']['font_color2'] = request.form['font-color2']
 
         return render_template('color_picker.html')
 
