@@ -5,6 +5,59 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
 
-ctro:Pub_2 rdf:type owl:NamedIndividual ,
-                    ctro:Publication ;
-           rdfs:label "Publication 123123"^^xsd:string .
+ctro:CT_1_1 rdf:type owl:NamedIndividual ,
+                     ctro:ClinicalTrial ;
+            rdfs:label "Clinical Trial 1"^^xsd:string ;
+            ctro:described_by_0 ctro:Pub_1_1 ;
+            ctro:described_by_freeindex "1"^^xsd:positiveInteger ;
+            ctro:hasDesignGroup_0 ctro:Design_1_1 ;
+            ctro:hasDesignGroup_freeindex "1"^^xsd:positiveInteger ;
+            ctro:hasPopulation_0 ctro:Population_1_1 ;
+            ctro:hasPopulation_freeindex "1"^^xsd:positiveInteger ;
+            ctro:hasQualityIndicator_0 ctro:Evidence_1_1 ;
+            ctro:hasQualityIndicator_freeindex "1"^^xsd:positiveInteger ;
+            ctro:hasArm_0 ctro:Arm_1_1 ;
+            ctro:hasArm_1 ctro:Arm_1_2 ;
+            ctro:hasArm_freeindex "2"^^xsd:positiveInteger ;
+            ctro:hasOutcome_0 ctro:Out_1_1 ;
+            ctro:hasOutcome_freeindex "1"^^xsd:positiveInteger ;
+            ctro:hasResult_0 ctro:Res_1_1 ;
+            ctro:hasResult_freeindex "1"^^xsd:positiveInteger .
+
+ctro:Pub_1_1 rdf:type owl:NamedIndividual ,
+                      ctro:Publication ;
+             rdfs:label "Publication"^^xsd:string .
+
+ctro:Design_1_1 rdf:type owl:NamedIndividual ,
+                         ctro:DesignGroup ;
+                rdfs:label "Design"^^xsd:string .
+
+ctro:Population_1_1 rdf:type owl:NamedIndividual ,
+                             ctro:Population ;
+                    rdfs:label "Population"^^xsd:string .
+
+ctro:Evidence_1_1 rdf:type owl:NamedIndividual ,
+                           ctro:EvidenceQuality;
+                  rdfs:label "Potential Conflicts of Interest"^^xsd:string .
+
+ctro:Arm_1_1 rdf:type owl:NamedIndividual ,
+                      ctro:Arm;
+             rdfs:label "Arm 1"^^xsd:string ;
+             ctro:hasIntervention_0 ctro:Interv_1_1 ;
+             ctro:hasIntervention_freeindex "1"^^xsd:positiveInteger .
+
+ctro:Interv_1_1 rdf:type owl:NamedIndividual ,
+                         ctro:Intervention ;
+                rdfs:label "Intervention 1"^^xsd:string .
+
+ctro:Arm_1_2 rdf:type owl:NamedIndividual ,
+                      ctro:Arm;
+             rdfs:label "Arm 2"^^xsd:string .
+
+ctro:Out_1_1 rdf:type owl:NamedIndividual ,
+                      ctro:Outcome ;
+             rdfs:label "Outcome 1"^^xsd:string .
+
+ctro:Res_1_1 rdf:type owl:NamedIndividual ,
+                      ctro:Result ;
+             rdfs:label "Arm 1 Outcome 1 Data"^^xsd:string .
