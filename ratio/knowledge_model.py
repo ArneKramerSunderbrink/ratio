@@ -272,7 +272,7 @@ class SubgraphKnowledge:
         #        class_label = class_uri.n3(get_ontology().graph.namespace_manager).split(':')[-1]
         #    label = '{} {}'.format(class_label, nr)
 
-        entity = build_empty_entity(get_ontology().graph, class_uri, uri, label)
+        entity = build_empty_entity(get_ontology().graph, self.graph, class_uri, uri, label)
 
         # new triples
         triples = [
@@ -487,15 +487,15 @@ class Field:
 
 
 class Option:
-    def __init__(self, uri, label, class_uri, defined_by):
+    def __init__(self, uri, label, class_uri):
         self.uri = uri
         self.label = label
         self.class_uri = class_uri
-        self.defined_by = defined_by
 
 
-def build_option(ontology, uri):
-    label = ontology.objects(uri, RDFS.label)
+def build_option(graph, ontology, uri):
+    """Searches in graph for an individual with thje given URI and a type defined in the ontology."""
+    label = graph.objects(uri, RDFS.label)
     try:
         label = next(label)
     except StopIteration:
@@ -506,19 +506,17 @@ def build_option(ontology, uri):
     # rdflib works with sleepycat: https://github.com/RDFLib/rdflib/blob/master/examples/sleepycat_example.py
     # I'd need BerkeleyDB and bsddb3 (python bindings for BerkeleyDB)
     class_uri = None
-    for o in ontology.objects(uri, RDF.type):
-        if o in ontology.subjects(RDF.type, OWL.Class):  # A class defined in the ontology
+    for o in graph.objects(uri, RDF.type):
+        if o in ontology.subjects(RDF.type, OWL.Class):  # A class defined in the graph
             class_uri = o
             break
     if class_uri is None:
         raise KeyError('No type found for individual ' + str(uri))
 
-    defined_by = ontology.objects(uri, RDFS.isDefinedBy)
-
-    return Option(uri, label, class_uri, defined_by)
+    return Option(uri, label, class_uri)
 
 
-def build_empty_field(ontology, property_uri, range_class_uri):
+def build_empty_field(ontology, knowledge, property_uri, range_class_uri):
     label = ontology.objects(property_uri, RDFS.label)
     try:
         label = next(label)
@@ -561,7 +559,8 @@ def build_empty_field(ontology, property_uri, range_class_uri):
 
     one_of = list(ontology.objects(range_class_uri, OWL.oneOf))
     if is_object_property and not is_described:
-        options = list(build_option(ontology, uri) for uri in get_tokens(ontology, range_class_uri))
+        options = list(build_option(ontology, ontology, uri) for uri in get_tokens(ontology, range_class_uri))
+        options += list(build_option(knowledge, ontology, uri) for uri in get_tokens(knowledge, range_class_uri))
         options.sort(key=lambda option: option.label)
     elif one_of:
         options = construct_list(ontology, one_of[0])
@@ -626,7 +625,7 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
         values = {i: build_entity_from_knowledge(ontology, knowledge, values[i])
                   for i in values if str(values[i]) != ''}
     elif is_object_property:
-        values = {i: build_option(ontology, values[i])
+        values = {i: build_option(ontology, ontology, values[i])
                   for i in values if str(values[i]) != ''}
     try:
         free_index = next(knowledge[individual_uri:URIRef(str(property_uri) + '_freeindex'):])
@@ -635,7 +634,8 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
 
     one_of = list(ontology.objects(range_class_uri, OWL.oneOf))
     if is_object_property and not is_described:
-        options = list(build_option(ontology, uri) for uri in get_tokens(ontology, range_class_uri))
+        options = list(build_option(ontology, ontology, uri) for uri in get_tokens(ontology, range_class_uri))
+        options += list(build_option(knowledge, ontology, uri) for uri in get_tokens(knowledge, range_class_uri))
         options.sort(key=lambda option: option.label)
     elif one_of:
         options = construct_list(ontology, one_of[0])
@@ -691,7 +691,7 @@ class Entity:
         return triples
 
 
-def build_empty_entity(ontology, class_uri, uri, label):
+def build_empty_entity(ontology, knowledge, class_uri, uri, label):
     class_label = ontology.objects(class_uri, RDFS.label)
     try:
         class_label = next(class_label)
@@ -705,7 +705,7 @@ def build_empty_entity(ontology, class_uri, uri, label):
         comment = None
 
     fields = [
-        build_empty_field(ontology, property_uri, range_uri)
+        build_empty_field(ontology, knowledge, property_uri, range_uri)
         for property_uri in ontology.subjects(RDFS.domain, class_uri)
         for range_uri in ontology.objects(property_uri, RDFS.range)
     ]
