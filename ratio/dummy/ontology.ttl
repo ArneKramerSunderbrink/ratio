@@ -166,6 +166,11 @@ ctro:hasAnalysisMetric rdf:type owl:ObjectProperty ,
                        rdfs:range ctro:AnalysisMetric ;
                        rdfs:label "Analysis metric" .
 
+# in the original ontology adverse effects and outcomes both have result children
+# currently in the tool outcomes don't have (described) children, instead outcomes and effects are siblings
+# and the outcome is referenced in an option-field of the result, while adverse events don't have effects at all,
+# just some of the fields an effect would have
+
 ctro:hasResult rdf:type owl:ObjectProperty ;
                ratio:described "true"^^xsd:boolean ;
                ratio:order "8"^^xsd:positiveInteger ;
@@ -193,7 +198,7 @@ ctro:hasMeasurementDevice rdf:type owl:ObjectProperty ;
 
 ctro:hasStatisticalMeasure rdf:type owl:ObjectProperty ;
                            ratio:described "true"^^xsd:boolean ;
-                           ratio:order "8"^^xsd:positiveInteger ;
+                           ratio:order "10"^^xsd:positiveInteger ;
                            rdfs:domain ctro:Result ;
                            rdfs:range ctro:StatisticalMeasure ;
                            rdfs:label "Statistical measure" .
@@ -210,6 +215,13 @@ ctro:hasArmAE rdf:type owl:ObjectProperty ;
               rdfs:domain ctro:AdverseEffect ;
               rdfs:range ctro:Arm ;
               rdfs:label "Interventional-Arm" .
+
+ctro:hasAEname rdf:type owl:ObjectProperty ,
+                        owl:FunctionalProperty ;
+               ratio:order "2"^^xsd:positiveInteger ;
+               rdfs:domain ctro:AdverseEffect ;
+               rdfs:range ctro:EndpointDescription ;
+               rdfs:label "Adverse effect description" .
 
 #################################################################
 #    Data properties
@@ -447,15 +459,32 @@ ctro:hasTimePoints rdf:type owl:DatatypeProperty ;
                    rdfs:comment "Point of time when an outcome was measured. E.g. study end, after two weeks, etc." ;
                    rdfs:label "Time point" .
 
-ctro:hasDifferenceFromBaseline rdf:type owl:DatatypeProperty ;
-                               rdfs:domain ctro:Result ;
-                               ratio:order "5"^^xsd:positiveInteger ;
-                               rdfs:range xsd:float ;
-                               rdfs:label "Difference from Baseline" .
+ctro:hasNumberAffected rdf:type owl:DatatypeProperty ,
+                                owl:FunctionalProperty ;
+                       ratio:order "5"^^xsd:positiveInteger ;
+                       rdfs:domain ctro:Result ;
+                       rdfs:range xsd:integer ;
+                       rdfs:label "Number of patients affected" .
+
+ctro:hasAbsoluteValue rdf:type owl:DatatypeProperty ,
+                               owl:FunctionalProperty ;
+                      ratio:order "6"^^xsd:positiveInteger ;
+                      ratio:width "25"^^xsd:positiveInteger ;
+                      rdfs:domain ctro:Result ;
+                      rdfs:range xsd:float ;
+                      rdfs:label "Value" .
+
+ctro:hasRelativeValue rdf:type owl:DatatypeProperty ,
+                               owl:FunctionalProperty ;
+                      ratio:order "7"^^xsd:positiveInteger ;
+                      ratio:width "25"^^xsd:positiveInteger ;
+                      rdfs:domain ctro:Result ;
+                      rdfs:range xsd:float ;
+                      rdfs:label "Relative value" .
 
 ctro:hasResultDirection rdf:type owl:DatatypeProperty ,
                                   owl:FunctionalProperty ;
-                         ratio:order "6"^^xsd:positiveInteger ;
+                         ratio:order "8"^^xsd:positiveInteger ;
                          rdfs:domain ctro:Result ;
                          rdfs:range [ rdf:type rdfs:Datatype ;
                                       owl:oneOf [ rdf:type rdf:List ;
@@ -474,7 +503,7 @@ ctro:hasResultDirection rdf:type owl:DatatypeProperty ,
 
 ctro:hasObservedResult rdf:type owl:DatatypeProperty ,
                                 owl:FunctionalProperty ;
-                       ratio:order "7"^^xsd:positiveInteger ;
+                       ratio:order "9"^^xsd:positiveInteger ;
                        ratio:width "100"^^xsd:positiveInteger ;
                        rdfs:domain ctro:Result ;
                        rdfs:range xsd:string ;
@@ -518,17 +547,16 @@ ctro:hasConfidenceInterval rdf:type owl:DatatypeProperty,
                            rdfs:range xsd:string ;
                            rdfs:label "Confidence Interval" .
 
-ctro:hasNumberAffected rdf:type owl:DatatypeProperty ,
-                                owl:FunctionalProperty ;
-                       ratio:order "2"^^xsd:positiveInteger ;
-                       ratio:width "25"^^xsd:positiveInteger ;
-                       rdfs:domain ctro:AdverseEffect ;
-                       rdfs:range xsd:integer ;
-                       rdfs:label "Number of patients affected" .
+ctro:hasNumberAffectedAE rdf:type owl:DatatypeProperty ,
+                                  owl:FunctionalProperty ;
+                         ratio:order "3"^^xsd:positiveInteger ;
+                         rdfs:domain ctro:AdverseEffect ;
+                         rdfs:range xsd:integer ;
+                         rdfs:label "Number of patients affected" .
 
 ctro:hasObservedResultAE rdf:type owl:DatatypeProperty ,
                                   owl:FunctionalProperty ;
-                         ratio:order "3"^^xsd:positiveInteger ;
+                         ratio:order "4"^^xsd:positiveInteger ;
                          ratio:width "100"^^xsd:positiveInteger ;
                          rdfs:domain ctro:AdverseEffect ;
                          rdfs:range xsd:string ;
@@ -759,7 +787,7 @@ ctro:CrossOver rdf:type owl:NamedIndividual ,
 
 ctro:Dabigatran rdf:type owl:NamedIndividual ,
                          ctro:Drug ;
-                rdfs:isDefinedBy <http://linkedlifedata.com/resource/drug/DB14726> ; # todo
+                rdfs:isDefinedBy <http://linkedlifedata.com/resource/drug/DB14726> ;
                 rdfs:label "Dabigatran" .
 
 ctro:Diurnal_IOP rdf:type owl:NamedIndividual ,
@@ -995,7 +1023,7 @@ ctro:Prospective rdf:type owl:NamedIndividual ,
 
 ctro:Pulmonary_embolism rdf:type owl:NamedIndividual ,
                                  ctro:EndpointDesc_AF ;
-                        rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/59282003> ; #todo tell olivia bout mistake
+                        rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/59282003> ;
                         rdfs:label "Pulmonary embolism" .
 
 ctro:Randomized rdf:type owl:NamedIndividual ,
@@ -1004,13 +1032,13 @@ ctro:Randomized rdf:type owl:NamedIndividual ,
 
 ctro:RankinScale rdf:type owl:NamedIndividual ,
                           ctro:AnalysisMetric ;
-                 rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/273729003> ; #todo tell olivia bout mistake
+                 rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/273729003> ;
                  rdfs:label "Rankin scale" .
 
 ctro:Rate rdf:type owl:NamedIndividual ,
                    ctro:Other ;
           rdfs:comment "A measure of the frequency of some phenomenon of interest given by rate: number of events in specified period / average population during the period. (Cambridge Dictionary of Statistics 3nd ed.)" ;
-          rdfs:isDefinedBy <http://purl.org/net/OCRe/statistics.owl#OCRE200042> ; #todo tell olivia bout mistake
+          rdfs:isDefinedBy <http://purl.org/net/OCRe/statistics.owl#OCRE200042> ;
           rdfs:label "Rate" .
 
 ctro:Rivaroxaban rdf:type owl:NamedIndividual ,
