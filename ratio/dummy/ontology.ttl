@@ -545,6 +545,9 @@ ctro:hasConclusionComment rdf:type owl:DatatypeProperty ,
 #    Classes
 #################################################################
 
+ctro:AnalysisMetric rdf:type owl:Class ;
+                    rdfs:label "Assessment scale" .
+
 ctro:ClinicalTrial rdf:type owl:Class ;
                    owl:equivalentClass [ rdf:type owl:Restriction ;
                                          owl:onProperty ctro:analysesHealthCondition ;
@@ -659,6 +662,9 @@ ctro:EndpointDesc_Glaucoma rdf:type owl:Class ;
 ctro:EndpointDesc_T2DM rdf:type owl:Class ;
                        rdfs:subClassOf ctro:EndpointDescription .
 
+ctro:EndpointDesc_AF rdf:type owl:Class ;
+                     rdfs:subClassOf ctro:EndpointDescription .
+
 ctro:Mass rdf:type owl:Class ;
           rdfs:subClassOf ctro:BioAndMedicalUnit .
 
@@ -672,6 +678,12 @@ ctro:Pressure rdf:type owl:Class ;
 #    Individuals
 #################################################################
 
+ctro:AllCauseMortality rdf:type owl:NamedIndividual ,
+                                ctro:EndpointDesc_AF ;
+                       rdfs:comment "A measure of all deaths, due to any cause, that occur during a clinical study." ;
+                       rdfs:isDefinedBy <http://purl.jp/bio/4/id/201106093496710803> ;
+                       rdfs:label "All-cause Mortality" .
+
 ctro:Argentina rdf:type owl:NamedIndividual ,
                         <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
                rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223713009> ;
@@ -681,6 +693,11 @@ ctro:Asian rdf:type owl:NamedIndividual ,
                     ctro:Ethnicity ;
            rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/315280000> ;
            rdfs:label "Asian" .
+
+ctro:AtrialFibrillation rdf:type owl:NamedIndividual ,
+                                 ctro:DisorderOrSyndrome ;
+                        rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/49436004> ;
+                        rdfs:label "Atrial fibrillation" .
 
 ctro:Australia rdf:type owl:NamedIndividual ,
                         <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
@@ -705,10 +722,20 @@ ctro:Brazil rdf:type owl:NamedIndividual ,
             rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223715002> ;
             rdfs:label "Brazil" .
 
+ctro:CHA2DS2VASc rdf:type owl:NamedIndividual ,
+                          ctro:AnalysisMetric ;
+                 rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/713678009> ;
+                 rdfs:label "CHA2DS2-VASc score" .
+
 ctro:Canada rdf:type owl:NamedIndividual ,
                      <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
             rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223686002> ;
             rdfs:label "Canada" .
+
+ctro:CardiacFailure rdf:type owl:NamedIndividual ,
+                             ctro:EndpointDesc_AF ;
+                    rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MEDDRA/10007554> ;
+                    rdfs:label "Cardiac failure" .
 
 ctro:China rdf:type owl:NamedIndividual ,
                     <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
@@ -725,12 +752,24 @@ ctro:Croatia rdf:type owl:NamedIndividual ,
              rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223662004> ;
              rdfs:label "Croatia" .
 
+ctro:CrossOver rdf:type owl:NamedIndividual ,
+                        ctro:CTDesign ;
+               rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MESH/D018592> ;
+               rdfs:label "Cross-over" .
+
+ctro:Dabigatran rdf:type owl:NamedIndividual ,
+                         ctro:Drug ;
+                rdfs:isDefinedBy <http://linkedlifedata.com/resource/drug/DB14726> ; # todo
+                rdfs:label "Dabigatran" .
+
 ctro:Diurnal_IOP rdf:type owl:NamedIndividual ,
                           ctro:EndpointDesc_Glaucoma ;
                  rdfs:label "Diurnal IOP" .
 
 ctro:Double-blind rdf:type owl:NamedIndividual ,
-                           ctro:CTDesign .
+                           ctro:CTDesign ;
+                  rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MESH/D004311> ;
+                  rdfs:label "Double-blind" .
 
 ctro:Egypt rdf:type owl:NamedIndividual ,
                     <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
@@ -781,6 +820,12 @@ ctro:HbA1c_target rdf:type owl:NamedIndividual ,
                   rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/408591000> ;
                   rdfs:label "HbA1c Target" .
 
+ctro:HemorrhagicStroke rdf:type owl:NamedIndividual ,
+                                ctro:EndpointDesc_AF ;
+                       rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MESH/D000083302> ;
+                       rdfs:comment "Stroke due to rupture of a weakened blood vessel in the brain." ;
+                       rdfs:label "Hemorrhagic (or intracerebral) Stroke" .
+
 ctro:IOP rdf:type owl:NamedIndividual ,
                   ctro:EndpointDesc_Glaucoma ;
          rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/41633001> ;
@@ -791,10 +836,20 @@ ctro:IOP_target rdf:type owl:NamedIndividual ,
                 rdfs:isDefinedBy <> ;
                 rdfs:label "IOP Target" .
 
+ctro:IOP_target rdf:type owl:NamedIndividual ,
+                         ctro:EndpointDesc_Glaucoma ;
+                rdfs:isDefinedBy <http://www.semanticweb.org/root/ontologies/2018/6/ctro> ;
+                rdfs:label "IOP Target" .
+
 ctro:India rdf:type owl:NamedIndividual ,
                     <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
            rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223600005> ;
            rdfs:label "India" .
+
+ctro:Indigestion rdf:type owl:NamedIndividual ,
+                          ctro:EndpointDesc_AF ;
+                 rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/162031009> ;
+                 rdfs:label "Indigestion (dyspepsia)" .
 
 ctro:Injection rdf:type owl:NamedIndividual ,
                         ctro:DeliveryMethod ;
@@ -805,6 +860,11 @@ ctro:IntentionToTreat rdf:type owl:NamedIndividual ,
                                ctro:CTAnalysisApproach ;
                       rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MESH/D057194> ;
                       rdfs:label "Intention to treat" .
+
+ctro:IntracranialBleeding rdf:type owl:NamedIndividual ,
+                                   ctro:EndpointDesc_AF ;
+                          rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MEDDRA/10005121> ;
+                          rdfs:label "Intracranial bleeding" .
 
 ctro:Iran rdf:type owl:NamedIndividual ,
                    <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
@@ -838,8 +898,14 @@ ctro:Kg rdf:type owl:NamedIndividual ,
 
 ctro:Latanoprost rdf:type owl:NamedIndividual ,
                           ctro:Drug ;
+                 rdfs:comment "Latanoprost ophthalmic solution is a topical medication used for controlling the progression of glaucoma or ocular hypertension, by reducing IOP. Xalatan is its brand name by Pfizer." ;
                  rdfs:isDefinedBy <http://linkedlifedata.com/resource/drug/DB00654> ;
                  rdfs:label "Latanoprost" .
+
+ctro:MajorBleed rdf:type owl:NamedIndividual ,
+                         ctro:EndpointDesc_AF ;
+                rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MEDDRA/10084048> ;
+                rdfs:label "Major Bleeding (or Hemorrhage)" .
 
 ctro:Mexico rdf:type owl:NamedIndividual ,
                      <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
@@ -851,10 +917,38 @@ ctro:Millimoles_per_litre rdf:type owl:NamedIndividual ,
                           rdfs:isDefinedBy <http://purl.bioontology.org/ontology/RCD/X802P> ;
                           rdfs:label "millimole/litre" .
 
+ctro:MinorBleed rdf:type owl:NamedIndividual ,
+                         ctro:EndpointDesc_AF ;
+                rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MEDDRA/10070922> ;
+                rdfs:label "Minor bleed" .
+
+ctro:Multicenter rdf:type owl:NamedIndividual ,
+                          ctro:CTDesign ;
+                 rdfs:comment "Work that reports on a study executed by several cooperating institutions." ;
+                 rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MESH/D016448> ;
+                 rdfs:label "Multi-center" .
+
+ctro:MyocardialInfarction rdf:type owl:NamedIndividual ,
+                                   ctro:EndpointDesc_AF ;
+                          rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/22298006> ;
+                          rdfs:label "Myocardial infarction" .
+
 ctro:Netherlands rdf:type owl:NamedIndividual ,
                           <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
                  rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223672001> ;
                  rdfs:label "Netherlands" .
+
+ctro:NonInferiority rdf:type owl:NamedIndividual ,
+                             ctro:CTDesign ;
+                    rdfs:label "Non-inferiority" .
+
+ctro:Number rdf:type owl:NamedIndividual ,
+                     ctro:Other ;
+            rdfs:label "Number" .
+
+ctro:OpenLabel rdf:type owl:NamedIndividual ,
+                        ctro:CTDesign ;
+               rdfs:label "Open-label" .
 
 ctro:Oral rdf:type owl:NamedIndividual ,
                    ctro:DeliveryMethod ;
@@ -868,6 +962,12 @@ ctro:Peak_IOP rdf:type owl:NamedIndividual ,
 ctro:PerProtocol rdf:type owl:NamedIndividual ,
                           ctro:CTAnalysisApproach ;
                  rdfs:label "Per Protocol" .
+
+ctro:PercentageUnit rdf:type owl:NamedIndividual ,
+                             ctro:Other ;
+                    rdfs:comment "A percentage is a number that is a ratio expressed as a fraction of 100. It is denoted using the percent sign \"%\"." ;
+                    rdfs:isDefinedBy <http://semanticscience.org/resource/SIO_001413> ;
+                    rdfs:label "% (ratio)" .
 
 ctro:Peru rdf:type owl:NamedIndividual ,
                    <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
@@ -888,13 +988,53 @@ ctro:Poland rdf:type owl:NamedIndividual ,
             rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223640004> ;
             rdfs:label "Poland" .
 
+ctro:Prospective rdf:type owl:NamedIndividual ,
+                          ctro:CTDesign ;
+                 rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MESH/D011446> ;
+                 rdfs:label "Prospective" .
+
+ctro:Pulmonary_embolism rdf:type owl:NamedIndividual ,
+                                 ctro:EndpointDesc_AF ;
+                        rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/59282003> ; #todo tell olivia bout mistake
+                        rdfs:label "Pulmonary embolism" .
+
 ctro:Randomized rdf:type owl:NamedIndividual ,
-                         ctro:CTDesign .
+                         ctro:CTDesign ;
+                rdfs:label "Randomized" .
+
+ctro:RankinScale rdf:type owl:NamedIndividual ,
+                          ctro:AnalysisMetric ;
+                 rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/273729003> ; #todo tell olivia bout mistake
+                 rdfs:label "Rankin scale" .
+
+ctro:Rate rdf:type owl:NamedIndividual ,
+                   ctro:Other ;
+          rdfs:comment "A measure of the frequency of some phenomenon of interest given by rate: number of events in specified period / average population during the period. (Cambridge Dictionary of Statistics 3nd ed.)" ;
+          rdfs:isDefinedBy <http://purl.org/net/OCRe/statistics.owl#OCRE200042> ; #todo tell olivia bout mistake
+          rdfs:label "Rate" .
+
+ctro:Rivaroxaban rdf:type owl:NamedIndividual ,
+                          ctro:Drug ;
+                 rdfs:comment "Rivaroxaban is indicated for the prevention of venous thromboembolic events (VTE) in patients who have undergone total hips replacements and total knee replacement surgery. Due to a lack of safety studies, it is not recommended for use in those under 18 years old. Its use is also not recommended in those with severe renal impairment (<30mL/min)." ;
+                 rdfs:isDefinedBy <http://linkedlifedata.com/resource/drug/DB06228> ;
+                 rdfs:label "Rivaroxaban" .
+
+ctro:SSE rdf:type owl:NamedIndividual ,
+                  ctro:EndpointDesc_AF ;
+         rdfs:label "Systematic Embolic Event" .
 
 ctro:Singapore rdf:type owl:NamedIndividual ,
                         <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
                rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223593008> ;
                rdfs:label "Singapore" .
+
+ctro:Single-blind rdf:type owl:NamedIndividual ,
+                           ctro:CTDesign ;
+                  rdfs:label "Single-blind" .
+
+ctro:Singlecenter rdf:type owl:NamedIndividual ,
+                           ctro:CTDesign ;
+                  rdfs:label "Single-center" .
 
 ctro:SouthKorea rdf:type owl:NamedIndividual ,
                          <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
@@ -905,6 +1045,11 @@ ctro:Spain rdf:type owl:NamedIndividual ,
                     <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
            rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223680008> ;
            rdfs:label "Spain" .
+
+ctro:StrokeRisk rdf:type owl:NamedIndividual ,
+                         ctro:EndpointDesc_AF ;
+                rdfs:isDefinedBy "http://purl.bioontology.org/ontology/SNOMEDCT/135877001" ;
+                rdfs:label "Stroke risk" .
 
 ctro:Sweden rdf:type owl:NamedIndividual ,
                      <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
@@ -926,8 +1071,14 @@ ctro:Taiwan rdf:type owl:NamedIndividual ,
             rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/428675004> ;
             rdfs:label "Taiwan" .
 
+ctro:Thromboembolism rdf:type owl:NamedIndividual ,
+                              ctro:EndpointDesc_AF ;
+                     rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MEDDRA/10043566> ;
+                     rdfs:label "Thromboembolism" .
+
 ctro:Timolol rdf:type owl:NamedIndividual ,
                       ctro:Drug ;
+             rdfs:comment "In its oral form it is used to treat high blood pressure and prevent heart attacks, and occasionally to prevent migraine headaches. In its opthalmic form it is used to treat open-angle and occasionally secondary glaucoma." ;
              rdfs:isDefinedBy <http://linkedlifedata.com/resource/drug/DB00373> ;
              rdfs:label "Timolol" .
 
@@ -955,10 +1106,21 @@ ctro:Venezuela rdf:type owl:NamedIndividual ,
                rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223724006> ;
                rdfs:label "Venezuela" .
 
+ctro:Warfarin rdf:type owl:NamedIndividual ,
+                       ctro:Drug ;
+              rdfs:comment "For the treatment of retinal vascular occlusion, pulmonary embolism, cardiomyopathy, atrial fibrillation and flutter, cerebral embolism, transient cerebral ischaemia, arterial embolism and thrombosis." ;
+              rdfs:isDefinedBy <http://linkedlifedata.com/resource/drug/DB00682> ;
+              rdfs:label "Warfarin" .
+
 ctro:White rdf:type owl:NamedIndividual ,
                     ctro:Ethnicity ;
            rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/185984009> ,
                             "White" .
+
+ctro:mg rdf:type owl:NamedIndividual ,
+                 ctro:Mass ;
+        rdfs:comment "mg." ;
+        rdfs:isDefinedBy <http://purl.bioontology.org/ontology/RCD/X800J> .
 
 ctro:mmHg rdf:type owl:NamedIndividual ,
                    ctro:Pressure ;

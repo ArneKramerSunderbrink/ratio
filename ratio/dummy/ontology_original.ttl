@@ -39,7 +39,7 @@ ctro:describes rdf:type owl:ObjectProperty ;
 ctro:hasAEname rdf:type owl:ObjectProperty ,
                         owl:FunctionalProperty ;
                rdfs:domain ctro:AdverseEffect ;
-               rdfs:range ctro:AdverseEffectName ;
+               rdfs:range ctro:EndpointDescription ;
                rdfs:label "Adverse effect description" .
 
 
@@ -55,7 +55,7 @@ ctro:hasAggregationMethod rdf:type owl:ObjectProperty ,
                                    owl:FunctionalProperty ;
                           rdfs:domain ctro:EndPoint ;
                           rdfs:range ctro:AgreggationMethod ;
-                          rdfs:label "Aggregation method" .
+                          rdfs:label "Aggregation or measurement method" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasAnalysisApproach
@@ -185,7 +185,7 @@ ctro:hasEndpointUnit rdf:type owl:ObjectProperty ,
                               owl:FunctionalProperty ;
                      rdfs:domain ctro:EndPoint ;
                      rdfs:range ctro:BioAndMedicalUnit ;
-                     rdfs:label "Endpoint unit" .
+                     rdfs:label "Unit" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasEthnicity
@@ -310,11 +310,11 @@ ctro:hasAuthor rdf:type owl:DatatypeProperty ;
                rdfs:label "Author" .
 
 
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasAuthorAffilation
-ctro:hasAuthorAffilation rdf:type owl:DatatypeProperty ;
-                         rdfs:domain ctro:EvidenceQuality ;
-                         rdfs:range xsd:string ;
-                         rdfs:label "Author affilation" .
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasAuthorAffiliation
+ctro:hasAuthorAffiliation rdf:type owl:DatatypeProperty ;
+                          rdfs:domain ctro:EvidenceQuality ;
+                          rdfs:range xsd:string ;
+                          rdfs:label "Author affiliation" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasAvgAge
@@ -404,7 +404,7 @@ ctro:hasDoseValue rdf:type owl:DatatypeProperty ,
                            owl:FunctionalProperty ;
                   rdfs:domain ctro:Medication ;
                   rdfs:range rdfs:Literal ;
-                  rdfs:label "Dose value" .
+                  rdfs:label "Dose value or description" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasDrugName
@@ -583,7 +583,8 @@ ctro:hasObservedResult rdf:type owl:DatatypeProperty ,
 ctro:hasOutcomeDescription rdf:type owl:DatatypeProperty ,
                                     owl:FunctionalProperty ;
                            rdfs:domain ctro:Outcome ;
-                           rdfs:range xsd:string .
+                           rdfs:range xsd:string ;
+                           rdfs:label "Outcome description" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasOutcomeType
@@ -598,7 +599,8 @@ ctro:hasOutcomeType rdf:type owl:DatatypeProperty ,
                                                         rdf:rest rdf:nil
                                                       ]
                                            ]
-                               ] .
+                               ] ;
+                    rdfs:label "Outcome type" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasPMID
@@ -775,12 +777,12 @@ ctro:AdverseEffectName rdf:type owl:Class ;
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#AgreggationMethod
 ctro:AgreggationMethod rdf:type owl:Class ;
-                       rdfs:label "Aggregation Method" .
+                       rdfs:label "Aggregation (or measurement) method" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#AnalysisMetric
 ctro:AnalysisMetric rdf:type owl:Class ;
-                    rdfs:label "Analysis Metric" .
+                    rdfs:label "Assessment scale" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Arm
@@ -881,6 +883,11 @@ ctro:EffectSizeMethod rdf:type owl:Class ;
 ctro:EndPoint rdf:type owl:Class ;
               rdfs:comment "Name of the outcome indicator that is being measured (e.g., IOP pressure)"^^xsd:string ;
               rdfs:label "Endpoint" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#EndpointDesc_AF
+ctro:EndpointDesc_AF rdf:type owl:Class ;
+                     rdfs:subClassOf ctro:EndpointDescription .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#EndpointDesc_Glaucoma
@@ -1002,6 +1009,14 @@ owl:Thing rdf:type owl:Class .
 #    Individuals
 #################################################################
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#AllCauseMortality
+ctro:AllCauseMortality rdf:type owl:NamedIndividual ,
+                                ctro:EndpointDesc_AF ;
+                       rdfs:comment "A measure of all deaths, due to any cause, that occur during a clinical study." ;
+                       rdfs:isDefinedBy <http://purl.jp/bio/4/id/201106093496710803> ;
+                       rdfs:label "All-cause Mortality" .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Argentina
 ctro:Argentina rdf:type owl:NamedIndividual ,
                         <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
@@ -1014,6 +1029,13 @@ ctro:Asian rdf:type owl:NamedIndividual ,
                     ctro:Ethnicity ;
            rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/315280000> ;
            rdfs:label "Asian" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#AtrialFibrillation
+ctro:AtrialFibrillation rdf:type owl:NamedIndividual ,
+                                 ctro:DisorderOrSyndrome ;
+                        rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/49436004> ;
+                        rdfs:label "Atrial fibrillation" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Australia
@@ -1037,11 +1059,6 @@ ctro:Black rdf:type owl:NamedIndividual ,
            rdfs:label "Black" .
 
 
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Blind
-ctro:Blind rdf:type owl:NamedIndividual ,
-                    ctro:CTDesign .
-
-
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Brazil
 ctro:Brazil rdf:type owl:NamedIndividual ,
                      <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
@@ -1049,11 +1066,25 @@ ctro:Brazil rdf:type owl:NamedIndividual ,
             rdfs:label "Brazil" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#CHA2DS2VASc
+ctro:CHA2DS2VASc rdf:type owl:NamedIndividual ,
+                          ctro:AnalysisMetric ;
+                 rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/713678009> ;
+                 rdfs:label "CHA2DS2-VASc score" .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Canada
 ctro:Canada rdf:type owl:NamedIndividual ,
                      <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
             rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223686002> ;
             rdfs:label "Canada" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#CardiacFailure
+ctro:CardiacFailure rdf:type owl:NamedIndividual ,
+                             ctro:EndpointDesc_AF ;
+                    rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MEDDRA/10007554> ;
+                    rdfs:label "Cardiac failure" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#China
@@ -1077,6 +1108,20 @@ ctro:Croatia rdf:type owl:NamedIndividual ,
              rdfs:label "Croatia" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#CrossOver
+ctro:CrossOver rdf:type owl:NamedIndividual ,
+                        ctro:CTDesign ;
+               rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MESH/D018592> ;
+               rdfs:label "Cross-over" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Dabigatran
+ctro:Dabigatran rdf:type owl:NamedIndividual ,
+                         ctro:Drug ;
+                rdfs:label <http://linkedlifedata.com/resource/drug/DB14726> ,
+                           "Dabigatran" .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Diurnal_IOP
 ctro:Diurnal_IOP rdf:type owl:NamedIndividual ,
                           ctro:EndpointDesc_Glaucoma ;
@@ -1085,7 +1130,9 @@ ctro:Diurnal_IOP rdf:type owl:NamedIndividual ,
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Double-blind
 ctro:Double-blind rdf:type owl:NamedIndividual ,
-                           ctro:CTDesign .
+                           ctro:CTDesign ;
+                  rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MESH/D004311> ;
+                  rdfs:label "Double-blind" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Egypt
@@ -1157,6 +1204,14 @@ ctro:HbA1c_target rdf:type owl:NamedIndividual ,
                   rdfs:label "HbA1c Target" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#HemorrhagicStroke
+ctro:HemorrhagicStroke rdf:type owl:NamedIndividual ,
+                                ctro:EndpointDesc_AF ;
+                       rdfs:comment <http://purl.bioontology.org/ontology/MESH/D000083302> ,
+                                    "Stroke due to rupture of a weakened blood vessel in the brain." ;
+                       rdfs:label "Hemorrhagic (or intracerebral) Stroke" .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#IOP
 ctro:IOP rdf:type owl:NamedIndividual ,
                   ctro:EndpointDesc_Glaucoma ;
@@ -1167,7 +1222,7 @@ ctro:IOP rdf:type owl:NamedIndividual ,
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#IOP_target
 ctro:IOP_target rdf:type owl:NamedIndividual ,
                          ctro:EndpointDesc_Glaucoma ;
-                rdfs:isDefinedBy <> ;
+                rdfs:isDefinedBy <http://www.semanticweb.org/root/ontologies/2018/6/ctro> ;
                 rdfs:label "IOP Target" .
 
 
@@ -1176,6 +1231,13 @@ ctro:India rdf:type owl:NamedIndividual ,
                     <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
            rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223600005> ;
            rdfs:label "India" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Indigestion
+ctro:Indigestion rdf:type owl:NamedIndividual ,
+                          ctro:EndpointDesc_AF ;
+                 rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/162031009> ;
+                 rdfs:label "Indigestion (dyspepsia)" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Injection
@@ -1190,6 +1252,13 @@ ctro:IntentionToTreat rdf:type owl:NamedIndividual ,
                                ctro:CTAnalysisApproach ;
                       rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MESH/D057194> ;
                       rdfs:label "Intention to treat" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#IntracranialBleeding
+ctro:IntracranialBleeding rdf:type owl:NamedIndividual ,
+                                   ctro:EndpointDesc_AF ;
+                          rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MEDDRA/10005121> ;
+                          rdfs:label "Intracranial bleeding" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Iran
@@ -1237,8 +1306,16 @@ ctro:Kg rdf:type owl:NamedIndividual ,
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Latanoprost
 ctro:Latanoprost rdf:type owl:NamedIndividual ,
                           ctro:Drug ;
+                 rdfs:comment "Latanoprost ophthalmic solution is a topical medication used for controlling the progression of glaucoma or ocular hypertension, by reducing IOP. Xalatan is its brand name by Pfizer." ;
                  rdfs:isDefinedBy <http://linkedlifedata.com/resource/drug/DB00654> ;
                  rdfs:label "Latanoprost" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#MajorBleed
+ctro:MajorBleed rdf:type owl:NamedIndividual ,
+                         ctro:EndpointDesc_AF ;
+                rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MEDDRA/10084048> ;
+                rdfs:label "Major Bleeding (or Hemorrhage)" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Mexico
@@ -1255,11 +1332,51 @@ ctro:Millimoles_per_litre rdf:type owl:NamedIndividual ,
                           rdfs:label "millimole/litre" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#MinorBleed
+ctro:MinorBleed rdf:type owl:NamedIndividual ,
+                         ctro:EndpointDesc_AF ;
+                rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MEDDRA/10070922> ;
+                rdfs:label "Minor bleed" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Multicenter
+ctro:Multicenter rdf:type owl:NamedIndividual ,
+                          ctro:CTDesign ;
+                 rdfs:comment "Work that reports on a study executed by several cooperating institutions." ;
+                 rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MESH/D016448> ;
+                 rdfs:label "Multi-center" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#MyocardialInfarction
+ctro:MyocardialInfarction rdf:type owl:NamedIndividual ,
+                                   ctro:EndpointDesc_AF ;
+                          rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/22298006> ;
+                          rdfs:label "Myocardial infarction" .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Netherlands
 ctro:Netherlands rdf:type owl:NamedIndividual ,
                           <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
                  rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223672001> ;
                  rdfs:label "Netherlands" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#NonInferiority
+ctro:NonInferiority rdf:type owl:NamedIndividual ,
+                             ctro:CTDesign ;
+                    rdfs:label "Non-inferiority" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Number
+ctro:Number rdf:type owl:NamedIndividual ,
+                     ctro:Other ;
+            rdfs:label "Number" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#OpenLabel
+ctro:OpenLabel rdf:type owl:NamedIndividual ,
+                        ctro:CTDesign ;
+               rdfs:label "Open-label" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Oral
@@ -1281,6 +1398,14 @@ ctro:PerProtocol rdf:type owl:NamedIndividual ,
                  rdfs:label "Per Protocol" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#PercentageUnit
+ctro:PercentageUnit rdf:type owl:NamedIndividual ,
+                             ctro:Other ;
+                    rdfs:comment "A percentage is a number that is a ratio expressed as a fraction of 100. It is denoted using the percent sign \"%\"." ;
+                    rdfs:isDefinedBy <http://semanticscience.org/resource/SIO_001413> ;
+                    rdfs:label "% (ratio)" .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Peru
 ctro:Peru rdf:type owl:NamedIndividual ,
                    <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
@@ -1295,12 +1420,6 @@ ctro:Philippines rdf:type owl:NamedIndividual ,
                  rdfs:label "Japan" .
 
 
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Placebo
-ctro:Placebo rdf:type owl:NamedIndividual ,
-                      ctro:Drug ;
-             rdfs:label "Placebo" .
-
-
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Poland
 ctro:Poland rdf:type owl:NamedIndividual ,
                      <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
@@ -1308,9 +1427,53 @@ ctro:Poland rdf:type owl:NamedIndividual ,
             rdfs:label "Poland" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Prospective
+ctro:Prospective rdf:type owl:NamedIndividual ,
+                          ctro:CTDesign ;
+                 rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MESH/D011446> ;
+                 rdfs:label "Prospective" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Pulmonary_embolism
+ctro:Pulmonary_embolism rdf:type owl:NamedIndividual ,
+                                 ctro:EndpointDesc_AF ;
+                        rdfs:label <http://purl.bioontology.org/ontology/SNOMEDCT/59282003> ,
+                                   "Pulmonary embolism" .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Randomized
 ctro:Randomized rdf:type owl:NamedIndividual ,
-                         ctro:CTDesign .
+                         ctro:CTDesign ;
+                rdfs:label "Randomized" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#RankinScale
+ctro:RankinScale rdf:type owl:NamedIndividual ,
+                          ctro:AnalysisMetric ;
+                 rdfs:label <http://purl.bioontology.org/ontology/SNOMEDCT/273729003> ,
+                            "Rankin scale" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Rate
+ctro:Rate rdf:type owl:NamedIndividual ,
+                   ctro:Other ;
+          rdfs:comment "A measure of the frequency of some phenomenon of interest given by rate: number of events in specified period / average population during the period. (Cambridge Dictionary of Statistics 3nd ed.)" ;
+          rdfs:label <http://purl.org/net/OCRe/statistics.owl#OCRE200042> ,
+                     "Rate" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Rivaroxaban
+ctro:Rivaroxaban rdf:type owl:NamedIndividual ,
+                          ctro:Drug ;
+                 rdfs:comment "Rivaroxaban is indicated for the prevention of venous thromboembolic events (VTE) in patients who have undergone total hips replacements and total knee replacement surgery. Due to a lack of safety studies, it is not recommended for use in those under 18 years old. Its use is also not recommended in those with severe renal impairment (<30mL/min)." ;
+                 rdfs:isDefinedBy <http://linkedlifedata.com/resource/drug/DB06228> ;
+                 rdfs:label "Rivaroxaban" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#SSE
+ctro:SSE rdf:type owl:NamedIndividual ,
+                  ctro:EndpointDesc_AF ;
+         rdfs:label "Systematic Embolic Event" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Singapore
@@ -1318,6 +1481,18 @@ ctro:Singapore rdf:type owl:NamedIndividual ,
                         <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
                rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223593008> ;
                rdfs:label "Singapore" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Single-blind
+ctro:Single-blind rdf:type owl:NamedIndividual ,
+                           ctro:CTDesign ;
+                  rdfs:label "Single-blind" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Singlecenter
+ctro:Singlecenter rdf:type owl:NamedIndividual ,
+                           ctro:CTDesign ;
+                  rdfs:label "Single-center" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#SouthKorea
@@ -1332,6 +1507,13 @@ ctro:Spain rdf:type owl:NamedIndividual ,
                     <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
            rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223680008> ;
            rdfs:label "Spain" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#StrokeRisk
+ctro:StrokeRisk rdf:type owl:NamedIndividual ,
+                         ctro:EndpointDesc_AF ;
+                rdfs:isDefinedBy "http://purl.bioontology.org/ontology/SNOMEDCT/135877001" ;
+                rdfs:label "Stroke risk" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Sweden
@@ -1362,9 +1544,17 @@ ctro:Taiwan rdf:type owl:NamedIndividual ,
             rdfs:label "Taiwan" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Thromboembolism
+ctro:Thromboembolism rdf:type owl:NamedIndividual ,
+                              ctro:EndpointDesc_AF ;
+                     rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MEDDRA/10043566> ;
+                     rdfs:label "Thromboembolism" .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Timolol
 ctro:Timolol rdf:type owl:NamedIndividual ,
                       ctro:Drug ;
+             rdfs:comment "In its oral form it is used to treat high blood pressure and prevent heart attacks, and occasionally to prevent migraine headaches. In its opthalmic form it is used to treat open-angle and occasionally secondary glaucoma." ;
              rdfs:isDefinedBy <http://linkedlifedata.com/resource/drug/DB00373> ;
              rdfs:label "Timolol" .
 
@@ -1403,11 +1593,26 @@ ctro:Venezuela rdf:type owl:NamedIndividual ,
                rdfs:label "Venezuela" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Warfarin
+ctro:Warfarin rdf:type owl:NamedIndividual ,
+                       ctro:Drug ;
+              rdfs:comment "For the treatment of retinal vascular occlusion, pulmonary embolism, cardiomyopathy, atrial fibrillation and flutter, cerebral embolism, transient cerebral ischaemia, arterial embolism and thrombosis." ;
+              rdfs:isDefinedBy <http://linkedlifedata.com/resource/drug/DB00682> ;
+              rdfs:label "Warfarin" .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#White
 ctro:White rdf:type owl:NamedIndividual ,
                     ctro:Ethnicity ;
            rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/185984009> ,
                             "White" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#mg
+ctro:mg rdf:type owl:NamedIndividual ,
+                 ctro:Mass ;
+        rdfs:comment "mg." ;
+        rdfs:isDefinedBy <http://purl.bioontology.org/ontology/RCD/X800J> .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#mmHg

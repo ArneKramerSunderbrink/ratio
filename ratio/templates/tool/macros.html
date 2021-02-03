@@ -78,7 +78,7 @@
     <div class="options"><div class="color1">
       {% if field.is_object_property %}
       {% for option in field.options %}
-      <div class="option" data-option-uri="{{ option.uri }}">{{ option.label }}</div>
+      <div class="option" data-option-uri="{{ option.uri }}"{% if option.comment is not none %} title="{{ option.comment }}"{% endif %}>{{ option.label }}</div>
       {% endfor %}
       {% else %}
       {% for option in field.options %}

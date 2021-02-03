@@ -17,6 +17,7 @@ from rdflib import RDF
 from rdflib import RDFS
 from rdflib import URIRef
 from rdflib import XSD
+from re import fullmatch
 
 from ratio.db import get_db
 
@@ -35,7 +36,9 @@ def parse_n3_term(s):
     if s.startswith('<') and s.endswith('>'):
         return URIRef(s[1:-1])
     elif s.startswith('"'):
-        _, value, suffix = s.split('"""' if s.startswith('"""') else '"')
+        # value surrounded by unescaped quotes, can contain escaped quotes
+        # the suffix cannot contain quotes
+        value, suffix = fullmatch(r'(?:"""|")((?:(?:[^"]|\\")*[^\\])?)(?:"""|")([^"]*)', s).group(1, 2)
         if suffix:
             if suffix.startswith('@'):
                 return Literal(value, lang=suffix[1:])
@@ -488,10 +491,11 @@ class Field:
 
 
 class Option:
-    def __init__(self, uri, label, class_uri):
+    def __init__(self, uri, label, class_uri, comment=None):
         self.uri = uri
         self.label = label
         self.class_uri = class_uri
+        self.comment = comment
 
 
 def build_option(ontology, knowledge, uri):
@@ -509,6 +513,12 @@ def build_option(ontology, knowledge, uri):
     except StopIteration:
         label = uri.n3(get_ontology().graph.namespace_manager).split(':')[-1]
 
+    comment = graph.objects(uri, RDFS.comment)
+    try:
+        comment = next(comment)
+    except StopIteration:
+        comment = None
+
     # todo would be nicer with sparql but unfortunately sparql query are very slow with rdflib
     # maybe consider using a real triple store?
     # rdflib works with sleepycat: https://github.com/RDFLib/rdflib/blob/master/examples/sleepycat_example.py
@@ -521,7 +531,7 @@ def build_option(ontology, knowledge, uri):
     if class_uri is None:
         raise KeyError('No type found for individual ' + str(uri))
 
-    return Option(uri, label, class_uri)
+    return Option(uri, label, class_uri, comment)
 
 
 def build_empty_field(ontology, knowledge, property_uri, range_class_uri):
