@@ -5,13 +5,15 @@
 
 $(function () {
   // Delete message X-button
-  $('div#knowledge-delete-msg > a:last').on('click', function() {
+  $('div#knowledge-delete-msg > button:last').on('click', function() {
     $('div#knowledge-delete-msg').css('display', 'none');
     return false;
   });
 
   // Add value
-  $('div#scroll-container').on('click', 'div.field > div > a', function() {
+  $('div#scroll-container').on('click', 'div.field > div > button', function() {
+    var button = this;
+    button.disabled = true;
     var property_uri = $(this).closest('div.field').attr('data-property-uri');
     var entity_uri = $(this).closest('div.entity').attr('data-entity-uri');
     var data = [
@@ -30,9 +32,10 @@ $(function () {
         list.append(data.value_div);
         list.children().last().find('.literal-input, .option-input').focus();
         if (data.remove_plus) {
-          field.children('div').children('a').css('display', 'none');
+          $(button).css('display', 'none');
         }
       }
+      button.disabled = false;
     })
     .fail(function() { alert('getJSON request failed!'); });
 
@@ -40,7 +43,9 @@ $(function () {
   });
 
   // Delete Value
-  $('div#scroll-container').on('click', '.delete-value-button', function() {
+  $('div#scroll-container').on('click', 'button.delete-value-button', function() {
+    var button = this;
+    button.disabled = true;
     var form = $(this).closest('form');
     var input = form.find('.literal-input, .option-input');
     var old_value;
@@ -58,14 +63,16 @@ $(function () {
         }
       });
     }
-    get_json_change_value(input[0], '');
+    get_json_change_value(input[0], function() { return ''; }, button);
     form.css('display', 'none');
     // Display message
     $('div#knowledge-delete-msg > span').text('Value has been deleted.');
-    $('div#knowledge-delete-msg > a:first').off('click');
-    $('div#knowledge-delete-msg > a:first').on('click', function() {
+    $('div#knowledge-delete-msg > button:first').off('click');
+    $('div#knowledge-delete-msg > button:first').on('click', function() {
+      var button = this;
+      button.disabled = true;
       if (old_value != '') {
-        get_json_change_value(input[0], old_value);
+        get_json_change_value(input[0], function() { return old_value; }, button);
       }
       form.css('display', '');
       $('div#knowledge-delete-msg').css('display', 'none');
@@ -86,17 +93,36 @@ $(function () {
     }
   }
 
-  function get_json_change_value(input, value) {
+  function get_json_change_value(input, get_value, button=null) {
+    var index = $(input).attr('data-index');
+    console.log('before');
+    console.log(index);
+    if (index == -1) {
+      $(input).attr('data-index', -2);
+    } else if (index == -2) {
+      function wait_for_index() {
+        if ($(input).attr('data-index') == -2) {
+          setTimeout(wait_for_index, 300);
+          return;
+        }
+        get_json_change_value(input, get_value, button);
+        return;
+      }
+      wait_for_index();
+      return;
+    }
+    console.log('after');
+    console.log(index);
     var property = $(input).closest('div.field');
     var property_uri = property.attr('data-property-uri');
     var entity_uri = $(input).closest('div.entity').attr('data-entity-uri');
-    var index = $(input).attr('data-index');
+
     var data = [
       { name: 'subgraph_id', value: window.SUBGRAPH_ID },
       { name: 'entity_uri', value: entity_uri },
       { name: 'property_uri', value: property_uri },
       { name: 'index', value: index},
-      { name: 'value', value: value}
+      { name: 'value', value: get_value()}
     ];
 
     $.getJSON(window.SCRIPT_ROOT + '/_change_value', data, function(data) {
@@ -110,6 +136,9 @@ $(function () {
       if (index == -1) {
         $(input).attr('data-index', String(data.index));
       }
+      if (button != null) {
+        button.disabled = false;
+      }
     })
     .fail(function() { alert('getJSON request failed!'); });
   }
@@ -117,7 +146,8 @@ $(function () {
   // Special functionality for literal fields
   // Change value
   $('div#scroll-container').on('input', 'div.literal-input', function() {
-    get_json_change_value(this, this.innerText);
+    var input = this;
+    get_json_change_value(input, function() { return input.innerText; });
   });
 
   // Special functionality for options Fields
@@ -140,13 +170,15 @@ $(function () {
 
   // Select option
   $('div#scroll-container').on('click', '.option', function() {
-    var input = $(this).parent().parent('.options').prev('.option-input')
-    input.val($(this).text());
+    var input = $(this).parent().parent('.options').prev('.option-input')[0];
+    var value = '';
+    input.value = this.textContent;
     if ($(this).is('[data-option-uri]')) {
-      get_json_change_value(input[0], $(this).attr('data-option-uri'));
+      value = $(this).attr('data-option-uri');
     } else {
-      get_json_change_value(input[0], this.textContent);
+      value = this.textContent;
     }
+    get_json_change_value(input, function () { return value; });
   });
 
   // Check validity of option input
@@ -171,7 +203,7 @@ $(function () {
         return
       }
     }
-    get_json_change_value(input, value);
+    get_json_change_value(input, function () { return value; });
   });
 
   // Special functionality for Entities
@@ -194,6 +226,8 @@ $(function () {
 
   // Add entity
   $('div#scroll-container').on('submit', 'form.add-entity-form', function() {
+    var button = $(this).find('button')[0];
+    button.disabled = true;
     var field = $(this).closest('div.entity-field');
     var property_uri = field.attr('data-property-uri');
     var entity_uri = $(this).closest('div.entity').attr('data-entity-uri');
@@ -210,7 +244,7 @@ $(function () {
         var list = field.find('div.entity-field-value-list').first();
         list.append(data.entity_div);
         // expand entity body
-        flip_flip(list.children().last().find('.entity-title > a:first').attr('data-flipid'));
+        flip_flip(list.children().last().find('.entity-title > button:first').attr('data-flipid'));
         // reset add entity input
         field.find('form.add-entity-form').first()[0].reset();
         flip_front(field.find('div.add-entity-div > div.flip-flipside').first().attr('data-flipid'));
@@ -218,6 +252,7 @@ $(function () {
           field.find('add-entity-div').css('display', 'none');
         }
       }
+      button.disabled = false;
     })
     .fail(function() { alert('getJSON request failed!'); });
 
@@ -225,7 +260,9 @@ $(function () {
   });
 
   // Delete entity
-  $('div#scroll-container').on('click', 'a.delete-entity-button', function() {
+  $('div#scroll-container').on('click', 'button.delete-entity-button', function() {
+    var button = this;
+    button.disabled = true;
     var entity = $(this).closest('div.entity');
     var entity_uri = entity.attr('data-entity-uri');
     var data = [
@@ -241,8 +278,10 @@ $(function () {
         entity.css('display', 'none')
         // Display message
         $('div#knowledge-delete-msg > span').text('Entity has been deleted.');
-        $('div#knowledge-delete-msg > a:first').off('click');
-        $('div#knowledge-delete-msg > a:first').on('click', function() {
+        $('div#knowledge-delete-msg > button:first').off('click');
+        $('div#knowledge-delete-msg > button:first').on('click', function() {
+          var button = this;
+          button.disabled = true;
           $.getJSON(window.SCRIPT_ROOT + '/_undo_delete_entity', data, function(data_return) {
             if (data_return.error) {
               alert(data_return.error);
@@ -250,12 +289,14 @@ $(function () {
               entity.css('display', '');
               $('div#knowledge-delete-msg').css('display', 'none');
             }
+            button.disabled = false;
           })
           .fail(function() { alert('getJSON request failed!'); });
           return false;
         });
         $('div#knowledge-delete-msg').css('display', 'flex');
       }
+      button.disabled = false;
     })
     .fail(function() { alert('getJSON request failed!'); });
 
@@ -263,45 +304,3 @@ $(function () {
   });
 
 });
-
-
-/*
-// edit knowledge
-function edit_knowledge() {
-  var data = $(this).serializeArray();
-  var knowledge_id = parseInt(this.id.substring(20));  // 'edit-knowledge-form-123' without 'edit-knowledge-form-'
-  data.push({ name: "knowledge_id", value: knowledge_id });
-  data.push({ name: "subgraph_id", value: window.SUBGRAPH_ID });
-
-  $.getJSON(window.SCRIPT_ROOT + '/_edit_knowledge', data, function(data) {
-    if (data.error) {
-      alert(data.error); //todo add element to page to display error
-    } else {
-      $('tr#tr-' + knowledge_id).children().eq(0).text(data.subject);
-      $('tr#tr-' + knowledge_id).children().eq(1).text(data.predicate);
-      $('tr#tr-' + knowledge_id).children().eq(2).text(data.object);
-      $('tr#tr-' + knowledge_id).css('display', 'table-row');
-      $('tr#tr-edit-' + knowledge_id).css('display', 'none');
-    }
-  })
-  .fail(function() { alert('getJSON request failed!'); });
-
-  return false;
-}
-
-$(function() {
-  var forms, i;
-  forms = $('form[id^="edit-knowledge-form-"]');
-  for (i = 0; i < forms.length; i++) {
-    $(forms[i]).submit(edit_knowledge);
-  }
-});
-
-$(function() {
-  var as, i;
-  as = $('table a[id^="delete-"]');
-  for (i = 0; i < as.length; i++) {
-    $(as[i]).bind('click', delete_knowledge);
-  }
-});
-*/

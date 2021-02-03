@@ -13,9 +13,9 @@
       <a href="{{ request.script_root }}/{{ subgraph_id }}/_download_rdf" class="w3-button big-button flex-fix" title="Download RDF">{#
         #}<i class="fas fa-project-diagram"></i>
       </a>
-      <a href="#" class="w3-button big-button flex-fix flip-flipbutton" data-flipid="subgraph-list-{{ subgraph_id }}" title="Edit {{ frontend_config['subgraph_term'] }}">{#
+      <button class="w3-button big-button flex-fix flip-flipbutton" data-flipid="subgraph-list-{{ subgraph_id }}" title="Edit {{ frontend_config['subgraph_term'] }}">{#
         #}<i class="fas fa-pen fa-lg"></i>
-      </a>
+      </button>
     </div>
   </div>
   <div class="flip-flipside" data-flipid="subgraph-list-{{ subgraph_id }}" style="display: none">
@@ -24,12 +24,12 @@
       <button type="submit" class="w3-button big-button flex-fix w3-right" title="Save changes">{#
         #}<i class="fas fa-save fa-lg"></i>
       </button>
-      <a href="#" class="w3-button big-button flex-fix w3-right delete-subgraph-button" title="Delete {{ frontend_config['subgraph_term'] }}">{#
+      <button class="w3-button big-button flex-fix w3-right delete-subgraph-button" title="Delete {{ frontend_config['subgraph_term'] }}">{#
         #}<i class="fas fa-minus fa-lg"></i>
-      </a>
-      <a href="#" class="w3-button big-button flex-fix flip-frontbutton" data-flipid="subgraph-list-{{ subgraph_id }}" title="Cancel">{#
+      </button>
+      <button class="w3-button big-button flex-fix flip-frontbutton" data-flipid="subgraph-list-{{ subgraph_id }}" title="Cancel">{#
         #}<i class="fas fa-times fa-lg"></i>
-      </a>
+      </button>
     </form>
   </div>
 </div>
@@ -42,9 +42,9 @@
   <div class="flex-row">
     <span class="entity-field-label flex-fix" {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}:</span>
     <div class="add-entity-div flex-flex flex-row" {% if field.values and field.is_functional %}style="display: none;"{% endif %}>
-      <a href="#" class="w3-button tiny-button flex-fix flip-frontside flip-flipbutton" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}" title="Add {{ field.range_label }}">{#
+      <button class="w3-button tiny-button flex-fix flip-frontside flip-flipbutton" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}" title="Add {{ field.range_label }}">{#
         #}<i class="fas fa-plus"></i>
-      </a>
+      </button>
       <div class="flex-flex flip-frontside" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}"></div>
       {# add described entity #}
       <div class="flex-flex flip-flipside" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}" style="display: none; margin-left: 0.5em;">
@@ -55,9 +55,9 @@
             </button>
           </form>
       </div>
-      <a href="#" class="w3-button tiny-button flex-fix flip-flipside flip-frontbutton" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}" title="Cancel" style="display: none;">{#
+      <button class="w3-button tiny-button flex-fix flip-flipside flip-frontbutton" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}" title="Cancel" style="display: none;">{#
         #}<i class="fas fa-times"></i>
-      </a>
+      </button>
     </div>
   </div>
   {% endif %}
@@ -87,16 +87,16 @@
       {% endif %}
       <div class="flex-row">
         <input class="w3-input flex-flex" type="text" name="value" placeholder="Add option...">
-        <a href="#" class="w3-button tiny-button flex-fix" title="Add {{ field.range_label }} to the list of options.">{#
+        <button class="w3-button tiny-button flex-fix" title="Add {{ field.range_label }} to the list of options.">{#
           #}<i class="fas fa-plus"></i>
-        </a>
+        </button>
       </div>
     </div></div>
   </div>
   {% if not field.is_functional %}
-  <a href="#" class="w3-button tiny-button flex-fix delete-value-button" title="Delete value">{#
+  <button class="w3-button tiny-button flex-fix delete-value-button" title="Delete value">{#
     #}<i class="fas fa-minus"></i>
-  </a>
+  </button>
   {% endif %}
 </form>
 {% endmacro %}
@@ -106,9 +106,9 @@
 <form class="flex-row">
   <div class="w3-input literal-input flex-flex" data-index="{{index}}" contentEditable>{{ value }}</div>
   {% if not field.is_functional %}
-  <a href="#" class="w3-button tiny-button flex-fix delete-value-button" title="Delete value">{#
+  <button class="w3-button tiny-button flex-fix delete-value-button" title="Delete value">{#
     #}<i class="fas fa-minus"></i>
-  </a>
+  </button>
   {% endif %}
 </form>
 {% endmacro %}
@@ -120,17 +120,17 @@
   {% if not is_root %}
   <div class="entity-title color2 flex-row">
     {# collapse button #}
-    <a href="#" class="w3-button collapse-button flex-fix flip-frontside flip-flipbutton" data-flipid="collapse-{{ entity.uri }}">{#
+    <button class="w3-button collapse-button flex-fix flip-frontside flip-flipbutton" data-flipid="collapse-{{ entity.uri }}">{#
       #}<i class="fas fa-chevron-right"></i>
-    </a>
-    <a href="#" class="w3-button collapse-button flex-fix flip-flipside flip-frontbutton" data-flipid="collapse-{{ entity.uri }}" style="display: none;">{#
+    </button>
+    <button class="w3-button collapse-button flex-fix flip-flipside flip-frontbutton" data-flipid="collapse-{{ entity.uri }}" style="display: none;">{#
       #}<i class="fas fa-chevron-down"></i>
-    </a>
+    </button>
 
     <div class="entity-label flex-text" {% if entity.comment %}title="{{ entity.comment }}"{% endif %} contentEditable>{{ entity.label }}</div>
-    <a href="#" class="w3-button tiny-button flex-fix delete-entity-button" title="Delete {{ entity.class_label }}">{#
+    <button class="w3-button tiny-button flex-fix delete-entity-button" title="Delete {{ entity.class_label }}">{#
       #}<i class="fas fa-minus"></i>
-    </a>
+    </button>
   </div>
   {% endif %}
 
@@ -163,9 +163,9 @@
           {% endif %}
         </div>
         {% if not field.is_functional %}
-        <a href="#" class="w3-button tiny-button flex-fix" title="Add {{ field.range_label }}">{#
+        <button class="w3-button tiny-button flex-fix" title="Add {{ field.range_label }}">{#
           #}<i class="fas fa-plus"></i>
-        </a>
+        </button>
         {% endif %}
       </div>
     </div>

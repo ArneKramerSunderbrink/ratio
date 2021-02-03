@@ -22,8 +22,8 @@ from ratio.db import get_db
 
 
 RATIO = Namespace('http://www.example.org/ratio-tool#')
-TRUE = Literal('True', datatype=XSD.boolean)
-FALSE = Literal('False', datatype=XSD.boolean)
+TRUE = Literal('true', datatype=XSD.boolean)
+FALSE = Literal('false', datatype=XSD.boolean)
 
 
 def parse_n3_term(s):
@@ -395,6 +395,7 @@ class SubgraphKnowledge:
             clean_graph.add(t)
         return clean_graph.serialize(format=rdf_format)
 
+
 def get_subgraph_knowledge(subgraph_id):
     """Get SubgraphKnowledge of a certain subgraph.
     The connection is unique for each request and will be reused if this is called again.
@@ -444,7 +445,7 @@ class Field:
             else:
                 return 'Choose an option from the list.', None
         elif self.options:
-            lit = Literal(value)
+            lit = Literal(value, datatype=XSD.boolean) if self.range_uri == XSD.boolean else Literal(value)
             if lit in self.options:
                 return '', lit
             else:
@@ -483,7 +484,7 @@ class Field:
                 non_empty = [i for i in self.values if type(self.values[i]) != Literal]
         else:
             non_empty = [i for i in self.values if self.values[i].value != '']
-        return [(i, self.values[i]) for i in non_empty]
+        return sorted([(i, self.values[i]) for i in non_empty], key=lambda iv: iv[0])
 
 
 class Option:
@@ -493,8 +494,15 @@ class Option:
         self.class_uri = class_uri
 
 
-def build_option(graph, ontology, uri):
+def build_option(ontology, knowledge, uri):
     """Searches in graph for an individual with thje given URI and a type defined in the ontology."""
+    if uri in ontology.subjects():
+        graph = ontology
+    elif uri in knowledge.subjects():
+        graph = knowledge
+    else:
+        raise KeyError('{} was not found in the ontology or the knowledge.'.format(uri))
+
     label = graph.objects(uri, RDFS.label)
     try:
         label = next(label)
@@ -559,13 +567,13 @@ def build_empty_field(ontology, knowledge, property_uri, range_class_uri):
 
     one_of = list(ontology.objects(range_class_uri, OWL.oneOf))
     if is_object_property and not is_described:
-        options = list(build_option(ontology, ontology, uri) for uri in get_tokens(ontology, range_class_uri))
-        options += list(build_option(knowledge, ontology, uri) for uri in get_tokens(knowledge, range_class_uri))
+        options = list(build_option(ontology, knowledge, uri) for uri in get_tokens(ontology, range_class_uri))
+        options += list(build_option(ontology, knowledge, uri) for uri in get_tokens(knowledge, range_class_uri))
         options.sort(key=lambda option: option.label)
     elif one_of:
         options = construct_list(ontology, one_of[0])
     elif range_class_uri == XSD.boolean:
-        options = ['true', 'false']
+        options = [TRUE, FALSE]
     else:
         options = None
 
@@ -625,7 +633,7 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
         values = {i: build_entity_from_knowledge(ontology, knowledge, values[i])
                   for i in values if str(values[i]) != ''}
     elif is_object_property:
-        values = {i: build_option(ontology, ontology, values[i])
+        values = {i: build_option(ontology, knowledge, values[i])
                   for i in values if str(values[i]) != ''}
     try:
         free_index = next(knowledge[individual_uri:URIRef(str(property_uri) + '_freeindex'):])
@@ -634,13 +642,13 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
 
     one_of = list(ontology.objects(range_class_uri, OWL.oneOf))
     if is_object_property and not is_described:
-        options = list(build_option(ontology, ontology, uri) for uri in get_tokens(ontology, range_class_uri))
-        options += list(build_option(knowledge, ontology, uri) for uri in get_tokens(knowledge, range_class_uri))
+        options = list(build_option(ontology, knowledge, uri) for uri in get_tokens(ontology, range_class_uri))
+        options += list(build_option(ontology, knowledge, uri) for uri in get_tokens(knowledge, range_class_uri))
         options.sort(key=lambda option: option.label)
     elif one_of:
         options = construct_list(ontology, one_of[0])
     elif range_class_uri == XSD.boolean:
-        options = ['true', 'false']
+        options = [TRUE, FALSE]
     else:
         options = None
 

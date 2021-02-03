@@ -146,6 +146,11 @@ header {
     vertical-align: middle;
 }
 
+button:disabled,
+button[disabled]{
+  cursor: progress !important;
+}
+
 /* Menus */
 
 .button-border {
@@ -298,4 +303,8 @@ header {
   right: 10%;
   padding: 0.5em 1em;
   align-items: center;
+}
+
+#knowledge-delete-msg > span {
+  margin-right: 0.5em;
 }
