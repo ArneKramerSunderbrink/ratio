@@ -95,14 +95,8 @@ header {
   background: var(--color2);
 }
 
-.fa-times,
-.fa-plus,
-.fa-minus,
-.fa-pen,
-.fa-square,
-.fa-check-square,
-.fa-save,
-.fa-project-diagram {
+.fa,
+.fas {
   opacity: 0.6;
 }
 
@@ -117,16 +111,15 @@ header {
   height: 1.5em;
 }
 
-.collapse-button {
+.entity-title > button {
   width: 2em;
   height: 2em;
-  border-radius: 4px;
-  margin-right: 0.5em;
+  border-radius: 8px;
 }
 
 .big-button,
 .tiny-button,
-.collapse-button {
+.entity-title > button {
   padding: 0;
   text-align: center;
 }
@@ -154,7 +147,7 @@ button[disabled]{
 /* Menus */
 
 .button-border {
-  border: 2px solid black;
+  border: 2px solid rgba(0, 0, 0, .6);
   border-radius: 4px;
 }
 
@@ -165,22 +158,27 @@ button[disabled]{
 }
 
 .entity-border {
-  border: 2px solid black;
   border-radius: 10px;
   box-shadow: 0 1px 2px 0 rgba(0,0,0,0.16),0 2px 5px 0 rgba(0,0,0,0.12)
 }
 
 .entity-title {
   align-items: center;
-  border: 2px solid black;
   border-radius: 10px;
   padding: 0.2em;
+}
+
+.entity-label {
+  margin-left: 0.5em;
   font-weight: bold;
-  margin: -2px;
 }
 
 .entity-body {
   padding: 0.5em 1em 0.5em 1.5em;
+}
+
+.entity-field-title {
+  margin-top: 1em;
 }
 
 .entity-field-label {
@@ -188,7 +186,7 @@ button[disabled]{
 }
 
 .entity-field {
-  margin: 1em 0.5em 0.5em 0.5em;
+  margin: 0.5em;
 }
 
 .field {

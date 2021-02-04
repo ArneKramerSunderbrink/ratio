@@ -148,7 +148,7 @@ class SubgraphKnowledge:
 
     def get_root(self):
         if self.root is None:
-            self.root = build_entity_from_knowledge(get_ontology().graph, self.graph, self.root_uri)
+            self.root = build_entity_from_knowledge(get_ontology().graph, self.graph, self.root_uri, False)
         return self.root
 
     def get_entity(self, entity_uri):
@@ -275,7 +275,7 @@ class SubgraphKnowledge:
         #        class_label = class_uri.n3(get_ontology().graph.namespace_manager).split(':')[-1]
         #    label = '{} {}'.format(class_label, nr)
 
-        entity = build_empty_entity(get_ontology().graph, self.graph, class_uri, uri, label)
+        entity = build_empty_entity(get_ontology().graph, self.graph, class_uri, uri, label, field.is_deletable)
 
         # new triples
         triples = [
@@ -415,14 +415,14 @@ def get_subgraph_knowledge(subgraph_id):
 class Field:
     """Represents a possible owl:ObjectProperty or owl:DatatypeProperty of an Entity"""
     def __init__(self, property_uri, label, comment,
-                 is_object_property, is_described, show_label, is_functional,
+                 is_object_property, is_described, is_deletable, is_functional,
                  range_uri, range_label, order, width, values, free_index, options=None):
         self.property_uri = property_uri
         self.label = label
         self.comment = comment
         self.is_object_property = is_object_property
         self.is_described = is_described
-        self.show_label = show_label
+        self.is_deletable = is_deletable
         self.is_functional = is_functional
         self.range_uri = range_uri
         self.range_label = range_label
@@ -560,7 +560,7 @@ def build_empty_field(ontology, knowledge, property_uri, range_class_uri):
     is_object_property = OWL.ObjectProperty in ontology.objects(property_uri, RDF.type)
     is_functional = OWL.FunctionalProperty in ontology.objects(property_uri, RDF.type)
     is_described = TRUE in ontology.objects(property_uri, RATIO.described)
-    show_label = FALSE not in ontology.objects(property_uri, RATIO.show_label)
+    is_deletable = FALSE not in ontology.objects(property_uri, RATIO.deletable)
 
     try:
         order = next(ontology.objects(property_uri, RATIO.order)).value
@@ -587,7 +587,7 @@ def build_empty_field(ontology, knowledge, property_uri, range_class_uri):
     else:
         options = None
 
-    return Field(property_uri, label, comment, is_object_property, is_described, show_label, is_functional,
+    return Field(property_uri, label, comment, is_object_property, is_described, is_deletable, is_functional,
                  range_class_uri, range_label, order, width, values, free_index, options)
 
 
@@ -617,7 +617,7 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
     is_object_property = OWL.ObjectProperty in ontology.objects(property_uri, RDF.type)
     is_functional = OWL.FunctionalProperty in ontology.objects(property_uri, RDF.type)
     is_described = TRUE in ontology.objects(property_uri, RATIO.described)
-    show_label = FALSE not in ontology.objects(property_uri, RATIO.show_label)
+    is_deletable = FALSE not in ontology.objects(property_uri, RATIO.deletable)
 
     try:
         order = next(ontology.objects(property_uri, RATIO.order)).value
@@ -640,7 +640,7 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
         values[i] = next(knowledge[individual_uri:URIRef(str(property_uri) + '_' + str(i)):])
 
     if is_described:
-        values = {i: build_entity_from_knowledge(ontology, knowledge, values[i])
+        values = {i: build_entity_from_knowledge(ontology, knowledge, values[i], is_deletable)
                   for i in values if str(values[i]) != ''}
     elif is_object_property:
         values = {i: build_option(ontology, knowledge, values[i])
@@ -662,19 +662,20 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
     else:
         options = None
 
-    return Field(property_uri, label, comment, is_object_property, is_described, show_label, is_functional,
+    return Field(property_uri, label, comment, is_object_property, is_described, is_deletable, is_functional,
                  range_class_uri, range_label, order, width, values, free_index, options)
 
 
 class Entity:
     """Represents a owl:NamedIndividual"""
-    def __init__(self, uri, label, comment, class_uri, class_label, fields):
+    def __init__(self, uri, label, comment, class_uri, class_label, fields, is_deletable):
         self.uri = uri
         self.label = label
         self.comment = comment
         self.class_uri = class_uri
         self.class_label = class_label
         self.fields = fields  # fields s.t. field.property_uri rdfs:domain self.uri
+        self.is_deletable = is_deletable
 
     def get_triples(self):
         """Returns the clean knowledge about this entity.
@@ -709,7 +710,7 @@ class Entity:
         return triples
 
 
-def build_empty_entity(ontology, knowledge, class_uri, uri, label):
+def build_empty_entity(ontology, knowledge, class_uri, uri, label, is_deletable):
     class_label = ontology.objects(class_uri, RDFS.label)
     try:
         class_label = next(class_label)
@@ -734,10 +735,10 @@ def build_empty_entity(ontology, knowledge, class_uri, uri, label):
         print('There is an error in the order of the fields of {}'.format(uri))
         print([(f.order, f.label) for f in fields])
 
-    return Entity(uri, label, comment, class_uri, class_label, fields)
+    return Entity(uri, label, comment, class_uri, class_label, fields, is_deletable)
 
 
-def build_entity_from_knowledge(ontology, knowledge, uri):
+def build_entity_from_knowledge(ontology, knowledge, uri, is_deletable):
     # would be nicer with sparql query but that's very slow for some reason
     class_uri = None
     for o in knowledge.objects(uri, RDF.type):
@@ -773,4 +774,4 @@ def build_entity_from_knowledge(ontology, knowledge, uri):
         print('There is an error in the order of the fields of {}'.format(uri))
         print([(f.order, f.label) for f in fields])
 
-    return Entity(uri, label, comment, class_uri, class_label, fields)
+    return Entity(uri, label, comment, class_uri, class_label, fields, is_deletable)

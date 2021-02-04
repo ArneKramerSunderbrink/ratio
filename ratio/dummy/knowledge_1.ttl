@@ -29,7 +29,7 @@ ctro:CT_1_1 rdf:type owl:NamedIndividual ,
 
 ctro:Pub_1_1 rdf:type owl:NamedIndividual ,
                       ctro:Publication ;
-             rdfs:label "Publication 9098273"^^xsd:string ;
+             rdfs:label "Publication"^^xsd:string ;
              ctro:hasAuthor_2 "Alm A"^^xsd:string ;
              ctro:hasAuthor_0 "Stjernschantz J."^^xsd:string ;
              ctro:hasAuthor_freeindex "3"^^xsd:positiveInteger ;

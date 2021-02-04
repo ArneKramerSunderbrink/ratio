@@ -25,7 +25,7 @@ ratio:Configuration ratio:hasBase "http://www.semanticweb.org/root/ontologies/20
 ctro:described_by rdf:type owl:ObjectProperty ,
                            owl:FunctionalProperty ;
                   ratio:described "true"^^xsd:boolean ;
-                  ratio:show_label "false"^^xsd:boolean ;
+                  ratio:deletable "false"^^xsd:boolean ;
                   ratio:order "1"^^xsd:positiveInteger ;
                   rdfs:domain ctro:ClinicalTrial ;
                   rdfs:range ctro:Publication ;
@@ -34,14 +34,13 @@ ctro:described_by rdf:type owl:ObjectProperty ,
 ctro:hasDesignGroup rdf:type owl:ObjectProperty ,
                               owl:FunctionalProperty ;
                     ratio:described "true"^^xsd:boolean ;
-                    ratio:show_label "false"^^xsd:boolean ;
+                    ratio:deletable "false"^^xsd:boolean ;
                     ratio:order "3"^^xsd:positiveInteger ;
                     rdfs:domain ctro:ClinicalTrial ;
                     rdfs:range ctro:DesignGroup ;
                     rdfs:label "Clinical trial design" .
 
-ctro:hasCTDesign rdf:type owl:ObjectProperty ,
-                          owl:FunctionalProperty ;
+ctro:hasCTDesign rdf:type owl:ObjectProperty ;
                  ratio:order "5"^^xsd:positiveInteger ;
                  rdfs:domain ctro:DesignGroup ;
                  rdfs:range ctro:CTDesign ;
@@ -63,7 +62,7 @@ ctro:hasAnalysisApproach rdf:type owl:ObjectProperty ,
 ctro:hasPopulation rdf:type owl:ObjectProperty ,
                             owl:FunctionalProperty ;
                    ratio:described "true"^^xsd:boolean ;
-                   ratio:show_label "false"^^xsd:boolean ;
+                   ratio:deletable "false"^^xsd:boolean ;
                    ratio:order "4"^^xsd:positiveInteger ;
                    rdfs:domain ctro:ClinicalTrial ;
                    rdfs:range ctro:Population ;
@@ -86,16 +85,16 @@ ctro:hasCountry rdf:type owl:ObjectProperty ;
 ctro:hasQualityIndicator rdf:type owl:ObjectProperty ,
                                   owl:FunctionalProperty;
                          ratio:described "true"^^xsd:boolean ;
-                         ratio:show_label "false"^^xsd:boolean ;
-                         ratio:order "5"^^xsd:positiveInteger ;
+                         ratio:deletable "false"^^xsd:boolean ;
+                         ratio:order "10"^^xsd:positiveInteger ;
                          rdfs:subPropertyOf owl:topObjectProperty ;
                          rdfs:domain ctro:ClinicalTrial ;
                          rdfs:range ctro:EvidenceQuality ;
-                         rdfs:label "Potential Conflicts of Interest" .
+                         rdfs:label "Potential Conflict of Interest" .
 
 ctro:hasArm rdf:type owl:ObjectProperty ;
             ratio:described "true"^^xsd:boolean ;
-            ratio:order "6"^^xsd:positiveInteger ;
+            ratio:order "5"^^xsd:positiveInteger ;
             rdfs:domain ctro:ClinicalTrial ;
             rdfs:range ctro:Arm ;
             rdfs:label "Interventional-Arm" .
@@ -131,7 +130,7 @@ ctro:hasDeliveryMethod rdf:type owl:ObjectProperty ;
 
 ctro:hasOutcome rdf:type owl:ObjectProperty ;
                 ratio:described "true"^^xsd:boolean ;
-                ratio:order "7"^^xsd:positiveInteger ;
+                ratio:order "6"^^xsd:positiveInteger ;
                 rdfs:domain ctro:ClinicalTrial ;
                 rdfs:range ctro:Outcome ;
                 rdfs:label "Outcome (Endpoint)" .
@@ -173,7 +172,7 @@ ctro:hasAnalysisMetric rdf:type owl:ObjectProperty ,
 
 ctro:hasResult rdf:type owl:ObjectProperty ;
                ratio:described "true"^^xsd:boolean ;
-               ratio:order "8"^^xsd:positiveInteger ;
+               ratio:order "7"^^xsd:positiveInteger ;
                rdfs:domain ctro:ClinicalTrial ;
                rdfs:range ctro:Result ;
                rdfs:label "Outcome Measure Data" .
@@ -205,7 +204,7 @@ ctro:hasStatisticalMeasure rdf:type owl:ObjectProperty ;
 
 ctro:hasAdverseEffect rdf:type owl:ObjectProperty ;
                       ratio:described "true"^^xsd:boolean ;
-                      ratio:order "9"^^xsd:positiveInteger ;
+                      ratio:order "8"^^xsd:positiveInteger ;
                       rdfs:domain ctro:ClinicalTrial ;
                       rdfs:range ctro:AdverseEffect ;
                       rdfs:label "Adverse Event" .
@@ -564,7 +563,8 @@ ctro:hasObservedResultAE rdf:type owl:DatatypeProperty ,
 
 ctro:hasConclusionComment rdf:type owl:DatatypeProperty ,
                                    owl:FunctionalProperty ;
-                          ratio:order "10"^^xsd:positiveInteger ;
+                          ratio:order "9"^^xsd:positiveInteger ;
+                          ratio:width "100"^^xsd:positiveInteger ;
                           rdfs:domain ctro:ClinicalTrial ;
                           rdfs:range xsd:string ;
                           rdfs:label "Conclusion" .
@@ -850,8 +850,8 @@ ctro:HbA1c_target rdf:type owl:NamedIndividual ,
 
 ctro:HemorrhagicStroke rdf:type owl:NamedIndividual ,
                                 ctro:EndpointDesc_AF ;
-                       rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MESH/D000083302> ;
                        rdfs:comment "Stroke due to rupture of a weakened blood vessel in the brain." ;
+                       rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MESH/D000083302> ;
                        rdfs:label "Hemorrhagic (or intracerebral) Stroke" .
 
 ctro:IOP rdf:type owl:NamedIndividual ,

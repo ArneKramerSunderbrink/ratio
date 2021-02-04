@@ -1118,8 +1118,8 @@ ctro:CrossOver rdf:type owl:NamedIndividual ,
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Dabigatran
 ctro:Dabigatran rdf:type owl:NamedIndividual ,
                          ctro:Drug ;
-                rdfs:label <http://linkedlifedata.com/resource/drug/DB14726> ,
-                           "Dabigatran" .
+                rdfs:isDefinedBy <http://linkedlifedata.com/resource/drug/DB14726> ;
+                rdfs:label "Dabigatran" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Diurnal_IOP
@@ -1207,8 +1207,8 @@ ctro:HbA1c_target rdf:type owl:NamedIndividual ,
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#HemorrhagicStroke
 ctro:HemorrhagicStroke rdf:type owl:NamedIndividual ,
                                 ctro:EndpointDesc_AF ;
-                       rdfs:comment <http://purl.bioontology.org/ontology/MESH/D000083302> ,
-                                    "Stroke due to rupture of a weakened blood vessel in the brain." ;
+                       rdfs:comment "Stroke due to rupture of a weakened blood vessel in the brain." ;
+                       rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MESH/D000083302> ;
                        rdfs:label "Hemorrhagic (or intracerebral) Stroke" .
 
 
@@ -1437,8 +1437,8 @@ ctro:Prospective rdf:type owl:NamedIndividual ,
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Pulmonary_embolism
 ctro:Pulmonary_embolism rdf:type owl:NamedIndividual ,
                                  ctro:EndpointDesc_AF ;
-                        rdfs:label <http://purl.bioontology.org/ontology/SNOMEDCT/59282003> ,
-                                   "Pulmonary embolism" .
+                        rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/59282003> ;
+                        rdfs:label "Pulmonary embolism" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Randomized
@@ -1450,16 +1450,16 @@ ctro:Randomized rdf:type owl:NamedIndividual ,
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#RankinScale
 ctro:RankinScale rdf:type owl:NamedIndividual ,
                           ctro:AnalysisMetric ;
-                 rdfs:label <http://purl.bioontology.org/ontology/SNOMEDCT/273729003> ,
-                            "Rankin scale" .
+                 rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/273729003> ;
+                 rdfs:label "Rankin scale" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Rate
 ctro:Rate rdf:type owl:NamedIndividual ,
                    ctro:Other ;
           rdfs:comment "A measure of the frequency of some phenomenon of interest given by rate: number of events in specified period / average population during the period. (Cambridge Dictionary of Statistics 3nd ed.)" ;
-          rdfs:label <http://purl.org/net/OCRe/statistics.owl#OCRE200042> ,
-                     "Rate" .
+          rdfs:isDefinedBy <http://purl.org/net/OCRe/statistics.owl#OCRE200042> ;
+          rdfs:label "Rate" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Rivaroxaban

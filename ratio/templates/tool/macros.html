@@ -38,8 +38,8 @@
 
 {% macro entity_field(entity, field) %}
 <div class="entity-field" data-property-uri="{{ field.property_uri }}">
-  {% if field.show_label %}
-  <div class="flex-row">
+  {% if field.is_deletable %}
+  <div class="entity-field-title flex-row">
     <span class="entity-field-label flex-fix" {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}:</span>
     <div class="add-entity-div flex-flex flex-row" {% if field.values and field.is_functional %}style="display: none;"{% endif %}>
       <button class="w3-button tiny-button flex-fix flip-frontside flip-flipbutton" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}" title="Add {{ field.range_label }}">{#
@@ -120,17 +120,19 @@
   {% if not is_root %}
   <div class="entity-title color2 flex-row">
     {# collapse button #}
-    <button class="w3-button collapse-button flex-fix flip-frontside flip-flipbutton" data-flipid="collapse-{{ entity.uri }}">{#
+    <button class="w3-button flex-fix flip-frontside flip-flipbutton" data-flipid="collapse-{{ entity.uri }}">{#
       #}<i class="fas fa-chevron-right"></i>
     </button>
-    <button class="w3-button collapse-button flex-fix flip-flipside flip-frontbutton" data-flipid="collapse-{{ entity.uri }}" style="display: none;">{#
+    <button class="w3-button flex-fix flip-flipside flip-frontbutton" data-flipid="collapse-{{ entity.uri }}" style="display: none;">{#
       #}<i class="fas fa-chevron-down"></i>
     </button>
 
-    <div class="entity-label flex-text" {% if entity.comment %}title="{{ entity.comment }}"{% endif %} contentEditable>{{ entity.label }}</div>
-    <button class="w3-button tiny-button flex-fix delete-entity-button" title="Delete {{ entity.class_label }}">{#
+    <div class="entity-label flex-text" {% if entity.comment %}title="{{ entity.comment }}"{% endif %} {% if entity.is_deletable %}contentEditable{% endif %}>{{ entity.label }}</div>
+    {% if entity.is_deletable %}
+    <button class="w3-button flex-fix delete-entity-button" title="Delete {{ entity.class_label }}">{#
       #}<i class="fas fa-minus"></i>
     </button>
+    {% endif %}
   </div>
   {% endif %}
 

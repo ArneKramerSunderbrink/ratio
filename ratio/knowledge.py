@@ -176,7 +176,6 @@ def change_value():
 @bp.route('/_change_label')
 @login_required
 def change_label():
-    # TODO
     user_id = g.user['id']
     subgraph_id = request.args.get('subgraph_id', 0, type=int)
     entity_uri = request.args.get('entity_uri', '', type=str)
@@ -191,6 +190,11 @@ def change_label():
         return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
 
     subgraph_knowledge = get_subgraph_knowledge(subgraph_id)
+
+    entity = subgraph_knowledge.get_entity(entity_uri)
+    if not entity.is_deletable:
+        return jsonify(error='You are not allowed to change the label of this entity.')
+
     subgraph_knowledge.change_label(entity_uri, label)
 
     return jsonify()
@@ -219,6 +223,9 @@ def add_entity():
 
     subgraph_knowledge = get_subgraph_knowledge(subgraph_id)
     field = subgraph_knowledge.get_field(parent_uri, property_uri)
+
+    if not field.is_deletable:
+        return jsonify(error='You are not allowed to add entities to this field.')
 
     if field.is_functional and field.values:
         return jsonify(error='You cannot add more than one value to this field.')
@@ -249,6 +256,11 @@ def delete_entity():
         return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
 
     subgraph_knowledge = get_subgraph_knowledge(subgraph_id)
+
+    entity = subgraph_knowledge.get_entity(entity_uri)
+    if not entity.is_deletable:
+        return jsonify(error='You are not allowed to delete this entity.')
+
     subgraph_knowledge.delete_individual_recursive(entity_uri)
 
     return jsonify()
