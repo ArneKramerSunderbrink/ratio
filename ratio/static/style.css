@@ -240,19 +240,19 @@ button[disabled]{
   width: calc(100% - 1.5em);
 }
 
-.options {
+.options-dropdown {
   display: none;
   position: relative;
   z-index: 100;
 }
 
-.option-input:focus + .options,
-.options:hover,
-.options:focus-within {
+.option-input:focus + .options-dropdown,
+.options-dropdown:hover,
+.options-dropdown:focus-within {
   display: block;
 }
 
-.option-input + .options > div {
+.option-input + .options-dropdown > div {
   position: absolute;
   border: 1px solid #ccc;
 }
@@ -264,14 +264,11 @@ button[disabled]{
   cursor: pointer;
 }
 
-.options > div {
+.options-dropdown > div {
   max-height: 10em;
   overflow: auto;
-  width: 100%
-}
-
-.options > div > div {
   padding: 3px;
+  width: 100%
 }
 
 .option:hover {
@@ -279,7 +276,7 @@ button[disabled]{
   background-color: #ccc !important;
 }
 
-.options input {
+.options-dropdown input {
   padding: 0 2px;
   width: calc(100% - 1.5em);
   border-bottom: 1px solid #ccc;
@@ -287,7 +284,7 @@ button[disabled]{
   display: inline-block;
 }
 
-.options a {
+.options-dropdown a {
   display: inline-block;
 }
 

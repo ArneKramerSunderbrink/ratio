@@ -179,6 +179,16 @@ class SubgraphKnowledge:
 
         raise KeyError('No field with URI {} found.'.format(property_uri))
 
+    def get_fields(self):
+        fields = []
+        stack = [self.get_root()]
+        while stack:
+            e = stack.pop()
+            fields += e.fields
+            stack += [f.values[i] for f in e.fields for i in f.values
+                      if f.is_object_property and f.is_described]
+        return fields
+
     def new_value(self, entity_uri, property_uri):
         entity = self.get_entity(entity_uri)
         field = self.get_field(entity_uri, property_uri)

@@ -14,8 +14,10 @@ $(function () {
   $('div#scroll-container').on('click', 'div.field > div > button', function() {
     var button = this;
     button.disabled = true;
-    var property_uri = $(this).closest('div.field').attr('data-property-uri');
-    var entity_uri = $(this).closest('div.entity').attr('data-entity-uri');
+    var field = $(this).closest('div.field');
+    var entity = $(this).closest('div.entity');
+    var property_uri = field.attr('data-property-uri');
+    var entity_uri = entity.attr('data-entity-uri');
     var data = [
       { name: "subgraph_id", value: window.SUBGRAPH_ID },
       { name: "property_uri", value: property_uri },
@@ -26,14 +28,9 @@ $(function () {
       if (data.error) {
         alert(data.error);
       } else {
-        var entity = $('div.entity[data-entity-uri="' + data.entity_uri + '"]');
-        var field = entity.find('div.field[data-property-uri="' + data.property_uri + '"]');
-        var list = field.find('div.field-value-list');
-        list.append(data.value_div);
-        list.children().last().find('.literal-input, .option-input').focus();
-        if (data.remove_plus) {
-          $(button).css('display', 'none');
-        }
+        var value_div = $(data.value_div)
+        field.find('div.field-value-list').append(value_div);
+        value_div.find('div.literal-input, input.option-input').focus();
       }
       button.disabled = false;
     })
@@ -95,8 +92,6 @@ $(function () {
 
   function get_json_change_value(input, get_value, button=null) {
     var index = $(input).attr('data-index');
-    console.log('before');
-    console.log(index);
     if (index == -1) {
       $(input).attr('data-index', -2);
     } else if (index == -2) {
@@ -111,8 +106,6 @@ $(function () {
       wait_for_index();
       return;
     }
-    console.log('after');
-    console.log(index);
     var property = $(input).closest('div.field');
     var property_uri = property.attr('data-property-uri');
     var entity_uri = $(input).closest('div.entity').attr('data-entity-uri');
@@ -154,7 +147,7 @@ $(function () {
   // Filter
   $('div#scroll-container').on('input', 'input.option-input', function() {
     var filter_string = this.value.toUpperCase();
-    $(this).next('.options').find('.option').each(function() {
+    $(this).next('.options-dropdown').find('.option').each(function() {
       if ($(this).text().toUpperCase().indexOf(filter_string) > -1) {
         $(this).css('display', '');
       } else {
@@ -163,14 +156,14 @@ $(function () {
     });
   });
   $('div#scroll-container').on('focus', 'input.option-input', function() {
-    $(this).next('.options').find('.option').each(function() {
+    $(this).next('.options-dropdown').find('.option').each(function() {
       $(this).css('display', '');
     });
   });
 
   // Select option
   $('div#scroll-container').on('click', '.option', function() {
-    var input = $(this).parent().parent('.options').prev('.option-input')[0];
+    var input = $(this).closest('.options-dropdown').prev('.option-input')[0];
     var value = '';
     input.value = this.textContent;
     if ($(this).is('[data-option-uri]')) {
@@ -250,6 +243,11 @@ $(function () {
         flip_front(field.find('div.add-entity-div > div.flip-flipside').first().attr('data-flipid'));
         if (data.remove_plus) {
           field.find('add-entity-div').css('display', 'none');
+        }
+        if (data.option_fields) {
+          data.option_fields.forEach(function(uri) {
+            $('div.field[data-property-uri="'+uri+'"] div.options').append(data.option_div);
+          });
         }
       }
       button.disabled = false;

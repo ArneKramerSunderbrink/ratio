@@ -130,9 +130,7 @@ def add_value():
         render_value_div = get_template_attribute('tool/macros.html', 'value_options')
     value_div = render_value_div(field, '', index)
 
-    return jsonify(value_div=value_div,
-                   property_uri=property_uri, entity_uri=entity_uri,
-                   remove_plus=field.is_functional)
+    return jsonify(value_div=value_div)
 
 
 @bp.route('/_change_value')
@@ -235,9 +233,15 @@ def add_entity():
     render_entity_div = get_template_attribute('tool/macros.html', 'entity_div')
     entity_div = render_entity_div(entity, False, index)
 
-    return jsonify(entity_div=entity_div,
-                   property_uri=property_uri, parent_uri=parent_uri,
-                   remove_plus=field.is_functional)
+    option_fields = {str(f.property_uri) for f in subgraph_knowledge.get_fields()
+                     if f.is_object_property and not f.is_described and f.range_uri == entity.class_uri}
+    if option_fields:
+        render_option_div = get_template_attribute('tool/macros.html', 'option_div')
+        option_div = render_option_div(entity, True)
+        return jsonify(entity_div=entity_div, remove_plus=field.is_functional,
+                       option_fields=list(option_fields), option_div=option_div)
+
+    return jsonify(entity_div=entity_div, remove_plus=field.is_functional)
 
 
 @bp.route('/_delete_entity')
