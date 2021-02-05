@@ -61,7 +61,7 @@ $(function () {
       });
     }
     get_json_change_value(input[0], function() { return ''; }, button);
-    form.css('display', 'none');
+    form.addClass('deleted');
     // Display message
     $('div#knowledge-delete-msg > span').text('Value has been deleted.');
     $('div#knowledge-delete-msg > button:first').off('click');
@@ -71,7 +71,7 @@ $(function () {
       if (old_value != '') {
         get_json_change_value(input[0], function() { return old_value; }, button);
       }
-      form.css('display', '');
+      form.removeClass('deleted');
       $('div#knowledge-delete-msg').css('display', 'none');
       return false;
     });
@@ -147,7 +147,7 @@ $(function () {
   // Filter
   $('div#scroll-container').on('input', 'input.option-input', function() {
     var filter_string = this.value.toUpperCase();
-    $(this).next('.options-dropdown').find('.option').each(function() {
+    $(this).next('.options-dropdown').find('.option:not(.deleted)').each(function() {
       if ($(this).text().toUpperCase().indexOf(filter_string) > -1) {
         $(this).css('display', '');
       } else {
@@ -282,7 +282,13 @@ $(function () {
         alert(data_return.error);
       } else {
         // Remove entity div
-        entity.css('display', 'none')
+        entity.addClass('deleted');
+        // update option fields
+        var deleted_uris = data_return.deleted;
+        deleted_uris.forEach(function(uri) {
+          $('input.option-input[data-option-uri="'+uri+'"]').val('');
+          $('div.option[data-option-uri="'+uri+'"]').addClass('deleted');
+        });
         // Display message
         $('div#knowledge-delete-msg > span').text('Entity has been deleted.');
         $('div#knowledge-delete-msg > button:first').off('click');
@@ -293,7 +299,10 @@ $(function () {
             if (data_return.error) {
               alert(data_return.error);
             } else {
-              entity.css('display', '');
+              entity.removeClass('deleted');
+              deleted_uris.forEach(function(uri) {
+                $('div.option[data-option-uri="'+uri+'"]').removeClass('deleted');
+              });
               $('div#knowledge-delete-msg').css('display', 'none');
             }
             button.disabled = false;

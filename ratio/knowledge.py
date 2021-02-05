@@ -16,86 +16,6 @@ MSG_SUBGRAPH_ACCESS = 'Subgraph with id {} does not exist or is not owned by use
 bp = Blueprint('knowledge', __name__)
 
 
-@bp.route('/_edit_knowledge')
-@login_required
-def edit_knowledge():
-    user_id = g.user['id']
-    knowledge_id = request.args.get('knowledge_id', 0, type=int)
-    subgraph_id = request.args.get('subgraph_id', 0, type=int)
-    rdf_subject = request.args.get('subject', '', type=str)
-    rdf_predicate = request.args.get('predicate', '', type=str)
-    rdf_object = request.args.get('object', '', type=str)
-
-    if not subgraph_id:
-        return jsonify(error='Subgraph id cannot be empty.')
-    if not knowledge_id:
-        return jsonify(error='Knowledge id cannot be empty.')
-    if not rdf_subject or rdf_subject.isspace():
-        return jsonify(error='Subject cannot be empty.')
-    if not rdf_predicate or rdf_predicate.isspace():
-        return jsonify(error='Predicate cannot be empty.')
-    if not rdf_object or rdf_object.isspace():
-        return jsonify(error='Object cannot be empty.')
-
-    db = get_db()
-    db_cursor = db.cursor()
-
-    if not subgraph_access(user_id, subgraph_id):
-        return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
-
-    knowledge_exists = db_cursor.execute(
-        'SELECT EXISTS (SELECT 1 FROM knowledge WHERE id = ? AND subgraph_id = ?)', (knowledge_id, subgraph_id)
-    ).fetchone()[0]
-
-    if not knowledge_exists:
-        return jsonify(error='Knowledge with id {} in subgraph with id {} does not exist.'
-                       .format(knowledge_id, subgraph_id))
-
-    db_cursor.execute(
-        'UPDATE knowledge SET subject = ?, predicate = ?, object = ? WHERE id = ?',
-        (rdf_subject, rdf_predicate, rdf_object, knowledge_id)
-    )
-
-    db.commit()
-
-    return jsonify(subject=rdf_subject, predicate=rdf_predicate, object=rdf_object)
-
-
-@bp.route('/_delete_knowledge')
-@login_required
-def delete_knowledge():
-    user_id = g.user['id']
-    knowledge_id = request.args.get('knowledge_id', 0, type=int)
-    subgraph_id = request.args.get('subgraph_id', 0, type=int)
-
-    if not subgraph_id:
-        return jsonify(error='Subgraph id cannot be empty.')
-    if not knowledge_id:
-        return jsonify(error='Knowledge id cannot be empty.')
-
-    db = get_db()
-    db_cursor = db.cursor()
-
-    if not subgraph_access(user_id, subgraph_id):
-        return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
-
-    knowledge_exists = db_cursor.execute(
-        'SELECT EXISTS (SELECT 1 FROM knowledge WHERE id = ? AND subgraph_id = ?)', (knowledge_id, subgraph_id)
-    ).fetchone()[0]
-
-    if not knowledge_exists:
-        return jsonify(error='Knowledge with id {} in subgraph with id {} does not exist.'
-                       .format(knowledge_id, subgraph_id))
-
-    db_cursor.execute(
-        'DELETE FROM knowledge WHERE id = ?', (knowledge_id,)
-    )
-
-    db.commit()
-
-    return jsonify()
-
-
 @bp.route('/_add_value')
 @login_required
 def add_value():
@@ -159,8 +79,7 @@ def change_value():
     field = subgraph_knowledge.get_field(entity_uri, property_uri)
 
     if field.is_described:
-        # todo stimmt der link?
-        return jsonify(error='You have to use /_change_entity_label to change the label of a described individual')
+        return jsonify(error='You have to use /_change_label to change the label of a described individual')
 
     if index == -1:
         index = subgraph_knowledge.new_value(entity_uri, property_uri)
@@ -265,9 +184,9 @@ def delete_entity():
     if not entity.is_deletable:
         return jsonify(error='You are not allowed to delete this entity.')
 
-    subgraph_knowledge.delete_individual_recursive(entity_uri)
+    deleted = subgraph_knowledge.delete_individual_recursive(entity_uri)
 
-    return jsonify()
+    return jsonify(deleted=list(deleted))
 
 
 @bp.route('/_undo_delete_entity')

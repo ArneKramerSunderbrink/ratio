@@ -152,6 +152,10 @@ button[disabled]{
 }
 
 /* Knowledge */
+.deleted {
+  display: none;
+}
+
 .entity {
   margin: 0.5em 0;
   background: white;

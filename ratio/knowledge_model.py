@@ -324,8 +324,10 @@ class SubgraphKnowledge:
         db_cursor = db.cursor()
 
         stack = {uri}
+        deleted = set()
         while stack:
             u = stack.pop()
+            deleted.add(str(u))
             stack.update((
                 o for p, o in self.graph[u::] if o in self.graph.subjects()
             ))
@@ -356,6 +358,8 @@ class SubgraphKnowledge:
         db.commit()
 
         self.root = None  # forces a rebuild of the root entity from the updated graph on the next request
+
+        return deleted
 
     def undo_delete_individual(self, uri):
         if type(uri) == str:
