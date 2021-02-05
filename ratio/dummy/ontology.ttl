@@ -69,14 +69,14 @@ ctro:hasPopulation rdf:type owl:ObjectProperty ,
                    rdfs:label "Population" .
 
 ctro:hasEthnicity rdf:type owl:ObjectProperty ;
-                  ratio:order "5"^^xsd:positiveInteger ;
+                  ratio:order "6"^^xsd:positiveInteger ;
                   ratio:width "25"^^xsd:positiveInteger ;
                   rdfs:domain ctro:Population ;
                   rdfs:range ctro:Ethnicity ;
                   rdfs:label "Ethnicity" .
 
 ctro:hasCountry rdf:type owl:ObjectProperty ;
-                ratio:order "6"^^xsd:positiveInteger ;
+                ratio:order "7"^^xsd:positiveInteger ;
                 ratio:width "25"^^xsd:positiveInteger ;
                 rdfs:domain ctro:Population ;
                 rdfs:range <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
@@ -323,8 +323,15 @@ ctro:hasMaxAge rdf:type owl:DatatypeProperty ,
                rdfs:range xsd:positiveInteger ;
                rdfs:label "Max. age" .
 
+ctro:hasAvgAge rdf:type owl:DatatypeProperty ;
+               ratio:order "4"^^xsd:positiveInteger ;
+               ratio:width "25"^^xsd:positiveInteger ;
+               rdfs:domain ctro:Population ;
+               rdfs:range xsd:nonNegativeInteger ;
+               rdfs:label "Avg Age" .
+
 ctro:hasPreconditionDescription rdf:type owl:DatatypeProperty ;
-                                ratio:order "4"^^xsd:positiveInteger ;
+                                ratio:order "5"^^xsd:positiveInteger ;
                                 ratio:width "100"^^xsd:positiveInteger ;
                                 rdfs:domain ctro:Population ;
                                 rdfs:range xsd:string ;
@@ -426,7 +433,8 @@ ctro:hasOutcomeDescription rdf:type owl:DatatypeProperty ,
                            ratio:order "3"^^xsd:positiveInteger ;
                            ratio:width "100"^^xsd:positiveInteger ;
                            rdfs:domain ctro:Outcome ;
-                           rdfs:range xsd:string .
+                           rdfs:range xsd:string ;
+                           rdfs:label "Outcome description" .
 
 ctro:hasOutcomeType rdf:type owl:DatatypeProperty ,
                              owl:FunctionalProperty ;
@@ -440,7 +448,8 @@ ctro:hasOutcomeType rdf:type owl:DatatypeProperty ,
                                                         rdf:rest rdf:nil
                                                       ]
                                            ]
-                               ] .
+                               ] ;
+                    rdfs:label "Outcome type" .
 
 ctro:hasFinalNumberPatients rdf:type owl:DatatypeProperty ,
                                      owl:FunctionalProperty ;
@@ -775,6 +784,10 @@ ctro:Colombia rdf:type owl:NamedIndividual ,
               rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223717005> ;
               rdfs:label "Colombia" .
 
+ctro:Count rdf:type owl:NamedIndividual ,
+                    ctro:AgreggationMethod ;
+           rdfs:label "Count" .
+
 ctro:Croatia rdf:type owl:NamedIndividual ,
                       <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
              rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223662004> ;
@@ -935,6 +948,10 @@ ctro:MajorBleed rdf:type owl:NamedIndividual ,
                 rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MEDDRA/10084048> ;
                 rdfs:label "Major Bleeding (or Hemorrhage)" .
 
+ctro:Mean rdf:type owl:NamedIndividual ,
+                   ctro:AgreggationMethod ;
+          rdfs:label "Mean" .
+
 ctro:Mexico rdf:type owl:NamedIndividual ,
                      <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
             rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223687006> ;
@@ -955,6 +972,10 @@ ctro:Multicenter rdf:type owl:NamedIndividual ,
                  rdfs:comment "Work that reports on a study executed by several cooperating institutions." ;
                  rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MESH/D016448> ;
                  rdfs:label "Multi-center" .
+
+ctro:Multinational rdf:type owl:NamedIndividual ,
+                            ctro:CTDesign ;
+                   rdfs:label "Multi-national" .
 
 ctro:MyocardialInfarction rdf:type owl:NamedIndividual ,
                                    ctro:EndpointDesc_AF ;

@@ -1101,6 +1101,12 @@ ctro:Colombia rdf:type owl:NamedIndividual ,
               rdfs:label "Colombia" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Count
+ctro:Count rdf:type owl:NamedIndividual ,
+                    ctro:AgreggationMethod ;
+           rdfs:label "Count" .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Croatia
 ctro:Croatia rdf:type owl:NamedIndividual ,
                       <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
@@ -1318,6 +1324,12 @@ ctro:MajorBleed rdf:type owl:NamedIndividual ,
                 rdfs:label "Major Bleeding (or Hemorrhage)" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Mean
+ctro:Mean rdf:type owl:NamedIndividual ,
+                   ctro:AgreggationMethod ;
+          rdfs:label "Mean" .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Mexico
 ctro:Mexico rdf:type owl:NamedIndividual ,
                      <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
@@ -1345,6 +1357,12 @@ ctro:Multicenter rdf:type owl:NamedIndividual ,
                  rdfs:comment "Work that reports on a study executed by several cooperating institutions." ;
                  rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MESH/D016448> ;
                  rdfs:label "Multi-center" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Multinational
+ctro:Multinational rdf:type owl:NamedIndividual ,
+                            ctro:CTDesign ;
+                   rdfs:label "Multi-national" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#MyocardialInfarction

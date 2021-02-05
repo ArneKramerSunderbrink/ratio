@@ -97,7 +97,7 @@ $(function () {
     } else if (index == -2) {
       function wait_for_index() {
         if ($(input).attr('data-index') == -2) {
-          setTimeout(wait_for_index, 300);
+          setTimeout(wait_for_index, 100);
           return;
         }
         get_json_change_value(input, get_value, button);
@@ -168,6 +168,7 @@ $(function () {
     input.value = this.textContent;
     if ($(this).is('[data-option-uri]')) {
       value = $(this).attr('data-option-uri');
+      input.setAttribute('data-option-uri', value);
     } else {
       value = this.textContent;
     }
@@ -186,6 +187,7 @@ $(function () {
         if (this.textContent == input.value) {
           if ($(this).is('[data-option-uri]')) {
             value = $(this).attr('data-option-uri');
+            input.setAttribute('data-option-uri', value);
           } else {
             value = this.textContent;
           }
@@ -193,6 +195,7 @@ $(function () {
       });
       if (value == '') {
         set_validity(input, 'Choose an option from the list.');
+        input.removeAttribute('data-option-uri');
         return
       }
     }
@@ -203,11 +206,17 @@ $(function () {
   // Change label
   $('div#scroll-container').on('input', 'div.entity-label', function() {
     var entity_uri = $(this).closest('div.entity').attr('data-entity-uri');
+    var label = this.innerText.replace(/\r?\n|\r/g, "");
+
     var data = [
       { name: 'subgraph_id', value: window.SUBGRAPH_ID },
       { name: 'entity_uri', value: entity_uri },
-      { name: 'label', value: this.innerText}
+      { name: 'label', value: label}
     ];
+
+    // update option fields
+    $('input.option-input[data-option-uri="'+entity_uri+'"]').val(label);
+    $('div.option[data-option-uri="'+entity_uri+'"]').text(label);
 
     $.getJSON(window.SCRIPT_ROOT + '/_change_label', data, function(data) {
       if (data.error) {

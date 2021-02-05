@@ -160,9 +160,8 @@ class SubgraphKnowledge:
             e = stack.pop()
             if e.uri == entity_uri:
                 return e
-            if isinstance(e, Entity):
-                stack += [f.values[i] for f in e.fields for i in f.values
-                          if f.is_object_property]
+            stack += [f.values[i] for f in e.fields for i in f.values
+                      if f.is_object_property and f.is_described]
 
         raise KeyError('No entity with URI {} found.'.format(entity_uri))
 
@@ -477,12 +476,19 @@ class Field:
                 int(value)
             except (ValueError, SyntaxError):
                 return '{} is not a valid integer.'.format(value), None
-        elif self.range_uri == XSD.positiveInteger:
+        elif self.range_uri == XSD.nonNegativeInteger:
             try:
                 i = int(value)
             except (ValueError, SyntaxError):
                 return '{} is not a valid integer.'.format(value), None
             if i < 0:
+                return '{} is not a non-negative value.'.format(value), None
+        elif self.range_uri == XSD.positiveInteger:
+            try:
+                i = int(value)
+            except (ValueError, SyntaxError):
+                return '{} is not a valid integer.'.format(value), None
+            if i <= 0:
                 return '{} is not a positive value.'.format(value), None
         else:
             print('Unknown Datatype: {}'.format(self.range_uri))
