@@ -12,7 +12,7 @@ from flask import url_for
 from time import strftime
 
 from ratio.auth import login_required, subgraph_access
-from ratio.db import get_db
+from ratio.db import get_db, get_empty_subgraph_template
 from ratio.knowledge_model import get_subgraph_knowledge
 
 MSG_SUBGRAPH_ACCESS = '{} with id {} does not exist or is not owned by user {} currently logged in.'
@@ -269,12 +269,9 @@ def add_subgraph():
     db = get_db()
     db_cursor = db.cursor()
 
-    # todo create new root individual, add uri to subgraph and knowledge to knowledge
-    root_uri = 'http://abc.de/root'
-
     db_cursor.execute(
-        'INSERT INTO subgraph (name, root, finished, deleted) VALUES (?, ?, ?, ?)',
-        (subgraph_name, root_uri, False, False)
+        'INSERT INTO subgraph (name, finished, deleted) VALUES (?, ?, ?)',
+        (subgraph_name, False, False)
     )
 
     subgraph_id = db_cursor.lastrowid
@@ -284,6 +281,7 @@ def add_subgraph():
         (user_id, subgraph_id)
     )
 
+    get_subgraph_knowledge(subgraph_id).load_rdf_data(get_empty_subgraph_template(subgraph_id))
 
     db.commit()
     return jsonify(redirect=url_for('tool.index', subgraph_id=subgraph_id))
@@ -306,7 +304,7 @@ def download_rdf(subgraph_id):
         subgraph_id,
         strftime('%Y-%m-%d-%H-%M-%S')
     )
-    content = get_subgraph_knowledge(subgraph_id).get_clean_serialization()
+    content = get_subgraph_knowledge(subgraph_id).get_serialization()
 
     return Response(
         content,

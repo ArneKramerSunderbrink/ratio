@@ -28,6 +28,15 @@ def close_db(e=None):
         db.close()
 
 
+def get_empty_subgraph_template(subgraph_id=None):
+    """Returns empty subgraph template string"""
+    with current_app.open_resource(current_app.config['EMPTY_SUBGRAPH_TEMPLATE'], 'r') as f:
+        empty_subgraph_template = f.read()
+    if subgraph_id is not None:
+        empty_subgraph_template = empty_subgraph_template.format(id=subgraph_id)
+    return empty_subgraph_template
+
+
 def db_init():
     """Clear existing data and create new tables."""
     with current_app.open_resource('schema.sql') as f:
@@ -49,12 +58,16 @@ def db_populate_dummy():
 
     from ratio.knowledge_model import get_ontology
     with current_app.open_resource('dummy/ontology.ttl') as f:
-        get_ontology().load_rdf_file(f, 'turtle')
+        get_ontology().load_rdf_data(f, 'turtle')
 
     from ratio.knowledge_model import get_subgraph_knowledge
     for i in range(1, 5):
         with current_app.open_resource('dummy/knowledge_{}.ttl'.format(i)) as f:
-            get_subgraph_knowledge(i).load_rdf_file(f, 'turtle')
+            get_subgraph_knowledge(i).load_rdf_data(f, 'turtle')
+
+    with current_app.open_resource('dummy/empty_subgraph_template.ttl') as f:
+        with open(current_app.config['EMPTY_SUBGRAPH_TEMPLATE'], 'wb+') as f2:
+            f2.write(f.read())
 
 
 @click.command('db-add-dummy')

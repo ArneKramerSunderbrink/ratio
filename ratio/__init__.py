@@ -33,6 +33,8 @@ def create_app(test_config=None):
         SECRET_KEY='dev',
         # store the database in the instance folder
         DATABASE=os.path.join(app.instance_path, 'ratio.sqlite'),
+        # and a template for creating new subgraphs
+        EMPTY_SUBGRAPH_TEMPLATE=os.path.join(app.instance_path, 'empty_subgraph_template.ttl'),
         # Prepend URL_PREFIX to all routes, including static etc.
         URL_PREFIX='',
         # Don't do logging via gunicorn and with the gunicorn level

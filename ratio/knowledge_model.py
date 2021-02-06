@@ -93,9 +93,12 @@ class Ontology:
         for row in db.execute('SELECT * FROM namespace').fetchall():
             self.graph.namespace_manager.bind(row['prefix'], parse_n3_term(row['uri']))
 
-    def load_rdf_file(self, file, rdf_format='turtle'):
+    def load_rdf_data(self, data, rdf_format='turtle'):
         self.graph = Graph()
-        self.graph.parse(file=file, format=rdf_format)
+        if type(data) == str:
+            self.graph.parse(data=data, format=rdf_format)
+        else:
+            self.graph.parse(file=data, format=rdf_format)
 
         db = get_db()
         db.execute('DELETE FROM ontology')
@@ -133,18 +136,20 @@ class SubgraphKnowledge:
 
         db = get_db()
 
+        for row in db.execute('SELECT * FROM namespace').fetchall():
+            self.graph.namespace_manager.bind(row['prefix'], parse_n3_term(row['uri']))
+
         rows = db.execute(
             'SELECT subject, predicate, object FROM knowledge WHERE subgraph_id = ?',
             (subgraph_id,)
         ).fetchall()
-        for row in rows:
-            self.graph.add(row_to_rdf(row))
+        if rows:
+            # else we have a completely new graph that needs to be filled with initial data via load_rdf_data
+            for row in rows:
+                self.graph.add(row_to_rdf(row))
 
-        for row in db.execute('SELECT * FROM namespace').fetchall():
-            self.graph.namespace_manager.bind(row['prefix'], parse_n3_term(row['uri']))
-
-        self.root_uri = URIRef(db.execute('SELECT root FROM subgraph WHERE id = ?', (subgraph_id,)).fetchone()['root'])
-        self.root = None
+            self.root_uri = next(self.graph[:RATIO.isRoot:TRUE])
+            self.root = None
 
     def get_root(self):
         if self.root is None:
@@ -197,7 +202,7 @@ class SubgraphKnowledge:
         property_uri_freeindex = URIRef(str(field.property_uri) + '_freeindex')
         self.graph.remove((entity.uri, property_uri_freeindex, None))
         self.graph.add((entity.uri, property_uri_index, Literal('')))
-        self.graph.add((entity.uri, property_uri_freeindex, Literal(index+1, datatype=XSD.positiveInteger)))
+        self.graph.add((entity.uri, property_uri_freeindex, Literal(index+1, datatype=XSD.nonNegativeInteger)))
         db = get_db()
         db.execute(
             'DELETE FROM knowledge WHERE subgraph_id = ? AND subject = ? AND predicate = ?',
@@ -206,7 +211,8 @@ class SubgraphKnowledge:
         db.executemany(
             'INSERT INTO knowledge (subgraph_id, subject, predicate, object) VALUES (?, ?, ?, ?)',
             [(self.id, entity.uri.n3(), property_uri_index.n3(), Literal('').n3()),
-             (self.id, entity.uri.n3(), property_uri_freeindex.n3(), Literal(index+1, datatype=XSD.positiveInteger).n3())]
+             (self.id, entity.uri.n3(), property_uri_freeindex.n3(),
+              Literal(index+1, datatype=XSD.nonNegativeInteger).n3())]
         )
         db.commit()
 
@@ -262,9 +268,13 @@ class SubgraphKnowledge:
         parent_uri = URIRef(parent_uri)
         property_uri = URIRef(property_uri)
         field = self.get_field(parent_uri, property_uri)
-        index = field.free_index
 
-        property_uri_index = URIRef(str(field.property_uri) + '_' + str(index))
+        try:
+            index = next(self.graph[class_uri:RATIO.freeindex:])
+        except StopIteration:
+            index = Literal(0, datatype=XSD.nonNegativeInteger)
+
+        property_uri_index = URIRef(str(field.property_uri) + '_' + str(field.free_index))
         property_uri_freeindex = URIRef(str(field.property_uri) + '_freeindex')
 
         # construct a unique uri
@@ -272,7 +282,7 @@ class SubgraphKnowledge:
             get_ontology().get_base(),
             class_uri.n3(get_ontology().graph.namespace_manager).split(':')[-1],  # try to remove the prefix
             self.id,
-            index
+            index.value
         ))
 
         #if label is None:  # todo would be nice to propose this default label in the frontend
@@ -286,25 +296,28 @@ class SubgraphKnowledge:
 
         entity = build_empty_entity(get_ontology().graph, self.graph, class_uri, uri, label, field.is_deletable)
 
-        # new triples
+        # update triples
         triples = [
             (parent_uri, property_uri_index, uri),
-            (parent_uri, property_uri_freeindex, Literal(index + 1, datatype=XSD.positiveInteger)),
+            (parent_uri, property_uri_freeindex, Literal(field.free_index + 1, datatype=XSD.nonNegativeInteger)),
             (uri, RDF.type, OWL.NamedIndividual),
             (uri, RDF.type, class_uri),
-            (uri, RDFS.label, Literal(label, datatype=XSD.string))
+            (uri, RDFS.label, Literal(label, datatype=XSD.string)),
+            (class_uri, RATIO.freeindex, index + 1)
         ]
 
         # add triples to graph
         self.graph.remove((parent_uri, property_uri_freeindex, None))
+        self.graph.remove((class_uri, RATIO.freeindex, None))
         for t in triples:
             self.graph.add(t)
 
         # save add triples to database
         db = get_db()
-        db.execute(
+        db.executemany(
             'DELETE FROM knowledge WHERE subgraph_id = ? AND subject = ? AND predicate = ?',
-            (self.id, parent_uri.n3(), property_uri_freeindex.n3())
+            [(self.id, parent_uri.n3(), property_uri_freeindex.n3()),
+             (self.id, class_uri.n3(), RATIO.freeindex.n3())]
         )
         db.executemany(
             'INSERT INTO knowledge (subgraph_id, subject, predicate, object) VALUES (?, ?, ?, ?)',
@@ -390,9 +403,12 @@ class SubgraphKnowledge:
 
         self.root = None  # forces a rebuild of the root entity from the updated graph on the next request
 
-    def load_rdf_file(self, file, rdf_format='turtle'):
+    def load_rdf_data(self, data, rdf_format='turtle'):
         self.graph = Graph()
-        self.graph.parse(file=file, format=rdf_format)
+        if type(data) == str:
+            self.graph.parse(data=data, format=rdf_format)
+        else:
+            self.graph.parse(file=data, format=rdf_format)
 
         db = get_db()
         db.execute('DELETE FROM knowledge WHERE subgraph_id = ?', (self.id,))
@@ -404,7 +420,9 @@ class SubgraphKnowledge:
 
         self.root = None  # forces a rebuild of the root entity from the updated graph on the next request
 
-    def get_clean_serialization(self, rdf_format='turtle'):
+    def get_serialization(self, rdf_format='turtle', clean=True):
+        if not clean:
+            return self.graph.serialize(format=rdf_format)
         clean_graph = Graph()
         clean_graph.namespace_manager = self.graph.namespace_manager
         for t in self.get_root().get_triples():
