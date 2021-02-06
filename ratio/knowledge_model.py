@@ -303,7 +303,7 @@ class SubgraphKnowledge:
             (uri, RDF.type, OWL.NamedIndividual),
             (uri, RDF.type, class_uri),
             (uri, RDFS.label, Literal(label, datatype=XSD.string)),
-            (class_uri, RATIO.freeindex, index + 1)
+            (class_uri, RATIO.freeindex, Literal(index + 1, datatype=XSD.nonNegativeInteger))
         ]
 
         # add triples to graph
@@ -686,7 +686,7 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
     try:
         free_index = next(knowledge[individual_uri:URIRef(str(property_uri) + '_freeindex'):])
     except StopIteration:
-        free_index = 0
+        free_index = Literal(0, datatype=XSD.nonNegativeInteger)
 
     one_of = list(ontology.objects(range_class_uri, OWL.oneOf))
     if is_object_property and not is_described:

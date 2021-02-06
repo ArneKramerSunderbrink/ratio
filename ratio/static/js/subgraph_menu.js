@@ -33,7 +33,7 @@ $(function() {
 $(function() {
   $('div#subgraph-list').on('submit', 'form', function() {
     var data = $(this).serializeArray();
-    var list_item = $(this.parentNode.parentNode);
+    var list_item = $(this).closest('.item');
     var subgraph_id = list_item.attr('data-subgraph-id')
     var flipid = 'subgraph-list-' + subgraph_id;
     data.push({ name: 'subgraph_id', value: subgraph_id });
@@ -47,8 +47,9 @@ $(function() {
       } else {
         if (subgraph_id == window.SUBGRAPH_ID) {
           $('a#subgraph-name').text(data.name);
+          $('title').text('RATIO - ' + data.name);
         }
-        list_item.children().eq(0).children().eq(0).text(data.name);
+        list_item.find('a:first').text(data.name);
         flip_front(flipid);
       }
     })

@@ -1,123 +1,243 @@
 @prefix ctro: <http://www.semanticweb.org/root/ontologies/2018/6/ctro#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
 @prefix ratio: <http://www.example.org/ratio-tool#> .
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
+ctro:CT_1_0 a ctro:ClinicalTrial,
+        owl:NamedIndividual ;
+    rdfs:label "Clinical Trial"^^xsd:string ;
+    ratio:isRoot true ;
+    ctro:described_by_0 ctro:Pub_1_0 ;
+    ctro:described_by_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasAdverseEffect_0 ctro:AdverseEffect_1_0 ;
+    ctro:hasAdverseEffect_1 ctro:AdverseEffect_1_1 ;
+    ctro:hasAdverseEffect_2 ctro:AdverseEffect_1_2 ;
+    ctro:hasAdverseEffect_3 ctro:AdverseEffect_1_3 ;
+    ctro:hasAdverseEffect_freeindex "4"^^xsd:nonNegativeInteger ;
+    ctro:hasArm_0 ctro:Arm_1_0 ;
+    ctro:hasArm_1 ctro:Arm_1_1 ;
+    ctro:hasArm_freeindex "2"^^xsd:nonNegativeInteger ;
+    ctro:hasConclusionComment_0 "In patients with type 2 diabetes , once - daily bedtime insulin glargine is as effective as once - or twice - daily NPH in improving and maintaining glycemic control. In addition , insulin glargine deonstrates a lower risk of nocturnal hypoglycemia and less weight gain compared with NPH insulin."^^xsd:string ;
+    ctro:hasConclusionComment_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDesignGroup_0 ctro:Design_1_0 ;
+    ctro:hasDesignGroup_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObjectiveDescription_0 "To determine the safety and efficacy of the long - acting analog insulin glargine compared with NPH insulin in patients with type 2 diabetes who were previously treated with insulin alone."^^xsd:string ;
+    ctro:hasObjectiveDescription_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcome_0 ctro:Out_1_0 ;
+    ctro:hasOutcome_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasPopulation_0 ctro:Population_1_0 ;
+    ctro:hasPopulation_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasQualityIndicator_0 ctro:Evidence_1_0 ;
+    ctro:hasQualityIndicator_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasResult_0 ctro:Res_1_0 ;
+    ctro:hasResult_1 ctro:Result_1_1 ;
+    ctro:hasResult_freeindex "2"^^xsd:nonNegativeInteger .
 
-ctro:CT_1_1 rdf:type owl:NamedIndividual ,
-                     ctro:ClinicalTrial ;
-            ratio:isRoot "true"^^xsd:boolean ;
-            rdfs:label "Clinical Trial 1"^^xsd:string ;
-            ctro:described_by_0 ctro:Pub_1_1 ;
-            ctro:described_by_freeindex "1"^^xsd:positiveInteger ;
-            ctro:hasDesignGroup_0 ctro:Design_1_1 ;
-            ctro:hasDesignGroup_freeindex "1"^^xsd:positiveInteger ;
-            ctro:hasPopulation_0 ctro:Population_1_1 ;
-            ctro:hasPopulation_freeindex "1"^^xsd:positiveInteger ;
-            ctro:hasQualityIndicator_0 ctro:Evidence_1_1 ;
-            ctro:hasQualityIndicator_freeindex "1"^^xsd:positiveInteger ;
-            ctro:hasArm_0 ctro:Arm_1_1 ;
-            ctro:hasArm_3 ctro:Arm_1_2 ;
-            ctro:hasArm_freeindex "4"^^xsd:positiveInteger ;
-            ctro:hasOutcome_0 ctro:Out_1_1 ;
-            ctro:hasOutcome_freeindex "1"^^xsd:positiveInteger ;
-            ctro:hasResult_0 ctro:Res_1_1 ;
-            ctro:hasResult_1 ctro:Res_1_2 ;
-            ctro:hasResult_freeindex "2"^^xsd:positiveInteger ;
-            ctro:hasAdverseEffect_0 ctro:AE_1_1 ;
-            ctro:hasAdverseEffect_freeindex "1"^^xsd:positiveInteger .
+ctro:AdverseEffect_1_0 a ctro:AdverseEffect,
+        owl:NamedIndividual ;
+    rdfs:label "Glargine symptomatic ypoglycemia" ;
+    ctro:hasAEname_0 ""^^ctro:EndpointDescription ;
+    ctro:hasAEname_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasArmAE_0 ctro:Arm_1_0 ;
+    ctro:hasArmAE_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberAffectedAE_0 ""^^xsd:integer ;
+    ctro:hasNumberAffectedAE_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObservedResultAE_0 "61.4"^^xsd:string ;
+    ctro:hasObservedResultAE_freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:Pub_1_1 rdf:type owl:NamedIndividual ,
-                      ctro:Publication ;
-             rdfs:label "Publication"^^xsd:string ;
-             ctro:hasAuthor_2 "Alm A"^^xsd:string ;
-             ctro:hasAuthor_0 "Stjernschantz J."^^xsd:string ;
-             ctro:hasAuthor_freeindex "3"^^xsd:positiveInteger ;
-             ctro:hasJournal_0 "Ophthalmology"^^xsd:string ;
-             ctro:hasJournal_freeindex "1"^^xsd:positiveInteger ;
-             ctro:hasPMID_0 "9098273"^^xsd:integer ;
-             ctro:hasPMID_freeindex "1"^^xsd:positiveInteger ;
-             ctro:hasPublicationYear_0 "1995"^^xsd:integer ;
-             ctro:hasPublicationYear_freeindex "1"^^xsd:positiveInteger ;
-             ctro:hasTitle_0 "Effects on intraocular pressure and side effects of 0.005% latanoprost applied once daily, evening or morning. A comparison with timolol. Scandinavian Latanoprost Study Group"^^xsd:string ;
-             ctro:hasTitle_freeindex "1"^^xsd:positiveInteger .
+ctro:AdverseEffect_1_1 a ctro:AdverseEffect,
+        owl:NamedIndividual ;
+    rdfs:label "NPH symptomatic hypoglycemia" ;
+    ctro:hasArmAE_0 ctro:Arm_1_1 ;
+    ctro:hasArmAE_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObservedResultAE_0 "66 %"^^xsd:string ;
+    ctro:hasObservedResultAE_freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:Design_1_1 rdf:type owl:NamedIndividual ,
-                         ctro:DesignGroup ;
-                rdfs:label "Design"^^xsd:string ;
-                ctro:analysesHealthCondition_0 ctro:T2DM ;
-                ctro:analysesHealthCondition_freeindex "1"^^xsd:positiveInteger .
+ctro:AdverseEffect_1_2 a ctro:AdverseEffect,
+        owl:NamedIndividual ;
+    rdfs:label "Glargine nocturnal hypoglycemia"^^xsd:string ;
+    ctro:hasAEname_0 ""^^ctro:EndpointDescription ;
+    ctro:hasAEname_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasArmAE_0 ctro:Arm_1_0 ;
+    ctro:hasArmAE_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObservedResultAE_0 "26.5%"^^xsd:string ;
+    ctro:hasObservedResultAE_freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:Population_1_1 rdf:type owl:NamedIndividual ,
-                             ctro:Population ;
-                    rdfs:label "Population"^^xsd:string ;
-                    ctro:hasGender_0 "Female" ;
-                    ctro:hasGender_freeindex "1"^^xsd:positiveInteger .
+ctro:AdverseEffect_1_3 a ctro:AdverseEffect,
+        owl:NamedIndividual ;
+    rdfs:label "NPH nocturnal hypoglycemia"^^xsd:string ;
+    ctro:hasArmAE_0 ctro:Arm_1_1 ;
+    ctro:hasArmAE_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObservedResultAE_0 "35%"^^xsd:string ;
+    ctro:hasObservedResultAE_freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:Evidence_1_1 rdf:type owl:NamedIndividual ,
-                           ctro:EvidenceQuality;
-                  rdfs:label "Potential Conflicts of Interest"^^xsd:string .
+ctro:ClinicalTrial ratio:freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:Arm_1_1 rdf:type owl:NamedIndividual ,
-                      ctro:Arm;
-             rdfs:label "Latanoprost Arm"^^xsd:string ;
-             ctro:hasNumberPatientsArm_0 "123"^^xsd:positiveInteger ;
-             ctro:hasNumberPatientsArm_freeindex "1"^^xsd:positiveInteger ;
-             ctro:hasIntervention_0 ctro:Interv_1_1 ;
-             ctro:hasIntervention_freeindex "1"^^xsd:positiveInteger .
+ctro:DesignGroup ratio:freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:Interv_1_1 rdf:type owl:NamedIndividual ,
-                         ctro:Intervention ;
-                rdfs:label "Latanoprost"^^xsd:string ;
-                ctro:hasDuration_0 "12 months" ;
-                ctro:hasDuration_freeindex "1"^^xsd:positiveInteger ;
-                ctro:hasFrequency_0 "every 2 hrs." ;
-                ctro:hasFrequency_freeindex "1"^^xsd:positiveInteger ;
-                ctro:hasDrug_0 ctro:Latanoprost ;
-                ctro:hasDrug_freeindex "1"^^xsd:positiveInteger ;
-                ctro:hasDeliveryMethod_0 ctro:Injection ;
-                ctro:hasDeliveryMethod_freeindex "1"^^xsd:positiveInteger .
+ctro:Design_1_0 a ctro:DesignGroup,
+        owl:NamedIndividual ;
+    rdfs:label "Design"^^xsd:string ;
+    ctro:analysesHealthCondition_0 ctro:T2DM ;
+    ctro:analysesHealthCondition_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasAnalysisApproach_0 ctro:IntentionToTreat ;
+    ctro:hasAnalysisApproach_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasCTDesign_0 ctro:Randomized ;
+    ctro:hasCTDesign_1 ctro:Multicenter ;
+    ctro:hasCTDesign_2 ctro:OpenLabel ;
+    ctro:hasCTDesign_freeindex "3"^^xsd:nonNegativeInteger ;
+    ctro:hasCTduration_0 "28"^^xsd:positiveInteger ;
+    ctro:hasCTduration_freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:Arm_1_2 rdf:type owl:NamedIndividual ,
-                      ctro:Arm;
-             rdfs:label "Timolol Arm"^^xsd:string ;
-             ctro:hasNumberPatientsArm_0 "111"^^xsd:positiveInteger ;
-             ctro:hasNumberPatientsArm_freeindex "1"^^xsd:positiveInteger ;
-             ctro:hasIntervention_0 ctro:Interv_1_2 ;
-             ctro:hasIntervention_freeindex "1"^^xsd:positiveInteger .
+ctro:EvidenceQuality ratio:freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:Interv_1_2 rdf:type owl:NamedIndividual ,
-                         ctro:Intervention ;
-                rdfs:label "Timolol"^^xsd:string ;
-                ctro:hasDuration_0 "12 months" ;
-                ctro:hasDuration_freeindex "1"^^xsd:positiveInteger ;
-                ctro:hasFrequency_0 "every 2 hrs." ;
-                ctro:hasFrequency_freeindex "1"^^xsd:positiveInteger ;
-                ctro:hasDrug_0 ctro:Timolol ;
-                ctro:hasDrug_freeindex "1"^^xsd:positiveInteger ;
-                ctro:hasDeliveryMethod_0 ctro:Injection ;
-                ctro:hasDeliveryMethod_freeindex "1"^^xsd:positiveInteger .
+ctro:Evidence_1_0 a ctro:EvidenceQuality,
+        owl:NamedIndividual ;
+    rdfs:label "Potential Conflicts of Interest"^^xsd:string ;
+    ctro:hasAuthorAffiliation_0 "Dallas Diabetes and Endocrine Center , Texas"^^xsd:string ;
+    ctro:hasAuthorAffiliation_freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:Out_1_1 rdf:type owl:NamedIndividual ,
-                      ctro:Outcome ;
-             rdfs:label "Outcome HBA"^^xsd:string .
+ctro:Interv_1_0 a ctro:Intervention,
+        owl:NamedIndividual ;
+    rdfs:label "Intervention 1"^^xsd:string ;
+    ctro:hasDoseValue_0 "Doses were adjusted to obtain target fasting glucose < 6 . 7 mmol / l ."^^rdfs:Literal ;
+    ctro:hasDoseValue_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDrug_0 ""^^ctro:Drug ;
+    ctro:hasDrug_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasFrequency_0 "every day" ;
+    ctro:hasFrequency_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:isControl_0 false ;
+    ctro:isControl_freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:Res_1_1 rdf:type owl:NamedIndividual ,
-                      ctro:Result ;
-             rdfs:label "Outcome Measure Data HBA Arm 1"^^xsd:string ;
-             ctro:hasStatisticalMeasure_0 ctro:Stat_1_1 ;
-             ctro:hasStatisticalMeasure_freeindex "1"^^xsd:positiveInteger .
+ctro:Intervention_1_1 a ctro:Intervention,
+        owl:NamedIndividual ;
+    rdfs:label "Intervention"^^xsd:string ;
+    ctro:hasDoseValue_0 "Doses were adjusted to obtain target fasting glucose < 6 . 7 mmol / l ."^^rdfs:Literal ;
+    ctro:hasDoseValue_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasFrequency_0 "every day" ;
+    ctro:hasFrequency_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:isControl_0 false ;
+    ctro:isControl_freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:Res_1_2 rdf:type owl:NamedIndividual ,
-                      ctro:Result ;
-             rdfs:label "Outcome Measure Data HBA Arm 2"^^xsd:string .
+ctro:Outcome ratio:freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:Stat_1_1 rdf:type owl:NamedIndividual ,
-                       ctro:StatisticalMeasure ;
-              rdfs:label "Stat 1"^^xsd:string .
+ctro:Population ratio:freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:AE_1_1 rdf:type owl:NamedIndividual ,
-                     ctro:AdverseEffect ;
-            rdfs:label "AE 1"^^xsd:string .
+ctro:Population_1_0 a ctro:Population,
+        owl:NamedIndividual ;
+    rdfs:label "Population"^^xsd:string ;
+    ctro:hasCountry_0 ctro:USA ;
+    ctro:hasCountry_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasPreconditionDescription_0 "subjects with type 2 diabetes who were receiving NPH insulin with or without regular insulin for postprandial control"^^xsd:string ;
+    ctro:hasPreconditionDescription_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Pub_1_0 a ctro:Publication,
+        owl:NamedIndividual ;
+    rdfs:label "Publication"^^xsd:string ;
+    ctro:hasAuthor_0 "Schwartz SL"^^xsd:string ;
+    ctro:hasAuthor_1 "Clark CM Jr"^^xsd:string ;
+    ctro:hasAuthor_2 "Edwards MB"^^xsd:string ;
+    ctro:hasAuthor_3 "Park GD"^^xsd:string ;
+    ctro:hasAuthor_4 "Donley DW"^^xsd:string ;
+    ctro:hasAuthor_5 "Rosenstock J"^^xsd:string ;
+    ctro:hasAuthor_freeindex "6"^^xsd:nonNegativeInteger ;
+    ctro:hasJournal_0 "Diabetes	Care"^^xsd:string ;
+    ctro:hasJournal_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasPMID_0 "11315821"^^rdfs:Literal ;
+    ctro:hasPMID_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasPublicationYear_0 "2001"^^xsd:positiveInteger ;
+    ctro:hasPublicationYear_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasTitle_0 "Basal insulin therapy in type 2 diabetes : 28 - week comparison of insulin glargine ( HOE 901 ) and NPH insulin"^^xsd:string ;
+    ctro:hasTitle_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Publication ratio:freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Res_1_0 a ctro:Result,
+        owl:NamedIndividual ;
+    rdfs:label "Glargine HBA1C" ;
+    ctro:hasAbsoluteValue_0 "0.41"^^xsd:float ;
+    ctro:hasAbsoluteValue_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasArmRes_0 ctro:Arm_1_0 ;
+    ctro:hasArmRes_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcomeRes_0 ctro:Out_1_0 ;
+    ctro:hasOutcomeRes_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasResultDirection_0 "Reduction" ;
+    ctro:hasResultDirection_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasStatisticalMeasure_0 ctro:StatisticalMeasure_1_0 ;
+    ctro:hasStatisticalMeasure_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasTimePoints_0 "endpoi"^^xsd:string ;
+    ctro:hasTimePoints_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Result_1_1 a ctro:Result,
+        owl:NamedIndividual ;
+    rdfs:label "NPH HBA1C"^^xsd:string ;
+    ctro:hasAbsoluteValue_0 "0.59"^^xsd:float ;
+    ctro:hasAbsoluteValue_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasArmRes_0 ctro:Arm_1_1 ;
+    ctro:hasArmRes_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcomeRes_0 ctro:Out_1_0 ;
+    ctro:hasOutcomeRes_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasResultDirection_0 "Reduction" ;
+    ctro:hasResultDirection_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasStatisticalMeasure_0 ctro:StatisticalMeasure_1_1 ;
+    ctro:hasStatisticalMeasure_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasTimePoints_0 "endpoint"^^xsd:string ;
+    ctro:hasTimePoints_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:StatisticalMeasure_1_0 a ctro:StatisticalMeasure,
+        owl:NamedIndividual ;
+    rdfs:label "stat"^^xsd:string ;
+    ctro:hasStandardDev_0 "0.1"^^xsd:float ;
+    ctro:hasStandardDev_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:StatisticalMeasure_1_1 a ctro:StatisticalMeasure,
+        owl:NamedIndividual ;
+    rdfs:label "stat"^^xsd:string ;
+    ctro:hasStandardDev_0 "0.1"^^xsd:float ;
+    ctro:hasStandardDev_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Arm ratio:freeindex "2"^^xsd:nonNegativeInteger .
+
+ctro:Intervention ratio:freeindex "2"^^xsd:nonNegativeInteger .
+
+ctro:Result ratio:freeindex "2"^^xsd:nonNegativeInteger .
+
+ctro:StatisticalMeasure ratio:freeindex "2"^^xsd:nonNegativeInteger .
+
+ctro:Out_1_0 a ctro:Outcome,
+        owl:NamedIndividual ;
+    rdfs:label "HBA1C" ;
+    ctro:hasAggregationMethod_0 ctro:Mean ;
+    ctro:hasAggregationMethod_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasAnalysisMetric_0 ""^^ctro:AnalysisMetric ;
+    ctro:hasAnalysisMetric_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasBaselineValue_0 "8.5"^^xsd:float ;
+    ctro:hasBaselineValue_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndpointDescription_0 ctro:HbA1c ;
+    ctro:hasEndpointDescription_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndpointUnit_0 ctro:PercentageUnit ;
+    ctro:hasEndpointUnit_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasMeasurementDevice_0 ""^^ctro:MeasurementDevice ;
+    ctro:hasMeasurementDevice_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcomeType_0 "Primary" ;
+    ctro:hasOutcomeType_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:AdverseEffect ratio:freeindex "4"^^xsd:nonNegativeInteger .
+
+ctro:Arm_1_0 a ctro:Arm,
+        owl:NamedIndividual ;
+    rdfs:label "Arm Glargine" ;
+    ctro:hasIntervention_0 ctro:Interv_1_0 ;
+    ctro:hasIntervention_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberPatientsArm_0 "259"^^xsd:positiveInteger ;
+    ctro:hasNumberPatientsArm_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Arm_1_1 a ctro:Arm,
+        owl:NamedIndividual ;
+    rdfs:label "Arm NPH" ;
+    ctro:hasIntervention_0 ctro:Intervention_1_1 ;
+    ctro:hasIntervention_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberPatientsArm_0 "259"^^xsd:positiveInteger ;
+    ctro:hasNumberPatientsArm_freeindex "1"^^xsd:nonNegativeInteger .
+

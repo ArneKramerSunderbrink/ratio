@@ -7,15 +7,8 @@ VALUES
 
 INSERT INTO subgraph (name, finished, deleted)
 VALUES
-  ('Clinical trial 1', 0, 0),
-  ('Clinical trial 2', 0, 0),
-  ('Clinical trial 3', 0, 0),
-  ('deleted', 1, 1);
+  ('Diabetes test', 1, 0);
 
 INSERT INTO access (user_id, subgraph_id)
 VALUES
-  (1, 1),
-  (1, 2),
-  (1, 4),
-  (2, 2),
-  (2, 3);
+  (1, 1);
