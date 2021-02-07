@@ -28,8 +28,6 @@ def add_value():
         return jsonify(error='Subgraph id cannot be empty.')
     if not property_uri or property_uri.isspace():
         return jsonify(error='Property URI cannot be empty.')
-    if not entity_uri or entity_uri.isspace():
-        return jsonify(error='Entity URI cannot be empty.')
 
     if not subgraph_access(user_id, subgraph_id):
         return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
@@ -93,6 +91,34 @@ def change_value():
 @bp.route('/_add_option')
 @login_required
 def add_option():
+    user_id = g.user['id']
+    subgraph_id = request.args.get('subgraph_id', 0, type=int)
+    entity_uri = request.args.get('entity_uri', '', type=str)
+    property_uri = request.args.get('property_uri', '', type=str)
+    label = request.args.get('label', '', type=str)
+
+    if not subgraph_id:
+        return jsonify(error='Subgraph id cannot be empty.')
+    if not property_uri or property_uri.isspace():
+        return jsonify(error='Property URI cannot be empty.')
+    if not entity_uri or entity_uri.isspace():
+        return jsonify(error='Entity URI cannot be empty.')
+    if not label or label.isspace():
+        return jsonify(error='Label cannot be empty.')
+
+    if not subgraph_access(user_id, subgraph_id):
+        return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
+
+    subgraph_knowledge = get_subgraph_knowledge(subgraph_id)
+    field = subgraph_knowledge.get_field(entity_uri, property_uri)
+
+    if field.is_described:
+        return jsonify(error='Use _add_entity to add entities to a described field.')
+    if field.is_range_described:
+        return jsonify(error='The options to this field are described somewhere else in the graph, add them there.')
+
+    # todo do the actual adding of the option in knowledge model
+
     return jsonify()
 
 
@@ -108,6 +134,8 @@ def change_label():
         return jsonify(error='Subgraph id cannot be empty.')
     if not entity_uri or entity_uri.isspace():
         return jsonify(error='Entity URI cannot be empty.')
+    if not label or label.isspace():
+        return jsonify(error='Label cannot be empty.')
 
     if not subgraph_access(user_id, subgraph_id):
         return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))

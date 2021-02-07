@@ -447,8 +447,8 @@ class Field:
     """Represents a possible owl:ObjectProperty or owl:DatatypeProperty of an Entity"""
     def __init__(self, property_uri, label, comment,
                  is_object_property, is_described, is_deletable, is_functional,
-                 range_uri, range_label, is_range_described,
-                 order, width, values, free_index, options=None):
+                 range_uri, range_label,
+                 order, width, values, free_index, is_add_option_allowed, options=None):
         self.property_uri = property_uri
         self.label = label
         self.comment = comment
@@ -458,11 +458,11 @@ class Field:
         self.is_functional = is_functional
         self.range_uri = range_uri
         self.range_label = range_label
-        self.is_range_described = is_range_described
         self.order = order
         self.width = width
         self.values = values
         self.free_index = free_index
+        self.is_add_option_allowed = is_add_option_allowed
         self.options = options
 
     def check_value(self, value):
@@ -632,8 +632,10 @@ def build_empty_field(ontology, knowledge, property_uri, range_class_uri):
     else:
         options = None
 
+    is_add_option_allowed = not is_range_described and not range_class_uri == XSD.boolean
+
     return Field(property_uri, label, comment, is_object_property, is_described, is_deletable, is_functional,
-                 range_class_uri, range_label, is_range_described, order, width, values, free_index, options)
+                 range_class_uri, range_label, order, width, values, free_index, is_add_option_allowed, options)
 
 
 def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri, range_class_uri):
@@ -712,8 +714,10 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
     else:
         options = None
 
+    is_add_option_allowed = not is_range_described and not range_class_uri == XSD.boolean
+
     return Field(property_uri, label, comment, is_object_property, is_described, is_deletable, is_functional,
-                 range_class_uri, range_label, is_range_described, order, width, values, free_index, options)
+                 range_class_uri, range_label, order, width, values, free_index, is_add_option_allowed, options)
 
 
 class Entity:
