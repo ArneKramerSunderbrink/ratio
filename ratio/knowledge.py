@@ -90,6 +90,12 @@ def change_value():
     return jsonify(index=index)
 
 
+@bp.route('/_add_option')
+@login_required
+def add_option():
+    return jsonify()
+
+
 @bp.route('/_change_label')
 @login_required
 def change_label():

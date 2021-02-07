@@ -78,7 +78,7 @@
 {% endmacro %}
 
 {% macro value_options(field, value, index) %}
-<form class="option-form flex-row">
+<div class="option-form flex-row">
   <input type="hidden" autofocus>
   <div class="flex-flex">
     {% if field.is_object_property %}
@@ -92,12 +92,12 @@
         {{ option_div(option, field.is_object_property) }}
         {% endfor %}
       </div>
-      <div class="flex-row">
-        <input class="w3-input flex-flex" type="text" name="value" placeholder="Add option...">
-        <button class="w3-button tiny-button flex-fix" title="Add {{ field.range_label }} to the list of options.">{#
+      <form class="add-option-form flex-row">
+        <input class="w3-input flex-flex" type="text" name="label" placeholder="Add option...">
+        <button type="submit" class="w3-button tiny-button flex-fix" title="Add {{ field.range_label }} to the list of options.">{#
           #}<i class="fas fa-plus"></i>
         </button>
-      </div>
+      </form>
     </div></div>
   </div>
   {% if not field.is_functional %}
@@ -105,19 +105,19 @@
     #}<i class="fas fa-minus"></i>
   </button>
   {% endif %}
-</form>
+</div>
 {% endmacro %}
 
 
 {% macro value_free(field, value, index) %}
-<form class="flex-row">
+<div class="literal-form flex-row">
   <div class="w3-input literal-input flex-flex" data-index="{{index}}" contentEditable>{{ value }}</div>
   {% if not field.is_functional %}
   <button class="w3-button tiny-button flex-fix delete-value-button" title="Delete value">{#
     #}<i class="fas fa-minus"></i>
   </button>
   {% endif %}
-</form>
+</div>
 {% endmacro %}
 
 

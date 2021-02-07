@@ -43,7 +43,7 @@ $(function () {
   $('div#scroll-container').on('click', 'button.delete-value-button', function() {
     var button = this;
     button.disabled = true;
-    var form = $(this).closest('form');
+    var form = $(this).closest('.literal-form, .option-form');
     var input = form.find('.literal-input, .option-input');
     var old_value;
     if (input.is('.literal-input')) {
@@ -178,7 +178,7 @@ $(function () {
   // Check validity of option input
   // I found no way to discriminate between focus switching within the form (to the custom option input)
   // or out of the form and only then check validity
-  $('div#scroll-container').on('focusout', 'form.option-form', function() {
+  $('div#scroll-container').on('focusout', '.option-form', function() {
     // if value not in options, .setCustomValidity("Invalid option.")
     var input = $(this).find('.option-input')[0];
     var value = '';
@@ -200,6 +200,37 @@ $(function () {
       }
     }
     get_json_change_value(input, function () { return value; });
+  });
+
+  // TODO Add custom option
+  $('div#scroll-container').on('submit', '.add-option-form', function() {
+    var form = $(this);
+    var button = form.find('button')[0];
+    button.disabled = true;
+    var field = form.closest('div.entity-field');
+    var property_uri = field.attr('data-property-uri');
+    var data = form.serializeArray();
+    data.push({ name: "subgraph_id", value: window.SUBGRAPH_ID });
+    data.push({ name: "property_uri", value: property_uri });
+
+    alert(data);
+
+    $.getJSON(window.SCRIPT_ROOT + '/_add_option', data, function(data) {
+      if (data.error) {
+        alert(data.error);
+      } else {
+        // reset add entity input
+        form.first()[0].reset();
+        // todo add option div to all option fields with the same range
+        //data.option_fields.forEach(function(uri) {
+        //  $('div.field[data-property-uri="'+uri+'"] div.options').append(data.option_div);
+        //});
+      }
+      button.disabled = false;
+    })
+    .fail(function() { alert('getJSON request failed!'); });
+
+    return false;
   });
 
   // Special functionality for Entities
