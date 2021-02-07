@@ -447,7 +447,8 @@ class Field:
     """Represents a possible owl:ObjectProperty or owl:DatatypeProperty of an Entity"""
     def __init__(self, property_uri, label, comment,
                  is_object_property, is_described, is_deletable, is_functional,
-                 range_uri, range_label, order, width, values, free_index, options=None):
+                 range_uri, range_label, is_range_described,
+                 order, width, values, free_index, options=None):
         self.property_uri = property_uri
         self.label = label
         self.comment = comment
@@ -457,6 +458,7 @@ class Field:
         self.is_functional = is_functional
         self.range_uri = range_uri
         self.range_label = range_label
+        self.is_range_described = is_range_described
         self.order = order
         self.width = width
         self.values = values
@@ -594,6 +596,11 @@ def build_empty_field(ontology, knowledge, property_uri, range_class_uri):
         except StopIteration:
             range_label = range_class_uri.n3(get_ontology().graph.namespace_manager).split(':')[-1]
 
+    is_range_described = False
+    for p in ontology[:RDFS.range:range_class_uri]:
+        if TRUE in ontology[p:RATIO.described:]:
+            is_range_described = True
+
     # if false, the field belongs to a owl:DatatypeProperty
     is_object_property = OWL.ObjectProperty in ontology.objects(property_uri, RDF.type)
     is_functional = OWL.FunctionalProperty in ontology.objects(property_uri, RDF.type)
@@ -626,7 +633,7 @@ def build_empty_field(ontology, knowledge, property_uri, range_class_uri):
         options = None
 
     return Field(property_uri, label, comment, is_object_property, is_described, is_deletable, is_functional,
-                 range_class_uri, range_label, order, width, values, free_index, options)
+                 range_class_uri, range_label, is_range_described, order, width, values, free_index, options)
 
 
 def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri, range_class_uri):
@@ -650,6 +657,11 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
             range_label = next(range_label)
         except StopIteration:
             range_label = range_class_uri.n3(get_ontology().graph.namespace_manager).split(':')[-1]
+
+    is_range_described = False
+    for p in ontology[:RDFS.range:range_class_uri]:
+        if TRUE in ontology[p:RATIO.described:]:
+            is_range_described = True
 
     # if false, the field belongs to a owl:DatatypeProperty
     is_object_property = OWL.ObjectProperty in ontology.objects(property_uri, RDF.type)
@@ -701,7 +713,7 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
         options = None
 
     return Field(property_uri, label, comment, is_object_property, is_described, is_deletable, is_functional,
-                 range_class_uri, range_label, order, width, values, free_index, options)
+                 range_class_uri, range_label, is_range_described, order, width, values, free_index, options)
 
 
 class Entity:

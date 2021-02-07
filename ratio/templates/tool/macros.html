@@ -92,12 +92,14 @@
         {{ option_div(option, field.is_object_property) }}
         {% endfor %}
       </div>
+      {% if not field.is_range_described %}
       <form class="add-option-form flex-row">
         <input class="w3-input flex-flex" type="text" name="label" placeholder="Add option...">
         <button type="submit" class="w3-button tiny-button flex-fix" title="Add {{ field.range_label }} to the list of options.">{#
           #}<i class="fas fa-plus"></i>
         </button>
       </form>
+      {% endif %}
     </div></div>
   </div>
   {% if not field.is_functional %}
