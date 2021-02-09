@@ -114,10 +114,12 @@ def add_option():
 
     if field.is_described:
         return jsonify(error='Use _add_entity to add entities to a described field.')
-    if field.is_range_described:
-        return jsonify(error='The options to this field are described somewhere else in the graph, add them there.')
+    if not field.is_add_option_allowed:
+        return jsonify(error='Adding options to this field is not allowed.')
 
     # todo do the actual adding of the option in knowledge model
+    # todo render the option div
+    # todo return list with where to add the div (fields with same range or superclass) or same propuri (datafields)
 
     return jsonify()
 

@@ -10,6 +10,7 @@ from flask import Response
 from flask import redirect
 from flask import url_for
 from time import strftime
+from urllib.parse import quote, unquote
 
 from ratio.auth import login_required, subgraph_access
 from ratio.db import get_db, get_empty_subgraph_template
@@ -54,19 +55,26 @@ def index(subgraph_id=None, message=None):
 
     if subgraph_id is None:
         subgraph = {'id': 0, 'name': '', 'finished': False}
-        return render_template('tool/index.html', subgraph=subgraph, subgraph_list=subgraph_list, message=message)
+        return render_template('tool/index.html', subgraph=subgraph, subgraph_list=subgraph_list,
+                               message=unquote(message))
 
     subgraph = db.execute(
         'SELECT * FROM subgraph WHERE id = ?', (subgraph_id,)
     ).fetchone()
 
     if subgraph is None:
-        return redirect(url_for('tool.index', message='{} with id {} does not exist.'
-                                .format(current_app.config['FRONTEND_CONFIG']['Subgraph_term'], subgraph_id)))
+        message = '{} with id {} does not exist.'.format(
+            current_app.config['FRONTEND_CONFIG']['Subgraph_term'], subgraph_id
+        )
+        # for some reason I need to unquote two times (once via url_for, once via quote) on the server, else
+        # I'd get a bad request
+        return redirect(url_for('tool.index', message=quote(message)))
 
     if not subgraph_access(user_id, subgraph_id):
-        return redirect(url_for('tool.index', message='You have no access to {} with id {}.'
-                                .format(current_app.config['FRONTEND_CONFIG']['subgraph_term'], subgraph_id)))
+        message = 'You have no access to {} with id {}.'.format(
+            current_app.config['FRONTEND_CONFIG']['subgraph_term'], subgraph_id
+        )
+        return redirect(url_for('tool.index', message=quote(message)))
 
     root = get_subgraph_knowledge(subgraph_id).get_root()
 
@@ -304,7 +312,7 @@ def download_rdf(subgraph_id):
         subgraph_id,
         strftime('%Y-%m-%d-%H-%M-%S')
     )
-    content = get_subgraph_knowledge(subgraph_id).get_serialization()
+    content = get_subgraph_knowledge(subgraph_id).get_serialization(clean=False)
 
     return Response(
         content,

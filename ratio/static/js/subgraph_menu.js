@@ -1,11 +1,33 @@
 /**
  * Javascript code related to the subgraph list:
- * Toggling the finished-checkboxes,
+ * Toggling the overlay and finished-checkboxes,
  * editing subgraph names, adding new subgraphs, deleting subgraphs and undoing that delete.
  */
 
-// finished checkboxes
 $(function() {
+  // toggle overlay
+  function toggle_overlay() {
+    var overlay = $('div#overlay');
+    if (overlay.css('display') == 'none') {
+      overlay.css('display', 'block');
+    } else {
+      overlay.css('display', 'none');
+    }
+
+    return false;
+  }
+
+  function overlay_escape_handler(e) {
+    if (e.key === "Escape" && $('div#overlay').css('display') == 'block' && window.SUBGRAPH_ID != 0) {
+      toggle_overlay();
+    }
+  }
+
+  $('a#subgraph-name').on('click', toggle_overlay);
+  $('a#close-overlay').on('click', toggle_overlay);
+  $(document).on('keyup', overlay_escape_handler);
+
+  // finished checkboxes
   $('div#subgraph-list').on('change', ':checkbox', function() {
     var finished = $(this).prop('checked');
     var subgraph_id = parseInt(this.id.substring(9));
@@ -27,10 +49,8 @@ $(function() {
 
     return false;
   });
-});
 
-// edit subgraph name
-$(function() {
+  // edit subgraph name
   $('div#subgraph-list').on('submit', 'form', function() {
     var data = $(this).serializeArray();
     var list_item = $(this).closest('.item');
@@ -57,12 +77,10 @@ $(function() {
 
     return false;
   });
-});
 
-// delete subgraph
-$(function() {
-  $('div#subgraph-list').on('click', 'form > a.delete-subgraph-button', function() {
-    var item = $(this.parentNode.parentNode.parentNode);
+  // delete subgraph
+  $('div#subgraph-list').on('click', 'button.delete-subgraph-button', function() {
+    var item = $(this).closest('.item');
     var subgraph_id = item.attr('data-subgraph-id');
     $.getJSON(window.SCRIPT_ROOT + '/_delete_subgraph', {subgraph_id: subgraph_id}, function(data) {
       if (data.error) {
@@ -85,10 +103,8 @@ $(function() {
 
     return false;
   });
-});
 
-// undo delete Subgraph
-$(function() {
+  // undo delete Subgraph
   $('div#subgraph-menu-delete-msg > a').on('click', function() {
     var subgraph_id = this.parentNode.getAttribute('data-subgraph-id');
     var item = $('div#subgraph-list > div.item[data-subgraph-id="' + subgraph_id + '"]')
@@ -108,10 +124,8 @@ $(function() {
 
     return false;
   });
-});
 
 // add subgraph
-$(function() {
   $('form#new-subgraph-form').on('submit', function() {
     var data = $(this).serialize();
 
