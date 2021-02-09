@@ -68,6 +68,13 @@ ctro:hasPopulation rdf:type owl:ObjectProperty ,
                    rdfs:range ctro:Population ;
                    rdfs:label "Population" .
 
+ctro:hasGender rdf:type owl:ObjectProperty ;
+               ratio:order "1"^^xsd:positiveInteger ;
+               ratio:width "25"^^xsd:positiveInteger ;
+               rdfs:domain ctro:Population ;
+               rdfs:range ctro:Gender ;
+               rdfs:label "Gender" .
+
 ctro:hasEthnicity rdf:type owl:ObjectProperty ;
                   ratio:order "6"^^xsd:positiveInteger ;
                   ratio:width "25"^^xsd:positiveInteger ;
@@ -87,7 +94,6 @@ ctro:hasQualityIndicator rdf:type owl:ObjectProperty ,
                          ratio:described "true"^^xsd:boolean ;
                          ratio:deletable "false"^^xsd:boolean ;
                          ratio:order "10"^^xsd:positiveInteger ;
-                         rdfs:subPropertyOf owl:topObjectProperty ;
                          rdfs:domain ctro:ClinicalTrial ;
                          rdfs:range ctro:EvidenceQuality ;
                          rdfs:label "Potential Conflict of Interest" .
@@ -105,6 +111,14 @@ ctro:hasIntervention rdf:type owl:ObjectProperty ;
                      rdfs:domain ctro:Arm ;
                      rdfs:range ctro:Intervention ;
                      rdfs:label "Intervention" .
+
+ctro:hasFreqInterval rdf:type owl:ObjectProperty ,
+                           owl:FunctionalProperty ;
+                  ratio:order "2"^^xsd:positiveInteger ;
+                  ratio:width "25"^^xsd:positiveInteger ;
+                  rdfs:domain ctro:Intervention ;
+                  rdfs:range ctro:FrequencyInterval ;
+                  rdfs:label "Frequency Interval" .
 
 ctro:hasDrug rdf:type owl:ObjectProperty ,
                       owl:FunctionalProperty ;
@@ -140,7 +154,7 @@ ctro:hasEndpointDescription rdf:type owl:ObjectProperty ;
                             rdfs:subPropertyOf owl:topObjectProperty ;
                             rdf:type owl:FunctionalProperty ;
                             rdfs:domain ctro:Outcome ;
-                            rdfs:range ctro:EndpointDescription ;
+                            rdfs:range ctro:EndpointDesc_AF ;
                             rdfs:label "Outcome Measure" .
 
 ctro:hasAggregationMethod rdf:type owl:ObjectProperty ,
@@ -219,7 +233,7 @@ ctro:hasAEname rdf:type owl:ObjectProperty ,
                         owl:FunctionalProperty ;
                ratio:order "2"^^xsd:positiveInteger ;
                rdfs:domain ctro:AdverseEffect ;
-               rdfs:range ctro:EndpointDescription ;
+               rdfs:range ctro:EndpointDesc_AF ;
                rdfs:label "Adverse effect description" .
 
 #################################################################
@@ -288,25 +302,6 @@ ctro:hasCTduration rdf:type owl:DatatypeProperty ,
                    rdfs:comment "Duration of the trial given in WEEKS" ;
                    rdfs:label "Trial duration (in weeks)" .
 
-ctro:hasGender rdf:type owl:DatatypeProperty ,
-                        owl:FunctionalProperty ;
-               ratio:order "1"^^xsd:positiveInteger ;
-               ratio:width "25"^^xsd:positiveInteger ;
-               rdfs:domain ctro:Population ;
-               rdfs:range [ rdf:type rdfs:Datatype ;
-                            owl:oneOf [ rdf:type rdf:List ;
-                                        rdf:first "Female" ;
-                                        rdf:rest [ rdf:type rdf:List ;
-                                                   rdf:first "Male" ;
-                                                   rdf:rest [ rdf:type rdf:List ;
-                                                              rdf:first "Mixed" ;
-                                                              rdf:rest rdf:nil
-                                                            ]
-                                                 ]
-                                      ]
-                          ] ;
-               rdfs:label "Gender" .
-
 ctro:hasMinAge rdf:type owl:DatatypeProperty ,
                         owl:FunctionalProperty ;
                ratio:order "2"^^xsd:positiveInteger ;
@@ -359,7 +354,6 @@ ctro:hasSponsor rdf:type owl:DatatypeProperty ;
 ctro:hasNumberPatientsArm rdf:type owl:DatatypeProperty ,
                                    owl:FunctionalProperty ;
                           ratio:order "1"^^xsd:positiveInteger ;
-                          ratio:width "25"^^xsd:positiveInteger ;
                           rdfs:domain ctro:Arm ;
                           rdfs:range xsd:positiveInteger ;
                           rdfs:label "Number of patients in arm" .
@@ -369,40 +363,6 @@ ctro:hasDuration rdf:type owl:DatatypeProperty ;
                  rdfs:domain ctro:Intervention ;
                  rdfs:range rdfs:Literal ;
                  rdfs:label "Intervention duration" .
-
-ctro:hasFrequency rdf:type owl:DatatypeProperty ,
-                           owl:FunctionalProperty ;
-                  ratio:order "2"^^xsd:positiveInteger ;
-                  ratio:width "25"^^xsd:positiveInteger ;
-                  rdfs:domain ctro:Intervention ;
-                  rdfs:range [ rdf:type rdfs:Datatype ;
-                               owl:oneOf [ rdf:type rdf:List ;
-                                           rdf:first "b.i.d." ;
-                                           rdf:rest [ rdf:type rdf:List ;
-                                                      rdf:first "every 2 hrs." ;
-                                                      rdf:rest [ rdf:type rdf:List ;
-                                                                 rdf:first "every 3 hours" ;
-                                                                 rdf:rest [ rdf:type rdf:List ;
-                                                                            rdf:first "every day" ;
-                                                                            rdf:rest [ rdf:type rdf:List ;
-                                                                                       rdf:first "every other day" ;
-                                                                                       rdf:rest [ rdf:type rdf:List ;
-                                                                                                  rdf:first "other" ;
-                                                                                                  rdf:rest [ rdf:type rdf:List ;
-                                                                                                             rdf:first "q.i.d" ;
-                                                                                                             rdf:rest [ rdf:type rdf:List ;
-                                                                                                                        rdf:first "t.i.d" ;
-                                                                                                                        rdf:rest rdf:nil
-                                                                                                                      ]
-                                                                                                           ]
-                                                                                                ]
-                                                                                     ]
-                                                                          ]
-                                                               ]
-                                                    ]
-                                         ]
-                             ] ;
-                  rdfs:label "Frequency" .
 
 ctro:hasDoseValue rdf:type owl:DatatypeProperty ,
                            owl:FunctionalProperty ;
@@ -624,6 +584,8 @@ ctro:CTAnalysisApproach rdf:type owl:Class ;
 ctro:Population rdf:type owl:Class ;
                 rdfs:label "Population" .
 
+ctro:Gender rdf:type owl:Class .
+
 ctro:Ethnicity rdf:type owl:Class ;
                rdfs:label "Ethnic Group" .
 
@@ -652,6 +614,8 @@ ctro:Arm rdf:type owl:Class ;
 
 ctro:Intervention rdf:type owl:Class ;
                   rdfs:label "Intervention" .
+
+ctro:FrequencyInterval rdf:type owl:Class .
 
 ctro:Drug rdf:type owl:Class ;
           rdfs:label "Drug name" .
@@ -720,6 +684,11 @@ ctro:AllCauseMortality rdf:type owl:NamedIndividual ,
                        rdfs:comment "A measure of all deaths, due to any cause, that occur during a clinical study." ;
                        rdfs:isDefinedBy <http://purl.jp/bio/4/id/201106093496710803> ;
                        rdfs:label "All-cause Mortality" .
+
+ctro:AlternateDays rdf:type owl:NamedIndividual ,
+                            ctro:FrequencyInterval ;
+                   rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/225760004> ;
+                   rdfs:label "Alternate days" .
 
 ctro:Argentina rdf:type owl:NamedIndividual ,
                         <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
@@ -803,6 +772,11 @@ ctro:Dabigatran rdf:type owl:NamedIndividual ,
                 rdfs:isDefinedBy <http://linkedlifedata.com/resource/drug/DB14726> ;
                 rdfs:label "Dabigatran" .
 
+ctro:Daily rdf:type owl:NamedIndividual ,
+                    ctro:FrequencyInterval ;
+           rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/69620002> ;
+           rdfs:label "Daily" .
+
 ctro:Diurnal_IOP rdf:type owl:NamedIndividual ,
                           ctro:EndpointDesc_Glaucoma ;
                  rdfs:label "Diurnal IOP" .
@@ -821,6 +795,21 @@ ctro:England rdf:type owl:NamedIndividual ,
                       <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
              rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223664003> ;
              rdfs:label "England" .
+
+ctro:EveryThreeHrs rdf:type owl:NamedIndividual ,
+                            ctro:FrequencyInterval ;
+                   rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/225753005> ;
+                   rdfs:label "Every three hours" .
+
+ctro:EveryTwoHours rdf:type owl:NamedIndividual ,
+                            ctro:FrequencyInterval ;
+                   rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/225750008> ;
+                   rdfs:label "Every two hours" .
+
+ctro:Female rdf:type owl:NamedIndividual ,
+                     ctro:Gender ;
+            rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/248152002> ;
+            rdfs:label "Female" .
 
 ctro:Finland rdf:type owl:NamedIndividual ,
                       <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
@@ -881,6 +870,11 @@ ctro:IOP_target rdf:type owl:NamedIndividual ,
                          ctro:EndpointDesc_Glaucoma ;
                 rdfs:isDefinedBy <http://www.semanticweb.org/root/ontologies/2018/6/ctro> ;
                 rdfs:label "IOP Target" .
+
+ctro:IndeterminateGender rdf:type owl:NamedIndividual ,
+                                  ctro:Gender ;
+                         rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/32570681000036106> ;
+                         rdfs:label "Indeterminate gender" .
 
 ctro:India rdf:type owl:NamedIndividual ,
                     <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
@@ -947,6 +941,11 @@ ctro:MajorBleed rdf:type owl:NamedIndividual ,
                          ctro:EndpointDesc_AF ;
                 rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MEDDRA/10084048> ;
                 rdfs:label "Major Bleeding (or Hemorrhage)" .
+
+ctro:Male rdf:type owl:NamedIndividual ,
+                   ctro:Gender ;
+          rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/248153007> ;
+          rdfs:label "Male" .
 
 ctro:Mean rdf:type owl:NamedIndividual ,
                    ctro:AgreggationMethod ;
@@ -1120,6 +1119,11 @@ ctro:Taiwan rdf:type owl:NamedIndividual ,
             rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/428675004> ;
             rdfs:label "Taiwan" .
 
+ctro:ThreeXday rdf:type owl:NamedIndividual ,
+                        ctro:FrequencyInterval ;
+               rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/229798009> ;
+               rdfs:label "Three times daily" .
+
 ctro:Thromboembolism rdf:type owl:NamedIndividual ,
                               ctro:EndpointDesc_AF ;
                      rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MEDDRA/10043566> ;
@@ -1139,6 +1143,11 @@ ctro:Turkey rdf:type owl:NamedIndividual ,
                      <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
             rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/278900006> ;
             rdfs:label "Turkey - country" .
+
+ctro:TwiceAday rdf:type owl:NamedIndividual ,
+                        ctro:FrequencyInterval ;
+               rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/229799001> ;
+               rdfs:label "Twice a day" .
 
 ctro:USA rdf:type owl:NamedIndividual ,
                   <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;

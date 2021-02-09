@@ -1,6 +1,8 @@
 /**
  * Javascript code related to the dynamic display and editing of knowledge:
- * todo
+ * Adding, deleting and changing Literal and Entity values, checking if inputs are valid,
+ * filtering options, adding custom options,
+ * displaying messages related to the above.
  */
 
 $(function () {

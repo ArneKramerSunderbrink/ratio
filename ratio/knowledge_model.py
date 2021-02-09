@@ -263,6 +263,22 @@ class SubgraphKnowledge:
 
         self.root = None  # forces a rebuild of the root entity from the updated graph on the next request
 
+    def propose_label(self, class_uri):
+        # Propose a label for a new entity, currently this is not used
+        try:
+            index = next(self.graph[class_uri:RATIO.freeindex:])
+        except StopIteration:
+            index = Literal(0, datatype=XSD.nonNegativeInteger)
+
+        class_label = get_ontology().graph.objects(class_uri, RDFS.label)
+        try:
+            class_label = next(class_label)
+        except StopIteration:
+            # default label
+            class_label = class_uri.n3(get_ontology().graph.namespace_manager).split(':')[-1]
+
+        return '{} {}'.format(class_label, index.value)
+
     def new_individual(self, class_uri, label, parent_uri, property_uri):
         class_uri = URIRef(class_uri)
         parent_uri = URIRef(parent_uri)
@@ -284,15 +300,6 @@ class SubgraphKnowledge:
             self.id,
             index.value
         ))
-
-        #if label is None:  # todo would be nice to propose this default label in the frontend
-        #    class_label = get_ontology().graph.objects(class_uri, RDFS.label)
-        #    try:
-        #        class_label = next(class_label)
-        #    except StopIteration:
-        #        # default label
-        #        class_label = class_uri.n3(get_ontology().graph.namespace_manager).split(':')[-1]
-        #    label = '{} {}'.format(class_label, nr)
 
         entity = build_empty_entity(get_ontology().graph, self.graph, class_uri, uri, label, field.is_deletable)
 

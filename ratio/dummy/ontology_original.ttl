@@ -13,6 +13,15 @@
 #    Datatypes
 #################################################################
 
+###  http://www.w3.org/2001/XMLSchema#string
+xsd:string owl:equivalentClass [ rdf:type rdfs:Datatype ;
+                                 owl:onDatatype xsd:string ;
+                                 owl:withRestrictions ( [ xsd:length "15"^^xsd:string
+                                                        ]
+                                                      )
+                               ] .
+
+
 ###  http://www.w3.org/2006/time#Interval
 <http://www.w3.org/2006/time#Interval> rdf:type rdfs:Datatype .
 
@@ -89,9 +98,8 @@ ctro:hasCTDesign rdf:type owl:ObjectProperty ;
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasConfidenceInterval
-ctro:hasConfidenceInterval rdf:type owl:ObjectProperty ;
-                           rdfs:subPropertyOf owl:topObjectProperty ;
-                           rdf:type owl:FunctionalProperty ;
+ctro:hasConfidenceInterval rdf:type owl:ObjectProperty ,
+                                    owl:FunctionalProperty ;
                            rdfs:domain ctro:StatisticalMeasure ;
                            rdfs:range ctro:ConfidenceInterval ;
                            rdfs:label "Confidence Interval" .
@@ -127,7 +135,6 @@ ctro:hasDesiredEndpoint rdf:type owl:ObjectProperty ;
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasDesiredOutcome
 ctro:hasDesiredOutcome rdf:type owl:ObjectProperty ;
-                       rdfs:subPropertyOf owl:topObjectProperty ;
                        rdfs:domain ctro:ClinicalTrial ;
                        rdfs:range ctro:DesiredOutcome ;
                        rdfs:label "Desired outcome" .
@@ -195,6 +202,21 @@ ctro:hasEthnicity rdf:type owl:ObjectProperty ;
                   rdfs:label "Ethnicity" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasFreqInterval
+ctro:hasFreqInterval rdf:type owl:ObjectProperty ,
+                              owl:FunctionalProperty ;
+                     rdfs:domain ctro:Intervention ;
+                     rdfs:range ctro:FrequencyInterval ;
+                     rdfs:label "Frequency Interval" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasGender
+ctro:hasGender rdf:type owl:ObjectProperty ;
+               rdfs:domain ctro:Population ;
+               rdfs:range ctro:Gender ;
+               rdfs:label "Gender" .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasIntervention
 ctro:hasIntervention rdf:type owl:ObjectProperty ;
                      rdfs:domain ctro:Arm ;
@@ -239,9 +261,8 @@ ctro:hasPopulationUnit rdf:type owl:ObjectProperty ;
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasQualityIndicator
-ctro:hasQualityIndicator rdf:type owl:ObjectProperty ;
-                         rdfs:subPropertyOf owl:topObjectProperty ;
-                         rdf:type owl:FunctionalProperty ;
+ctro:hasQualityIndicator rdf:type owl:ObjectProperty ,
+                                  owl:FunctionalProperty ;
                          rdfs:domain ctro:ClinicalTrial ;
                          rdfs:range ctro:EvidenceQuality ;
                          rdfs:label "Quality / bias indicator" .
@@ -415,14 +436,6 @@ ctro:hasDrugName rdf:type owl:DatatypeProperty ;
                  rdfs:label "Drug name" .
 
 
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasDrug_Id
-ctro:hasDrug_Id rdf:type owl:DatatypeProperty ,
-                         owl:FunctionalProperty ;
-                rdfs:domain ctro:Drug ;
-                rdfs:range xsd:string ;
-                rdfs:label "Drug URL" .
-
-
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasDuration
 ctro:hasDuration rdf:type owl:DatatypeProperty ;
                  rdfs:domain ctro:Intervention ;
@@ -444,59 +457,6 @@ ctro:hasFinalNumberPatients rdf:type owl:DatatypeProperty ,
                             rdfs:domain ctro:Outcome ;
                             rdfs:range xsd:positiveInteger ;
                             rdfs:label "Final number of patients" .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasFrequency
-ctro:hasFrequency rdf:type owl:DatatypeProperty ,
-                           owl:FunctionalProperty ;
-                  rdfs:domain ctro:Intervention ;
-                  rdfs:range [ rdf:type rdfs:Datatype ;
-                               owl:oneOf [ rdf:type rdf:List ;
-                                           rdf:first "b.i.d." ;
-                                           rdf:rest [ rdf:type rdf:List ;
-                                                      rdf:first "every 2 hrs." ;
-                                                      rdf:rest [ rdf:type rdf:List ;
-                                                                 rdf:first "every 3 hours" ;
-                                                                 rdf:rest [ rdf:type rdf:List ;
-                                                                            rdf:first "every day" ;
-                                                                            rdf:rest [ rdf:type rdf:List ;
-                                                                                       rdf:first "every other day" ;
-                                                                                       rdf:rest [ rdf:type rdf:List ;
-                                                                                                  rdf:first "other" ;
-                                                                                                  rdf:rest [ rdf:type rdf:List ;
-                                                                                                             rdf:first "q.i.d" ;
-                                                                                                             rdf:rest [ rdf:type rdf:List ;
-                                                                                                                        rdf:first "t.i.d" ;
-                                                                                                                        rdf:rest rdf:nil
-                                                                                                                      ]
-                                                                                                           ]
-                                                                                                ]
-                                                                                     ]
-                                                                          ]
-                                                               ]
-                                                    ]
-                                         ]
-                             ] ;
-                  rdfs:label "Frequency" .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasGender
-ctro:hasGender rdf:type owl:DatatypeProperty ,
-                        owl:FunctionalProperty ;
-               rdfs:domain ctro:Population ;
-               rdfs:range [ rdf:type rdfs:Datatype ;
-                            owl:oneOf [ rdf:type rdf:List ;
-                                        rdf:first "Female" ;
-                                        rdf:rest [ rdf:type rdf:List ;
-                                                   rdf:first "Male" ;
-                                                   rdf:rest [ rdf:type rdf:List ;
-                                                              rdf:first "Mixed" ;
-                                                              rdf:rest rdf:nil
-                                                            ]
-                                                 ]
-                                      ]
-                          ] ;
-               rdfs:label "Gender" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasInfMargin
@@ -710,9 +670,8 @@ ctro:hasStatisticalTestValue rdf:type owl:DatatypeProperty ,
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasSupMargin
-ctro:hasSupMargin rdf:type owl:DatatypeProperty ;
-                  rdfs:subPropertyOf owl:topDataProperty ;
-                  rdf:type owl:FunctionalProperty ;
+ctro:hasSupMargin rdf:type owl:DatatypeProperty ,
+                           owl:FunctionalProperty ;
                   rdfs:domain ctro:ConfidenceInterval ;
                   rdfs:range xsd:float ;
                   rdfs:label "Superior margin" .
@@ -915,6 +874,14 @@ ctro:EvidenceQuality rdf:type owl:Class ;
                      rdfs:label "Quality of the Evidence" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#FrequencyInterval
+ctro:FrequencyInterval rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Gender
+ctro:Gender rdf:type owl:Class .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Intervention
 ctro:Intervention rdf:type owl:Class ;
                   rdfs:label "Intervention" .
@@ -1015,6 +982,13 @@ ctro:AllCauseMortality rdf:type owl:NamedIndividual ,
                        rdfs:comment "A measure of all deaths, due to any cause, that occur during a clinical study." ;
                        rdfs:isDefinedBy <http://purl.jp/bio/4/id/201106093496710803> ;
                        rdfs:label "All-cause Mortality" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#AlternateDays
+ctro:AlternateDays rdf:type owl:NamedIndividual ,
+                            ctro:FrequencyInterval ;
+                   rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/225760004> ;
+                   rdfs:label "Alternate days" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Argentina
@@ -1128,6 +1102,13 @@ ctro:Dabigatran rdf:type owl:NamedIndividual ,
                 rdfs:label "Dabigatran" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Daily
+ctro:Daily rdf:type owl:NamedIndividual ,
+                    ctro:FrequencyInterval ;
+           rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/69620002> ,
+                            "Daily" .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Diurnal_IOP
 ctro:Diurnal_IOP rdf:type owl:NamedIndividual ,
                           ctro:EndpointDesc_Glaucoma ;
@@ -1153,6 +1134,27 @@ ctro:England rdf:type owl:NamedIndividual ,
                       <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
              rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/223664003> ;
              rdfs:label "England" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#EveryThreeHrs
+ctro:EveryThreeHrs rdf:type owl:NamedIndividual ,
+                            ctro:FrequencyInterval ;
+                   rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/225753005> ;
+                   rdfs:label "Every three hours" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#EveryTwoHours
+ctro:EveryTwoHours rdf:type owl:NamedIndividual ,
+                            ctro:FrequencyInterval ;
+                   rdfs:label <http://purl.bioontology.org/ontology/SNOMEDCT/225750008> ,
+                              "Every two hours" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Female
+ctro:Female rdf:type owl:NamedIndividual ,
+                     ctro:Gender ;
+            rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/248152002> ;
+            rdfs:label "Female" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Finland
@@ -1230,6 +1232,13 @@ ctro:IOP_target rdf:type owl:NamedIndividual ,
                          ctro:EndpointDesc_Glaucoma ;
                 rdfs:isDefinedBy <http://www.semanticweb.org/root/ontologies/2018/6/ctro> ;
                 rdfs:label "IOP Target" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#IndeterminateGender
+ctro:IndeterminateGender rdf:type owl:NamedIndividual ,
+                                  ctro:Gender ;
+                         rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/32570681000036106> ;
+                         rdfs:label "Indeterminate gender" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#India
@@ -1322,6 +1331,13 @@ ctro:MajorBleed rdf:type owl:NamedIndividual ,
                          ctro:EndpointDesc_AF ;
                 rdfs:isDefinedBy <http://purl.bioontology.org/ontology/MEDDRA/10084048> ;
                 rdfs:label "Major Bleeding (or Hemorrhage)" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Male
+ctro:Male rdf:type owl:NamedIndividual ,
+                   ctro:Gender ;
+          rdfs:label <http://purl.bioontology.org/ontology/SNOMEDCT/248153007> ,
+                     "Male" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Mean
@@ -1562,6 +1578,13 @@ ctro:Taiwan rdf:type owl:NamedIndividual ,
             rdfs:label "Taiwan" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#ThreeXday
+ctro:ThreeXday rdf:type owl:NamedIndividual ,
+                        ctro:FrequencyInterval ;
+               rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/229798009> ;
+               rdfs:label "Three times daily" .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Thromboembolism
 ctro:Thromboembolism rdf:type owl:NamedIndividual ,
                               ctro:EndpointDesc_AF ;
@@ -1588,6 +1611,13 @@ ctro:Turkey rdf:type owl:NamedIndividual ,
                      <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
             rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/278900006> ;
             rdfs:label "Turkey - country" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#TwiceAday
+ctro:TwiceAday rdf:type owl:NamedIndividual ,
+                        ctro:FrequencyInterval ;
+               rdfs:label <http://purl.bioontology.org/ontology/SNOMEDCT/229799001> ,
+                          "Twice a day" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#USA

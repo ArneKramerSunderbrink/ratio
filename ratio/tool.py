@@ -42,6 +42,10 @@ def index(subgraph_id=None, message=None):
 
     """
     user_id = g.user['id']
+
+    if message:
+        message = unquote(message)
+
     db = get_db()
 
     # for the subgraph menu
@@ -56,7 +60,7 @@ def index(subgraph_id=None, message=None):
     if subgraph_id is None:
         subgraph = {'id': 0, 'name': '', 'finished': False}
         return render_template('tool/index.html', subgraph=subgraph, subgraph_list=subgraph_list,
-                               message=unquote(message))
+                               message=message)
 
     subgraph = db.execute(
         'SELECT * FROM subgraph WHERE id = ?', (subgraph_id,)

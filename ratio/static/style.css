@@ -208,6 +208,7 @@ button[disabled]{
 
 .field-label {
   margin-bottom: calc(0.2em + 1px); /* Margin + border of field-values */
+  margin-right: 3px;
 }
 
 .field-value-list {
