@@ -204,20 +204,17 @@ $(function () {
     get_json_change_value(input, function () { return value; });
   });
 
-  // TODO Add custom option
   $('div#scroll-container').on('submit', '.add-option-form', function() {
-    var button = form.find('button')[0];
     var form = $(this);
+    var button = form.find('button')[0];
     button.disabled = true;
-    var entity_uri = $(input).closest('div.entity').attr('data-entity-uri');
-    var field = form.closest('div.entity-field');
+    var entity_uri = form.closest('div.entity').attr('data-entity-uri');
+    var field = form.closest('div.field');
     var property_uri = field.attr('data-property-uri');
     var data = form.serializeArray();
     data.push({ name: "subgraph_id", value: window.SUBGRAPH_ID });
     data.push({ name: "entity_uri", value: entity_uri });
     data.push({ name: "property_uri", value: property_uri });
-
-    alert(data);
 
     $.getJSON(window.SCRIPT_ROOT + '/_add_option', data, function(data) {
       if (data.error) {
@@ -225,10 +222,9 @@ $(function () {
       } else {
         // reset add entity input
         form.first()[0].reset();
-        // todo add option div to all option fields with the same range
-        //data.option_fields.forEach(function(uri) {
-        //  $('div.field[data-property-uri="'+uri+'"] div.options').append(data.option_div);
-        //});
+        data.option_fields.forEach(function(uri) {
+          $('div.field[data-property-uri="'+uri+'"] div.options').append(data.option_div);
+        });
       }
       button.disabled = false;
     })

@@ -71,14 +71,33 @@ def row_to_rdf(row):
     return subject, predicate, object_
 
 
+def get_subclasses(graph, class_):
+    stack = {class_}
+    subclasses = set()
+    while stack:
+        c = stack.pop()
+        stack.update(graph[:RDFS.subClassOf:c])
+        subclasses.update(graph[:RDFS.subClassOf:c])
+    return subclasses
+
+
+def get_superclasses(graph, class_):
+    stack = {class_}
+    superclasses = set()
+    while stack:
+        c = stack.pop()
+        stack.update(graph[c:RDFS.subClassOf:])
+        superclasses.update(graph[c:RDFS.subClassOf:])
+    return superclasses
+
+
 def get_tokens(graph, class_):
     classes = {class_}
-    results = set()
-    while classes:
-        c = classes.pop()
-        classes.update(graph.subjects(RDFS.subClassOf, c))
-        results.update(graph.subjects(RDF.type, c))
-    return results
+    classes.update(get_subclasses(graph, class_))
+    tokens = set()
+    for c in classes:
+        tokens.update(graph[:RDF.type:c])
+    return tokens
 
 
 class Ontology:
@@ -410,6 +429,61 @@ class SubgraphKnowledge:
 
         self.root = None  # forces a rebuild of the root entity from the updated graph on the next request
 
+    def new_option(self, class_uri, label):
+        class_uri = URIRef(class_uri)
+
+        try:
+            index = next(self.graph[class_uri:RATIO.freeindex:])
+        except StopIteration:
+            index = Literal(0, datatype=XSD.nonNegativeInteger)
+
+        # construct a unique uri
+        uri = URIRef('{}{}_{}_{}'.format(
+            get_ontology().get_base(),
+            class_uri.n3(get_ontology().graph.namespace_manager).split(':')[-1],  # try to remove the prefix
+            self.id,
+            index.value
+        ))
+
+        option = Option(uri, label, class_uri, TRUE)
+
+        # update triples
+        triples = [
+            (uri, RDF.type, OWL.NamedIndividual),
+            (uri, RDF.type, class_uri),
+            (uri, RDFS.label, Literal(label, datatype=XSD.string)),
+            (uri, RATIO.isCustom, TRUE),
+            (class_uri, RATIO.freeindex, Literal(index + 1, datatype=XSD.nonNegativeInteger))
+        ]
+
+        # add triples to graph
+        self.graph.remove((class_uri, RATIO.freeindex, None))
+        for t in triples:
+            self.graph.add(t)
+
+        # save add triples to database
+        db = get_db()
+        db.execute(
+            'DELETE FROM knowledge WHERE subgraph_id = ? AND subject = ? AND predicate = ?',
+            (self.id, class_uri.n3(), RATIO.freeindex.n3())
+        )
+        db.executemany(
+            'INSERT INTO knowledge (subgraph_id, subject, predicate, object) VALUES (?, ?, ?, ?)',
+            [(self.id, s.n3(), p.n3(), o.n3()) for s, p, o in triples]
+        )
+        db.commit()
+
+        self.root = None  # forces a rebuild of the root entity from the updated graph on the next request
+
+        # collect all property URIs where this new option needs to be attached to the range in the frontend
+        ontology = get_ontology().graph
+        classes = {class_uri}
+        classes.update(get_superclasses(ontology, class_uri))
+        properties = {p for c in classes for p in ontology[:RDFS.range:c]
+                      if TRUE not in ontology[p:RATIO.described:]}
+
+        return option, properties
+
     def load_rdf_data(self, data, rdf_format='turtle'):
         self.graph = Graph()
         if type(data) == str:
@@ -430,6 +504,7 @@ class SubgraphKnowledge:
     def get_serialization(self, rdf_format='turtle', clean=True):
         if not clean:
             return self.graph.serialize(format=rdf_format)
+
         clean_graph = Graph()
         clean_graph.namespace_manager = self.graph.namespace_manager
         for t in self.get_root().get_triples():
@@ -538,10 +613,11 @@ class Field:
 
 
 class Option:
-    def __init__(self, uri, label, class_uri, comment=None):
+    def __init__(self, uri, label, class_uri, is_custom, comment=None):
         self.uri = uri
         self.label = label
         self.class_uri = class_uri
+        self.is_custom = is_custom
         self.comment = comment
 
 
@@ -578,7 +654,9 @@ def build_option(ontology, knowledge, uri):
     if class_uri is None:
         raise KeyError('No type found for individual ' + str(uri))
 
-    return Option(uri, label, class_uri, comment)
+    is_custom = TRUE in knowledge[uri:RATIO.isCustom:]
+
+    return Option(uri, label, class_uri, is_custom, comment)
 
 
 def build_empty_field(ontology, knowledge, property_uri, range_class_uri):
@@ -639,7 +717,7 @@ def build_empty_field(ontology, knowledge, property_uri, range_class_uri):
     else:
         options = None
 
-    is_add_option_allowed = not is_range_described and not range_class_uri == XSD.boolean
+    is_add_option_allowed = is_object_property and not is_range_described
 
     return Field(property_uri, label, comment, is_object_property, is_described, is_deletable, is_functional,
                  range_class_uri, range_label, order, width, values, free_index, is_add_option_allowed, options)
@@ -721,7 +799,7 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
     else:
         options = None
 
-    is_add_option_allowed = not is_range_described and not range_class_uri == XSD.boolean
+    is_add_option_allowed = is_object_property and not is_range_described
 
     return Field(property_uri, label, comment, is_object_property, is_described, is_deletable, is_functional,
                  range_class_uri, range_label, order, width, values, free_index, is_add_option_allowed, options)
@@ -762,6 +840,14 @@ class Entity:
                         for i in f.values
                         if type(f.values[i]) != Literal  # no emmpty values
                     ]
+                    # for custom options, also store the triples describing them
+                    triples += sum((
+                        [(f.values[i].uri, RDF.type, OWL.NamedIndividual),
+                         (f.values[i].uri, RDF.type, f.values[i].class_uri),
+                         (f.values[i].uri, RDFS.label, f.values[i].label)]
+                        for i in f.values
+                        if type(f.values[i]) != Literal and f.values[i].is_custom
+                    ), start=[])
             else:
                 triples += [
                     (self.uri, f.property_uri, f.values[i])

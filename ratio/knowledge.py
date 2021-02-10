@@ -117,11 +117,12 @@ def add_option():
     if not field.is_add_option_allowed:
         return jsonify(error='Adding options to this field is not allowed.')
 
-    # todo do the actual adding of the option in knowledge model
-    # todo render the option div
-    # todo return list with where to add the div (fields with same range or superclass) or same propuri (datafields)
+    option, option_fields = subgraph_knowledge.new_option(field.range_uri, label)
 
-    return jsonify()
+    render_option_div = get_template_attribute('tool/macros.html', 'option_div')
+    option_div = render_option_div(option, True)
+
+    return jsonify(option_div=option_div, option_fields=list(option_fields))
 
 
 @bp.route('/_change_label')
