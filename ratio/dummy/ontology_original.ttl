@@ -126,6 +126,14 @@ ctro:hasDesiredEffectDirection rdf:type owl:ObjectProperty ;
                                rdfs:label "Desired effect direction" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasDesiredEndPoint
+ctro:hasDesiredEndPoint rdf:type owl:ObjectProperty ,
+                                 owl:FunctionalProperty ;
+                        rdfs:domain ctro:DiffBetweenGroups ;
+                        rdfs:range ctro:EndPoint ;
+                        rdfs:label "Endpoint" .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasDesiredEndpoint
 ctro:hasDesiredEndpoint rdf:type owl:ObjectProperty ;
                         rdfs:domain ctro:DesiredOutcome ;
@@ -138,6 +146,13 @@ ctro:hasDesiredOutcome rdf:type owl:ObjectProperty ;
                        rdfs:domain ctro:ClinicalTrial ;
                        rdfs:range ctro:DesiredOutcome ;
                        rdfs:label "Desired outcome" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasDiffBetweenGroups
+ctro:hasDiffBetweenGroups rdf:type owl:ObjectProperty ;
+                          rdfs:domain ctro:ClinicalTrial ;
+                          rdfs:range ctro:DiffBetweenGroups ;
+                          rdfs:label "Difference between groups" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasDoseUnit
@@ -224,6 +239,14 @@ ctro:hasIntervention rdf:type owl:ObjectProperty ;
                      rdfs:label "Intervention" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasMeasureName
+ctro:hasMeasureName rdf:type owl:ObjectProperty ,
+                             owl:FunctionalProperty ;
+                    rdfs:domain ctro:DiffBetweenGroups ;
+                    rdfs:range ctro:DiffGroupsMeasureName ;
+                    rdfs:label "Measure" .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasMeasurementDevice
 ctro:hasMeasurementDevice rdf:type owl:ObjectProperty ;
                           rdfs:domain ctro:Outcome ;
@@ -243,6 +266,23 @@ ctro:hasOutcome rdf:type owl:ObjectProperty ;
                 rdfs:domain ctro:Arm ;
                 rdfs:range ctro:Outcome ;
                 rdfs:label "Outcome" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasOutcome1
+ctro:hasOutcome1 rdf:type owl:ObjectProperty ;
+                 rdfs:subPropertyOf owl:topObjectProperty ;
+                 rdf:type owl:FunctionalProperty ;
+                 rdfs:domain ctro:DiffBetweenGroups ;
+                 rdfs:range ctro:Outcome ;
+                 rdfs:label "Outcome of group 1" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasOutcome2
+ctro:hasOutcome2 rdf:type owl:ObjectProperty ,
+                          owl:FunctionalProperty ;
+                 rdfs:domain ctro:DiffBetweenGroups ;
+                 rdfs:range ctro:Outcome ;
+                 rdfs:label "Outcome of group 2" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasPopulation
@@ -378,19 +418,19 @@ ctro:hasConclusionComment rdf:type owl:DatatypeProperty ,
                           rdfs:label "Conclusion" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasConfIntervalDiff
+ctro:hasConfIntervalDiff rdf:type owl:DatatypeProperty ,
+                                  owl:FunctionalProperty ;
+                         rdfs:domain ctro:DiffBetweenGroups ;
+                         rdfs:range rdfs:Literal ;
+                         rdfs:label "Confidence interval" .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasConflictInterest
 ctro:hasConflictInterest rdf:type owl:DatatypeProperty ;
                          rdfs:domain ctro:EvidenceQuality ;
                          rdfs:range xsd:string ;
                          rdfs:label "Conflict of interest" .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasDBdisease
-ctro:hasDBdisease rdf:type owl:DatatypeProperty ,
-                           owl:FunctionalProperty ;
-                  rdfs:domain ctro:DisorderOrSyndrome ;
-                  rdfs:range xsd:string ;
-                  rdfs:label "Data source" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasDesiredEffectDir
@@ -412,12 +452,19 @@ ctro:hasDesiredEffectDir rdf:type owl:DatatypeProperty ,
                          rdfs:label "Desired direction of the effect" .
 
 
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasDiseaseId
-ctro:hasDiseaseId rdf:type owl:DatatypeProperty ,
-                           owl:FunctionalProperty ;
-                  rdfs:domain ctro:DisorderOrSyndrome ;
-                  rdfs:range xsd:anyURI ;
-                  rdfs:label "Disease URL" .
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasDiffGroupAbsValue
+ctro:hasDiffGroupAbsValue rdf:type owl:DatatypeProperty ,
+                                   owl:FunctionalProperty ;
+                          rdfs:domain ctro:DiffBetweenGroups ;
+                          rdfs:range xsd:float ;
+                          rdfs:label "Absolute value" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasDiffGroupRelValue
+ctro:hasDiffGroupRelValue rdf:type owl:DatatypeProperty ;
+                          rdfs:domain ctro:DiffBetweenGroups ;
+                          rdfs:range xsd:float ;
+                          rdfs:label "Relative value" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasDoseValue
@@ -449,6 +496,13 @@ ctro:hasEffectSizeValue rdf:type owl:DatatypeProperty ,
                         rdfs:domain ctro:EffectSize ;
                         rdfs:range xsd:float ;
                         rdfs:label "Size of effect value" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasExclusionCriteria
+ctro:hasExclusionCriteria rdf:type owl:DatatypeProperty ;
+                          rdfs:domain ctro:Population ;
+                          rdfs:range rdfs:Literal ;
+                          rdfs:comment "Exclusion criteria" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasFinalNumberPatients
@@ -602,6 +656,14 @@ ctro:hasPublicationYear rdf:type owl:DatatypeProperty ,
                         rdfs:label "Publication year" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasPvalueDiff
+ctro:hasPvalueDiff rdf:type owl:DatatypeProperty ,
+                            owl:FunctionalProperty ;
+                   rdfs:domain ctro:DiffBetweenGroups ;
+                   rdfs:range xsd:float ;
+                   rdfs:label "P-value" .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasRelativeValue
 ctro:hasRelativeValue rdf:type owl:DatatypeProperty ,
                                owl:FunctionalProperty ;
@@ -645,12 +707,28 @@ ctro:hasStandardDev rdf:type owl:DatatypeProperty ,
                     rdfs:label "Standard Deviation" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasStandardDevDiff
+ctro:hasStandardDevDiff rdf:type owl:DatatypeProperty ,
+                                 owl:FunctionalProperty ;
+                        rdfs:domain ctro:DiffBetweenGroups ;
+                        rdfs:range xsd:float ;
+                        rdfs:comment "Standard deviation" .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasStandardError
 ctro:hasStandardError rdf:type owl:DatatypeProperty ,
                                owl:FunctionalProperty ;
                       rdfs:domain ctro:StatisticalMeasure ;
                       rdfs:range xsd:float ;
                       rdfs:label "Standard Error" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasStandardErrorDiff
+ctro:hasStandardErrorDiff rdf:type owl:DatatypeProperty ,
+                                   owl:FunctionalProperty ;
+                          rdfs:domain ctro:DiffBetweenGroups ;
+                          rdfs:range xsd:float ;
+                          rdfs:comment "Standard error" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasStatisticalTestName
@@ -691,14 +769,6 @@ ctro:hasTitle rdf:type owl:DatatypeProperty ,
               rdfs:domain ctro:Publication ;
               rdfs:range xsd:string ;
               rdfs:label "Title" .
-
-
-###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasdiseaseName
-ctro:hasdiseaseName rdf:type owl:DatatypeProperty ;
-                    rdfs:subPropertyOf owl:topDataProperty ;
-                    rdfs:domain ctro:DisorderOrSyndrome ;
-                    rdfs:range xsd:string ;
-                    rdfs:label "Disease name" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#isControl
@@ -814,6 +884,14 @@ ctro:DesiredOutcome rdf:type owl:Class ;
                                           owl:onClass ctro:Result
                                         ] ;
                     rdfs:label "Desired outcome" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#DiffBetweenGroups
+ctro:DiffBetweenGroups rdf:type owl:Class .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#DiffGroupsMeasureName
+ctro:DiffGroupsMeasureName rdf:type owl:Class .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#DisorderOrSyndrome
@@ -1105,8 +1183,15 @@ ctro:Dabigatran rdf:type owl:NamedIndividual ,
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Daily
 ctro:Daily rdf:type owl:NamedIndividual ,
                     ctro:FrequencyInterval ;
-           rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/69620002> ,
-                            "Daily" .
+           rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/69620002> ;
+           rdfs:label "Daily" .
+
+
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#DiffGroups
+ctro:DiffGroups rdf:type owl:NamedIndividual ,
+                         ctro:DiffGroupsMeasureName ;
+                rdfs:isDefinedBy <http://purl.obolibrary.org/obo/STATO_0000061> ;
+                rdfs:label "Difference between groups" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Diurnal_IOP
@@ -1146,8 +1231,8 @@ ctro:EveryThreeHrs rdf:type owl:NamedIndividual ,
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#EveryTwoHours
 ctro:EveryTwoHours rdf:type owl:NamedIndividual ,
                             ctro:FrequencyInterval ;
-                   rdfs:label <http://purl.bioontology.org/ontology/SNOMEDCT/225750008> ,
-                              "Every two hours" .
+                   rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/225750008> ;
+                   rdfs:label "Every two hours" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Female
@@ -1336,8 +1421,8 @@ ctro:MajorBleed rdf:type owl:NamedIndividual ,
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Male
 ctro:Male rdf:type owl:NamedIndividual ,
                    ctro:Gender ;
-          rdfs:label <http://purl.bioontology.org/ontology/SNOMEDCT/248153007> ,
-                     "Male" .
+          rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/248153007> ;
+          rdfs:label "Male" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Mean
@@ -1496,6 +1581,13 @@ ctro:Rate rdf:type owl:NamedIndividual ,
           rdfs:label "Rate" .
 
 
+###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#RelativeRisk
+ctro:RelativeRisk rdf:type owl:NamedIndividual ,
+                           ctro:DiffGroupsMeasureName ;
+                  rdfs:isDefinedBy <http://purl.obolibrary.org/obo/OBCS_0000056> ;
+                  rdfs:label "Relative risk" .
+
+
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#Rivaroxaban
 ctro:Rivaroxaban rdf:type owl:NamedIndividual ,
                           ctro:Drug ;
@@ -1616,8 +1708,8 @@ ctro:Turkey rdf:type owl:NamedIndividual ,
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#TwiceAday
 ctro:TwiceAday rdf:type owl:NamedIndividual ,
                         ctro:FrequencyInterval ;
-               rdfs:label <http://purl.bioontology.org/ontology/SNOMEDCT/229799001> ,
-                          "Twice a day" .
+               rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/229799001> ;
+               rdfs:label "Twice a day" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#USA

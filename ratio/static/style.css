@@ -294,7 +294,16 @@ button[disabled]{
 }
 
 /* Message */
+.login-msg,
+#subgraph-menu-delete-msg,
+#subgraph-menu-edit-msg,
+#subgraph-menu-add-msg,
 #knowledge-delete-msg {
+  background-color: #FFE5B4;
+}
+
+#knowledge-delete-msg {
+  background-color: #FFE5B4;
   display: none;
   position: fixed;
   bottom: 0;

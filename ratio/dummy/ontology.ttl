@@ -50,7 +50,7 @@ ctro:analysesHealthCondition rdf:type owl:ObjectProperty ;
                              ratio:order "1"^^xsd:positiveInteger ;
                              rdfs:domain ctro:DesignGroup ;
                              rdfs:range ctro:DisorderOrSyndrome ;
-                             rdfs:label "Condition" .
+                             rdfs:label "Disease" .
 
 ctro:hasAnalysisApproach rdf:type owl:ObjectProperty ,
                                   owl:FunctionalProperty ;
@@ -76,14 +76,14 @@ ctro:hasGender rdf:type owl:ObjectProperty ;
                rdfs:label "Gender" .
 
 ctro:hasEthnicity rdf:type owl:ObjectProperty ;
-                  ratio:order "6"^^xsd:positiveInteger ;
+                  ratio:order "7"^^xsd:positiveInteger ;
                   ratio:width "25"^^xsd:positiveInteger ;
                   rdfs:domain ctro:Population ;
                   rdfs:range ctro:Ethnicity ;
                   rdfs:label "Ethnicity" .
 
 ctro:hasCountry rdf:type owl:ObjectProperty ;
-                ratio:order "7"^^xsd:positiveInteger ;
+                ratio:order "8"^^xsd:positiveInteger ;
                 ratio:width "25"^^xsd:positiveInteger ;
                 rdfs:domain ctro:Population ;
                 rdfs:range <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ;
@@ -93,7 +93,7 @@ ctro:hasQualityIndicator rdf:type owl:ObjectProperty ,
                                   owl:FunctionalProperty;
                          ratio:described "true"^^xsd:boolean ;
                          ratio:deletable "false"^^xsd:boolean ;
-                         ratio:order "10"^^xsd:positiveInteger ;
+                         ratio:order "11"^^xsd:positiveInteger ;
                          rdfs:domain ctro:ClinicalTrial ;
                          rdfs:range ctro:EvidenceQuality ;
                          rdfs:label "Potential Conflict of Interest" .
@@ -191,6 +191,37 @@ ctro:hasResult rdf:type owl:ObjectProperty ;
                rdfs:range ctro:Result ;
                rdfs:label "Outcome Measure Data" .
 
+ctro:hasDiffBetweenGroups rdf:type owl:ObjectProperty ;
+                          ratio:described "true"^^xsd:boolean ;
+                          ratio:order "8"^^xsd:positiveInteger ;
+                          rdfs:domain ctro:ClinicalTrial ;
+                          rdfs:range ctro:DiffBetweenGroups ;
+                          rdfs:label "Difference between groups" .
+
+ctro:hasOutcome1 rdf:type owl:ObjectProperty ,
+                          owl:FunctionalProperty ;
+                 ratio:order "1"^^xsd:positiveInteger ;
+                 rdfs:subPropertyOf owl:topObjectProperty ;
+                 rdf:type owl:FunctionalProperty ;
+                 rdfs:domain ctro:DiffBetweenGroups ;
+                 rdfs:range ctro:Outcome ;
+                 rdfs:label "Outcome of group 1" .
+
+
+ctro:hasOutcome2 rdf:type owl:ObjectProperty ,
+                          owl:FunctionalProperty ;
+                 ratio:order "2"^^xsd:positiveInteger ;
+                 rdfs:domain ctro:DiffBetweenGroups ;
+                 rdfs:range ctro:Outcome ;
+                 rdfs:label "Outcome of group 2" .
+
+ctro:hasMeasureName rdf:type owl:ObjectProperty ,
+                             owl:FunctionalProperty ;
+                    ratio:order "3"^^xsd:positiveInteger ;
+                    rdfs:domain ctro:DiffBetweenGroups ;
+                    rdfs:range ctro:DiffGroupsMeasureName ;
+                    rdfs:label "Measure" .
+
 ctro:hasArmRes rdf:type owl:ObjectProperty ;
                ratio:order "1"^^xsd:positiveInteger ;
                rdfs:domain ctro:Result ;
@@ -218,7 +249,7 @@ ctro:hasStatisticalMeasure rdf:type owl:ObjectProperty ;
 
 ctro:hasAdverseEffect rdf:type owl:ObjectProperty ;
                       ratio:described "true"^^xsd:boolean ;
-                      ratio:order "8"^^xsd:positiveInteger ;
+                      ratio:order "9"^^xsd:positiveInteger ;
                       rdfs:domain ctro:ClinicalTrial ;
                       rdfs:range ctro:AdverseEffect ;
                       rdfs:label "Adverse Event" .
@@ -332,6 +363,13 @@ ctro:hasPreconditionDescription rdf:type owl:DatatypeProperty ;
                                 rdfs:range xsd:string ;
                                 rdfs:label "Precondition" .
 
+ctro:hasExclusionCriteria rdf:type owl:DatatypeProperty ;
+                          ratio:order "6"^^xsd:positiveInteger ;
+                          ratio:width "100"^^xsd:positiveInteger ;
+                          rdfs:domain ctro:Population ;
+                          rdfs:range rdfs:Literal ;
+                          rdfs:label "Exclusion criteria" .
+
 ctro:hasAuthorAffiliation rdf:type owl:DatatypeProperty ;
                          ratio:order "2"^^xsd:positiveInteger ;
                          rdfs:domain ctro:EvidenceQuality ;
@@ -367,10 +405,10 @@ ctro:hasDuration rdf:type owl:DatatypeProperty ;
 ctro:hasDoseValue rdf:type owl:DatatypeProperty ,
                            owl:FunctionalProperty ;
                   ratio:order "4"^^xsd:positiveInteger ;
-                  ratio:width "25"^^xsd:positiveInteger ;
+                  ratio:width "75"^^xsd:positiveInteger ;
                   rdfs:domain ctro:Intervention ;
                   rdfs:range rdfs:Literal ;
-                  rdfs:label "Dose value" .
+                  rdfs:label "Dose value or description" .
 
 ctro:isControl rdf:type owl:DatatypeProperty ,
                         owl:FunctionalProperty ;
@@ -515,6 +553,51 @@ ctro:hasConfidenceInterval rdf:type owl:DatatypeProperty,
                            rdfs:range xsd:string ;
                            rdfs:label "Confidence Interval" .
 
+ctro:hasDiffGroupAbsValue rdf:type owl:DatatypeProperty ,
+                                   owl:FunctionalProperty ;
+                          ratio:order "4"^^xsd:positiveInteger ;
+                          ratio:width "25"^^xsd:positiveInteger ;
+                          rdfs:domain ctro:DiffBetweenGroups ;
+                          rdfs:range xsd:float ;
+                          rdfs:label "Absolute value" .
+
+
+ctro:hasDiffGroupRelValue rdf:type owl:DatatypeProperty ;
+                          ratio:order "5"^^xsd:positiveInteger ;
+                          ratio:width "25"^^xsd:positiveInteger ;
+                          rdfs:domain ctro:DiffBetweenGroups ;
+                          rdfs:range xsd:float ;
+                          rdfs:label "Relative value" .
+
+ctro:hasStandardDevDiff rdf:type owl:DatatypeProperty ,
+                                 owl:FunctionalProperty ;
+                        ratio:order "6"^^xsd:positiveInteger ;
+                        rdfs:domain ctro:DiffBetweenGroups ;
+                        rdfs:range xsd:float ;
+                        rdfs:comment "Standard deviation" .
+
+ctro:hasStandardErrorDiff rdf:type owl:DatatypeProperty ,
+                                   owl:FunctionalProperty ;
+                          ratio:order "7"^^xsd:positiveInteger ;
+                          rdfs:domain ctro:DiffBetweenGroups ;
+                          rdfs:range xsd:float ;
+                          rdfs:comment "Standard error" .
+
+ctro:hasConfIntervalDiff rdf:type owl:DatatypeProperty ,
+                                  owl:FunctionalProperty ;
+                         ratio:order "8"^^xsd:positiveInteger ;
+                         rdfs:domain ctro:DiffBetweenGroups ;
+                         rdfs:range rdfs:Literal ;
+                         rdfs:label "Confidence interval" .
+
+ctro:hasPvalueDiff rdf:type owl:DatatypeProperty ,
+                            owl:FunctionalProperty ;
+                   ratio:order "9"^^xsd:positiveInteger ;
+                   ratio:width "25"^^xsd:positiveInteger ;
+                   rdfs:domain ctro:DiffBetweenGroups ;
+                   rdfs:range xsd:string ;
+                   rdfs:label "P-value" .
+
 ctro:hasNumberAffectedAE rdf:type owl:DatatypeProperty ,
                                   owl:FunctionalProperty ;
                          ratio:order "3"^^xsd:positiveInteger ;
@@ -532,7 +615,7 @@ ctro:hasObservedResultAE rdf:type owl:DatatypeProperty ,
 
 ctro:hasConclusionComment rdf:type owl:DatatypeProperty ,
                                    owl:FunctionalProperty ;
-                          ratio:order "9"^^xsd:positiveInteger ;
+                          ratio:order "10"^^xsd:positiveInteger ;
                           ratio:width "100"^^xsd:positiveInteger ;
                           rdfs:domain ctro:ClinicalTrial ;
                           rdfs:range xsd:string ;
@@ -675,6 +758,10 @@ ctro:Other rdf:type owl:Class ;
 ctro:Pressure rdf:type owl:Class ;
               rdfs:subClassOf ctro:BioAndMedicalUnit .
 
+ctro:DiffBetweenGroups rdf:type owl:Class .
+
+ctro:DiffGroupsMeasureName rdf:type owl:Class .
+
 #################################################################
 #    Individuals
 #################################################################
@@ -776,6 +863,11 @@ ctro:Daily rdf:type owl:NamedIndividual ,
                     ctro:FrequencyInterval ;
            rdfs:isDefinedBy <http://purl.bioontology.org/ontology/SNOMEDCT/69620002> ;
            rdfs:label "Daily" .
+
+ctro:DiffGroups rdf:type owl:NamedIndividual ,
+                         ctro:DiffGroupsMeasureName ;
+                rdfs:isDefinedBy <http://purl.obolibrary.org/obo/STATO_0000061> ;
+                rdfs:label "Difference between groups" .
 
 ctro:Diurnal_IOP rdf:type owl:NamedIndividual ,
                           ctro:EndpointDesc_Glaucoma ;
@@ -1060,6 +1152,11 @@ ctro:Rate rdf:type owl:NamedIndividual ,
           rdfs:comment "A measure of the frequency of some phenomenon of interest given by rate: number of events in specified period / average population during the period. (Cambridge Dictionary of Statistics 3nd ed.)" ;
           rdfs:isDefinedBy <http://purl.org/net/OCRe/statistics.owl#OCRE200042> ;
           rdfs:label "Rate" .
+
+ctro:RelativeRisk rdf:type owl:NamedIndividual ,
+                           ctro:DiffGroupsMeasureName ;
+                  rdfs:isDefinedBy <http://purl.obolibrary.org/obo/OBCS_0000056> ;
+                  rdfs:label "Relative risk" .
 
 ctro:Rivaroxaban rdf:type owl:NamedIndividual ,
                           ctro:Drug ;
