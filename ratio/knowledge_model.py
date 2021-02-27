@@ -100,6 +100,11 @@ def get_tokens(graph, class_):
     return tokens
 
 
+def guess_label(uri):
+    # returns the tail of the uri string that does not contain # or :
+    return fullmatch(r'(?:.*[:#])*([^:#]*)', uri).group(1)
+
+
 class Ontology:
     """Wrapper for rdflib.Graph that connects it to the database."""
     def __init__(self):
@@ -293,8 +298,7 @@ class SubgraphKnowledge:
         try:
             class_label = next(class_label)
         except StopIteration:
-            # default label
-            class_label = class_uri.n3(get_ontology().graph.namespace_manager).split(':')[-1]
+            class_label = guess_label(class_uri)
 
         return '{} {}'.format(class_label, index.value)
 
@@ -315,7 +319,7 @@ class SubgraphKnowledge:
         # construct a unique uri
         uri = URIRef('{}{}_{}_{}'.format(
             get_ontology().get_base(),
-            class_uri.n3(get_ontology().graph.namespace_manager).split(':')[-1],  # try to remove the prefix
+            guess_label(class_uri),
             self.id,
             index.value
         ))
@@ -440,7 +444,7 @@ class SubgraphKnowledge:
         # construct a unique uri
         uri = URIRef('{}{}_{}_{}'.format(
             get_ontology().get_base(),
-            class_uri.n3(get_ontology().graph.namespace_manager).split(':')[-1],  # try to remove the prefix
+            guess_label(class_uri),
             self.id,
             index.value
         ))
@@ -634,7 +638,7 @@ def build_option(ontology, knowledge, uri):
     try:
         label = next(label)
     except StopIteration:
-        label = uri.n3(get_ontology().graph.namespace_manager).split(':')[-1]
+        label = guess_label(uri)
 
     comment = graph.objects(uri, RDFS.comment)
     try:
@@ -664,7 +668,7 @@ def build_empty_field(ontology, knowledge, property_uri, range_class_uri):
     try:
         label = next(label)
     except StopIteration:
-        label = property_uri.n3(get_ontology().graph.namespace_manager).split(':')[-1]
+        label = guess_label(property_uri)
 
     comment = ontology.objects(property_uri, RDFS.comment)
     try:
@@ -679,7 +683,7 @@ def build_empty_field(ontology, knowledge, property_uri, range_class_uri):
         try:
             range_label = next(range_label)
         except StopIteration:
-            range_label = range_class_uri.n3(get_ontology().graph.namespace_manager).split(':')[-1]
+            range_label = guess_label(range_class_uri)
 
     is_range_described = False
     for p in ontology[:RDFS.range:range_class_uri]:
@@ -728,7 +732,7 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
     try:
         label = next(label)
     except StopIteration:
-        label = property_uri.n3(get_ontology().graph.namespace_manager).split(':')[-1]
+        label = guess_label(property_uri)
 
     comment = ontology.objects(property_uri, RDFS.comment)
     try:
@@ -743,7 +747,7 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
         try:
             range_label = next(range_label)
         except StopIteration:
-            range_label = range_class_uri.n3(get_ontology().graph.namespace_manager).split(':')[-1]
+            range_label = guess_label(range_class_uri)
 
     is_range_described = False
     for p in ontology[:RDFS.range:range_class_uri]:
@@ -862,7 +866,7 @@ def build_empty_entity(ontology, knowledge, class_uri, uri, label, is_deletable)
     try:
         class_label = next(class_label)
     except StopIteration:
-        class_label = class_uri.n3(get_ontology().graph.namespace_manager).split(':')[-1]
+        class_label = guess_label(class_uri)
 
     comment = ontology.objects(class_uri, RDFS.comment)
     try:
@@ -907,7 +911,7 @@ def build_entity_from_knowledge(ontology, knowledge, uri, is_deletable):
     try:
         class_label = next(class_label)
     except StopIteration:
-        class_label = class_uri.n3(get_ontology().graph.namespace_manager).split(':')[-1]
+        class_label = guess_label(class_uri)
 
     fields = [
         build_field_from_knowledge(ontology, knowledge, uri, property_uri, range_uri)
