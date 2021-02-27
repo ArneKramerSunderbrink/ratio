@@ -91,11 +91,14 @@ def change_value():
 @bp.route('/_add_option')
 @login_required
 def add_option():
+    # If an index is given, the corresponding value is changed the new option,
+    # if index is -1 a new value is created first
     user_id = g.user['id']
     subgraph_id = request.args.get('subgraph_id', 0, type=int)
     entity_uri = request.args.get('entity_uri', '', type=str)
     property_uri = request.args.get('property_uri', '', type=str)
     label = request.args.get('label', '', type=str)
+    index = request.args.get('index', -2, type=int)
 
     if not subgraph_id:
         return jsonify(error='Subgraph id cannot be empty.')
@@ -119,10 +122,16 @@ def add_option():
 
     option, option_fields = subgraph_knowledge.new_option(field.range_uri, label)
 
+    if index == -1:
+        index = subgraph_knowledge.new_value(entity_uri, property_uri)
+    if index >= 0:
+        validity = subgraph_knowledge.change_value(entity_uri, property_uri, index, option.uri)
+
     render_option_div = get_template_attribute('tool/macros.html', 'option_div')
     option_div = render_option_div(option, True)
 
-    return jsonify(option_div=option_div, option_fields=list(option_fields))
+    return jsonify(option_div=option_div, option_fields=list(option_fields),
+                   option_label=option.label, option_uri=option.uri, index=index)
 
 
 @bp.route('/_change_label')

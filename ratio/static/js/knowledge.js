@@ -204,6 +204,7 @@ $(function () {
     get_json_change_value(input, function () { return value; });
   });
 
+  // Add option
   $('div#scroll-container').on('submit', '.add-option-form', function() {
     var form = $(this);
     var button = form.find('button')[0];
@@ -212,16 +213,25 @@ $(function () {
     var field = form.closest('div.field');
     var property_uri = field.attr('data-property-uri');
     var data = form.serializeArray();
+    var input = $(this).closest('.options-dropdown').prev('.option-input')[0];
+    var index = $(input).attr('data-index');
     data.push({ name: "subgraph_id", value: window.SUBGRAPH_ID });
     data.push({ name: "entity_uri", value: entity_uri });
     data.push({ name: "property_uri", value: property_uri });
+    data.push({ name: "index", value: index });
 
     $.getJSON(window.SCRIPT_ROOT + '/_add_option', data, function(data) {
       if (data.error) {
         alert(data.error);
       } else {
+        input.value = data.option_label;
+        input.setAttribute('data-option-uri', data.option_uri);
+        if (index == -1) {
+          input.setAttribute('data-index', String(data.index));
+        }
         // reset add entity input
         form.first()[0].reset();
+        // add option to all corrsponding fields
         data.option_fields.forEach(function(uri) {
           $('div.field[data-property-uri="'+uri+'"] div.options').append(data.option_div);
         });
