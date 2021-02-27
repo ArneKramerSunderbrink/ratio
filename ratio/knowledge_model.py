@@ -368,7 +368,7 @@ class SubgraphKnowledge:
             u = stack.pop()
             deleted.add(str(u))
             stack.update((
-                o for p, o in self.graph[u::] if o in self.graph.subjects()
+                o for p, o in self.graph[u::] if o in self.graph[:RDF.type:OWL.NamedIndividual]
             ))
             # remove links from parents
             self.graph.remove((None, None, u))
@@ -380,7 +380,7 @@ class SubgraphKnowledge:
             )
             db_cursor.execute(
                 'DELETE FROM knowledge WHERE subgraph_id = :subgraph_id AND object = :entity',
-                {'subgraph_id': self.id, 'entity': uri.n3()}
+                {'subgraph_id': self.id, 'entity': u.n3()}
             )
             # remove links to children
             self.graph.remove((u, None, None))

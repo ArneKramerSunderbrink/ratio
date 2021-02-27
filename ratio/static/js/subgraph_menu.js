@@ -7,7 +7,7 @@
 $(function() {
   // toggle overlay
   function toggle_overlay() {
-    var overlay = $('div#overlay');
+    const overlay = $('div#overlay');
     if (overlay.css('display') == 'none') {
       overlay.css('display', 'block');
     } else {
@@ -29,11 +29,11 @@ $(function() {
 
   // finished checkboxes
   $('div#subgraph-list').on('change', ':checkbox', function() {
-    var finished = $(this).prop('checked');
-    var subgraph_id = parseInt(this.id.substring(9));
+    const finished = $(this).prop('checked');
+    const subgraph_id = parseInt(this.id.substring(9));
 
     // change checkbox in the subgraph menu
-    var menu_box = $('label[for="finished-'+subgraph_id+'"]').children('i');
+    const menu_box = $('label[for="finished-'+subgraph_id+'"]').children('i');
     if (finished) {
       menu_box.removeClass().addClass('fa fa-check-square fa-lg');
       menu_box.prop('title', 'Finished');
@@ -52,10 +52,10 @@ $(function() {
 
   // edit subgraph name
   $('div#subgraph-list').on('submit', 'form', function() {
-    var data = $(this).serializeArray();
-    var list_item = $(this).closest('.item');
-    var subgraph_id = list_item.attr('data-subgraph-id')
-    var flipid = 'subgraph-list-' + subgraph_id;
+    const data = $(this).serializeArray();
+    const list_item = $(this).closest('.item');
+    const subgraph_id = list_item.attr('data-subgraph-id')
+    const flipid = 'subgraph-list-' + subgraph_id;
     data.push({ name: 'subgraph_id', value: subgraph_id });
 
     $.getJSON(window.SCRIPT_ROOT + '/_edit_subgraph_name', data, function(data) {
@@ -80,8 +80,8 @@ $(function() {
 
   // delete subgraph
   $('div#subgraph-list').on('click', 'button.delete-subgraph-button', function() {
-    var item = $(this).closest('.item');
-    var subgraph_id = item.attr('data-subgraph-id');
+    const item = $(this).closest('.item');
+    const subgraph_id = item.attr('data-subgraph-id');
     $.getJSON(window.SCRIPT_ROOT + '/_delete_subgraph', {subgraph_id: subgraph_id}, function(data) {
       if (data.error) {
         $('div#subgraph-menu-edit-msg').text(data.error);
@@ -106,8 +106,8 @@ $(function() {
 
   // undo delete Subgraph
   $('div#subgraph-menu-delete-msg > a').on('click', function() {
-    var subgraph_id = this.parentNode.getAttribute('data-subgraph-id');
-    var item = $('div#subgraph-list > div.item[data-subgraph-id="' + subgraph_id + '"]')
+    const subgraph_id = this.parentNode.getAttribute('data-subgraph-id');
+    const item = $('div#subgraph-list > div.item[data-subgraph-id="' + subgraph_id + '"]')
     $.getJSON(window.SCRIPT_ROOT + '/_undo_delete_subgraph', {subgraph_id: subgraph_id}, function(data) {
       if (data.error) {
         alert(data.error);  // if everything runs correctly this will never happen
@@ -127,7 +127,7 @@ $(function() {
 
 // add subgraph
   $('form#new-subgraph-form').on('submit', function() {
-    var data = $(this).serialize();
+    const data = $(this).serialize();
 
     $.getJSON(window.SCRIPT_ROOT + '/_add_subgraph', data, function(data) {
       if (data.error) {

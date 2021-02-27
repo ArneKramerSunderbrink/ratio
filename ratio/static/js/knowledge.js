@@ -14,13 +14,13 @@ $(function () {
 
   // Add value
   $('div#scroll-container').on('click', 'div.field > div > button', function() {
-    var button = this;
+    const button = this;
     button.disabled = true;
-    var field = $(this).closest('div.field');
-    var entity = $(this).closest('div.entity');
-    var property_uri = field.attr('data-property-uri');
-    var entity_uri = entity.attr('data-entity-uri');
-    var data = [
+    const field = $(this).closest('div.field');
+    const entity = $(this).closest('div.entity');
+    const property_uri = field.attr('data-property-uri');
+    const entity_uri = entity.attr('data-entity-uri');
+    const data = [
       { name: "subgraph_id", value: window.SUBGRAPH_ID },
       { name: "property_uri", value: property_uri },
       { name: "entity_uri", value: entity_uri }
@@ -30,7 +30,7 @@ $(function () {
       if (data.error) {
         alert(data.error);
       } else {
-        var value_div = $(data.value_div)
+        const value_div = $(data.value_div)
         field.find('div.field-value-list').append(value_div);
         value_div.find('div.literal-input, input.option-input').focus();
       }
@@ -43,15 +43,14 @@ $(function () {
 
   // Delete Value
   $('div#scroll-container').on('click', 'button.delete-value-button', function() {
-    var button = this;
+    const button = this;
     button.disabled = true;
-    var form = $(this).closest('.literal-form, .option-form');
-    var input = form.find('.literal-input, .option-input');
-    var old_value;
+    const form = $(this).closest('.literal-form, .option-form');
+    const input = form.find('.literal-input, .option-input');
+    let old_value = '';
     if (input.is('.literal-input')) {
       old_value = input[0].innerText;
     } else {
-      old_value = '';
       form.find('.option').each(function() {
         if (this.textContent == input[0].value) {
           if ($(this).is('[data-option-uri]')) {
@@ -59,6 +58,7 @@ $(function () {
           } else {
             old_value = this.textContent;
           }
+          return false;
         }
       });
     }
@@ -68,7 +68,7 @@ $(function () {
     $('div#knowledge-delete-msg > span').text('Value has been deleted.');
     $('div#knowledge-delete-msg > button:first').off('click');
     $('div#knowledge-delete-msg > button:first').on('click', function() {
-      var button = this;
+      const button = this;
       button.disabled = true;
       if (old_value != '') {
         get_json_change_value(input[0], function() { return old_value; }, button);
@@ -93,7 +93,7 @@ $(function () {
   }
 
   function get_json_change_value(input, get_value, button=null) {
-    var index = $(input).attr('data-index');
+    const index = $(input).attr('data-index');
     if (index == -1) {
       $(input).attr('data-index', -2);
     } else if (index == -2) {
@@ -108,11 +108,11 @@ $(function () {
       wait_for_index();
       return;
     }
-    var property = $(input).closest('div.field');
-    var property_uri = property.attr('data-property-uri');
-    var entity_uri = $(input).closest('div.entity').attr('data-entity-uri');
+    const property = $(input).closest('div.field');
+    const property_uri = property.attr('data-property-uri');
+    const entity_uri = $(input).closest('div.entity').attr('data-entity-uri');
 
-    var data = [
+    const data = [
       { name: 'subgraph_id', value: window.SUBGRAPH_ID },
       { name: 'entity_uri', value: entity_uri },
       { name: 'property_uri', value: property_uri },
@@ -141,14 +141,14 @@ $(function () {
   // Special functionality for literal fields
   // Change value
   $('div#scroll-container').on('input', 'div.literal-input', function() {
-    var input = this;
+    const input = this;
     get_json_change_value(input, function() { return input.innerText; });
   });
 
   // Special functionality for options Fields
   // Filter
   $('div#scroll-container').on('input', 'input.option-input', function() {
-    var filter_string = this.value.toUpperCase();
+    const filter_string = this.value.toUpperCase();
     $(this).next('.options-dropdown').find('.option:not(.deleted)').each(function() {
       if ($(this).text().toUpperCase().indexOf(filter_string) > -1) {
         $(this).css('display', '');
@@ -165,8 +165,8 @@ $(function () {
 
   // Select option
   $('div#scroll-container').on('click', '.option', function() {
-    var input = $(this).closest('.options-dropdown').prev('.option-input')[0];
-    var value = '';
+    const input = $(this).closest('.options-dropdown').prev('.option-input')[0];
+    let value = '';
     input.value = this.textContent;
     if ($(this).is('[data-option-uri]')) {
       value = $(this).attr('data-option-uri');
@@ -182,8 +182,8 @@ $(function () {
   // or out of the form and only then check validity
   $('div#scroll-container').on('focusout', '.option-form', function() {
     // if value not in options, .setCustomValidity("Invalid option.")
-    var input = $(this).find('.option-input')[0];
-    var value = '';
+    const input = $(this).find('.option-input')[0];
+    let value = '';
     if (input.value != '') {
       $(this).find('.option').each(function() {
         if (this.textContent == input.value) {
@@ -206,15 +206,15 @@ $(function () {
 
   // Add option
   $('div#scroll-container').on('submit', '.add-option-form', function() {
-    var form = $(this);
-    var button = form.find('button')[0];
+    const form = $(this);
+    const button = form.find('button')[0];
     button.disabled = true;
-    var entity_uri = form.closest('div.entity').attr('data-entity-uri');
-    var field = form.closest('div.field');
-    var property_uri = field.attr('data-property-uri');
-    var data = form.serializeArray();
-    var input = $(this).closest('.options-dropdown').prev('.option-input')[0];
-    var index = $(input).attr('data-index');
+    const entity_uri = form.closest('div.entity').attr('data-entity-uri');
+    const field = form.closest('div.field');
+    const property_uri = field.attr('data-property-uri');
+    const data = form.serializeArray();
+    const input = $(this).closest('.options-dropdown').prev('.option-input')[0];
+    const index = $(input).attr('data-index');
     data.push({ name: "subgraph_id", value: window.SUBGRAPH_ID });
     data.push({ name: "entity_uri", value: entity_uri });
     data.push({ name: "property_uri", value: property_uri });
@@ -246,10 +246,10 @@ $(function () {
   // Special functionality for Entities
   // Change label
   $('div#scroll-container').on('input', 'div.entity-label', function() {
-    var entity_uri = $(this).closest('div.entity').attr('data-entity-uri');
-    var label = this.innerText.replace(/\r?\n|\r/g, "");
+    const entity_uri = $(this).closest('div.entity').attr('data-entity-uri');
+    const label = this.innerText.replace(/\r?\n|\r/g, "");
 
-    var data = [
+    const data = [
       { name: 'subgraph_id', value: window.SUBGRAPH_ID },
       { name: 'entity_uri', value: entity_uri },
       { name: 'label', value: label}
@@ -269,12 +269,12 @@ $(function () {
 
   // Add entity
   $('div#scroll-container').on('submit', 'form.add-entity-form', function() {
-    var button = $(this).find('button')[0];
+    const button = $(this).find('button')[0];
     button.disabled = true;
-    var field = $(this).closest('div.entity-field');
-    var property_uri = field.attr('data-property-uri');
-    var entity_uri = $(this).closest('div.entity').attr('data-entity-uri');
-    var data = $(this).serializeArray();
+    const field = $(this).closest('div.entity-field');
+    const property_uri = field.attr('data-property-uri');
+    const entity_uri = $(this).closest('div.entity').attr('data-entity-uri');
+    const data = $(this).serializeArray();
     data.push({ name: "subgraph_id", value: window.SUBGRAPH_ID });
     data.push({ name: "property_uri", value: property_uri });
     data.push({ name: "entity_uri", value: entity_uri });
@@ -284,7 +284,7 @@ $(function () {
         alert(data.error);
       } else {
         // add entity
-        var list = field.find('div.entity-field-value-list').first();
+        const list = field.find('div.entity-field-value-list').first();
         list.append(data.entity_div);
         // expand entity body
         flip_flip(list.children().last().find('.entity-title > button:first').attr('data-flipid'));
@@ -309,11 +309,11 @@ $(function () {
 
   // Delete entity
   $('div#scroll-container').on('click', 'button.delete-entity-button', function() {
-    var button = this;
+    const button = this;
     button.disabled = true;
-    var entity = $(this).closest('div.entity');
-    var entity_uri = entity.attr('data-entity-uri');
-    var data = [
+    const entity = $(this).closest('div.entity');
+    const entity_uri = entity.attr('data-entity-uri');
+    const data = [
       { name: "subgraph_id", value: window.SUBGRAPH_ID },
       { name: "entity_uri", value: entity_uri }
     ];
@@ -325,7 +325,7 @@ $(function () {
         // Remove entity div
         entity.addClass('deleted');
         // update option fields
-        var deleted_uris = data_return.deleted;
+        const deleted_uris = data_return.deleted;
         deleted_uris.forEach(function(uri) {
           $('input.option-input[data-option-uri="'+uri+'"]').val('');
           $('div.option[data-option-uri="'+uri+'"]').addClass('deleted');
@@ -334,7 +334,7 @@ $(function () {
         $('div#knowledge-delete-msg > span').text('Entity has been deleted.');
         $('div#knowledge-delete-msg > button:first').off('click');
         $('div#knowledge-delete-msg > button:first').on('click', function() {
-          var button = this;
+          const button = this;
           button.disabled = true;
           $.getJSON(window.SCRIPT_ROOT + '/_undo_delete_entity', data, function(data_return) {
             if (data_return.error) {
