@@ -27,16 +27,27 @@ header {
   position: absolute;
 }
 
-.w3-modal-content {
+#overlay > div {
   background-color: transparent;
+  width: 75vw;
+}
+
+#overlay > div > div:first-of-type {
+  padding: 0.7em 1em;
+}
+
+#subgraph-list-box {
+  border: 2px solid rgba(0, 0, 0, 0.6);
+  border-radius: 4px;
+  margin-top: 1em;
 }
 
 #subgraph-list {
-  height: 35vh;
+  height: 50vh;
   overflow: auto;
 }
 
-#subgraph-list div {
+#subgraph-list > div {
   padding: 0;
 }
 
@@ -104,6 +115,7 @@ header {
 .big-button {
   width: 2.5em;
   height: 2.5em;
+  border-radius: 2px;
 }
 
 .tiny-button {

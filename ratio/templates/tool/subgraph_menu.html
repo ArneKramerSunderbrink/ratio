@@ -2,8 +2,8 @@
 
 <script src="{{ url_for('static', filename='js/subgraph_menu.js') }}" defer></script>
 
-<div class="w3-container w3-card-4 color1">
-  <div class="flex-row w3-margin-top">
+<div class="w3-card-4 color1">
+  <div class="flex-row">
     <div class="flex-flex">
       <div class="flip-frontside" data-flipid="new-subgraph">
         <button class="w3-button button-border flex-fix flip-flipbutton" data-flipid="new-subgraph">New {{ frontend_config['subgraph_term'] }}</button>
@@ -21,15 +21,20 @@
         </form>
       </div>
     </div>
+    <a href="{{ url_for('tool.index', subgraph_id=123) }}" class="w3-button big-button flex-fix w3-margin-left" title="Advanced search">{#
+      #}<i class="fas fa-search-plus fa-lg"></i>
+    </a>
     <a href="#" class="w3-button big-button flex-fix w3-margin-left" title="Close" id="close-overlay"
        style="display: {{ 'block' if subgraph['id'] else 'none' }}">{#
       #}<i class="fas fa-times fa-lg"></i>
     </a>
   </div>
-  <div class="w3-margin-top" id="subgraph-list">
-    {% for subgraph in subgraph_list %}
-      {{ subgraph_row(subgraph['id'], subgraph['name'], subgraph['finished']) }}
-    {% endfor %}
+  <div id="subgraph-list-box">
+    <div id="subgraph-list">
+      {% for subgraph in subgraph_list %}
+        {{ subgraph_row(subgraph['id'], subgraph['name'], subgraph['finished']) }}
+      {% endfor %}
+    </div>
   </div>
 </div>
 
