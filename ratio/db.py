@@ -37,6 +37,11 @@ def get_empty_subgraph_template(subgraph_id=None):
     return empty_subgraph_template
 
 
+def get_filter_description():
+    with current_app.open_resource(current_app.config['FILTER'], 'r') as f:
+        return f.read()
+
+
 def db_init():
     """Clear existing data and create new tables."""
     with current_app.open_resource('schema.sql') as f:
@@ -66,6 +71,10 @@ def db_populate_dummy():
 
     with current_app.open_resource('dummy/empty_subgraph_template.ttl') as f:
         with open(current_app.config['EMPTY_SUBGRAPH_TEMPLATE'], 'wb+') as f2:
+            f2.write(f.read())
+
+    with current_app.open_resource('dummy/filter.ttl') as f:
+        with open(current_app.config['FILTER'], 'wb+') as f2:
             f2.write(f.read())
 
 

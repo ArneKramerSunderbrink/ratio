@@ -58,9 +58,7 @@ def index(subgraph_id=None, message=None):
     ).fetchall()
 
     if subgraph_id is None:
-        subgraph = {'id': 0, 'name': '', 'finished': False}
-        return render_template('tool/index.html', subgraph=subgraph, subgraph_list=subgraph_list,
-                               message=message)
+        return render_template('tool/index.html', subgraph_list=subgraph_list, message=message)
 
     subgraph = db.execute(
         'SELECT * FROM subgraph WHERE id = ?', (subgraph_id,)

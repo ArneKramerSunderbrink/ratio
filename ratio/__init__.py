@@ -35,6 +35,8 @@ def create_app(test_config=None):
         DATABASE=os.path.join(app.instance_path, 'ratio.sqlite'),
         # and a template for creating new subgraphs
         EMPTY_SUBGRAPH_TEMPLATE=os.path.join(app.instance_path, 'empty_subgraph_template.ttl'),
+        # and the file describing the filter
+        FILTER=os.path.join(app.instance_path, 'filter.ttl'),
         # Prepend URL_PREFIX to all routes, including static etc.
         URL_PREFIX='',
         # Don't do logging via gunicorn and with the gunicorn level
@@ -99,10 +101,11 @@ def create_app(test_config=None):
     db.init_app(app)
 
     # apply the blueprints to the app
-    from ratio import auth, tool, knowledge
+    from ratio import auth, tool, knowledge, search
 
     app.register_blueprint(auth.bp)
     app.register_blueprint(tool.bp)
     app.register_blueprint(knowledge.bp)
+    app.register_blueprint(search.bp)
 
     return app

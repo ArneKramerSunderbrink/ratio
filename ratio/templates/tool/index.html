@@ -2,11 +2,11 @@
 
 {% extends 'base.html' %}
 
-{% block title %}RATIO{{ ' - '+subgraph['name'] if subgraph['name'] }}{% endblock %}
+{% block title %}RATIO{{ ' - '+subgraph['name'] if subgraph }}{% endblock %}
 
 {% block content %}
 <script type=text/javascript>
-  window.SUBGRAPH_ID = {{ subgraph['id'] }};
+  window.SUBGRAPH_ID = {{ subgraph['id'] if subgraph else 0}};
 </script>
 
 <div class="flex-column">
@@ -14,7 +14,7 @@
 
   <section id="flex-body" class="color0">
     <div id="scroll-container">
-      {% if subgraph['id'] %}
+      {% if subgraph %}
       <script src="{{ url_for('static', filename='js/knowledge.js') }}" defer></script>
       {{ entity_div(root, true) }}
       <div style="height: 11em;">{# just a spacer #}</div>
@@ -29,7 +29,7 @@
       {% endif %}
     </div>
 
-    <div class="w3-modal" id="overlay" {% if not subgraph['id'] %}style="display: block"{% endif %}>
+    <div class="w3-modal" id="overlay" {% if not subgraph %}style="display: block"{% endif %}>
       <div class="w3-modal-content">
         {% include 'tool/subgraph_menu.html' %}
       </div>

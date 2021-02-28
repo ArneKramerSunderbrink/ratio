@@ -1,0 +1,17 @@
+@prefix ctro: <http://www.semanticweb.org/root/ontologies/2018/6/ctro#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix ratio: <http://www.example.org/ratio-tool#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ctro:hasAuthor ratio:order "1"^^xsd:positiveInteger .
+
+ctro:hasPublicationYear ratio:order "2"^^xsd:positiveInteger ;
+                        ratio:width "25"^^xsd:positiveInteger .
+
+ctro:hasCountry ratio:order "3"^^xsd:positiveInteger ;
+                ratio:width "25"^^xsd:positiveInteger .
+
+ctro:hasAvgAge ratio:order "4"^^xsd:positiveInteger ;
+               ratio:width "25"^^xsd:positiveInteger .

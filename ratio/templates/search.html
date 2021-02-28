@@ -1,0 +1,23 @@
+{% from "tool/macros.html" import entity_div %}
+
+{% extends 'base.html' %}
+
+{% block title %}RATIO - Search{% endblock %}
+
+{% block content %}
+<script src="{{ url_for('static', filename='js/knowledge.js') }}" defer></script>
+
+<div class="flex-column">
+  {% include 'tool/header.html' %}
+
+  <section id="flex-body" class="color0">
+    <div id="scroll-container">
+      <div class="entity-body">
+      {{ entity_div(filter, false) }}
+      </div>
+      <div style="height: 11em;">{# just a spacer #}</div>
+    </div>
+  </section>
+</div>
+
+{% endblock %}
