@@ -194,12 +194,13 @@ $(function () {
           } else {
             value = this.textContent;
           }
+          return false;
         }
       });
       if (value == '') {
         set_validity(input, 'Choose an option from the list.');
         input.removeAttribute('data-option-uri');
-        return
+        return;
       }
     }
     get_json_change_value(input, function () { return value; });

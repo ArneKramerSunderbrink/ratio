@@ -15,3 +15,5 @@ ctro:hasCountry ratio:order "3"^^xsd:positiveInteger ;
 
 ctro:hasAvgAge ratio:order "4"^^xsd:positiveInteger ;
                ratio:width "25"^^xsd:positiveInteger .
+
+ctro:hasDrug ratio:order "4"^^xsd:positiveInteger .

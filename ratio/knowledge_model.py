@@ -252,7 +252,7 @@ class SubgraphKnowledge:
         if validity:
             return validity
 
-        property_uri_index = property_uri + '_' + str(index)
+        property_uri_index = field.property_uri + '_' + str(index)
         self.graph.remove((entity.uri, property_uri_index, None))
         self.graph.add((entity.uri, property_uri_index, value))
         db = get_db()

@@ -106,7 +106,7 @@ class FilterField:
 
         self.options = list(set(self.options))
         if self.is_object_property:
-            self.options = [build_option(o) for o in self.options]
+            self.options = [build_option(ontology, knowledge, o) for o in self.options]
 
     def get_sorted_values(self):
         return []

@@ -125,7 +125,7 @@ def add_option():
     if index == -1:
         index = subgraph_knowledge.new_value(entity_uri, property_uri)
     if index >= 0:
-        validity = subgraph_knowledge.change_value(entity_uri, property_uri, index, option.uri)
+        subgraph_knowledge.change_value(entity_uri, property_uri, index, option.uri)
 
     render_option_div = get_template_attribute('tool/macros.html', 'option_div')
     option_div = render_option_div(option, True)
