@@ -9,8 +9,8 @@ from rdflib import RDF
 from rdflib import RDFS
 
 from ratio.auth import login_required
-from ratio.db import get_filter_description
-from ratio.knowledge_model import RATIO, get_ontology, guess_label
+from ratio.db import get_db, get_filter_description
+from ratio.knowledge_model import RATIO, build_option, get_ontology, guess_label, parse_n3_term, row_to_rdf
 
 bp = Blueprint('search', __name__)
 
@@ -39,8 +39,21 @@ class Filter:
         self.comment = ''
         self.is_deletable = False
 
+        self.knowledge = Graph()
+        db = get_db()
+        for row in db.execute('SELECT * FROM namespace').fetchall():
+            self.knowledge.namespace_manager.bind(row['prefix'], parse_n3_term(row['uri']))
+
+        rows = db.execute(
+            'SELECT subject, predicate, object FROM knowledge WHERE subgraph_id IN ('
+            '   SELECT id FROM subgraph WHERE finished = 1 AND deleted = 0'
+            ')',
+        ).fetchall()
+        for row in rows:
+            self.knowledge.add(row_to_rdf(row))
+
         self.fields = [
-            FilterField(property_uri, self.graph, get_ontology().graph)
+            FilterField(property_uri, self.graph, get_ontology().graph, self.knowledge)
             for property_uri in set(self.graph.subjects())
         ]
         self.fields.sort(key=lambda field: field.order)
@@ -52,7 +65,7 @@ class Filter:
 
 
 class FilterField:
-    def __init__(self, property_uri, filter_graph, ontology):
+    def __init__(self, property_uri, filter_graph, ontology, knowledge):
         self.property_uri = property_uri
 
         self.label = ontology.objects(property_uri, RDFS.label)
@@ -73,17 +86,27 @@ class FilterField:
         self.is_functional = False
 
         try:
-            self.order = next(ontology.objects(property_uri, RATIO.order)).value
+            self.order = next(filter_graph.objects(property_uri, RATIO.order)).value
         except StopIteration:
             self.order = 0
 
         try:
-            self.width = next(ontology.objects(property_uri, RATIO.width)).value
+            self.width = next(filter_graph.objects(property_uri, RATIO.width)).value
         except StopIteration:
             self.width = 50
 
         self.is_add_option_allowed = False
-        self.options = []  # todo add all values from all subgraphs
+        self.options = []
+        for i, o in [(p[len(property_uri)+1:], o) for s, p, o in knowledge[::] if p.startswith(property_uri)]:
+            try:
+                int(i)
+            except ValueError:
+                continue
+            self.options.append(o)
+
+        self.options = list(set(self.options))
+        if self.is_object_property:
+            self.options = [build_option(o) for o in self.options]
 
     def get_sorted_values(self):
         return []

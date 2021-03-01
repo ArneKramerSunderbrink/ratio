@@ -222,8 +222,8 @@ class SubgraphKnowledge:
         field = self.get_field(entity_uri, property_uri)
         index = field.free_index
 
-        property_uri_index = URIRef(str(field.property_uri) + '_' + str(index))
-        property_uri_freeindex = URIRef(str(field.property_uri) + '_freeindex')
+        property_uri_index = field.property_uri + '_' + str(index)
+        property_uri_freeindex = field.property_uri + '_freeindex'
         self.graph.remove((entity.uri, property_uri_freeindex, None))
         self.graph.add((entity.uri, property_uri_index, Literal('')))
         self.graph.add((entity.uri, property_uri_freeindex, Literal(index+1, datatype=XSD.nonNegativeInteger)))
@@ -252,7 +252,7 @@ class SubgraphKnowledge:
         if validity:
             return validity
 
-        property_uri_index = URIRef(str(property_uri) + '_' + str(index))
+        property_uri_index = property_uri + '_' + str(index)
         self.graph.remove((entity.uri, property_uri_index, None))
         self.graph.add((entity.uri, property_uri_index, value))
         db = get_db()
@@ -313,8 +313,8 @@ class SubgraphKnowledge:
         except StopIteration:
             index = Literal(0, datatype=XSD.nonNegativeInteger)
 
-        property_uri_index = URIRef(str(field.property_uri) + '_' + str(field.free_index))
-        property_uri_freeindex = URIRef(str(field.property_uri) + '_freeindex')
+        property_uri_index = field.property_uri + '_' + str(field.free_index)
+        property_uri_freeindex = field.property_uri + '_freeindex'
 
         # construct a unique uri
         uri = URIRef('{}{}_{}_{}'.format(
@@ -771,14 +771,14 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
         width = 50
 
     values = dict()
-    for i in [str(p)[len(str(property_uri))+1:]
-              for p, o in knowledge[individual_uri::]
-              if str(p).startswith(str(property_uri))]:
+    for p, i, o in [(p, p[len(property_uri)+1:], o)
+                    for p, o in knowledge[individual_uri::]
+                    if p.startswith(property_uri)]:
         try:
             i = int(i)
         except ValueError:
             continue
-        values[i] = next(knowledge[individual_uri:URIRef(str(property_uri) + '_' + str(i)):])
+        values[i] = o
 
     if is_described:
         values = {i: build_entity_from_knowledge(ontology, knowledge, values[i], is_deletable)
@@ -787,11 +787,11 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
         values = {i: build_option(ontology, knowledge, values[i])
                   for i in values if str(values[i]) != ''}
     try:
-        free_index = next(knowledge[individual_uri:URIRef(str(property_uri) + '_freeindex'):])
+        free_index = next(knowledge[individual_uri:URIRef(property_uri + '_freeindex'):])
     except StopIteration:
         free_index = Literal(0, datatype=XSD.nonNegativeInteger)
 
-    one_of = list(ontology.objects(range_class_uri, OWL.oneOf))
+    one_of = list(ontology[range_class_uri:OWL.oneOf:])
     if is_object_property and not is_described:
         options = list(build_option(ontology, knowledge, uri) for uri in get_tokens(ontology, range_class_uri))
         options += list(build_option(ontology, knowledge, uri) for uri in get_tokens(knowledge, range_class_uri))
