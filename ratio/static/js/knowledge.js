@@ -92,6 +92,7 @@ $(function () {
     }
   }
 
+  // general change value call
   function get_json_change_value(input, get_value, button=null) {
     const index = $(input).attr('data-index');
     if (index == -1) {

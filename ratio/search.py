@@ -83,7 +83,7 @@ class FilterField:
         self.is_object_property = OWL.ObjectProperty in ontology.objects(property_uri, RDF.type)
         self.is_described = False
         self.is_deletable = False
-        self.is_functional = False
+        self.is_functional = True
 
         try:
             self.order = next(filter_graph.objects(property_uri, RATIO.order)).value
