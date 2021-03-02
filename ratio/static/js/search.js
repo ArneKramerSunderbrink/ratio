@@ -31,6 +31,7 @@ $(function(){
     } else {
       value = this.textContent;
     }
+    set_validity(input, '');
 
     search();
   });
@@ -75,8 +76,10 @@ $(function(){
 
   function search() {
     // collect all values from the filter fields
+    const filter = $('div.entity[data-entity-uri="http://www.example.org/ratio-tool#Filter"]');
+    filter.css('cursor', 'progress');
     const data = [];
-    $('div.entity[data-entity-uri="http://www.example.org/ratio-tool#Filter"] input.option-input').each(function() {
+    filter.find('input.option-input').each(function() {
       if (this.value != '') {
         if ($(this).is('[data-option-uri]')) {
           data.push({ name: $(this).closest('div.field').attr('data-property-uri'), value: $(this).attr('data-option-uri') });
@@ -93,7 +96,9 @@ $(function(){
       if (data.error) {
         alert(data.error);
       } else {
-        // todo: build result list
+        filter.css('cursor', '');
+        $('#subgraph-list').empty();
+        $('#subgraph-list').append(data.results_div);
       }
     })
     .fail(function() { alert('getJSON request failed!'); });

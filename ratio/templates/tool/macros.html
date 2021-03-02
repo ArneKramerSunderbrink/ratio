@@ -148,7 +148,6 @@
   </div>
   {% endif %}
 
-
   <div class="entity-body{%if is_root%} color0{% else %} flip-flipside{% endif %}"{%if not is_root %} data-flipid="collapse-{{ entity.uri }}" style="display: none;"{% endif %}>
     {% for field in entity.fields %}
     {% if field.is_described %}
@@ -187,4 +186,19 @@
     {% endfor %}
   </div>
 </div>
+{% endmacro %}
+
+
+{% macro search_results(results) %}
+{% for subgraph in results %}
+<div class="item" data-subgraph-id="{{ subgraph['id'] }}">
+  <div class="flex-row">
+    <a href="{{ url_for('tool.index', subgraph_id=subgraph['id']) }}"
+       class="w3-button flex-text">{{ subgraph['name'] }}</a>
+    <a href="{{ request.script_root }}/{{ subgraph['id'] }}/_download_rdf" class="w3-button big-button flex-fix" title="Download RDF">{#
+      #}<i class="fas fa-project-diagram"></i>
+    </a>
+  </div>
+</div>
+{% endfor %}
 {% endmacro %}

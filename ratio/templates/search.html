@@ -1,4 +1,5 @@
 {% from "tool/macros.html" import entity_div %}
+{% from "tool/macros.html" import search_results %}
 
 {% extends 'base.html' %}
 
@@ -13,7 +14,12 @@
   <section id="flex-body" class="color0">
     <div id="scroll-container">
       <div class="entity-body">
-      {{ entity_div(filter, false) }}
+        {{ entity_div(filter, false) }}
+        <div id="subgraph-list-box">
+          <div id="subgraph-list">
+            {{ search_results(results) }}
+          </div>
+        </div>
       </div>
     </div>
   </section>

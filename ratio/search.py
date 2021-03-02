@@ -2,6 +2,7 @@
 
 from flask import Blueprint
 from flask import g
+from flask import get_template_attribute
 from flask import jsonify
 from flask import render_template
 from flask import request
@@ -12,7 +13,8 @@ from rdflib import RDFS
 
 from ratio.auth import login_required
 from ratio.db import get_db, get_filter_description
-from ratio.knowledge_model import RATIO, build_option, get_ontology, guess_label, Option, parse_n3_term, row_to_rdf
+from ratio.knowledge_model import RATIO, build_option, get_subgraph_knowledge, get_ontology, guess_label, Option, \
+    parse_n3_term, row_to_rdf
 
 bp = Blueprint('search', __name__)
 
@@ -21,7 +23,13 @@ bp = Blueprint('search', __name__)
 @login_required
 def search_view():
     filter_object = get_filter()
-    return render_template('search.html', filter=filter_object)
+
+    db = get_db()
+    rows = db.execute(
+        'SELECT id, name FROM subgraph WHERE finished = 1 AND deleted = 0',
+    ).fetchall()
+
+    return render_template('search.html', filter=filter_object, results=rows)
 
 
 @bp.route('/_search')
@@ -29,10 +37,30 @@ def search_view():
 def search():
     filter_data = {p: request.args.get(p, '', type=str) for p in request.args}
 
-    # todo get list of subgraphs and apply the filter
+    # get list of subgraphs that are finished and not deleted
+    db = get_db()
+    rows = db.execute(
+        'SELECT id, name FROM subgraph WHERE finished = 1 AND deleted = 0',
+    ).fetchall()
+    subgraphs = {row['id']: row['name'] for row in rows}
 
-    print(filter_data)
-    return jsonify()
+    results = subgraphs.copy()
+    # todo this should be a method of the filter
+    for id in subgraphs:
+        knowledge = {(str(p), str(o)) for s, p, o in get_subgraph_knowledge(id).get_root().get_triples()}
+        for po in filter_data.items():
+            if po in knowledge:
+                continue
+            else:
+                del results[id]
+                break
+
+    results = [{'id': id, 'name': results[id]} for id in results]
+
+    render_results = get_template_attribute('tool/macros.html', 'search_results')
+    results_div = render_results(results)
+
+    return jsonify(results_div=results_div)
 
 
 def get_filter():
@@ -122,7 +150,7 @@ class FilterField:
             self.options = [build_option(ontology, knowledge, o) for o in self.options]
             self.options.append(Option('', '', '', False))
         else:
-            self.options.append('') # how do I get an empty option whithout HTML not displaying it
+            self.options.append('')
 
     def get_sorted_values(self):
         return []
