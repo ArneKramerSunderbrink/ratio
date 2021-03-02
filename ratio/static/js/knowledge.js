@@ -184,7 +184,7 @@ $(function () {
   $('div#scroll-container').on('focusout', '.option-form', function() {
     // if value not in options, .setCustomValidity("Invalid option.")
     const input = $(this).find('.option-input')[0];
-    let value = '';
+    let value = false;
     if (input.value != '') {
       $(this).find('.option').each(function() {
         if (this.textContent == input.value) {
@@ -197,11 +197,14 @@ $(function () {
           return false;
         }
       });
-      if (value == '') {
+      if (value === false) {
+        console.log('false');
         set_validity(input, 'Choose an option from the list.');
         input.removeAttribute('data-option-uri');
         return;
       }
+    } else {
+      value = '';
     }
     get_json_change_value(input, function () { return value; });
   });

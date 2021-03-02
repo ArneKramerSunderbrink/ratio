@@ -279,6 +279,7 @@ button[disabled]{
   -ms-user-select: none; /* IE 10 and IE 11 */
   user-select: none;
   cursor: pointer;
+  min-height: 1.5em; /* To make sure empty options (filter) are visible */
 }
 
 .options-dropdown > div {

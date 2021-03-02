@@ -2,7 +2,9 @@
 
 from flask import Blueprint
 from flask import g
+from flask import jsonify
 from flask import render_template
+from flask import request
 from rdflib import Graph
 from rdflib import OWL
 from rdflib import RDF
@@ -10,16 +12,27 @@ from rdflib import RDFS
 
 from ratio.auth import login_required
 from ratio.db import get_db, get_filter_description
-from ratio.knowledge_model import RATIO, build_option, get_ontology, guess_label, parse_n3_term, row_to_rdf
+from ratio.knowledge_model import RATIO, build_option, get_ontology, guess_label, Option, parse_n3_term, row_to_rdf
 
 bp = Blueprint('search', __name__)
 
 
 @bp.route('/search')
 @login_required
-def search():
+def search_view():
     filter_object = get_filter()
     return render_template('search.html', filter=filter_object)
+
+
+@bp.route('/_search')
+@login_required
+def search():
+    filter_data = {p: request.args.get(p, '', type=str) for p in request.args}
+
+    # todo get list of subgraphs and apply the filter
+
+    print(filter_data)
+    return jsonify()
 
 
 def get_filter():
@@ -107,6 +120,9 @@ class FilterField:
         self.options = list(set(self.options))
         if self.is_object_property:
             self.options = [build_option(ontology, knowledge, o) for o in self.options]
+            self.options.append(Option('', '', '', False))
+        else:
+            self.options.append('') # how do I get an empty option whithout HTML not displaying it
 
     def get_sorted_values(self):
         return []
