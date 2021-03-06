@@ -23,7 +23,7 @@ $(function() {
     }
   }
 
-  $('a#subgraph-name').on('click', toggle_overlay);
+  $('a#menu-button').on('click', toggle_overlay);
   $('a#close-overlay').on('click', toggle_overlay);
   $(document).on('keyup', overlay_escape_handler);
 
@@ -66,7 +66,7 @@ $(function() {
         list_item.find('form > input').focus();
       } else {
         if (subgraph_id == window.SUBGRAPH_ID) {
-          $('a#subgraph-name').text(data.name);
+          $('a#menu-button').text(data.name);
           $('title').text('RATIO - ' + data.name);
         }
         list_item.find('a:first').text(data.name);

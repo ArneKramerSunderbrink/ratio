@@ -96,9 +96,9 @@ $(function(){
       if (data.error) {
         alert(data.error);
       } else {
-        filter.css('cursor', '');
         $('#subgraph-list').empty();
         $('#subgraph-list').append(data.results_div);
+        filter.css('cursor', '');
       }
     })
     .fail(function() { alert('getJSON request failed!'); });

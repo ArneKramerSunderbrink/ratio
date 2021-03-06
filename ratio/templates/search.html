@@ -14,8 +14,12 @@
   <section id="flex-body" class="color0">
     <div id="scroll-container">
       <div class="entity-body">
-        {{ entity_div(filter, false) }}
-        <div id="subgraph-list-box">
+        {{ entity_div(filter, false, collapsed=False) }}
+
+        <div class="entity entity-border" style="margin-top: 1em;">
+          <div class="entity-title color2 flex-row">
+            <div class="entity-label flex-flex"> Search results</div>
+          </div>
           <div id="subgraph-list">
             {{ search_results(results) }}
           </div>
@@ -24,5 +28,4 @@
     </div>
   </section>
 </div>
-
 {% endblock %}

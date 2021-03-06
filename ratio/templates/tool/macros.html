@@ -63,7 +63,7 @@
   {% endif %}
   <div class="entity-field-value-list">
     {% for index, value in field.get_sorted_values() %}
-    {{ entity_div(value, False, index) }}
+    {{ entity_div(value, index=index) }}
     {% endfor %}
   </div>
 </div>
@@ -126,16 +126,16 @@
 {% endmacro %}
 
 
-{% macro entity_div(entity, is_root, index) %}
+{% macro entity_div(entity, is_root=False, index=0, collapsed=True) %}
 <div class="entity{% if not is_root %} entity-border{% endif %}" data-entity-uri="{{ entity.uri }}" data-index="{{index}}">
   {# entity header #}
   {% if not is_root %}
   <div class="entity-title color2 flex-row">
     {# collapse button #}
-    <button class="w3-button flex-fix flip-frontside flip-flipbutton" data-flipid="collapse-{{ entity.uri }}">{#
+    <button class="w3-button flex-fix flip-frontside flip-flipbutton" data-flipid="collapse-{{ entity.uri }}" {% if not collapsed %}style="display: none;"{% endif %}>{#
       #}<i class="fas fa-chevron-right"></i>
     </button>
-    <button class="w3-button flex-fix flip-flipside flip-frontbutton" data-flipid="collapse-{{ entity.uri }}" style="display: none;">{#
+    <button class="w3-button flex-fix flip-flipside flip-frontbutton" data-flipid="collapse-{{ entity.uri }}" {% if collapsed %}style="display: none;"{% endif %}>{#
       #}<i class="fas fa-chevron-down"></i>
     </button>
 
@@ -148,7 +148,7 @@
   </div>
   {% endif %}
 
-  <div class="entity-body{%if is_root%} color0{% else %} flip-flipside{% endif %}"{%if not is_root %} data-flipid="collapse-{{ entity.uri }}" style="display: none;"{% endif %}>
+  <div class="entity-body{%if is_root%} color0{% else %} flip-flipside{% endif %}"{%if not is_root %} data-flipid="collapse-{{ entity.uri }}" {% if collapsed %}style="display: none;"{% endif %}{% endif %}>
     {% for field in entity.fields %}
     {% if field.is_described %}
     {{ entity_field(entity, field) }}

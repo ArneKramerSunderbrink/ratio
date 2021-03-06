@@ -1,6 +1,7 @@
 <header class="w3-bar w3-card color2" id="flex-fix">
   {% if subgraph %}
-  <a href="#" id="subgraph-name" class="w3-bar-item w3-button">{{ subgraph['name'] }}</a>
+  <a href="#" id="menu-button" class="w3-bar-item w3-button">Menu</a>
+  <div class="w3-bar-item">{{ subgraph['name'] }}</div>
   {% endif %}
   <div class="w3-right">
     <div class="w3-bar-item"><i class="fas fa-user w3-large"></i> {{ g.user['username'] }}</div>

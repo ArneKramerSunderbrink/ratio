@@ -113,7 +113,8 @@ header {
 
 /* Icon button */
 .big-button {
-  width: 2.5em;
+  align-self: center;
+  min-width: 2.5em;
   height: 2.5em;
   border-radius: 2px;
 }
@@ -181,6 +182,7 @@ button[disabled]{
 .entity-title {
   align-items: center;
   border-radius: 10px;
+  height: 36px;
   padding: 0.2em;
 }
 

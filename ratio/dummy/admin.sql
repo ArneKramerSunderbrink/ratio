@@ -7,7 +7,7 @@ VALUES
 
 INSERT INTO subgraph (name, finished, deleted)
 VALUES
-  ('Diabetes test', 1, 0);
+  ('Dabigatran versus Warfarin in Patients with Atrial Fibrillation (2009)', 1, 0);
 
 INSERT INTO access (user_id, subgraph_id)
 VALUES

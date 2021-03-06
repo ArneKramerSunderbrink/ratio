@@ -196,7 +196,7 @@ def add_entity():
     entity, index = subgraph_knowledge.new_individual(field.range_uri, entity_label, parent_uri, property_uri)
 
     render_entity_div = get_template_attribute('tool/macros.html', 'entity_div')
-    entity_div = render_entity_div(entity, False, index)
+    entity_div = render_entity_div(entity, index=index)
 
     option_fields = {str(f.property_uri) for f in subgraph_knowledge.get_fields()
                      if f.is_object_property and not f.is_described and f.range_uri == entity.class_uri}

@@ -291,8 +291,6 @@ $(function () {
         // add entity
         const list = field.find('div.entity-field-value-list').first();
         list.append(data.entity_div);
-        // expand entity body
-        flip_flip(list.children().last().find('.entity-title > button:first').attr('data-flipid'));
         // reset add entity input
         field.find('form.add-entity-form').first()[0].reset();
         flip_front(field.find('div.add-entity-div > div.flip-flipside').first().attr('data-flipid'));
