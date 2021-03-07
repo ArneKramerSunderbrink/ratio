@@ -124,6 +124,7 @@ header {
   height: 1.5em;
 }
 
+.entity-title > a,
 .entity-title > button {
   width: 2em;
   height: 2em;
@@ -132,6 +133,7 @@ header {
 
 .big-button,
 .tiny-button,
+.entity-title > a,
 .entity-title > button {
   padding: 0;
   text-align: center;
@@ -150,6 +152,10 @@ header {
 .big-button > i,
 .tiny-button > i {
     vertical-align: middle;
+}
+
+.entity-title > a > i {
+  vertical-align: bottom;
 }
 
 button:disabled,

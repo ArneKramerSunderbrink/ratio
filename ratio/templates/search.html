@@ -1,5 +1,5 @@
 {% from "tool/macros.html" import entity_div %}
-{% from "tool/macros.html" import search_results %}
+{% from "tool/macros.html" import search_result %}
 
 {% extends 'base.html' %}
 
@@ -18,10 +18,12 @@
 
         <div class="entity entity-border" style="margin-top: 1em;">
           <div class="entity-title color2 flex-row">
-            <div class="entity-label flex-flex"> Search results</div>
+            <div class="entity-label flex-flex">Search results</div>
           </div>
-          <div id="subgraph-list">
-            {{ search_results(results) }}
+          <div class="entity-body" id="search-results">
+            {% for subgraph in results %}
+            {{ search_result(subgraph) }}
+            {% endfor %}
           </div>
         </div>
       </div>

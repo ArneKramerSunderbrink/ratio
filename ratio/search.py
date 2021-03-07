@@ -40,27 +40,22 @@ def search():
     # get list of subgraphs that are finished and not deleted
     db = get_db()
     rows = db.execute(
-        'SELECT id, name FROM subgraph WHERE finished = 1 AND deleted = 0',
+        'SELECT id FROM subgraph WHERE finished = 1 AND deleted = 0',
     ).fetchall()
-    subgraphs = {row['id']: row['name'] for row in rows}
+    subgraphs = {row['id'] for row in rows}
 
     results = subgraphs.copy()
     # todo this should be a method of the filter
-    for id in subgraphs:
-        knowledge = {(str(p), str(o)) for s, p, o in get_subgraph_knowledge(id).get_root().get_triples()}
+    for id_ in subgraphs:
+        knowledge = {(str(p), str(o)) for s, p, o in get_subgraph_knowledge(id_).get_root().get_triples()}
         for po in filter_data.items():
             if po in knowledge:
                 continue
             else:
-                del results[id]
+                results.remove(id_)
                 break
 
-    results = [{'id': id, 'name': results[id]} for id in results]
-
-    render_results = get_template_attribute('tool/macros.html', 'search_results')
-    results_div = render_results(results)
-
-    return jsonify(results_div=results_div)
+    return jsonify(results=[str(id_) for id_ in results])
 
 
 def get_filter():

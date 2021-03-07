@@ -189,16 +189,28 @@
 {% endmacro %}
 
 
-{% macro search_results(results) %}
-{% for subgraph in results %}
-<div class="item" data-subgraph-id="{{ subgraph['id'] }}">
-  <div class="flex-row">
-    <a href="{{ url_for('tool.index', subgraph_id=subgraph['id']) }}"
-       class="w3-button flex-text">{{ subgraph['name'] }}</a>
-    <a href="{{ request.script_root }}/{{ subgraph['id'] }}/_download_rdf" class="w3-button big-button flex-fix" title="Download RDF">{#
+{% macro search_result(subgraph) %}
+<div class="entity entity-border" data-subgraph-id="{{ subgraph['id'] }}">
+  <div class="entity-title color2 flex-row">
+    {# collapse button #}
+    <button class="w3-button flex-fix flip-frontside flip-flipbutton" data-flipid="collapse-{{ subgraph['id'] }}">{#
+      #}<i class="fas fa-chevron-right"></i>
+    </button>
+    <button class="w3-button flex-fix flip-flipside flip-frontbutton" data-flipid="collapse-{{ subgraph['id'] }}" style="display: none;">{#
+      #}<i class="fas fa-chevron-down"></i>
+    </button>
+
+    <div class="entity-label flex-flex">{{ subgraph['name'] }}</div>
+    <a href="{{ url_for('tool.index', subgraph_id=subgraph['id']) }}" class="w3-button flex-fix" title="Edit">{#
+      #}<i class="fas fa-pen"></i>
+    </a>
+    <a href="{{ request.script_root }}/{{ subgraph['id'] }}/_download_rdf" class="w3-button flex-fix" title="Download RDF">{#
       #}<i class="fas fa-project-diagram"></i>
     </a>
   </div>
+
+  <div class="entity-body flip-flipside" data-flipid="collapse-{{ subgraph['id'] }}" style="display: none;">
+    TABULAR OVERVIEW
+  </div>
 </div>
-{% endfor %}
 {% endmacro %}

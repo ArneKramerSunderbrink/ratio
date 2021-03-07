@@ -96,8 +96,13 @@ $(function(){
       if (data.error) {
         alert(data.error);
       } else {
-        $('#subgraph-list').empty();
-        $('#subgraph-list').append(data.results_div);
+        $('#search-results > .entity').each(function() {
+          if (data.results.includes($(this).attr('data-subgraph-id'))) {
+            $(this).css('display', '');
+          } else {
+            $(this).css('display', 'none');
+          }
+        });
         filter.css('cursor', '');
       }
     })
