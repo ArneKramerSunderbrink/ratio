@@ -338,3 +338,23 @@ button[disabled]{
 #knowledge-delete-msg > span {
   margin-right: 0.5em;
 }
+
+/* Result table */
+table, td, th {
+  border-collapse: collapse;
+  border:1px solid rgba(0, 0, 0, 0.6);
+}
+
+td {
+  width: 1%; /* trick to get equal width columns */
+}
+
+/* Nested tables */
+table table {
+  margin: -1px;
+  width: calc(100% + 2px);
+}
+
+.table-container {
+  padding: 0 !important;
+}

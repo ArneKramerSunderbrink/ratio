@@ -210,7 +210,65 @@
   </div>
 
   <div class="entity-body flip-flipside" data-flipid="collapse-{{ subgraph['id'] }}" style="display: none;">
-    TABULAR OVERVIEW
+    <table class="w3-table color1">
+      <tr class="color2">
+        <th>Study details: Title, first author, year</th>
+      </tr>
+      <tr>
+        <td>Objective:</td>
+      </tr>
+      <tr>
+        <td>Elegibility: Preconditions/Inclusion, Exclusion criteria</td>
+      </tr>
+      <tr class="color2">
+        <th>Results at last timepoint</th>
+      </tr>
+      <tr>
+        <td class="table-container">
+          <table>
+            <tr>
+              <th>Events / Arms</th>
+              <td>Arm1 description: num patients and intervention</td>
+              <td>Arm2 description: num patients and intervention</td>
+            </tr>
+            <tr>
+              <td>Outcome1, primary</td>
+              <td>Num Affected / change from BL</td>
+              <td>Num Affected / change from BL</td>
+            </tr>
+            <tr>
+              <td>Outcome2, primary</td>
+              <td>Num Affected / change from BL</td>
+              <td>Num Affected / change from BL</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr class="color2">
+        <th>Size of effect / difference between groups</th>
+      </tr>
+      <tr>
+        <td class="table-container">
+          <table>
+            <tr>
+              <td>Arm1/Arm2</td>
+              <td>Measurement</td>
+              <td>value</td>
+              <td>statistical information (P-value, SD, SE, CI)</td>
+            </tr>
+            <tr>
+              <td>Arm1/Arm2</td>
+              <td>Measurement</td>
+              <td>value</td>
+              <td>statistical information (P-value, SD, SE, CI)</td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <th>Conclusions:</th>
+      </tr>
+    </table>
   </div>
 </div>
 {% endmacro %}
