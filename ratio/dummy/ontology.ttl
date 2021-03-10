@@ -400,7 +400,8 @@ ctro:hasDuration rdf:type owl:DatatypeProperty ;
                  ratio:order "1"^^xsd:positiveInteger ;
                  rdfs:domain ctro:Intervention ;
                  rdfs:range rdfs:Literal ;
-                 rdfs:label "Intervention duration" .
+                 rdfs:label "Intervention duration" ;
+                 rdfs:comment "Duration of the intervention given in WEEKS" .
 
 ctro:hasDoseValue rdf:type owl:DatatypeProperty ,
                            owl:FunctionalProperty ;
@@ -574,14 +575,14 @@ ctro:hasStandardDevDiff rdf:type owl:DatatypeProperty ,
                         ratio:order "6"^^xsd:positiveInteger ;
                         rdfs:domain ctro:DiffBetweenGroups ;
                         rdfs:range xsd:float ;
-                        rdfs:comment "Standard deviation" .
+                        rdfs:label "Standard deviation" .
 
 ctro:hasStandardErrorDiff rdf:type owl:DatatypeProperty ,
                                    owl:FunctionalProperty ;
                           ratio:order "7"^^xsd:positiveInteger ;
                           rdfs:domain ctro:DiffBetweenGroups ;
                           rdfs:range xsd:float ;
-                          rdfs:comment "Standard error" .
+                          rdfs:label "Standard error" .
 
 ctro:hasConfIntervalDiff rdf:type owl:DatatypeProperty ,
                                   owl:FunctionalProperty ;
