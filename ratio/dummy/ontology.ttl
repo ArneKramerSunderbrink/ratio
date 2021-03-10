@@ -331,7 +331,7 @@ ctro:hasCTduration rdf:type owl:DatatypeProperty ,
                    rdfs:domain ctro:DesignGroup ;
                    rdfs:range xsd:positiveInteger ;
                    rdfs:comment "Duration of the trial given in WEEKS" ;
-                   rdfs:label "Trial duration (in weeks)" .
+                   rdfs:label "Trial duration" .
 
 ctro:hasMinAge rdf:type owl:DatatypeProperty ,
                         owl:FunctionalProperty ;
