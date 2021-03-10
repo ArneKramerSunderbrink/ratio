@@ -210,12 +210,58 @@
   </div>
 
   <div class="entity-body flip-flipside" data-flipid="collapse-{{ subgraph['id'] }}" style="display: none;">
-    {{ overview() }}
+    {{ overview(subgraph['id']) }}
   </div>
 </div>
 {% endmacro %}
 
-{% macro overview() %}
+{% macro overview(id=1) %}
+{% if id == 1%}
+<table class="w3-table color1">
+  <tr class="color2">
+    <th>Study details: Dabigatran versus Warfarin in Patients with Atrial Fibrillation, Stuart J. Connolly, 2009</th>
+  </tr>
+  <tr>
+    <td>Objective: To find out whether dabigatran ( a new oral direct thrombin inhibitor) is as effective as Warfarin. (inferred from text.)</td>
+  </tr>
+  <tr>
+    <td>Elegibility: Patients who had atrial fibrillation and were at increased risk for stroke.</td>
+  </tr>
+  <tr class="color2">
+    <th>Results at last timepoint</th>
+  </tr>
+  <tr>
+    <td class="table-container">
+      <table>
+        <tr>
+          <th>Events / Arms</th>
+          <td>Arm 1: 6015 patients, drug: Dabigatran</td>
+          <td>Arm 2: 6022 patients, drug: Warfarin</td>
+        </tr>
+        <tr>
+          <td>Outcome 1: Systematic Embolic Event</td>
+          <td>Num Affected: 182</td>
+          <td>Information missing</td>
+        </tr>
+        <tr>
+          <td>Outcome 2: All-cause Mortality</td>
+          <td>Information missing</td>
+          <td>Information missing</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr class="color2">
+    <th>Size of effect / difference between groups</th>
+  </tr>
+  <tr>
+    <td>Information missing</td>
+  </tr>
+  <tr>
+    <th>Conclusions: In conclusion, we compared two doses of dabigatran with warfarin in patients who had atrial fibrillation and who were at risk for stroke. As compared with warfarin, the 110-mg dose of dabigatran was associated with similar rates of stroke and systemic embolism and lower rates of major hemorrhage; the 150-mg dose of dabigatran was associated with lower rates of stroke and systemic embolism but with a similar rate of major hemorrhage.</th>
+  </tr>
+</table>
+{% else %}
 <table class="w3-table color1">
   <tr class="color2">
     <th>Study details: Title, first author, year</th>
@@ -275,4 +321,5 @@
     <th>Conclusions:</th>
   </tr>
 </table>
+{% endif %}
 {% endmacro %}
