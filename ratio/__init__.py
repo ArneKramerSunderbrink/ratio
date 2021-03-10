@@ -43,11 +43,16 @@ def create_app(test_config=None):
         GUNICORN_LOGGER=False,
         # Frontend config dictionary
         FRONTEND_CONFIG=dict(
+            tool_name='CTrO-Map',
+            tool_description='CTrO-Map allows capturing the information contained in published clinical trials and '
+                             'exports it into a semantic machine-readable format (RDF).<br>Please create a new study '
+                             'or click on the one you would like to edit.',
             Subgraph_term='Clinical trial',
             subgraph_term='clinical trial',
             color0='#EDEDED',
             color1='#E6F7FF',
-            color2='#F3F3DB'
+            color2='#F3F3DB',
+            color3='#90EE90'
         )
     )
 
@@ -86,6 +91,7 @@ def create_app(test_config=None):
             app.config['FRONTEND_CONFIG']['color0'] = request.form['color0']
             app.config['FRONTEND_CONFIG']['color1'] = request.form['color1']
             app.config['FRONTEND_CONFIG']['color2'] = request.form['color2']
+            app.config['FRONTEND_CONFIG']['color3'] = request.form['color3']
 
         return render_template('color_picker.html')
 

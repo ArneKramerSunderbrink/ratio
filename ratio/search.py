@@ -19,7 +19,7 @@ from ratio.knowledge_model import RATIO, build_option, get_subgraph_knowledge, g
 bp = Blueprint('search', __name__)
 
 
-@bp.route('/search')
+@bp.route('/overview')
 @login_required
 def search_view():
     filter_object = get_filter()

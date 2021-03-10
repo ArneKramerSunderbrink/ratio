@@ -3,13 +3,22 @@
 
 {% extends 'base.html' %}
 
-{% block title %}RATIO - Search{% endblock %}
+{% block title %}{{ frontend_config['tool_name'] }} - Search{% endblock %}
 
 {% block content %}
 <script src="{{ url_for('static', filename='js/search.js') }}" defer></script>
 
 <div class="flex-column">
-  {% include 'tool/header.html' %}
+  <header class="w3-card flex-row color3" id="flex-fix">
+    <a href="{{ url_for('tool.index') }}" id="menu-button" class="w3-button flex-fix">Return</a>
+    <div class="flex-fix"><b>Overview of {{ frontend_config['subgraph_term'] }}s</b></div>
+    <div class="w3-small flex-flex">
+      Select the characteristics of the {{ frontend_config['subgraph_term'] }}s whose overview you would like to see.<br>
+      Do not input any filter to retrieve all the existing {{ frontend_config['subgraph_term'] }}s.
+    </div>
+    <div class="flex-fix"><i class="fas fa-user w3-large"></i> {{ g.user['username'] }}</div>
+    <a href="{{ url_for('auth.logout') }}" class="w3-button flex-fix">Log Out</a>
+  </header>
 
   <section id="flex-body" class="color0">
     <div id="scroll-container">
@@ -18,12 +27,13 @@
 
         <div class="entity entity-border" style="margin-top: 1em;">
           <div class="entity-title color2 flex-row">
-            <div class="entity-label flex-flex">Search results</div>
+            <div class="entity-label flex-flex">{{ frontend_config['Subgraph_term'] }}s</div>
           </div>
           <div class="entity-body" id="search-results">
             {% for subgraph in results %}
             {{ search_result(subgraph) }}
             {% endfor %}
+            <div id="no-match-msg" style="display: none;">No studies with these characteristics have been found.</div>
           </div>
         </div>
       </div>

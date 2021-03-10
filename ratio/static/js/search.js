@@ -96,13 +96,19 @@ $(function(){
       if (data.error) {
         alert(data.error);
       } else {
-        $('#search-results > .entity').each(function() {
-          if (data.results.includes($(this).attr('data-subgraph-id'))) {
-            $(this).css('display', '');
-          } else {
-            $(this).css('display', 'none');
-          }
-        });
+        if (data.results.length > 0) {
+          $('#no-match-msg').css('display', 'none');
+          $('#search-results > .entity').each(function() {
+            if (data.results.includes($(this).attr('data-subgraph-id'))) {
+              $(this).css('display', '');
+            } else {
+              $(this).css('display', 'none');
+            }
+          });
+        } else {
+          $('#search-results > .entity').css('display', 'none');
+          $('#no-match-msg').css('display', '');
+        }
         filter.css('cursor', '');
       }
     })

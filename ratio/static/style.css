@@ -9,6 +9,12 @@ header {
     z-index: 100;
 }
 
+header > * {
+  padding: 8px 16px;
+  display: table-cell;
+  vertical-align: middle;
+}
+
 #flex-body {
   flex: 1 1 0;
   overflow: auto;
@@ -106,6 +112,10 @@ header {
   background: var(--color2);
 }
 
+.color3 {
+  background: var(--color3);
+}
+
 .fa,
 .fas {
   opacity: 0.6;
@@ -171,6 +181,11 @@ button[disabled]{
 }
 
 /* Knowledge */
+#subgraph-header {
+  align-items: center;
+  padding: 0 1em;
+}
+
 .deleted {
   display: none;
 }

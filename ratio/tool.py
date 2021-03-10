@@ -83,6 +83,35 @@ def index(subgraph_id=None, message=None):
     return render_template('tool/index.html', subgraph=subgraph, root=root, subgraph_list=subgraph_list)
 
 
+@bp.route('/<int:subgraph_id>/overview')
+@login_required
+def overview(subgraph_id):
+    user_id = g.user['id']
+
+    db = get_db()
+
+    if subgraph_id is None:
+        return jsonify(error='{} id cannot be empty.'.format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
+
+    subgraph = db.execute(
+        'SELECT * FROM subgraph WHERE id = ?', (subgraph_id,)
+    ).fetchone()
+
+    if subgraph is None:
+        message = '{} with id {} does not exist.'.format(
+            current_app.config['FRONTEND_CONFIG']['Subgraph_term'], subgraph_id
+        )
+        return redirect(url_for('tool.index', message=quote(message)))
+
+    if not subgraph_access(user_id, subgraph_id):
+        message = 'You have no access to {} with id {}.'.format(
+            current_app.config['FRONTEND_CONFIG']['subgraph_term'], subgraph_id
+        )
+        return redirect(url_for('tool.index', message=quote(message)))
+
+    return render_template('tool/overview.html', subgraph=subgraph)
+
+
 @bp.route('/_set_finished')
 @login_required
 def set_finished():

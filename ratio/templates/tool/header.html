@@ -1,10 +1,11 @@
-<header class="w3-bar w3-card color2" id="flex-fix">
+<header class="w3-card flex-row color3" id="flex-fix">
   {% if subgraph %}
-  <a href="#" id="menu-button" class="w3-bar-item w3-button">Menu</a>
-  <div class="w3-bar-item">{{ subgraph['name'] }}</div>
+  <a href="#" id="menu-button" class="w3-button flex-fix">Return</a>
+  <div class="flex-flex">{# just a spacer #}</div>
+  {% else %}
+  <div class="flex-fix"><b>{{ frontend_config['tool_name'] }}</b></div>
+  <div class="w3-small flex-flex">{{ frontend_config['tool_description'] }}</div>
   {% endif %}
-  <div class="w3-right">
-    <div class="w3-bar-item"><i class="fas fa-user w3-large"></i> {{ g.user['username'] }}</div>
-    <a href="{{ url_for('auth.logout') }}" class="w3-bar-item w3-button">Log Out</a>
-  </div>
+  <div class="flex-fix"><i class="fas fa-user w3-large"></i> {{ g.user['username'] }}</div>
+  <a href="{{ url_for('auth.logout') }}" class="w3-button flex-fix">Log Out</a>
 </header>
