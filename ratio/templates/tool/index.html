@@ -2,42 +2,19 @@
 
 {% extends 'base.html' %}
 
-{% block title %}{{ frontend_config['tool_name'] }}{{ ' - '+subgraph['name'] if subgraph }}{% endblock %}
+{% block title %}{{ frontend_config['tool_name'] }}{% endblock %}
 
 {% block content %}
-<script type=text/javascript>
-  window.SUBGRAPH_ID = {{ subgraph['id'] if subgraph else 0}};
-</script>
-
 <div class="flex-column">
-  {% include 'tool/header.html' %}
+  <header class="w3-card flex-row color3" id="flex-fix">
+    <div class="flex-fix"><b>{{ frontend_config['tool_name'] }}</b></div>
+    <div class="w3-small flex-flex">{{ frontend_config['tool_description'] }}</div>
+    <div class="flex-fix"><i class="fas fa-user w3-large"></i> {{ g.user['username'] }}</div>
+    <a href="{{ url_for('auth.logout') }}" class="w3-button flex-fix">Log Out</a>
+  </header>
 
   <section id="flex-body" class="color0">
-    <div id="scroll-container">
-      {% if subgraph %}
-      <script src="{{ url_for('static', filename='js/knowledge.js') }}" defer></script>
-      <div id="subgraph-header" class="flex-row">
-        <b class="flex-text">{{ subgraph['name'] }}</b>
-        <a href="{{ url_for('tool.overview', subgraph_id=subgraph['id']) }}" class="w3-button flex-fix">Overview table</a>
-      </div>
-      {{ entity_div(root, true) }}
-      <div style="height: 11em;">{# just a spacer #}</div>
-      <div class="w3-panel w3-card-4 flex-row" id="knowledge-delete-msg">
-        <span class="flex-fix"></span>
-        <button class="w3-button w3-text-green flex-fix">Undo.</button>
-        <div class="flex-flex"></div>
-        <button class="w3-button big-button flex-fix" title="Cancel">{#
-          #}<i class="fas fa-times fa-lg"></i>
-        </button>
-      </div>
-      {% endif %}
-    </div>
-
-    <div class="w3-modal" id="overlay" {% if not subgraph %}style="display: block"{% endif %}>
-      <div class="w3-modal-content">
-        {% include 'tool/subgraph_menu.html' %}
-      </div>
-    </div>
+    {% include 'tool/subgraph_menu.html' %}
   </section>
 </div>
 

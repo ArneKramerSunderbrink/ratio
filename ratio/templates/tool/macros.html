@@ -2,7 +2,7 @@
 <div class="item" data-subgraph-id="{{ subgraph_id }}">
   <div class="flip-frontside" data-flipid="subgraph-list-{{ subgraph_id }}">
     <div class="flex-row">
-      <a href="{{ url_for('tool.index', subgraph_id=subgraph_id) }}"
+      <a href="{{ url_for('tool.edit_view', subgraph_id=subgraph_id) }}"
          class="w3-button flex-text">{{ subgraph_name }}</a>
       <input type="checkbox" id="finished-{{ subgraph_id }}" style="display: none"
              {% if subgraph_finished %}checked{% endif %}>
@@ -201,7 +201,7 @@
     </button>
 
     <div class="entity-label flex-text">{{ subgraph['name'] }}</div>
-    <a href="{{ url_for('tool.index', subgraph_id=subgraph['id']) }}" class="w3-button flex-fix" title="Edit">{#
+    <a href="{{ url_for('tool.edit_view', subgraph_id=subgraph['id']) }}" class="w3-button flex-fix" title="Edit">{#
       #}<i class="fas fa-pen"></i>
     </a>
     <a href="{{ request.script_root }}/{{ subgraph['id'] }}/_download_rdf" class="w3-button flex-fix" title="Download RDF">{#

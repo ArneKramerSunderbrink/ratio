@@ -22,24 +22,11 @@ bp = Blueprint('tool', __name__)
 
 
 @bp.route('/')
-@bp.route('/<int:subgraph_id>')
 @bp.route('/msg:<string:message>')
 @login_required
-def index(subgraph_id=None, message=None):
-    """Main view of the tool.
-    Contains list of accessible subgraphs and displays knowledge of the selected subgraph if subgraph_id not none.
-
-    Args:
-        subgraph_id (int): Id of the subgraph to display or None.
-        message (str): Message to display below the subgraph menu if this function gets called as a redirect after
-            trying to access a subgraph that is not accessible.
-
-    Context:
-        g.user (sqlite3.Row): Logged in user.
-
-    Returns:
-        The view.
-
+def index(message=None):
+    """Home view of the tool.
+    Contains list of accessible subgraphs.
     """
     user_id = g.user['id']
 
@@ -57,8 +44,17 @@ def index(subgraph_id=None, message=None):
         (user_id,)
     ).fetchall()
 
-    if subgraph_id is None:
-        return render_template('tool/index.html', subgraph_list=subgraph_list, message=message)
+    return render_template('tool/index.html', subgraph_list=subgraph_list, message=message)
+
+
+@bp.route('/<int:subgraph_id>')
+@login_required
+def edit_view(subgraph_id):
+    """Edit view.
+    Displays knowledge about a subgraph and allows users to edit it."""
+    user_id = g.user['id']
+
+    db = get_db()
 
     subgraph = db.execute(
         'SELECT * FROM subgraph WHERE id = ?', (subgraph_id,)
@@ -80,7 +76,7 @@ def index(subgraph_id=None, message=None):
 
     root = get_subgraph_knowledge(subgraph_id).get_root()
 
-    return render_template('tool/index.html', subgraph=subgraph, root=root, subgraph_list=subgraph_list)
+    return render_template('tool/edit.html', subgraph=subgraph, root=root)
 
 
 @bp.route('/<int:subgraph_id>/overview')
@@ -323,7 +319,7 @@ def add_subgraph():
     get_subgraph_knowledge(subgraph_id).load_rdf_data(get_empty_subgraph_template(subgraph_id))
 
     db.commit()
-    return jsonify(redirect=url_for('tool.index', subgraph_id=subgraph_id))
+    return jsonify(redirect=url_for('tool.edit_view', subgraph_id=subgraph_id))
 
 
 @bp.route('/<int:subgraph_id>/_download_rdf')

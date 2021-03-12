@@ -1,32 +1,10 @@
 /**
  * Javascript code related to the subgraph list:
- * Toggling the overlay and finished-checkboxes,
+ * Toggling finished-checkboxes,
  * editing subgraph names, adding new subgraphs, deleting subgraphs and undoing that delete.
  */
 
 $(function() {
-  // toggle overlay
-  function toggle_overlay() {
-    const overlay = $('div#overlay');
-    if (overlay.css('display') == 'none') {
-      overlay.css('display', 'block');
-    } else {
-      overlay.css('display', 'none');
-    }
-
-    return false;
-  }
-
-  function overlay_escape_handler(e) {
-    if (e.key === "Escape" && $('div#overlay').css('display') == 'block' && window.SUBGRAPH_ID != 0) {
-      toggle_overlay();
-    }
-  }
-
-  $('a#menu-button').on('click', toggle_overlay);
-  $('a#close-overlay').on('click', toggle_overlay);
-  $(document).on('keyup', overlay_escape_handler);
-
   // finished checkboxes
   $('div#subgraph-list').on('change', ':checkbox', function() {
     const finished = $(this).prop('checked');
@@ -65,10 +43,6 @@ $(function() {
         $('div#subgraph-menu-edit-msg').css('display', 'block');
         list_item.find('form > input').focus();
       } else {
-        if (subgraph_id == window.SUBGRAPH_ID) {
-          $('a#menu-button').text(data.name);
-          $('title').text('RATIO - ' + data.name);
-        }
         list_item.find('a:first').text(data.name);
         flip_front(flipid);
       }
@@ -88,11 +62,6 @@ $(function() {
         $('div#subgraph-menu-edit-msg').attr('data-flipid', 'subgraph-list-' + subgraph_id)
         $('div#subgraph-menu-edit-msg').css('display', 'block');
       } else {
-        if (subgraph_id == window.SUBGRAPH_ID) {
-          // prevent user from going back to editing the subgraph
-          $('a#close-overlay').css('display', 'none');
-          $(document).off('keyup', overlay_escape_handler);
-        }
         item.css('display', 'none');
         $('div#subgraph-menu-delete-msg').attr('data-subgraph-id', subgraph_id);
         $('div#subgraph-menu-delete-msg > span').text('"' + data.name + '" has been deleted.');
@@ -112,10 +81,6 @@ $(function() {
       if (data.error) {
         alert(data.error);  // if everything runs correctly this will never happen
       } else {
-        if (subgraph_id == window.SUBGRAPH_ID) {
-          $('a#close-overlay').css('display', 'block');
-          $(document).on('keyup', overlay_escape_handler);
-        }
         item.css('display', 'block');
         $('div#subgraph-menu-delete-msg').css('display', 'none');
       }

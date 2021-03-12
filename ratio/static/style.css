@@ -28,20 +28,7 @@ header > * {
   width: 100%;
 }
 
-/* Subgraph list overlay */
-#overlay {
-  position: absolute;
-}
-
-#overlay > div {
-  background-color: transparent;
-  width: 75vw;
-}
-
-#overlay > div > div:first-of-type {
-  padding: 0.7em 1em;
-}
-
+/* tool index */
 #subgraph-list-box {
   border: 2px solid rgba(0, 0, 0, 0.6);
   border-radius: 4px;
