@@ -337,16 +337,11 @@ button[disabled]{
 }
 
 /* Message */
-.login-msg,
-#subgraph-menu-delete-msg,
-#subgraph-menu-edit-msg,
-#subgraph-menu-add-msg,
-#knowledge-delete-msg {
+.message{
   background-color: #FFE5B4;
 }
 
 #knowledge-delete-msg {
-  background-color: #FFE5B4;
   display: none;
   position: fixed;
   bottom: 0;
@@ -367,8 +362,18 @@ table, td, th {
   border:1px solid rgba(0, 0, 0, 0.6);
 }
 
-td {
+td, th {
+  padding: 0.5em 1em;
+  vertical-align: top;
   width: 1%; /* trick to get equal width columns */
+}
+
+th {
+  text-align: center !important;
+}
+
+.separator-row {
+  padding: 2px !important;
 }
 
 /* Nested tables */

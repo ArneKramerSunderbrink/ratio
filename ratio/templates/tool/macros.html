@@ -217,85 +217,143 @@
 
 {% macro overview(id=1) %}
 {% if id == 1%}
-<table class="w3-table color1">
+<table class="color1">
   <tr class="color2">
-    <th>Study details: Dabigatran versus Warfarin in Patients with Atrial Fibrillation, Stuart J. Connolly, 2009</th>
+    <td><b>Study details: Dabigatran versus Warfarin in Patients with Atrial Fibrillation, Stuart J. Connolly, 2009</b></td>
   </tr>
   <tr>
     <td>Objective: To find out whether dabigatran ( a new oral direct thrombin inhibitor) is as effective as Warfarin. (inferred from text.)</td>
   </tr>
   <tr>
-    <td>Elegibility: Patients who had atrial fibrillation and were at increased risk for stroke.</td>
+    <td>Study design: Randomized, Non-inferiority, Blind, Multi-Center, Open-label, Multi-national</td>
   </tr>
+  <tr>
+    <td>Disease(s): Atrial fibrillation</td>
+  </tr>
+  <tr>
+    <td>Eligibility: Patients who had atrial fibrillation and were at increased risk for stroke.</td>
+  </tr>
+  <tr>
+    <td>Baseline Population: Gender: Female, Male; Avg Age: 71</td>
+  </tr>
+  <tr><td class="separator-row"></td></tr>
   <tr class="color2">
-    <th>Results at last timepoint</th>
+    <th>Results</th>
   </tr>
   <tr>
     <td class="table-container">
       <table>
         <tr>
-          <th>Events / Arms</th>
-          <td>Arm 1: 6015 patients, drug: Dabigatran</td>
-          <td>Arm 2: 6022 patients, drug: Warfarin</td>
+          <td><b>Events / Arms</b></td>
+          <td>Arm 1: Drug: Dabigatran; Frequency Interval: Twice a day; Dose value or description: 110; Dose unit: mg; Delivery method: Oral; Control or placebo: true</td>
+          <td>Arm 2: Drug: Warfarin; Dose value or description: 1 or 3 or 5; Dose unit: mg; Delivery method: Oral; Control or placebo: false</td>
+        </tr>
+
+        <tr>
+          <td rowspan="4">Outcome 1: Outcome Measure: Systematic Embolic Event; Outcome description: Stroke or systemic embolism, Primary</td>
+          <th colspan="2" class="color2">Baseline values</th>
         </tr>
         <tr>
-          <td>Outcome 1: Systematic Embolic Event</td>
-          <td>Num Affected: 182</td>
-          <td>Information missing</td>
+          <td>Number of patients in arm: 6015, Aggregation method: Count</td>
+          <td>Number of patients in arm: 6022, Aggregation method: Count</td>
         </tr>
         <tr>
-          <td>Outcome 2: All-cause Mortality</td>
-          <td>Information missing</td>
-          <td>Information missing</td>
+          <th colspan="2" class="color2">Result at last timepoint</th>
+        </tr>
+        <tr>
+          <td>Number of patients affected: 182; Observed results: %/yr 1.53</td>
+          <td>Number of patients affected: 199; Observed results: %/yr 1.69</td>
+        </tr>
+
+        <tr>
+          <td rowspan="4">Outcome 2: Outcome Measure: All-cause Mortality; Outcome description: alll-cause mortality, Primary</td>
+          <th colspan="2" class="color2">Baseline values</th>
+        </tr>
+        <tr>
+          <td>Number of patients in arm: 6015, Aggregation method: Count</td>
+          <td>Number of patients in arm: 6022, Aggregation method: Count</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="color2">Result at last timepoint</th>
+        </tr>
+        <tr>
+          <td>No information was provided</td>
+          <td>No information was provided</td>
+        </tr>
+
+        <tr>
+          <td>Adverse Event 1: Indigestion (dyspepsia)</td>
+          <td>Number of patients affected affected: 707</td>
+          <td>Number of patients affected affected: 348</td>
         </tr>
       </table>
     </td>
   </tr>
-  <tr class="color2">
-    <th>Size of effect / difference between groups</th>
-  </tr>
+  <tr><td class="separator-row"></td></tr>
   <tr>
-    <td>Information missing</td>
+    <td class="color2"><b>Conclusions: In conclusion, we compared two doses of dabigatran with warfarin in patients who had atrial fibrillation and who were at risk for stroke. As compared with warfarin, the 110-mg dose of dabigatran was associated with similar rates of stroke and systemic embolism and lower rates of major hemorrhage; the 150-mg dose of dabigatran was associated with lower rates of stroke and systemic embolism but with a similar rate of major hemorrhage.</b></td>
   </tr>
+  <tr><td class="separator-row"></td></tr>
   <tr>
-    <th>Conclusions: In conclusion, we compared two doses of dabigatran with warfarin in patients who had atrial fibrillation and who were at risk for stroke. As compared with warfarin, the 110-mg dose of dabigatran was associated with similar rates of stroke and systemic embolism and lower rates of major hemorrhage; the 150-mg dose of dabigatran was associated with lower rates of stroke and systemic embolism but with a similar rate of major hemorrhage.</th>
+    <td class="color2"><b>Potential conflict of interest: Sponsor: Boehringer Ingelheim; Conflict of interest: An operations committee, with assistance from an international steering committee and with participation by the sponsor, was responsible for the design, conduct, and reporting of the study. Tby all appropriate national.</b></td>
   </tr>
 </table>
 {% else %}
-<table class="w3-table color1">
+<table class="color1">
   <tr class="color2">
-    <th>Study details: Title, first author, year</th>
+    <td><b>Study details: Title, first author, year</b></td>
   </tr>
   <tr>
     <td>Objective:</td>
   </tr>
   <tr>
+    <td>Study design: randomized, blind, etc.</td>
+  </tr>
+  <tr>
+    <td>Disease(s):</td>
+  </tr>
+  <tr>
     <td>Elegibility: Preconditions/Inclusion, Exclusion criteria</td>
   </tr>
+  <tr>
+    <td>Baseline Population: gender, age, ethnicity, country</td>
+  </tr>
+  <tr><td class="separator-row"></td></tr>
   <tr class="color2">
-    <th>Results at last timepoint</th>
+    <th>Results</th>
   </tr>
   <tr>
     <td class="table-container">
       <table>
         <tr>
-          <th>Events / Arms</th>
-          <td>Arm1 description: num patients and intervention</td>
-          <td>Arm2 description: num patients and intervention</td>
+          <td><b>Events / Arms</b></td>
+          <td>Arm1 description: intervention (drug, freq, delivery, method, etc.)</td>
+          <td>Arm2 description: intervention (drug, freq, delivery, method, etc.)</td>
         </tr>
         <tr>
-          <td>Outcome1, primary</td>
-          <td>Num Affected / change from BL</td>
-          <td>Num Affected / change from BL</td>
+          <td rowspan="4">Outcome1, primary/secondary, Description</td>
+          <th colspan="2" class="color2">Baseline values</th>
         </tr>
         <tr>
-          <td>Outcome2, primary</td>
-          <td>Num Affected / change from BL</td>
-          <td>Num Affected / change from BL</td>
+          <td>NumPatientsArm, BLValue, Aggregation method</td>
+          <td>NumPatientsArm, BLValue, Aggregation method</td>
+        </tr>
+        <tr>
+          <th colspan="2" class="color2">Result at last timepoint</th>
+        </tr>
+        <tr>
+          <td>Num affected / Change from BL, Observed results</td>
+          <td>Num affected / Change from BL, Observed results</td>
+        </tr>
+        <tr>
+          <td>Adverse Event 1, description</td>
+          <td>Num affected / Change from BL, Observed results</td>
+          <td>Num affected / Change from BL, Observed results</td>
         </tr>
       </table>
     </td>
   </tr>
+  <tr><td class="separator-row"></td></tr>
   <tr class="color2">
     <th>Size of effect / difference between groups</th>
   </tr>
@@ -317,8 +375,13 @@
       </table>
     </td>
   </tr>
+  <tr><td class="separator-row"></td></tr>
   <tr>
-    <th>Conclusions:</th>
+    <td class="color2"><b>Conclusions:</b></td>
+  </tr>
+  <tr><td class="separator-row"></td></tr>
+  <tr>
+    <td class="color2"><b>Potential conflict of interest:</b></td>
   </tr>
 </table>
 {% endif %}
