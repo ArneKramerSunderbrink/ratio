@@ -12,17 +12,24 @@
 
 <div class="flex-column">
   <header class="w3-card flex-row color3" id="flex-fix">
-    <a href="{{ url_for('tool.index') }}" id="menu-button" class="w3-button flex-fix">Return</a>
+    <a href="{{ url_for('tool.index') }}" class="w3-button flex-fix">
+      <i class="fas fa-home w3-large"></i> Return
+    </a>
     <div class="flex-flex">{# just a spacer #}</div>
-    <div class="flex-fix"><i class="fas fa-user w3-large"></i> {{ g.user['username'] }}</div>
+    <div class="flex-fix">
+      <i class="fas fa-user w3-large"></i>
+      {{ g.user['username'] }}
+    </div>
     <a href="{{ url_for('auth.logout') }}" class="w3-button flex-fix">Log Out</a>
   </header>
 
   <section id="flex-body" class="color0">
     <div id="scroll-container">
-      <div id="subgraph-header" class="flex-row">
+      <div id="subgraph-header" class="flex-row entity-border color2">
         <b class="flex-text">{{ subgraph['name'] }}</b>
-        <a href="{{ url_for('tool.overview', subgraph_id=subgraph['id']) }}" class="w3-button flex-fix">Overview table</a>
+        <a href="{{ url_for('tool.overview', subgraph_id=subgraph['id']) }}" class="w3-button flex-fix">
+          <i class="fas fa-table w3-large"></i> Overview table
+        </a>
       </div>
       {{ entity_div(root, true) }}
       <div style="height: 11em;">{# just a spacer #}</div>

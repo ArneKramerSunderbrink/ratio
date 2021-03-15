@@ -2,39 +2,37 @@
 
 <script src="{{ url_for('static', filename='js/subgraph_menu.js') }}" defer></script>
 
-<div class="color1">
-  <div class="flex-row">
-    <div class="flex-flex">
-      <div class="flip-frontside" data-flipid="new-subgraph">
-        <button class="w3-button button-border flex-fix flip-flipbutton color2" data-flipid="new-subgraph">New {{ frontend_config['subgraph_term'] }}</button>
-      </div>
-      <div class="flip-flipside button-border" data-flipid="new-subgraph" style="display: none;">
-        <form class="flex-row" id="new-subgraph-form" method="post">
-          <input class="w3-input flex-flex"
-                 type="text" placeholder="Name of new {{ frontend_config['subgraph_term'] }}..." name="name" id="new-subgraph-name" required style="border-bottom: 0">
-          <button type="submit" class="w3-button flex-fix" title="Add {{ frontend_config['subgraph_term'] }}">
-            <i class="fas fa-plus fa-lg"></i>
-          </button>
-          <a href="#" class="w3-button flex-fix flip-frontbutton" data-flipid="new-subgraph" title="Cancel">
-            <i class="fas fa-times fa-lg"></i>
-          </a>
-        </form>
-      </div>
+<div class="flex-row">
+  <div class="flex-flex">
+    <div class="flip-frontside" data-flipid="new-subgraph">
+      <button class="w3-button button-border flex-fix flip-flipbutton color2" data-flipid="new-subgraph">New {{ frontend_config['subgraph_term'] }}</button>
     </div>
-    <a href="{{ url_for('search.search_view') }}" class="w3-button button-border flex-fix w3-margin-left color2">
-      Overview of {{ frontend_config['subgraph_term'] }}s
-    </a>
-    <a href="#" class="w3-button big-button flex-fix w3-margin-left" title="Close" id="close-overlay"
-       style="display: {{ 'block' if subgraph else 'none' }}">{#
-      #}<i class="fas fa-times fa-lg"></i>
-    </a>
+    <div class="flip-flipside button-border" data-flipid="new-subgraph" style="display: none;">
+      <form class="flex-row" id="new-subgraph-form" method="post">
+        <input class="w3-input flex-flex"
+               type="text" placeholder="Name of new {{ frontend_config['subgraph_term'] }}..." name="name" id="new-subgraph-name" required style="border-bottom: 0">
+        <button type="submit" class="w3-button flex-fix" title="Add {{ frontend_config['subgraph_term'] }}">
+          <i class="fas fa-plus fa-lg"></i>
+        </button>
+        <a href="#" class="w3-button flex-fix flip-frontbutton" data-flipid="new-subgraph" title="Cancel">
+          <i class="fas fa-times fa-lg"></i>
+        </a>
+      </form>
+    </div>
   </div>
-  <div id="subgraph-list-box">
-    <div id="subgraph-list">
-      {% for subgraph in subgraph_list %}
-        {{ subgraph_row(subgraph['id'], subgraph['name'], subgraph['finished']) }}
-      {% endfor %}
-    </div>
+  <a href="{{ url_for('search.search_view') }}" class="w3-button button-border flex-fix w3-margin-left color2">
+    Overview of {{ frontend_config['subgraph_term'] }}s
+  </a>
+  <a href="#" class="w3-button big-button flex-fix w3-margin-left" title="Close" id="close-overlay"
+     style="display: {{ 'block' if subgraph else 'none' }}">{#
+    #}<i class="fas fa-times fa-lg"></i>
+  </a>
+</div>
+<div id="subgraph-list-box">
+  <div id="subgraph-list">
+    {% for subgraph in subgraph_list %}
+      {{ subgraph_row(subgraph['id'], subgraph['name'], subgraph['finished']) }}
+    {% endfor %}
   </div>
 </div>
 
@@ -47,7 +45,7 @@
      id="subgraph-menu-edit-msg"></div>
 <div class="w3-panel w3-card-4 flip-flipside-msg" data-flipid="new-subgraph" style="display: none"
      id="subgraph-menu-add-msg"></div>
-{% if message%}
+{% if message %}
 <div class="w3-panel w3-card-4 w3-red">
   {{ message }}
 </div>

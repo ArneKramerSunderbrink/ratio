@@ -7,13 +7,22 @@
 {% block content %}
 <div class="flex-column">
   <header class="w3-card flex-row color3" id="flex-fix">
-    <div class="flex-fix"><b>{{ frontend_config['tool_name'] }}</b></div>
-    <div class="w3-small flex-flex">{{ frontend_config['tool_description'] }}</div>
-    <div class="flex-fix"><i class="fas fa-user w3-large"></i> {{ g.user['username'] }}</div>
-    <a href="{{ url_for('auth.logout') }}" class="w3-button flex-fix">Log Out</a>
+    <a id="ratio-logo" href="http://ratio.sc.cit-ec.uni-bielefeld.de/home/">
+      <img src="{{ url_for('static', filename='ratiofarbig.jpg') }}" alt="Ratio logo"></img>
+    </a>
+    <div class="flex-fix ghost-center"><b>{{ frontend_config['tool_name'] }}</b></div>
+    <div class="w3-small flex-flex">
+      {{ frontend_config['tool_description'] }}
+      <br>
+      Please create a new {{ frontend_config['subgraph_term'] }} or click on the one you would like to edit.
+    </div>
+    <div class="flex-fix ghost-center">
+      <i class="fas fa-user w3-large"></i> {{ g.user['username'] }}
+    </div>
+    <a href="{{ url_for('auth.logout') }}" class="w3-button flex-fix ghost-center">Log Out</a>
   </header>
 
-  <section id="flex-body" class="color0">
+  <section id="flex-body" class="index-body color0">
     {% include 'tool/subgraph_menu.html' %}
   </section>
 </div>

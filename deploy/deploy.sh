@@ -29,14 +29,13 @@ echo "GUNICORN_LOGGER = True" >> venv/var/ratio-instance/config.py
 echo "FRONTEND_CONFIG=dict(
     tool_name='CTrO-Map',
     tool_description='CTrO-Map allows capturing the information contained in published clinical trials and '
-                     'exports it into a semantic machine-readable format (RDF).<br>Please create a new study '
-                     'or click on the one you would like to edit.',
+                     'exports it into a semantic machine-readable format (RDF).',
     Subgraph_term='Clinical trial',
     subgraph_term='clinical trial',
     color0='#EDEDED',
     color1='#E6F7FF',
     color2='#F3F3DB',
-    color3='#90EE90'
+    color3='#BBFFB3'
 )" >> venv/var/ratio-instance/config.py
 
 touch log.txt
