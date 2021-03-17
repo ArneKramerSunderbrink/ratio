@@ -38,7 +38,8 @@ ctro:analysesHealthCondition rdf:type owl:ObjectProperty ;
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#describes
-ctro:describes rdf:type owl:ObjectProperty ;
+ctro:describes rdf:type owl:ObjectProperty ,
+                        owl:FunctionalProperty ;
                rdfs:domain ctro:Publication ;
                rdfs:range ctro:ClinicalTrial ;
                rdfs:label "describes clinical trial" .
@@ -187,7 +188,8 @@ ctro:hasEffectSizeMethod rdf:type owl:ObjectProperty ,
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasEndPoint
-ctro:hasEndPoint rdf:type owl:ObjectProperty ;
+ctro:hasEndPoint rdf:type owl:ObjectProperty ,
+                          owl:FunctionalProperty ;
                  rdfs:domain ctro:Outcome ;
                  rdfs:range ctro:EndPoint ;
                  rdfs:label "Endpoint" .
@@ -309,21 +311,24 @@ ctro:hasQualityIndicator rdf:type owl:ObjectProperty ,
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasResult
-ctro:hasResult rdf:type owl:ObjectProperty ;
+ctro:hasResult rdf:type owl:ObjectProperty ,
+                        owl:FunctionalProperty ;
                rdfs:domain ctro:Outcome ;
                rdfs:range ctro:Result ;
                rdfs:label "Result" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasResultAE
-ctro:hasResultAE rdf:type owl:ObjectProperty ;
+ctro:hasResultAE rdf:type owl:ObjectProperty ,
+                          owl:FunctionalProperty ;
                  rdfs:domain ctro:AdverseEffect ;
                  rdfs:range ctro:Result ;
                  rdfs:label "Adverse effect result" .
 
 
 ###  http://www.semanticweb.org/root/ontologies/2018/6/ctro#hasStatisticalMeasure
-ctro:hasStatisticalMeasure rdf:type owl:ObjectProperty ;
+ctro:hasStatisticalMeasure rdf:type owl:ObjectProperty ,
+                                    owl:FunctionalProperty ;
                            rdfs:domain ctro:Result ;
                            rdfs:range ctro:StatisticalMeasure ;
                            rdfs:label "Statistical measure" .

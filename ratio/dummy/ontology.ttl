@@ -228,7 +228,8 @@ ctro:hasArmRes rdf:type owl:ObjectProperty ;
                rdfs:range ctro:Arm ;
                rdfs:label "Interventional-Arm" .
 
-ctro:hasOutcomeRes rdf:type owl:ObjectProperty ;
+ctro:hasOutcomeRes rdf:type owl:ObjectProperty ,
+                            owl:FunctionalProperty ;
                    ratio:order "2"^^xsd:positiveInteger ;
                    rdfs:domain ctro:Result ;
                    rdfs:range ctro:Outcome ;
@@ -240,7 +241,8 @@ ctro:hasMeasurementDevice rdf:type owl:ObjectProperty ;
                           rdfs:range ctro:MeasurementDevice ;
                           rdfs:label "Measurement device" .
 
-ctro:hasStatisticalMeasure rdf:type owl:ObjectProperty ;
+ctro:hasStatisticalMeasure rdf:type owl:ObjectProperty ,
+                                    owl:FunctionalProperty ;
                            ratio:described "true"^^xsd:boolean ;
                            ratio:order "10"^^xsd:positiveInteger ;
                            rdfs:domain ctro:Result ;
@@ -331,7 +333,7 @@ ctro:hasCTduration rdf:type owl:DatatypeProperty ,
                    rdfs:domain ctro:DesignGroup ;
                    rdfs:range xsd:positiveInteger ;
                    rdfs:comment "Duration of the trial given in WEEKS" ;
-                   rdfs:label "Trial duration" .
+                   rdfs:label "Trial duration (in weeks)" .
 
 ctro:hasMinAge rdf:type owl:DatatypeProperty ,
                         owl:FunctionalProperty ;

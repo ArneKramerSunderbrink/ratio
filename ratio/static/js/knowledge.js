@@ -302,6 +302,7 @@ $(function () {
             $('div.field[data-property-uri="'+uri+'"] div.options').append(data.option_div);
           });
         }
+        // TODO remove plus if is functional
       }
       button.disabled = false;
     })
@@ -327,6 +328,7 @@ $(function () {
       } else {
         // Remove entity div
         entity.addClass('deleted');
+        // TODO add plus if is functional
         // update option fields
         const deleted_uris = data_return.deleted;
         deleted_uris.forEach(function(uri) {
@@ -344,6 +346,7 @@ $(function () {
               alert(data_return.error);
             } else {
               entity.removeClass('deleted');
+              // TODO remove plus if is functional
               deleted_uris.forEach(function(uri) {
                 $('div.option[data-option-uri="'+uri+'"]').removeClass('deleted');
               });
