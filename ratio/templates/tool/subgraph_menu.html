@@ -5,7 +5,9 @@
 <div class="flex-row">
   <div class="flex-flex">
     <div class="flip-frontside" data-flipid="new-subgraph">
-      <button class="w3-button button-border flex-fix flip-flipbutton color2" data-flipid="new-subgraph">New {{ frontend_config['subgraph_term'] }}</button>
+      <button class="w3-button button-border flex-fix flip-flipbutton color2" data-flipid="new-subgraph">
+        <i class="fas fa-plus w3-large"></i> Create a new {{ frontend_config['subgraph_term'] }}
+      </button>
     </div>
     <div class="flip-flipside button-border" data-flipid="new-subgraph" style="display: none;">
       <form class="flex-row" id="new-subgraph-form" method="post">

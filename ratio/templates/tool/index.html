@@ -7,11 +7,11 @@
 {% block content %}
 <div class="flex-column">
   <header class="w3-card flex-row color3" id="flex-fix">
-    <a id="ratio-logo" href="http://ratio.sc.cit-ec.uni-bielefeld.de/home/">
-      <img src="{{ url_for('static', filename='ratiofarbig.jpg') }}" alt="Ratio logo"></img>
+    <a class="ghost-center" id="ratio-logo" href="http://ratio.sc.cit-ec.uni-bielefeld.de/home/">{#
+      #}<img src="{{ url_for('static', filename='ratiofarbig.jpg') }}" alt="Ratio logo"></img>
     </a>
     <div class="flex-fix ghost-center"><b>{{ frontend_config['tool_name'] }}</b></div>
-    <div class="w3-small flex-flex">
+    <div class="font-small flex-flex">
       {{ frontend_config['tool_description'] }}
       <br>
       Please create a new {{ frontend_config['subgraph_term'] }} or click on the one you would like to edit.

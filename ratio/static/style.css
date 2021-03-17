@@ -4,6 +4,10 @@ body {
   margin: 0;
 }
 
+.font-small {
+  font-size: 13px;
+}
+
 /* Layout of the tool */
 header {
     z-index: 100;
@@ -48,6 +52,7 @@ header > * {
 #subgraph-list {
   height: 50vh;
   overflow: auto;
+  background-color: white;
 }
 
 #subgraph-list > div {
@@ -98,19 +103,19 @@ header > * {
 
 /* Colors */
 .color0 {
-  background: var(--color0);
+  background-color: var(--color0);
 }
 
 .color1 {
-  background: var(--color1);
+  background-color: var(--color1);
 }
 
 .color2 {
-  background: var(--color2);
+  background-color: var(--color2);
 }
 
 .color3 {
-  background: var(--color3);
+  background-color: var(--color3);
 }
 
 .fa,
@@ -199,7 +204,7 @@ button[disabled]{
 
 .entity {
   margin: 0.5em 0;
-  background: white;
+  background-color: white;
 }
 
 .entity-border {
@@ -357,6 +362,14 @@ button[disabled]{
 }
 
 /* Result table */
+.table-gray {
+  background-color: #E6E6E6;
+}
+
+.table-light {
+  background-color: #F2F2F2;
+}
+
 table, td, th {
   border-collapse: collapse;
   border:1px solid rgba(0, 0, 0, 0.6);
