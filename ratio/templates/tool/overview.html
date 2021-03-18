@@ -5,5 +5,24 @@
 {% block title %}{{ frontend_config['tool_name'] }} Overview{{ ' - '+subgraph['name'] if subgraph }}{% endblock %}
 
 {% block content %}
-{{ overview(subgraph['id']) }}
+<div class="flex-column">
+  <header class="w3-card flex-row color3" id="flex-fix">
+    <a href="{{ url_for('tool.index') }}" class="w3-button flex-fix">
+      <i class="fas fa-home w3-large"></i> Return
+    </a>
+    <div class="flex-flex">{# just a spacer #}</div>
+    <div class="flex-fix">
+      <i class="fas fa-user w3-large"></i>
+      {{ g.user['username'] }}
+    </div>
+    <a href="{{ url_for('auth.logout') }}" class="w3-button flex-fix">Log Out</a>
+  </header>
+
+  <section id="flex-body" class="color0">
+    <div id="scroll-container" style="padding: 1em;">
+      {{ overview(subgraph['id']) }}
+      <div style="height: 11em;">{# just a spacer #}</div>
+    </div>
+  </section>
+</div>
 {% endblock %}
