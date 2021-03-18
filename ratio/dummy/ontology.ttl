@@ -241,6 +241,7 @@ ctro:hasMeasurementDevice rdf:type owl:ObjectProperty ;
                           rdfs:range ctro:MeasurementDevice ;
                           rdfs:label "Measurement device" .
 
+# todo: this shall become a mere heading
 ctro:hasStatisticalMeasure rdf:type owl:ObjectProperty ,
                                     owl:FunctionalProperty ;
                            ratio:described "true"^^xsd:boolean ;
@@ -520,39 +521,39 @@ ctro:hasObservedResult rdf:type owl:DatatypeProperty ,
 
 ctro:hasStatisticalTestName rdf:type owl:DatatypeProperty ,
                                      owl:FunctionalProperty ;
-                            ratio:order "1"^^xsd:positiveInteger ;
-                            rdfs:domain ctro:StatisticalMeasure ;
+                            ratio:order "11"^^xsd:positiveInteger ;
+                            rdfs:domain ctro:Result ;
                             rdfs:range xsd:string ;
                             rdfs:label "Statistical test name" .
 
 ctro:hasStatisticalTestValue rdf:type owl:DatatypeProperty ,
                                       owl:FunctionalProperty ;
-                             ratio:order "2"^^xsd:positiveInteger ;
+                             ratio:order "12"^^xsd:positiveInteger ;
                              ratio:width "25"^^xsd:positiveInteger ;
-                             rdfs:domain ctro:StatisticalMeasure ;
+                             rdfs:domain ctro:Result ;
                              rdfs:range xsd:float ;
                              rdfs:label "Statistical test value" .
 
 ctro:hasPValue rdf:type owl:DatatypeProperty ,
                         owl:FunctionalProperty ;
-               ratio:order "3"^^xsd:positiveInteger ;
+               ratio:order "13"^^xsd:positiveInteger ;
                ratio:width "25"^^xsd:positiveInteger ;
-               rdfs:domain ctro:StatisticalMeasure ;
+               rdfs:domain ctro:Result ;
                rdfs:range xsd:string ;
                rdfs:label "P-value" .
 
 ctro:hasStandardDev rdf:type owl:DatatypeProperty ,
                              owl:FunctionalProperty ;
-                    ratio:order "4"^^xsd:positiveInteger ;
+                    ratio:order "14"^^xsd:positiveInteger ;
                     ratio:width "25"^^xsd:positiveInteger ;
-                    rdfs:domain ctro:StatisticalMeasure ;
+                    rdfs:domain ctro:Result ;
                     rdfs:range xsd:float ;
                     rdfs:label "Standard Deviation" .
 
 ctro:hasConfidenceInterval rdf:type owl:DatatypeProperty,
                                     owl:FunctionalProperty ;
-                           ratio:order "5"^^xsd:positiveInteger ;
-                           rdfs:domain ctro:StatisticalMeasure ;
+                           ratio:order "15"^^xsd:positiveInteger ;
+                           rdfs:domain ctro:Result ;
                            rdfs:range xsd:string ;
                            rdfs:label "Confidence Interval" .
 
