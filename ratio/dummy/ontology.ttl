@@ -241,14 +241,10 @@ ctro:hasMeasurementDevice rdf:type owl:ObjectProperty ;
                           rdfs:range ctro:MeasurementDevice ;
                           rdfs:label "Measurement device" .
 
-# todo: this shall become a mere heading
-ctro:hasStatisticalMeasure rdf:type owl:ObjectProperty ,
-                                    owl:FunctionalProperty ;
-                           ratio:described "true"^^xsd:boolean ;
+ctro:hasStatisticalMeasure rdf:type ratio:Subheading ;
                            ratio:order "10"^^xsd:positiveInteger ;
                            rdfs:domain ctro:Result ;
-                           rdfs:range ctro:StatisticalMeasure ;
-                           rdfs:label "Statistical measure" .
+                           rdfs:label "Statistical measure:" .
 
 ctro:hasAdverseEffect rdf:type owl:ObjectProperty ;
                       ratio:described "true"^^xsd:boolean ;
@@ -728,9 +724,6 @@ ctro:BioAndMedicalUnit rdf:type owl:Class ;
 
 ctro:Result rdf:type owl:Class ;
             rdfs:label "Outcome Measure Data" .
-
-ctro:StatisticalMeasure rdf:type owl:Class ;
-                        rdfs:label "Statistical measure" .
 
 ctro:AdverseEffect rdf:type owl:Class ;
                    owl:equivalentClass [ rdf:type owl:Restriction ;

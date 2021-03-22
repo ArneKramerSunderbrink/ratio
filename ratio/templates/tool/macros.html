@@ -150,7 +150,9 @@
 
   <div class="entity-body{%if is_root%} color0{% else %} flip-flipside{% endif %}"{%if not is_root %} data-flipid="collapse-{{ entity.uri }}" {% if collapsed %}style="display: none;"{% endif %}{% endif %}>
     {% for field in entity.fields %}
-    {% if field.is_described %}
+    {% if field.is_subheading %}
+    <div class="knowledge-subheading" {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}</div>
+    {% elif field.is_described %}
     {{ entity_field(entity, field) }}
     {% else %}
     <div class="field color1" data-property-uri="{{ field.property_uri }}" style="width: calc({{ field.width }}% - 1.3em); min-width: calc(70em * 0.01 * min(50, {{ field.width }}) - 1.3em);">

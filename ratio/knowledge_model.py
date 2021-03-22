@@ -535,13 +535,13 @@ def get_subgraph_knowledge(subgraph_id):
 class Field:
     """Represents a possible owl:ObjectProperty or owl:DatatypeProperty of an Entity"""
     def __init__(self, property_uri, label, comment,
-                 is_object_property, is_described, is_deletable, is_functional,
+                 type_, is_described, is_deletable, is_functional,
                  range_uri, range_label,
                  order, width, values, free_index, is_add_option_allowed, options=None):
         self.property_uri = property_uri
         self.label = label
         self.comment = comment
-        self.is_object_property = is_object_property
+        self.type = type_
         self.is_described = is_described
         self.is_deletable = is_deletable
         self.is_functional = is_functional
@@ -553,6 +553,18 @@ class Field:
         self.free_index = free_index
         self.is_add_option_allowed = is_add_option_allowed
         self.options = options
+
+    @property
+    def is_object_property(self):
+        return self.type == 'ObjectProperty'
+
+    @property
+    def is_datatype_property(self):
+        return self.type == 'DatatypeProperty'
+
+    @property
+    def is_subheading(self):
+        return self.type == 'Subheading'
 
     def check_value(self, value):
         """Checks if the value is valid and transforms it into a corresponding rdflib.Literal
@@ -666,7 +678,7 @@ def build_option(ontology, knowledge, uri):
     return Option(uri, label, class_uri, is_custom, comment)
 
 
-def build_empty_field(ontology, knowledge, property_uri, range_class_uri):
+def build_empty_field(ontology, knowledge, property_uri):
     label = ontology.objects(property_uri, RDFS.label)
     try:
         label = next(label)
@@ -679,6 +691,16 @@ def build_empty_field(ontology, knowledge, property_uri, range_class_uri):
     except StopIteration:
         comment = None
 
+    try:
+        order = next(ontology.objects(property_uri, RATIO.order)).value
+    except StopIteration:
+        order = 0
+
+    if RATIO.Subheading in ontology.objects(property_uri, RDF.type):
+        return Field(property_uri, label, comment, 'Subheading', False, False, True,
+                     None, None, order, None, dict(), None, False, [])
+
+    range_class_uri = next(ontology.objects(property_uri, RDFS.range))
     if type(range_class_uri) == BNode:
         range_label = 'Literal'
     else:
@@ -693,16 +715,13 @@ def build_empty_field(ontology, knowledge, property_uri, range_class_uri):
         if TRUE in ontology[p:RATIO.described:]:
             is_range_described = True
 
-    # if false, the field belongs to a owl:DatatypeProperty
-    is_object_property = OWL.ObjectProperty in ontology.objects(property_uri, RDF.type)
+    if OWL.ObjectProperty in ontology.objects(property_uri, RDF.type):
+        type_ = 'ObjectProperty'
+    else:
+        type_ = 'DatatypeProperty'
     is_functional = OWL.FunctionalProperty in ontology.objects(property_uri, RDF.type)
     is_described = TRUE in ontology.objects(property_uri, RATIO.described)
     is_deletable = FALSE not in ontology.objects(property_uri, RATIO.deletable)
-
-    try:
-        order = next(ontology.objects(property_uri, RATIO.order)).value
-    except StopIteration:
-        order = 0
 
     try:
         width = next(ontology.objects(property_uri, RATIO.width)).value
@@ -713,7 +732,7 @@ def build_empty_field(ontology, knowledge, property_uri, range_class_uri):
     free_index = 0
 
     one_of = list(ontology.objects(range_class_uri, OWL.oneOf))
-    if is_object_property and not is_described:
+    if type_ == 'ObjectProperty' and not is_described:
         options = list(build_option(ontology, knowledge, uri) for uri in get_tokens(ontology, range_class_uri))
         options += list(build_option(ontology, knowledge, uri) for uri in get_tokens(knowledge, range_class_uri))
         options.sort(key=lambda option: option.label)
@@ -724,13 +743,13 @@ def build_empty_field(ontology, knowledge, property_uri, range_class_uri):
     else:
         options = None
 
-    is_add_option_allowed = is_object_property and not is_range_described
+    is_add_option_allowed = type_ == 'ObjectProperty' and not is_range_described
 
-    return Field(property_uri, label, comment, is_object_property, is_described, is_deletable, is_functional,
+    return Field(property_uri, label, comment, type_, is_described, is_deletable, is_functional,
                  range_class_uri, range_label, order, width, values, free_index, is_add_option_allowed, options)
 
 
-def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri, range_class_uri):
+def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri):
     label = ontology.objects(property_uri, RDFS.label)
     try:
         label = next(label)
@@ -743,6 +762,16 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
     except StopIteration:
         comment = None
 
+    try:
+        order = next(ontology.objects(property_uri, RATIO.order)).value
+    except StopIteration:
+        order = 0
+
+    if RATIO.Subheading in ontology.objects(property_uri, RDF.type):
+        return Field(property_uri, label, comment, 'Subheading', False, False, True,
+                     None, None, order, None, dict(), None, False, [])
+
+    range_class_uri = next(ontology.objects(property_uri, RDFS.range))
     if type(range_class_uri) == BNode:
         range_label = 'Literal'
     else:
@@ -757,16 +786,13 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
         if TRUE in ontology[p:RATIO.described:]:
             is_range_described = True
 
-    # if false, the field belongs to a owl:DatatypeProperty
-    is_object_property = OWL.ObjectProperty in ontology.objects(property_uri, RDF.type)
+    if OWL.ObjectProperty in ontology.objects(property_uri, RDF.type):
+        type_ = 'ObjectProperty'
+    else:
+        type_ = 'DatatypeProperty'
     is_functional = OWL.FunctionalProperty in ontology.objects(property_uri, RDF.type)
     is_described = TRUE in ontology.objects(property_uri, RATIO.described)
     is_deletable = FALSE not in ontology.objects(property_uri, RATIO.deletable)
-
-    try:
-        order = next(ontology.objects(property_uri, RATIO.order)).value
-    except StopIteration:
-        order = 0
 
     try:
         width = next(ontology.objects(property_uri, RATIO.width)).value
@@ -786,7 +812,7 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
     if is_described:
         values = {i: build_entity_from_knowledge(ontology, knowledge, values[i], is_deletable)
                   for i in values if str(values[i]) != ''}
-    elif is_object_property:
+    elif type_ == 'ObjectProperty':
         values = {i: build_option(ontology, knowledge, values[i])
                   for i in values if str(values[i]) != ''}
     try:
@@ -795,7 +821,7 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
         free_index = Literal(0, datatype=XSD.nonNegativeInteger)
 
     one_of = list(ontology[range_class_uri:OWL.oneOf:])
-    if is_object_property and not is_described:
+    if type_ == 'ObjectProperty' and not is_described:
         options = list(build_option(ontology, knowledge, uri) for uri in get_tokens(ontology, range_class_uri))
         options += list(build_option(ontology, knowledge, uri) for uri in get_tokens(knowledge, range_class_uri))
         options.sort(key=lambda option: option.label)
@@ -806,9 +832,9 @@ def build_field_from_knowledge(ontology, knowledge, individual_uri, property_uri
     else:
         options = None
 
-    is_add_option_allowed = is_object_property and not is_range_described
+    is_add_option_allowed = type_ == 'ObjectProperty' and not is_range_described
 
-    return Field(property_uri, label, comment, is_object_property, is_described, is_deletable, is_functional,
+    return Field(property_uri, label, comment, type_, is_described, is_deletable, is_functional,
                  range_class_uri, range_label, order, width, values, free_index, is_add_option_allowed, options)
 
 
@@ -878,9 +904,8 @@ def build_empty_entity(ontology, knowledge, class_uri, uri, label, is_deletable)
         comment = None
 
     fields = [
-        build_empty_field(ontology, knowledge, property_uri, range_uri)
+        build_empty_field(ontology, knowledge, property_uri)
         for property_uri in ontology.subjects(RDFS.domain, class_uri)
-        for range_uri in ontology.objects(property_uri, RDFS.range)
     ]
     fields.sort(key=lambda field: field.order)
 
@@ -917,9 +942,8 @@ def build_entity_from_knowledge(ontology, knowledge, uri, is_deletable):
         class_label = guess_label(class_uri)
 
     fields = [
-        build_field_from_knowledge(ontology, knowledge, uri, property_uri, range_uri)
+        build_field_from_knowledge(ontology, knowledge, uri, property_uri)
         for property_uri in ontology.subjects(RDFS.domain, class_uri)
-        for range_uri in ontology.objects(property_uri, RDFS.range)
     ]
     fields.sort(key=lambda field: field.order)
 

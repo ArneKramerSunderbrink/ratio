@@ -228,6 +228,11 @@ button[disabled]{
   padding: 0.5em 1em 0.5em 1.5em;
 }
 
+.knowledge-subheading {
+  margin-top: 1em;
+  font-weight: bold;
+}
+
 .entity-field-title {
   margin-top: 1em;
 }
