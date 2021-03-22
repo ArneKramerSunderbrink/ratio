@@ -290,19 +290,19 @@ $(function () {
       } else {
         // add entity
         const list = field.find('div.entity-field-value-list').first();
-        list.append(data.entity_div);
+        const entity_div = $(data.entity_div)
+        list.append(entity_div);
         // reset add entity input
         field.find('form.add-entity-form').first()[0].reset();
-        flip_front(field.find('div.add-entity-div > div.flip-flipside').first().attr('data-flipid'));
+        flip_flip(entity_div.children('div.entity-body').attr('data-flipid'));
         if (data.remove_plus) {
-          field.find('add-entity-div').css('display', 'none');
+          field.find('.add-entity-div').css('display', 'none');
         }
         if (data.option_fields) {
           data.option_fields.forEach(function(uri) {
             $('div.field[data-property-uri="'+uri+'"] div.options').append(data.option_div);
           });
         }
-        // TODO remove plus if is functional
       }
       button.disabled = false;
     })
@@ -315,10 +315,13 @@ $(function () {
   $('div#scroll-container').on('click', 'button.delete-entity-button', function() {
     const button = this;
     button.disabled = true;
+    const field = $(this).closest('div.entity-field');
+    const property_uri = field.attr('data-property-uri');
     const entity = $(this).closest('div.entity');
     const entity_uri = entity.attr('data-entity-uri');
     const data = [
       { name: "subgraph_id", value: window.SUBGRAPH_ID },
+      { name: "property_uri", value: property_uri },
       { name: "entity_uri", value: entity_uri }
     ];
 
@@ -328,7 +331,10 @@ $(function () {
       } else {
         // Remove entity div
         entity.addClass('deleted');
-        // TODO add plus if is functional
+        const functional = data_return.functional;
+        if (functional) {
+          field.find('.add-entity-div').css('display', '');
+        }
         // update option fields
         const deleted_uris = data_return.deleted;
         deleted_uris.forEach(function(uri) {
@@ -346,7 +352,9 @@ $(function () {
               alert(data_return.error);
             } else {
               entity.removeClass('deleted');
-              // TODO remove plus if is functional
+              if (functional) {
+                field.find('.add-entity-div').css('display', 'none');
+              }
               deleted_uris.forEach(function(uri) {
                 $('div.option[data-option-uri="'+uri+'"]').removeClass('deleted');
               });

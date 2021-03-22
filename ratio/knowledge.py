@@ -8,8 +8,7 @@ from flask import request
 
 from ratio.auth import login_required
 from ratio.auth import subgraph_access
-from ratio.db import get_db
-from ratio.knowledge_model import get_subgraph_knowledge
+from ratio.knowledge_model import get_subgraph_knowledge, get_ontology
 
 MSG_SUBGRAPH_ACCESS = 'Subgraph with id {} does not exist or is not owned by user {} currently logged in.'
 
@@ -215,6 +214,7 @@ def delete_entity():
     user_id = g.user['id']
     subgraph_id = request.args.get('subgraph_id', 0, type=int)
     entity_uri = request.args.get('entity_uri', '', type=str)
+    property_uri = request.args.get('property_uri', '', type=str)
 
     if not subgraph_id:
         return jsonify(error='Subgraph id cannot be empty.')
@@ -231,6 +231,10 @@ def delete_entity():
         return jsonify(error='You are not allowed to delete this entity.')
 
     deleted = subgraph_knowledge.delete_individual_recursive(entity_uri)
+
+    if property_uri:
+        is_functional = get_ontology().is_functional(property_uri)
+        return jsonify(deleted=list(deleted), functional=is_functional)
 
     return jsonify(deleted=list(deleted))
 
@@ -249,6 +253,10 @@ def undo_delete_entity():
 
     if not subgraph_access(user_id, subgraph_id):
         return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
+
+    # TODO actually we should check whether restoring the information would violate any
+    # functional property constraints, but that would be very complicated and currently we
+    # have no described functional deletable entities where that could happen
 
     subgraph_knowledge = get_subgraph_knowledge(subgraph_id)
     subgraph_knowledge.undo_delete_individual(entity_uri)

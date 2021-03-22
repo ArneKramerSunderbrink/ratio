@@ -140,6 +140,11 @@ class Ontology:
     def get_base(self):
         return next(self.graph.objects(RATIO.Configuration, RATIO.hasBase))
 
+    def is_functional(self, property_uri):
+        if type(property_uri) == str:
+            property_uri = URIRef(property_uri)
+        return OWL.FunctionalProperty in self.graph.objects(property_uri, RDF.type)
+
 
 def get_ontology():
     """Get the Ontology.
