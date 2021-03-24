@@ -101,6 +101,8 @@ class Filter:
 
 
 class FilterField:
+    # todo much of this is redundant code from class Field, should be implemented in the same place
+    # having to update this in too different places already caused problems in the past
     def __init__(self, property_uri, filter_graph, ontology, knowledge):
         self.property_uri = property_uri
 
@@ -116,22 +118,32 @@ class FilterField:
         except StopIteration:
             self.comment = None
 
-        self.is_object_property = OWL.ObjectProperty in ontology.objects(property_uri, RDF.type)
-        self.is_described = False
-        self.is_deletable = False
-        self.is_functional = True
-
         try:
             self.order = next(filter_graph.objects(property_uri, RATIO.order)).value
         except StopIteration:
             self.order = 0
+
+        self.is_described = False
+        self.is_deletable = False
+        self.is_functional = True
+        self.is_add_option_allowed = False
+
+        if RATIO.Subheading in ontology.objects(property_uri, RDF.type):
+            self.type = 'Subheading'
+            self.width = None
+            self.options = []
+            return
+
+        if OWL.ObjectProperty in ontology.objects(property_uri, RDF.type):
+            self.type = 'ObjectProperty'
+        else:
+            self.type = 'DatatypeProperty'
 
         try:
             self.width = next(filter_graph.objects(property_uri, RATIO.width)).value
         except StopIteration:
             self.width = 50
 
-        self.is_add_option_allowed = False
         self.options = []
         for i, o in [(p[len(property_uri)+1:], o) for s, p, o in knowledge[::] if p.startswith(property_uri)]:
             try:
@@ -146,6 +158,18 @@ class FilterField:
             self.options.append(Option('', '', '', False))
         else:
             self.options.append('')
+
+    @property
+    def is_object_property(self):
+        return self.type == 'ObjectProperty'
+
+    @property
+    def is_datatype_property(self):
+        return self.type == 'DatatypeProperty'
+
+    @property
+    def is_subheading(self):
+        return self.type == 'Subheading'
 
     def get_sorted_values(self):
         return []

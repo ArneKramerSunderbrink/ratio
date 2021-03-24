@@ -37,7 +37,7 @@ If you want to populate the database with dummy data to test the tool
     $ flask db-add-dummy
 
 
-Test
+Test (currently not supported)
 ----
 
     $ pip install '.[test]'
