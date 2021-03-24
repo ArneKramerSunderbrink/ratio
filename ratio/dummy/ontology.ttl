@@ -19,6 +19,20 @@ ratio:Configuration ratio:hasBase "http://www.semanticweb.org/root/ontologies/20
 
 
 #################################################################
+#    Subheadings
+#################################################################
+
+ctro:hasStatisticalMeasure rdf:type ratio:Subheading ;
+                           ratio:order "10"^^xsd:positiveInteger ;
+                           rdfs:domain ctro:Result ;
+                           rdfs:label "Statistical measurements:" .
+
+ctro:hasStatisticalMeasureAE rdf:type ratio:Subheading ;
+                             ratio:order "5"^^xsd:positiveInteger ;
+                             rdfs:domain ctro:AdverseEffect ;
+                             rdfs:label "Statistical measurements:" .
+
+#################################################################
 #    Object Properties
 #################################################################
 
@@ -240,11 +254,6 @@ ctro:hasMeasurementDevice rdf:type owl:ObjectProperty ;
                           rdfs:domain ctro:Outcome ;
                           rdfs:range ctro:MeasurementDevice ;
                           rdfs:label "Measurement device" .
-
-ctro:hasStatisticalMeasure rdf:type ratio:Subheading ;
-                           ratio:order "10"^^xsd:positiveInteger ;
-                           rdfs:domain ctro:Result ;
-                           rdfs:label "Statistical measure:" .
 
 ctro:hasAdverseEffect rdf:type owl:ObjectProperty ;
                       ratio:described "true"^^xsd:boolean ;
@@ -522,6 +531,13 @@ ctro:hasStatisticalTestName rdf:type owl:DatatypeProperty ,
                             rdfs:range xsd:string ;
                             rdfs:label "Statistical test name" .
 
+ctro:hasStatisticalTestNameAE rdf:type owl:DatatypeProperty ,
+                                       owl:FunctionalProperty ;
+                              ratio:order "6"^^xsd:positiveInteger ;
+                              rdfs:domain ctro:AdverseEffect ;
+                              rdfs:range xsd:string ;
+                              rdfs:label "Statistical test name" .
+
 ctro:hasStatisticalTestValue rdf:type owl:DatatypeProperty ,
                                       owl:FunctionalProperty ;
                              ratio:order "12"^^xsd:positiveInteger ;
@@ -529,6 +545,14 @@ ctro:hasStatisticalTestValue rdf:type owl:DatatypeProperty ,
                              rdfs:domain ctro:Result ;
                              rdfs:range xsd:float ;
                              rdfs:label "Statistical test value" .
+
+ctro:hasStatisticalTestValueAE rdf:type owl:DatatypeProperty ,
+                                        owl:FunctionalProperty ;
+                               ratio:order "7"^^xsd:positiveInteger ;
+                               ratio:width "25"^^xsd:positiveInteger ;
+                               rdfs:domain ctro:AdverseEffect ;
+                               rdfs:range xsd:float ;
+                               rdfs:label "Statistical test value" .
 
 ctro:hasPValue rdf:type owl:DatatypeProperty ,
                         owl:FunctionalProperty ;
@@ -538,6 +562,14 @@ ctro:hasPValue rdf:type owl:DatatypeProperty ,
                rdfs:range xsd:string ;
                rdfs:label "P-value" .
 
+ctro:hasPValueAE rdf:type owl:DatatypeProperty ,
+                          owl:FunctionalProperty ;
+                 ratio:order "8"^^xsd:positiveInteger ;
+                 ratio:width "25"^^xsd:positiveInteger ;
+                 rdfs:domain ctro:AdverseEffect ;
+                 rdfs:range xsd:string ;
+                 rdfs:label "P-value" .
+
 ctro:hasStandardDev rdf:type owl:DatatypeProperty ,
                              owl:FunctionalProperty ;
                     ratio:order "14"^^xsd:positiveInteger ;
@@ -546,12 +578,27 @@ ctro:hasStandardDev rdf:type owl:DatatypeProperty ,
                     rdfs:range xsd:float ;
                     rdfs:label "Standard Deviation" .
 
+ctro:hasStandardDevAE rdf:type owl:DatatypeProperty ,
+                               owl:FunctionalProperty ;
+                      ratio:order "9"^^xsd:positiveInteger ;
+                      ratio:width "25"^^xsd:positiveInteger ;
+                      rdfs:domain ctro:AdverseEffect ;
+                      rdfs:range xsd:float ;
+                      rdfs:label "Standard Deviation" .
+
 ctro:hasConfidenceInterval rdf:type owl:DatatypeProperty,
                                     owl:FunctionalProperty ;
                            ratio:order "15"^^xsd:positiveInteger ;
                            rdfs:domain ctro:Result ;
                            rdfs:range xsd:string ;
                            rdfs:label "Confidence Interval" .
+
+ctro:hasConfidenceIntervalAE rdf:type owl:DatatypeProperty,
+                                      owl:FunctionalProperty ;
+                             ratio:order "10"^^xsd:positiveInteger ;
+                             rdfs:domain ctro:AdverseEffect ;
+                             rdfs:range xsd:string ;
+                             rdfs:label "Confidence Interval" .
 
 ctro:hasDiffGroupAbsValue rdf:type owl:DatatypeProperty ,
                                    owl:FunctionalProperty ;

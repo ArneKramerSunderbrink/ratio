@@ -579,7 +579,7 @@ class Field:
         """
         if value == '':
             # Empty values are allowed but will be deleted on reloading the page
-            pass
+            return '', Literal(value)
         elif self.is_object_property and self.options:
             uri = URIRef(value)
             if uri in (o.uri for o in self.options):
@@ -646,7 +646,7 @@ class Option:
 
 
 def build_option(ontology, knowledge, uri):
-    """Searches in graph for an individual with thje given URI and a type defined in the ontology."""
+    """Searches in graph for an individual with the given URI and a type defined in the ontology."""
     if uri in ontology.subjects():
         graph = ontology
     elif uri in knowledge.subjects():

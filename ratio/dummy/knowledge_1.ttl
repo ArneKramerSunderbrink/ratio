@@ -31,7 +31,9 @@ ctro:CT_3_0 a ctro:ClinicalTrial,
     ctro:hasQualityIndicator_freeindex "1"^^xsd:nonNegativeInteger ;
     ctro:hasResult_0 ctro:Res_3_0 ;
     ctro:hasResult_1 ctro:Result_3_1 ;
-    ctro:hasResult_freeindex "2"^^xsd:nonNegativeInteger .
+    ctro:hasResult_2 ctro:Result_1_2 ;
+    ctro:hasResult_3 ctro:Result_1_3 ;
+    ctro:hasResult_freeindex "4"^^xsd:nonNegativeInteger .
 
 ctro:AdverseEffect_3_0 a ctro:AdverseEffect,
         owl:NamedIndividual ;
@@ -114,22 +116,6 @@ ctro:Intervention_3_1 a ctro:Intervention,
     ctro:isControl_0 false ;
     ctro:isControl_freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:Outcome_3_1 a ctro:Outcome,
-        owl:NamedIndividual ;
-    rdfs:label "OUTCOME-ALL-CAUSE-DEAD"^^xsd:string ;
-    ctro:hasAggregationMethod_0 ctro:Count ;
-    ctro:hasAggregationMethod_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasAnalysisMetric_0 ""^^ctro:AnalysisMetric ;
-    ctro:hasAnalysisMetric_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasEndpointDescription_0 ctro:AllCauseMortality ;
-    ctro:hasEndpointDescription_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasEndpointUnit_0 ctro:Number ;
-    ctro:hasEndpointUnit_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasOutcomeDescription_0 "all-cause mortality"^^xsd:string ;
-    ctro:hasOutcomeDescription_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasOutcomeType_0 "Primary" ;
-    ctro:hasOutcomeType_freeindex "1"^^xsd:nonNegativeInteger .
-
 ctro:Population ratio:freeindex "1"^^xsd:nonNegativeInteger .
 
 ctro:Population_3_0 a ctro:Population,
@@ -137,8 +123,6 @@ ctro:Population_3_0 a ctro:Population,
     rdfs:label "Population"^^xsd:string ;
     ctro:hasAvgAge_0 "71"^^xsd:nonNegativeInteger ;
     ctro:hasAvgAge_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasEthnicity_0 ""^^ctro:Ethnicity ;
-    ctro:hasEthnicity_freeindex "1"^^xsd:nonNegativeInteger ;
     ctro:hasGender_0 ctro:Female ;
     ctro:hasGender_1 ctro:Male ;
     ctro:hasGender_freeindex "2"^^xsd:nonNegativeInteger ;
@@ -173,10 +157,32 @@ ctro:Res_3_0 a ctro:Result,
     ctro:hasObservedResult_freeindex "1"^^xsd:nonNegativeInteger ;
     ctro:hasOutcomeRes_0 ctro:Out_3_0 ;
     ctro:hasOutcomeRes_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasResultDirection_0 ""^^<ub1bL456C37> ;
-    ctro:hasResultDirection_freeindex "1"^^xsd:nonNegativeInteger ;
     ctro:hasTimePoints_0 "1 year"^^xsd:string ;
     ctro:hasTimePoints_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Result_1_2 a ctro:Result,
+        owl:NamedIndividual ;
+    rdfs:label "OutcomeMeasure-dabigatran110-AllCausedDead"^^xsd:string ;
+    ctro:hasArmRes_0 ctro:Arm_3_0 ;
+    ctro:hasArmRes_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberAffected_0 446 ;
+    ctro:hasNumberAffected_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObservedResult_0 "%/yr 3.75"^^xsd:string ;
+    ctro:hasObservedResult_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcomeRes_0 ctro:Outcome_3_1 ;
+    ctro:hasOutcomeRes_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Result_1_3 a ctro:Result,
+        owl:NamedIndividual ;
+    rdfs:label "OutcomeMeasure-warfarin-AllCausedDead" ;
+    ctro:hasArmRes_0 ctro:Arm_3_1 ;
+    ctro:hasArmRes_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberAffected_0 487 ;
+    ctro:hasNumberAffected_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObservedResult_0 "%/yr 4.13"^^xsd:string ;
+    ctro:hasObservedResult_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcomeRes_0 ctro:Outcome_3_1 ;
+    ctro:hasOutcomeRes_freeindex "1"^^xsd:nonNegativeInteger .
 
 ctro:Result_3_1 a ctro:Result,
         owl:NamedIndividual ;
@@ -198,7 +204,33 @@ ctro:Intervention ratio:freeindex "2"^^xsd:nonNegativeInteger .
 
 ctro:Outcome ratio:freeindex "2"^^xsd:nonNegativeInteger .
 
-ctro:Result ratio:freeindex "2"^^xsd:nonNegativeInteger .
+ctro:Out_3_0 a ctro:Outcome,
+        owl:NamedIndividual ;
+    rdfs:label "OUTCOME-SSE" ;
+    ctro:hasAggregationMethod_0 ctro:Count ;
+    ctro:hasAggregationMethod_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndpointDescription_0 ctro:SSE ;
+    ctro:hasEndpointDescription_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndpointUnit_0 ctro:Number ;
+    ctro:hasEndpointUnit_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcomeDescription_0 "Stroke or systemic embolism"^^xsd:string ;
+    ctro:hasOutcomeDescription_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcomeType_0 "Primary" ;
+    ctro:hasOutcomeType_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Outcome_3_1 a ctro:Outcome,
+        owl:NamedIndividual ;
+    rdfs:label "OUTCOME-ALL-CAUSE-DEAD"^^xsd:string ;
+    ctro:hasAggregationMethod_0 ctro:Count ;
+    ctro:hasAggregationMethod_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndpointDescription_0 ctro:AllCauseMortality ;
+    ctro:hasEndpointDescription_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndpointUnit_0 ctro:Number ;
+    ctro:hasEndpointUnit_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcomeDescription_0 "all-cause mortality"^^xsd:string ;
+    ctro:hasOutcomeDescription_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcomeType_0 "Primary" ;
+    ctro:hasOutcomeType_freeindex "1"^^xsd:nonNegativeInteger .
 
 ctro:Arm_3_0 a ctro:Arm,
         owl:NamedIndividual ;
@@ -216,18 +248,5 @@ ctro:Arm_3_1 a ctro:Arm,
     ctro:hasNumberPatientsArm_0 "6022"^^xsd:positiveInteger ;
     ctro:hasNumberPatientsArm_freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:Out_3_0 a ctro:Outcome,
-        owl:NamedIndividual ;
-    rdfs:label "OUTCOME-SSE" ;
-    ctro:hasAggregationMethod_0 ctro:Count ;
-    ctro:hasAggregationMethod_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasAnalysisMetric_0 ""^^ctro:AnalysisMetric ;
-    ctro:hasAnalysisMetric_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasEndpointDescription_0 ctro:SSE ;
-    ctro:hasEndpointDescription_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasEndpointUnit_0 ctro:Number ;
-    ctro:hasEndpointUnit_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasOutcomeDescription_0 "Stroke or systemic embolism"^^xsd:string ;
-    ctro:hasOutcomeDescription_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasOutcomeType_0 "Primary" ;
-    ctro:hasOutcomeType_freeindex "1"^^xsd:nonNegativeInteger .
+ctro:Result ratio:freeindex "4"^^xsd:nonNegativeInteger .
+

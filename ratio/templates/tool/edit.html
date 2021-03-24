@@ -26,7 +26,7 @@
   <section id="flex-body" class="color0">
     <div id="scroll-container">
       <div id="subgraph-header" class="flex-row entity-border color2">
-        <b class="flex-text">{{ subgraph['name'] }}</b>
+        <b class="flex-text">{{ frontend_config['Subgraph_term'] }}: {{ subgraph['name'] }}</b>
         <a href="{{ url_for('tool.overview', subgraph_id=subgraph['id']) }}" class="w3-button flex-fix">
           <i class="fas fa-table w3-large"></i> Overview table
         </a>

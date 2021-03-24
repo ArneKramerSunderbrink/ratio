@@ -10,6 +10,7 @@ from rdflib import Graph
 from rdflib import OWL
 from rdflib import RDF
 from rdflib import RDFS
+from rdflib import URIRef
 
 from ratio.auth import login_required
 from ratio.db import get_db, get_filter_description
@@ -145,7 +146,8 @@ class FilterField:
             self.width = 50
 
         self.options = []
-        for i, o in [(p[len(property_uri)+1:], o) for s, p, o in knowledge[::] if p.startswith(property_uri)]:
+        for i, o in [(p[len(property_uri)+1:], o) for s, p, o in knowledge[::]
+                     if p.startswith(property_uri) and (type(o) == URIRef or o.value)]:
             try:
                 int(i)
             except ValueError:
