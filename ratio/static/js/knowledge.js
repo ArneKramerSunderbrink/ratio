@@ -294,7 +294,7 @@ $(function () {
         list.append(entity_div);
         // reset add entity input
         field.find('form.add-entity-form').first()[0].reset();
-        flip_flip(entity_div.children('div.entity-body').attr('data-flipid'));
+        flip_front(field.find('div.add-entity-div > button').first().attr('data-flipid'));
         if (data.remove_plus) {
           field.find('.add-entity-div').css('display', 'none');
         }
