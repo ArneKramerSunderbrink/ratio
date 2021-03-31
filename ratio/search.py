@@ -2,7 +2,6 @@
 
 from flask import Blueprint
 from flask import g
-from flask import get_template_attribute
 from flask import jsonify
 from flask import render_template
 from flask import request
@@ -23,11 +22,14 @@ bp = Blueprint('search', __name__)
 @bp.route('/overview')
 @login_required
 def search_view():
+    user_id = g.user['id']
+
     filter_object = get_filter()
 
     db = get_db()
     rows = db.execute(
-        'SELECT id, name FROM subgraph WHERE finished = 1 AND deleted = 0',
+        'SELECT id, name FROM access JOIN subgraph ON subgraph_id = id WHERE user_id = ? AND deleted = 0',
+        (user_id,)
     ).fetchall()
 
     return render_template('search.html', filter=filter_object, results=rows)
@@ -36,12 +38,14 @@ def search_view():
 @bp.route('/_search')
 @login_required
 def search():
+    user_id = g.user['id']
     filter_data = {p: request.args.get(p, '', type=str) for p in request.args}
 
     # get list of subgraphs that are finished and not deleted
     db = get_db()
     rows = db.execute(
-        'SELECT id FROM subgraph WHERE finished = 1 AND deleted = 0',
+        'SELECT id FROM access JOIN subgraph ON subgraph_id = id WHERE user_id = ? AND deleted = 0',
+        (user_id,)
     ).fetchall()
     subgraphs = {row['id'] for row in rows}
 
