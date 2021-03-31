@@ -20,10 +20,10 @@ ctro:CT_{id}_0 rdf:type owl:NamedIndividual ,
             ctro:hasArm_0 ctro:Arm_{id}_0 ;
             ctro:hasArm_1 ctro:Arm_{id}_1 ;
             ctro:hasArm_freeindex "2"^^xsd:nonNegativeInteger ;
-            ctro:hasOutcome_0 ctro:Out_{id}_0 ;
-            ctro:hasOutcome_freeindex "1"^^xsd:nonNegativeInteger ;
-            ctro:hasResult_0 ctro:Res_{id}_0 ;
-            ctro:hasResult_freeindex "1"^^xsd:nonNegativeInteger .
+            ctro:hasEndPoint_0 ctro:EndPoint_{id}_0 ;
+            ctro:hasEndPoint_freeindex "1"^^xsd:nonNegativeInteger ;
+            ctro:hasOutcome_0 ctro:Outcome_{id}_0 ;
+            ctro:hasOutcome_freeindex "1"^^xsd:nonNegativeInteger .
 ctro:ClinicalTrial ratio:freeindex "1"^^xsd:nonNegativeInteger .
 
 ctro:Pub_{id}_0 rdf:type owl:NamedIndividual ,
@@ -62,12 +62,16 @@ ctro:Arm_{id}_1 rdf:type owl:NamedIndividual ,
              rdfs:label "Arm 2"^^xsd:string .
 ctro:Arm ratio:freeindex "2"^^xsd:nonNegativeInteger .
 
-ctro:Out_{id}_0 rdf:type owl:NamedIndividual ,
-                      ctro:Outcome ;
-             rdfs:label "Outcome 1"^^xsd:string .
-ctro:Outcome ratio:freeindex "1"^^xsd:nonNegativeInteger .
+ctro:EndPoint_{id}_0 rdf:type owl:NamedIndividual ,
+                              ctro:EndPoint ;
+                     rdfs:label "Endpoint 1"^^xsd:string .
+ctro:EndPoint ratio:freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:Res_{id}_0 rdf:type owl:NamedIndividual ,
-                      ctro:Result ;
-             rdfs:label "Arm 1 Outcome 1 Data"^^xsd:string .
-ctro:Result ratio:freeindex "1"^^xsd:nonNegativeInteger .
+ctro:Outcome_{id}_0 rdf:type owl:NamedIndividual ,
+                             ctro:Outcome ;
+                    ctro:hasArmOut_0 ctro:Arm_{id}_0 ;
+                    ctro:hasArmOut_freeindex "1"^^xsd:nonNegativeInteger ;
+                    ctro:hasEndPointOut_0 ctro:EndPoint_{id}_0 ;
+                    ctro:hasEndPointOut_freeindex "1"^^xsd:nonNegativeInteger ;
+                    rdfs:label "Arm 1 Endpoint 1 Data"^^xsd:string .
+ctro:Outcome ratio:freeindex "1"^^xsd:nonNegativeInteger .

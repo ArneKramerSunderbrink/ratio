@@ -4,53 +4,57 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-ctro:CT_3_0 a ctro:ClinicalTrial,
+ctro:CT_1_0 a ctro:ClinicalTrial,
         owl:NamedIndividual ;
     rdfs:label "Clinical Trial"^^xsd:string ;
     ratio:isRoot true ;
-    ctro:described_by_0 ctro:Pub_3_0 ;
+    ctro:described_by_0 ctro:Pub_1_0 ;
     ctro:described_by_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasAdverseEffect_0 ctro:AdverseEffect_3_0 ;
-    ctro:hasAdverseEffect_1 ctro:AdverseEffect_3_1 ;
+    ctro:hasAdverseEffect_0 ctro:AdverseEffect_1_0 ;
+    ctro:hasAdverseEffect_1 ctro:AdverseEffect_1_1 ;
     ctro:hasAdverseEffect_freeindex "2"^^xsd:nonNegativeInteger ;
-    ctro:hasArm_0 ctro:Arm_3_0 ;
-    ctro:hasArm_1 ctro:Arm_3_1 ;
+    ctro:hasArm_0 ctro:Arm_1_0 ;
+    ctro:hasArm_1 ctro:Arm_1_1 ;
     ctro:hasArm_freeindex "2"^^xsd:nonNegativeInteger ;
     ctro:hasConclusionComment_0 "In conclusion, we compared two doses of dabigatran with warfarin in patients who had atrial fibrillation and who were at risk for stroke. As compared with warfarin, the 110-mg dose of dabigatran was associated with similar rates of stroke and systemic embolism and lower rates of major hemorrhage; the 150-mg dose of dabigatran was associated with lower rates of stroke and systemic embolism but with a similar rate of major hemorrhage."^^xsd:string ;
     ctro:hasConclusionComment_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasDesignGroup_0 ctro:Design_3_0 ;
+    ctro:hasDesignGroup_0 ctro:Design_1_0 ;
     ctro:hasDesignGroup_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDiffBetweenGroups_0 ctro:DiffBetweenGroups_1_0 ;
+    ctro:hasDiffBetweenGroups_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPoint_0 ctro:EndPoint_1_0 ;
+    ctro:hasEndPoint_1 ctro:EndPoint_1_1 ;
+    ctro:hasEndPoint_freeindex "2"^^xsd:nonNegativeInteger ;
     ctro:hasObjectiveDescription_0 "To find out whether dabigatran ( a new oral direct thrombin inhibitor) is as effective as Warfarin. (inferred from text.)"^^xsd:string ;
     ctro:hasObjectiveDescription_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasOutcome_0 ctro:Out_3_0 ;
-    ctro:hasOutcome_1 ctro:Outcome_3_1 ;
-    ctro:hasOutcome_freeindex "2"^^xsd:nonNegativeInteger ;
-    ctro:hasPopulation_0 ctro:Population_3_0 ;
+    ctro:hasOutcome_0 ctro:Out_1_0 ;
+    ctro:hasOutcome_1 ctro:Outcome_1_1 ;
+    ctro:hasOutcome_2 ctro:Outcome_1_2 ;
+    ctro:hasOutcome_3 ctro:Outcome_1_3 ;
+    ctro:hasOutcome_freeindex "4"^^xsd:nonNegativeInteger ;
+    ctro:hasPopulation_0 ctro:Population_1_0 ;
     ctro:hasPopulation_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasQualityIndicator_0 ctro:Evidence_3_0 ;
+    ctro:hasQualityIndicator_0 ctro:Evidence_1_0 ;
     ctro:hasQualityIndicator_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasResult_0 ctro:Res_3_0 ;
-    ctro:hasResult_1 ctro:Result_3_1 ;
-    ctro:hasResult_2 ctro:Result_1_2 ;
-    ctro:hasResult_3 ctro:Result_1_3 ;
-    ctro:hasResult_freeindex "4"^^xsd:nonNegativeInteger .
+    ctro:hasResult_0 ctro:Res_1_0 ;
+    ctro:hasResult_freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:AdverseEffect_3_0 a ctro:AdverseEffect,
+ctro:AdverseEffect_1_0 a ctro:AdverseEffect,
         owl:NamedIndividual ;
-    rdfs:label "Arm-dabigatran110-dyspepsia" ;
+    rdfs:label "Arm-dabigatran110-dyspepsia"^^xsd:string ;
     ctro:hasAEname_0 ctro:Indigestion ;
     ctro:hasAEname_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasArmAE_0 ctro:Arm_3_0 ;
+    ctro:hasArmAE_0 ctro:Arm_1_0 ;
     ctro:hasArmAE_freeindex "1"^^xsd:nonNegativeInteger ;
     ctro:hasNumberAffectedAE_0 707 ;
     ctro:hasNumberAffectedAE_freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:AdverseEffect_3_1 a ctro:AdverseEffect,
+ctro:AdverseEffect_1_1 a ctro:AdverseEffect,
         owl:NamedIndividual ;
     rdfs:label "Arm-warfarin-dyspepsia"^^xsd:string ;
     ctro:hasAEname_0 ctro:Indigestion ;
     ctro:hasAEname_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasArmAE_0 ctro:Arm_3_1 ;
+    ctro:hasArmAE_0 ctro:Arm_1_1 ;
     ctro:hasArmAE_freeindex "1"^^xsd:nonNegativeInteger ;
     ctro:hasNumberAffectedAE_0 348 ;
     ctro:hasNumberAffectedAE_freeindex "1"^^xsd:nonNegativeInteger .
@@ -59,7 +63,7 @@ ctro:ClinicalTrial ratio:freeindex "1"^^xsd:nonNegativeInteger .
 
 ctro:DesignGroup ratio:freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:Design_3_0 a ctro:DesignGroup,
+ctro:Design_1_0 a ctro:DesignGroup,
         owl:NamedIndividual ;
     rdfs:label "Design"^^xsd:string ;
     ctro:analysesHealthCondition_0 ctro:AtrialFibrillation ;
@@ -76,19 +80,30 @@ ctro:Design_3_0 a ctro:DesignGroup,
     ctro:hasNumberPatientsCT_0 "18113"^^xsd:positiveInteger ;
     ctro:hasNumberPatientsCT_freeindex "1"^^xsd:nonNegativeInteger .
 
+ctro:DiffBetweenGroups ratio:freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:DiffBetweenGroups_1_0 a ctro:DiffBetweenGroups,
+        owl:NamedIndividual ;
+    rdfs:label "DiffBtGroups-All-CAUSE-DEAD"^^xsd:string ;
+    ctro:hasOutcome1_0 ctro:Outcome_1_2 ;
+    ctro:hasOutcome1_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcome2_0 ctro:Outcome_1_3 ;
+    ctro:hasOutcome2_freeindex "1"^^xsd:nonNegativeInteger .
+
 ctro:EvidenceQuality ratio:freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:Evidence_3_0 a ctro:EvidenceQuality,
+ctro:Evidence_1_0 a ctro:EvidenceQuality,
         owl:NamedIndividual ;
     rdfs:label "Potential Conflicts of Interest"^^xsd:string ;
-    ctro:hasConflictInterest_0 "An operations committee, with assistance from an international steering committee and with participation by the sponsor, was responsible for the design, conduct, and reporting of the study. Tby all appropriate national."^^xsd:string ;
+    ctro:hasConflictInterest_0 """An operations committee, with assistance from an international steering
+committee and with participation by the sponsor, was responsible for the design, conduct, and reporting of the study. Tby all appropriate national."""^^xsd:string ;
     ctro:hasConflictInterest_freeindex "1"^^xsd:nonNegativeInteger ;
     ctro:hasSponsor_0 "Boehringer Ingelheim"^^xsd:string ;
     ctro:hasSponsor_freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:Interv_3_0 a ctro:Intervention,
+ctro:Interv_1_0 a ctro:Intervention,
         owl:NamedIndividual ;
-    rdfs:label "Dabigatran administered in a blinded fashion, in capsules with  110 mg  twice daily" ;
+    rdfs:label "Dabigatran administered in a blinded fashion, in capsules with 110 mg twice daily" ;
     ctro:hasDeliveryMethod_0 ctro:Oral ;
     ctro:hasDeliveryMethod_freeindex "1"^^xsd:nonNegativeInteger ;
     ctro:hasDoseUnit_0 ctro:mg ;
@@ -102,7 +117,7 @@ ctro:Interv_3_0 a ctro:Intervention,
     ctro:isControl_0 true ;
     ctro:isControl_freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:Intervention_3_1 a ctro:Intervention,
+ctro:Intervention_1_1 a ctro:Intervention,
         owl:NamedIndividual ;
     rdfs:label "Warfarin administered in an unblinded fashion, in tablets of 1, 3, or 5 mg and was adjusted locally to an international normalized ratio (INR) of 2.0 to 3.0, with the INR measured at least monthly."^^xsd:string ;
     ctro:hasDeliveryMethod_0 ctro:Oral ;
@@ -113,12 +128,40 @@ ctro:Intervention_3_1 a ctro:Intervention,
     ctro:hasDoseValue_freeindex "1"^^xsd:nonNegativeInteger ;
     ctro:hasDrug_0 ctro:Warfarin ;
     ctro:hasDrug_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasFreqInterval_0 "" ;
+    ctro:hasFreqInterval_freeindex "1"^^xsd:nonNegativeInteger ;
     ctro:isControl_0 false ;
     ctro:isControl_freeindex "1"^^xsd:nonNegativeInteger .
 
+ctro:Out_1_0 a ctro:Outcome,
+        owl:NamedIndividual ;
+    rdfs:label "OutcomeMeasure-dabigatran110-SEE" ;
+    ctro:hasArmOut_0 ctro:Arm_1_0 ;
+    ctro:hasArmOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPointOut_0 ctro:EndPoint_1_0 ;
+    ctro:hasEndPointOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberAffected_0 182 ;
+    ctro:hasNumberAffected_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObservedResult_0 "%/yr 1.53"^^xsd:string ;
+    ctro:hasObservedResult_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasTimePoints_0 "1 year"^^xsd:string ;
+    ctro:hasTimePoints_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Outcome_1_1 a ctro:Outcome,
+        owl:NamedIndividual ;
+    rdfs:label "OutcomeMeasure-warfarin-SEE"^^xsd:string ;
+    ctro:hasArmOut_0 ctro:Arm_1_1 ;
+    ctro:hasArmOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPointOut_0 ctro:EndPoint_1_0 ;
+    ctro:hasEndPointOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasFinalNumberPatients_0 "199"^^xsd:positiveInteger ;
+    ctro:hasFinalNumberPatients_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObservedResult_0 "%/yr 1.69"^^xsd:string ;
+    ctro:hasObservedResult_freeindex "1"^^xsd:nonNegativeInteger .
+
 ctro:Population ratio:freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:Population_3_0 a ctro:Population,
+ctro:Population_1_0 a ctro:Population,
         owl:NamedIndividual ;
     rdfs:label "Population"^^xsd:string ;
     ctro:hasAvgAge_0 "71"^^xsd:nonNegativeInteger ;
@@ -129,7 +172,7 @@ ctro:Population_3_0 a ctro:Population,
     ctro:hasPreconditionDescription_0 "Patients who had atrial fibrillation and were at increased risk for stroke."^^xsd:string ;
     ctro:hasPreconditionDescription_freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:Pub_3_0 a ctro:Publication,
+ctro:Pub_1_0 a ctro:Publication,
         owl:NamedIndividual ;
     rdfs:label "Publication"^^xsd:string ;
     ctro:hasAuthor_0 "Stuart J. Connolly"^^xsd:string ;
@@ -146,107 +189,82 @@ ctro:Pub_3_0 a ctro:Publication,
 
 ctro:Publication ratio:freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:Res_3_0 a ctro:Result,
-        owl:NamedIndividual ;
-    rdfs:label "OutcomeMeasure-dabigatran110-SEE" ;
-    ctro:hasArmRes_0 ctro:Arm_3_0 ;
-    ctro:hasArmRes_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasNumberAffected_0 182 ;
-    ctro:hasNumberAffected_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasObservedResult_0 "%/yr 1.53"^^xsd:string ;
-    ctro:hasObservedResult_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasOutcomeRes_0 ctro:Out_3_0 ;
-    ctro:hasOutcomeRes_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasTimePoints_0 "1 year"^^xsd:string ;
-    ctro:hasTimePoints_freeindex "1"^^xsd:nonNegativeInteger .
-
-ctro:Result_1_2 a ctro:Result,
-        owl:NamedIndividual ;
-    rdfs:label "OutcomeMeasure-dabigatran110-AllCausedDead"^^xsd:string ;
-    ctro:hasArmRes_0 ctro:Arm_3_0 ;
-    ctro:hasArmRes_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasNumberAffected_0 446 ;
-    ctro:hasNumberAffected_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasObservedResult_0 "%/yr 3.75"^^xsd:string ;
-    ctro:hasObservedResult_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasOutcomeRes_0 ctro:Outcome_3_1 ;
-    ctro:hasOutcomeRes_freeindex "1"^^xsd:nonNegativeInteger .
-
-ctro:Result_1_3 a ctro:Result,
-        owl:NamedIndividual ;
-    rdfs:label "OutcomeMeasure-warfarin-AllCausedDead" ;
-    ctro:hasArmRes_0 ctro:Arm_3_1 ;
-    ctro:hasArmRes_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasNumberAffected_0 487 ;
-    ctro:hasNumberAffected_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasObservedResult_0 "%/yr 4.13"^^xsd:string ;
-    ctro:hasObservedResult_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasOutcomeRes_0 ctro:Outcome_3_1 ;
-    ctro:hasOutcomeRes_freeindex "1"^^xsd:nonNegativeInteger .
-
-ctro:Result_3_1 a ctro:Result,
-        owl:NamedIndividual ;
-    rdfs:label "OutcomeMeasure-warfarin-SEE"^^xsd:string ;
-    ctro:hasArmRes_0 ctro:Arm_3_1 ;
-    ctro:hasArmRes_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasFinalNumberPatients_0 "199"^^xsd:positiveInteger ;
-    ctro:hasFinalNumberPatients_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasObservedResult_0 "%/yr 1.69"^^xsd:string ;
-    ctro:hasObservedResult_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasOutcomeRes_0 ctro:Out_3_0 ;
-    ctro:hasOutcomeRes_freeindex "1"^^xsd:nonNegativeInteger .
-
 ctro:AdverseEffect ratio:freeindex "2"^^xsd:nonNegativeInteger .
 
 ctro:Arm ratio:freeindex "2"^^xsd:nonNegativeInteger .
 
+ctro:EndPoint ratio:freeindex "2"^^xsd:nonNegativeInteger .
+
 ctro:Intervention ratio:freeindex "2"^^xsd:nonNegativeInteger .
 
-ctro:Outcome ratio:freeindex "2"^^xsd:nonNegativeInteger .
-
-ctro:Out_3_0 a ctro:Outcome,
+ctro:Outcome_1_2 a ctro:Outcome,
         owl:NamedIndividual ;
-    rdfs:label "OUTCOME-SSE" ;
-    ctro:hasAggregationMethod_0 ctro:Count ;
-    ctro:hasAggregationMethod_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasEndpointDescription_0 ctro:SSE ;
-    ctro:hasEndpointDescription_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasEndpointUnit_0 ctro:Number ;
-    ctro:hasEndpointUnit_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasOutcomeDescription_0 "Stroke or systemic embolism"^^xsd:string ;
-    ctro:hasOutcomeDescription_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasOutcomeType_0 "Primary" ;
-    ctro:hasOutcomeType_freeindex "1"^^xsd:nonNegativeInteger .
+    rdfs:label "OutcomeMeasure-dabigatran110-AllCausedDead"^^xsd:string ;
+    ctro:hasArmOut_0 ctro:Arm_1_0 ;
+    ctro:hasArmOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPointOut_0 ctro:EndPoint_1_1 ;
+    ctro:hasEndPointOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberAffected_0 446 ;
+    ctro:hasNumberAffected_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObservedResult_0 "%/yr 3.75"^^xsd:string ;
+    ctro:hasObservedResult_freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:Outcome_3_1 a ctro:Outcome,
+ctro:Outcome_1_3 a ctro:Outcome,
+        owl:NamedIndividual ;
+    rdfs:label "OutcomeMeasure-warfarin-AllCausedDead"^^xsd:string ;
+    ctro:hasArmOut_0 ctro:Arm_1_1 ;
+    ctro:hasArmOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPointOut_0 ctro:EndPoint_1_1 ;
+    ctro:hasEndPointOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberAffected_0 487 ;
+    ctro:hasNumberAffected_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObservedResult_0 "%/yr 4.13"^^xsd:string ;
+    ctro:hasObservedResult_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:EndPoint_1_1 a ctro:EndPoint,
         owl:NamedIndividual ;
     rdfs:label "OUTCOME-ALL-CAUSE-DEAD"^^xsd:string ;
     ctro:hasAggregationMethod_0 ctro:Count ;
     ctro:hasAggregationMethod_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPointDescriptionStr_0 "all-cause mortality"^^xsd:string ;
+    ctro:hasEndPointDescriptionStr_freeindex "1"^^xsd:nonNegativeInteger ;
     ctro:hasEndpointDescription_0 ctro:AllCauseMortality ;
     ctro:hasEndpointDescription_freeindex "1"^^xsd:nonNegativeInteger ;
     ctro:hasEndpointUnit_0 ctro:Number ;
     ctro:hasEndpointUnit_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasOutcomeDescription_0 "all-cause mortality"^^xsd:string ;
-    ctro:hasOutcomeDescription_freeindex "1"^^xsd:nonNegativeInteger ;
     ctro:hasOutcomeType_0 "Primary" ;
     ctro:hasOutcomeType_freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:Arm_3_0 a ctro:Arm,
+ctro:EndPoint_1_0 a ctro:EndPoint,
+        owl:NamedIndividual ;
+    rdfs:label "OUTCOME-SSE"^^xsd:string ;
+    ctro:hasAggregationMethod_0 "" ;
+    ctro:hasAggregationMethod_1 ctro:Count ;
+    ctro:hasAggregationMethod_freeindex "2"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPointDescriptionStr_0 "Stroke or systemic embolism"^^xsd:string ;
+    ctro:hasEndPointDescriptionStr_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndpointDescription_0 ctro:SSE ;
+    ctro:hasEndpointDescription_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndpointUnit_0 ctro:Number ;
+    ctro:hasEndpointUnit_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcomeType_0 "Primary" ;
+    ctro:hasOutcomeType_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Arm_1_0 a ctro:Arm,
         owl:NamedIndividual ;
     rdfs:label "Arm-dabigatran110" ;
-    ctro:hasIntervention_0 ctro:Interv_3_0 ;
+    ctro:hasIntervention_0 ctro:Interv_1_0 ;
     ctro:hasIntervention_freeindex "1"^^xsd:nonNegativeInteger ;
     ctro:hasNumberPatientsArm_0 "6015"^^xsd:positiveInteger ;
     ctro:hasNumberPatientsArm_freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:Arm_3_1 a ctro:Arm,
+ctro:Arm_1_1 a ctro:Arm,
         owl:NamedIndividual ;
     rdfs:label "Arm-warfarin" ;
-    ctro:hasIntervention_0 ctro:Intervention_3_1 ;
+    ctro:hasIntervention_0 ctro:Intervention_1_1 ;
     ctro:hasIntervention_freeindex "1"^^xsd:nonNegativeInteger ;
     ctro:hasNumberPatientsArm_0 "6022"^^xsd:positiveInteger ;
     ctro:hasNumberPatientsArm_freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:Result ratio:freeindex "4"^^xsd:nonNegativeInteger .
+ctro:Outcome ratio:freeindex "4"^^xsd:nonNegativeInteger .
 
