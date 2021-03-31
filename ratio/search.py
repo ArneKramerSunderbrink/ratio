@@ -28,7 +28,8 @@ def search_view():
 
     db = get_db()
     rows = db.execute(
-        'SELECT id, name FROM access JOIN subgraph ON subgraph_id = id WHERE user_id = ? AND deleted = 0',
+        'SELECT id, name FROM access JOIN subgraph ON subgraph_id = id'
+        ' WHERE user_id = ? AND deleted = 0  AND finished = 1',
         (user_id,)
     ).fetchall()
 
@@ -44,7 +45,8 @@ def search():
     # get list of subgraphs that are finished and not deleted
     db = get_db()
     rows = db.execute(
-        'SELECT id FROM access JOIN subgraph ON subgraph_id = id WHERE user_id = ? AND deleted = 0',
+        'SELECT id FROM access JOIN subgraph ON subgraph_id = id'
+        ' WHERE user_id = ? AND deleted = 0 AND finished = 1',
         (user_id,)
     ).fetchall()
     subgraphs = {row['id'] for row in rows}

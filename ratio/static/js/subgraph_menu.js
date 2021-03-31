@@ -10,14 +10,16 @@ $(function() {
     const finished = $(this).prop('checked');
     const subgraph_id = parseInt(this.id.substring(9));
 
-    // change checkbox in the subgraph menu
+    const link = $(this).prev();
     const menu_box = $('label[for="finished-'+subgraph_id+'"]').children('i');
     if (finished) {
       menu_box.removeClass().addClass('fa fa-check-square fa-lg');
       menu_box.prop('title', 'Finished');
+      link.addClass('w3-text-green');
     } else {
       menu_box.removeClass().addClass('fa fa-square fa-lg');
       menu_box.prop('title', 'Not finished');
+      link.removeClass('w3-text-green');
     }
 
     $.getJSON(window.SCRIPT_ROOT + '/_set_finished', {subgraph_id: subgraph_id, finished: finished}, function (data) {
