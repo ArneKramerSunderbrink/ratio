@@ -13,7 +13,11 @@ ctro:hasPublicationYear ratio:order "2"^^xsd:positiveInteger ;
 ctro:hasCountry ratio:order "3"^^xsd:positiveInteger ;
                 ratio:width "25"^^xsd:positiveInteger .
 
-ctro:hasAvgAge ratio:order "4"^^xsd:positiveInteger ;
+ctro:hasEndpointDescription ratio:order "4"^^xsd:positiveInteger .
+
+ctro:hasAEname ratio:order "5"^^xsd:positiveInteger .
+
+ctro:hasAvgAge ratio:order "6"^^xsd:positiveInteger ;
                ratio:width "25"^^xsd:positiveInteger .
 
-ctro:hasDrug ratio:order "5"^^xsd:positiveInteger .
+ctro:hasDrug ratio:order "7"^^xsd:positiveInteger .
