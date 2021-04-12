@@ -334,7 +334,7 @@ def download_rdf(subgraph_id):
         return jsonify(error=MSG_SUBGRAPH_ACCESS.format(current_app.config['FRONTEND_CONFIG']['Subgraph_term'],
                                                         subgraph_id, user_id))
 
-    filename = "{}_{}_{}.n-triples".format(
+    filename = "{}_{}_{}.ttl".format(
         current_app.config['FRONTEND_CONFIG']['Subgraph_term'],
         subgraph_id,
         strftime('%Y-%m-%d-%H-%M-%S')
