@@ -187,6 +187,36 @@ button[disabled]{
   border-radius: 4px;
 }
 
+.navigation {
+  padding: 0;
+}
+
+.navigation .flip-flipbutton,
+.navigation .flip-frontbutton {
+  height: 100%;
+  width: 3em;
+}
+
+.navigation > * {
+  height: 100%;
+}
+
+.navigation-dropdown {
+  position: absolute;
+  right: 0;
+}
+
+.navigation-dropdown > button,
+.navigation-dropdown > a {
+  width: 100%;
+}
+
+.navigation-dropdown > button:disabled,
+.navigation-dropdown > button[disabled] {
+  cursor: default !important;
+}
+
+
 /* Knowledge */
 #subgraph-header {
   align-items: center;

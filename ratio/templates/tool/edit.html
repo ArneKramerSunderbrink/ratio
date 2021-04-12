@@ -12,15 +12,26 @@
 
 <div class="flex-column">
   <header class="w3-card flex-row color3" id="flex-fix">
-    <a href="{{ url_for('tool.index') }}" class="w3-button flex-fix">
-      <i class="fas fa-home w3-large"></i> Return
-    </a>
     <div class="flex-flex">{# just a spacer #}</div>
     <div class="flex-fix">
       <i class="fas fa-user w3-large"></i>
       {{ g.user['username'] }}
     </div>
-    <a href="{{ url_for('auth.logout') }}" class="w3-button flex-fix">Log Out</a>
+    <div class="flex-fix navigation">
+      <button class="w3-button flip-flipbutton flip-frontside" data-flipid="navigation-dropdown">{#
+        #}<i class="fa fa-bars fa-lg"></i>
+      </button>
+      <div class="flip-flipside" data-flipid="navigation-dropdown" style="display: none;">
+        <button class="w3-button flip-frontbutton" data-flipid="navigation-dropdown">{#
+          #}<i class="fa fa-times fa-lg"></i>
+        </button>
+        <div class="w3-card color3 navigation-dropdown">
+          <a href="{{ url_for('tool.index') }}" class="w3-button">Home</a><br>
+          <a href="{{ url_for('search.search_view') }}" class="w3-button">{{ frontend_config['Subgraph_term'] }}s search</a><br>
+          <a href="{{ url_for('auth.logout') }}" class="w3-button">Log Out</a>
+        </div>
+      </div>
+    </div>
   </header>
 
   <section id="flex-body" class="color0">

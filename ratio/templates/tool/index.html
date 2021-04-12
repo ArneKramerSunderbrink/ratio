@@ -19,7 +19,21 @@
     <div class="flex-fix ghost-center">
       <i class="fas fa-user w3-large"></i> {{ g.user['username'] }}
     </div>
-    <a href="{{ url_for('auth.logout') }}" class="w3-button flex-fix ghost-center">Log Out</a>
+    <div class="flex-fix navigation">
+      <button class="w3-button flip-flipbutton flip-frontside" data-flipid="navigation-dropdown">{#
+        #}<i class="fa fa-bars fa-lg"></i>
+      </button>
+      <div class="flip-flipside" data-flipid="navigation-dropdown" style="display: none;">
+        <button class="w3-button flip-frontbutton" data-flipid="navigation-dropdown">{#
+          #}<i class="fa fa-times fa-lg"></i>
+        </button>
+        <div class="w3-card color3 navigation-dropdown">
+          <button class="w3-button" disabled>Home</button><br>
+          <a href="{{ url_for('search.search_view') }}" class="w3-button">{{ frontend_config['Subgraph_term'] }}s search</a><br>
+          <a href="{{ url_for('auth.logout') }}" class="w3-button">Log Out</a>
+        </div>
+      </div>
+    </div>
   </header>
 
   <section id="flex-body" class="index-body color0">
