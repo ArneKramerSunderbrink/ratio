@@ -118,6 +118,10 @@ header > * {
   background-color: var(--color3);
 }
 
+.text-green {
+  color: #307833;
+}
+
 .fa,
 .fas {
   opacity: 0.6;

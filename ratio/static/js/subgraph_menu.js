@@ -15,11 +15,11 @@ $(function() {
     if (finished) {
       menu_box.removeClass().addClass('fa fa-check-square fa-lg');
       menu_box.prop('title', 'Finished');
-      link.addClass('w3-text-green');
+      link.addClass('text-green');
     } else {
       menu_box.removeClass().addClass('fa fa-square fa-lg');
       menu_box.prop('title', 'Not finished');
-      link.removeClass('w3-text-green');
+      link.removeClass('text-green');
     }
 
     $.getJSON(window.SCRIPT_ROOT + '/_set_finished', {subgraph_id: subgraph_id, finished: finished}, function (data) {
