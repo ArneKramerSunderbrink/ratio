@@ -1,0 +1,135 @@
+@prefix ctro: <http://www.semanticweb.org/root/ontologies/2018/6/ctro#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix ratio: <http://www.example.org/ratio-tool#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ctro:CT_6_0 a ctro:ClinicalTrial,
+        owl:NamedIndividual ;
+    rdfs:label "Clinical Trial"^^xsd:string ;
+    ratio:isRoot true ;
+    ctro:described_by_0 ctro:Pub_6_0 ;
+    ctro:described_by_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasArm_0 ctro:Arm_6_0 ;
+    ctro:hasArm_1 ctro:Arm_6_1 ;
+    ctro:hasArm_freeindex "2"^^xsd:nonNegativeInteger ;
+    ctro:hasConclusionComment_0 "In this nationwide study of patients with AF in Norway, we found no statistically significant differences in risk of stroke or SE in propensity-matched comparisons between dabigatran, rivaroxaban, and apixaban. However, dabigatran and apixaban were both associated with significantly lower risk of major bleeding compared with rivaroxaban."^^xsd:string ;
+    ctro:hasConclusionComment_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDesignGroup_0 ctro:Design_6_0 ;
+    ctro:hasDesignGroup_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPoint_0 ctro:EndPoint_6_0 ;
+    ctro:hasEndPoint_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObjectiveDescription_0 "The aim of this study was to compare the risk of stroke or systemic embolism (SE) and major bleeding in patients with atrial fibrillation (AF) using dabigatran, rivaroxaban, and apixaban in routine clinical practice."^^xsd:string ;
+    ctro:hasObjectiveDescription_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcome_0 ctro:Outcome_6_0 ;
+    ctro:hasOutcome_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasPopulation_0 ctro:Population_6_0 ;
+    ctro:hasPopulation_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasQualityIndicator_0 ctro:Evidence_6_0 ;
+    ctro:hasQualityIndicator_freeindex "1"^^xsd:nonNegativeInteger .
+
+<http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country> ratio:freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Arm_6_1 a ctro:Arm,
+        owl:NamedIndividual ;
+    rdfs:label "Arm 2"^^xsd:string .
+
+ctro:CTDesign ratio:freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:CTDesign_6_0 a ctro:CTDesign,
+        owl:NamedIndividual ;
+    rdfs:label "Cohort study"^^xsd:string ;
+    ratio:isCustom true .
+
+ctro:ClinicalTrial ratio:freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Country_6_0 a <http://www.bpiresearch.com/BPMO/2004/03/03/cdl/Countries#Country>,
+        owl:NamedIndividual ;
+    rdfs:label "Norway"^^xsd:string ;
+    ratio:isCustom true .
+
+ctro:DesignGroup ratio:freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Design_6_0 a ctro:DesignGroup,
+        owl:NamedIndividual ;
+    rdfs:label "Design"^^xsd:string ;
+    ctro:analysesHealthCondition_0 ctro:AtrialFibrillation ;
+    ctro:analysesHealthCondition_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasAnalysisApproach_0 "" ;
+    ctro:hasAnalysisApproach_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasCTDesign_0 ctro:CTDesign_6_0 ;
+    ctro:hasCTDesign_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberPatientsCT_0 "65563"^^xsd:positiveInteger ;
+    ctro:hasNumberPatientsCT_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:EndPoint ratio:freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:EvidenceQuality ratio:freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Evidence_6_0 a ctro:EvidenceQuality,
+        owl:NamedIndividual ;
+    rdfs:label "Potential Conflicts of Interest"^^xsd:string ;
+    ctro:hasConflictInterest_0 "O.-C.R. reports personal fees from Merck, Bayer, Boehringer Ingelheim, Novartis, and Novo Nordisk, outside the submitted work. C.J. reports personal fees from BMS/Pfizer and Bayer, outside the submitted work. W.G. reports grants and personal fees from Bayer, MSD, Novartis, and Amgen, outside the submitted work. S.H. reports personal fees from Bristol-Myers Squibb, Bayer, Boehringer Ingelheim, Pfizer, Merck, and Daiichi-Sankyo, outside the submitted work."^^xsd:string ;
+    ctro:hasConflictInterest_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasSponsor_0 "South-Eastern Norway Regional Health Authority"^^xsd:string ;
+    ctro:hasSponsor_1 "Bristol-Myers Squibb/Pfizer-sponsored European Investigator Initiated research Program (ERISTA)"^^xsd:string ;
+    ctro:hasSponsor_freeindex "2"^^xsd:nonNegativeInteger .
+
+ctro:Interv_6_0 a ctro:Intervention,
+        owl:NamedIndividual ;
+    rdfs:label "Intervention 1"^^xsd:string .
+
+ctro:Intervention ratio:freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Outcome ratio:freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Outcome_6_0 a ctro:Outcome,
+        owl:NamedIndividual ;
+    rdfs:label "Arm 1 Endpoint 1 Data"^^xsd:string ;
+    ctro:hasArmOut_0 ctro:Arm_6_0 ;
+    ctro:hasArmOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPointOut_0 ctro:EndPoint_6_0 ;
+    ctro:hasEndPointOut_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Population ratio:freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Population_6_0 a ctro:Population,
+        owl:NamedIndividual ;
+    rdfs:label "Population"^^xsd:string ;
+    ctro:hasCountry_0 ctro:Country_6_0 ;
+    ctro:hasCountry_1 "" ;
+    ctro:hasCountry_freeindex "2"^^xsd:nonNegativeInteger ;
+    ctro:hasPreconditionDescription_0 "Anticoagulant-naıve patients with AF initiating OAC therapy."^^xsd:string ;
+    ctro:hasPreconditionDescription_1 "The study population included all patients <=18 years diagnosed with AF with at least one OAC dispensation (dabigatran 110 mg or 150 mg, rivaroxaban 15 mg or 20 mg, apixaban 2.5 mg or 5 mg, or warfarin 2.5 mg) in the study period (January 2013 to December 2017) but being anticoagulant naı¨ve before start of the study."^^xsd:string ;
+    ctro:hasPreconditionDescription_freeindex "2"^^xsd:nonNegativeInteger .
+
+ctro:Pub_6_0 a ctro:Publication,
+        owl:NamedIndividual ;
+    rdfs:label "Publication"^^xsd:string ;
+    ctro:hasAuthor_0 "Ole-Christian W. Rutherford"^^xsd:string ;
+    ctro:hasAuthor_1 "Christian Jonasson"^^xsd:string ;
+    ctro:hasAuthor_2 "Waleed Ghanima"^^xsd:string ;
+    ctro:hasAuthor_freeindex "3"^^xsd:nonNegativeInteger ;
+    ctro:hasJournal_0 "European Heart Journal - Cardiovascular Pharmacotherapy"^^xsd:string ;
+    ctro:hasJournal_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasPMID_0 "31942972"^^rdfs:Literal ;
+    ctro:hasPMID_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasPublicationYear_0 "2020"^^xsd:positiveInteger ;
+    ctro:hasPublicationYear_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasTitle_0 "Comparison of dabigatran, rivaroxaban, and apixaban for effectiveness and safety in atrial fibrillation: a nationwide cohort study."^^xsd:string ;
+    ctro:hasTitle_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Publication ratio:freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Arm ratio:freeindex "2"^^xsd:nonNegativeInteger .
+
+ctro:Arm_6_0 a ctro:Arm,
+        owl:NamedIndividual ;
+    rdfs:label "Arm 1"^^xsd:string ;
+    ctro:hasIntervention_0 ctro:Interv_6_0 ;
+    ctro:hasIntervention_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:EndPoint_6_0 a ctro:EndPoint,
+        owl:NamedIndividual ;
+    rdfs:label "Endpoint 1"^^xsd:string .
+

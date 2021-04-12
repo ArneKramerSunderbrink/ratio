@@ -1,0 +1,570 @@
+@prefix ctro: <http://www.semanticweb.org/root/ontologies/2018/6/ctro#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix ratio: <http://www.example.org/ratio-tool#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ctro:CT_5_0 a ctro:ClinicalTrial,
+        owl:NamedIndividual ;
+    rdfs:label "Clinical Trial"^^xsd:string ;
+    ratio:isRoot true ;
+    ctro:described_by_0 ctro:Pub_5_0 ;
+    ctro:described_by_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasAdverseEffect_0 ctro:AdverseEffect_5_0 ;
+    ctro:hasAdverseEffect_1 ctro:AdverseEffect_5_1 ;
+    ctro:hasAdverseEffect_2 ctro:AdverseEffect_5_2 ;
+    ctro:hasAdverseEffect_freeindex "3"^^xsd:nonNegativeInteger ;
+    ctro:hasArm_0 ctro:Arm_5_0 ;
+    ctro:hasArm_1 ctro:Arm_5_1 ;
+    ctro:hasArm_2 ctro:Arm_5_2 ;
+    ctro:hasArm_freeindex "3"^^xsd:nonNegativeInteger ;
+    ctro:hasConclusionComment_0 "Both once-daily regimens of edoxaban were noninferior to warfarin with respect to the prevention of stroke or systemic embolism and were associated with significantly lower rates of bleeding and death from cardiovascular causes."^^xsd:string ;
+    ctro:hasConclusionComment_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDesignGroup_0 ctro:Design_5_0 ;
+    ctro:hasDesignGroup_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDiffBetweenGroups_0 ctro:DiffBetweenGroups_5_0 ;
+    ctro:hasDiffBetweenGroups_1 ctro:DiffBetweenGroups_5_1 ;
+    ctro:hasDiffBetweenGroups_2 ctro:DiffBetweenGroups_5_2 ;
+    ctro:hasDiffBetweenGroups_3 ctro:DiffBetweenGroups_5_3 ;
+    ctro:hasDiffBetweenGroups_4 ctro:DiffBetweenGroups_5_4 ;
+    ctro:hasDiffBetweenGroups_5 ctro:DiffBetweenGroups_5_5 ;
+    ctro:hasDiffBetweenGroups_freeindex "6"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPoint_0 ctro:EndPoint_5_0 ;
+    ctro:hasEndPoint_1 ctro:EndPoint_5_1 ;
+    ctro:hasEndPoint_2 ctro:EndPoint_5_2 ;
+    ctro:hasEndPoint_freeindex "3"^^xsd:nonNegativeInteger ;
+    ctro:hasObjectiveDescription_0 "Studied the long-term efficacy and safety of edoxaban as compared with warfarin in patients with atrial fibrillation."^^xsd:string ;
+    ctro:hasObjectiveDescription_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcome_0 ctro:Outcome_5_0 ;
+    ctro:hasOutcome_1 ctro:Outcome_5_1 ;
+    ctro:hasOutcome_2 ctro:Outcome_5_2 ;
+    ctro:hasOutcome_3 ctro:Outcome_5_3 ;
+    ctro:hasOutcome_4 ctro:Outcome_5_4 ;
+    ctro:hasOutcome_5 ctro:Outcome_5_5 ;
+    ctro:hasOutcome_6 ctro:Outcome_5_6 ;
+    ctro:hasOutcome_7 ctro:Outcome_5_7 ;
+    ctro:hasOutcome_8 ctro:Outcome_5_8 ;
+    ctro:hasOutcome_freeindex "9"^^xsd:nonNegativeInteger ;
+    ctro:hasPopulation_0 ctro:Population_5_0 ;
+    ctro:hasPopulation_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasQualityIndicator_0 ctro:Evidence_5_0 ;
+    ctro:hasQualityIndicator_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:AdverseEffect_5_0 a ctro:AdverseEffect,
+        owl:NamedIndividual ;
+    rdfs:label "OverallAdverseEvents-warfarin"^^xsd:string ;
+    ctro:hasAEname_0 ctro:EndpointDesc_AF_5_1 ;
+    ctro:hasAEname_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasArmAE_0 ctro:Arm_5_0 ;
+    ctro:hasArmAE_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberAffectedAE_0 5910 ;
+    ctro:hasNumberAffectedAE_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObservedResultAE_0 "84.3%"^^xsd:string ;
+    ctro:hasObservedResultAE_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:AdverseEffect_5_1 a ctro:AdverseEffect,
+        owl:NamedIndividual ;
+    rdfs:label "OverallAdverseEvents-edoxaban60"^^xsd:string ;
+    ctro:hasAEname_0 ctro:EndpointDesc_AF_5_1 ;
+    ctro:hasAEname_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasArmAE_0 ctro:Arm_5_2 ;
+    ctro:hasArmAE_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberAffectedAE_0 5911 ;
+    ctro:hasNumberAffectedAE_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObservedResultAE_0 "84.3%"^^xsd:string ;
+    ctro:hasObservedResultAE_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:AdverseEffect_5_2 a ctro:AdverseEffect,
+        owl:NamedIndividual ;
+    rdfs:label "OverallAdverseEvents-edoxaban30"^^xsd:string ;
+    ctro:hasAEname_0 ctro:EndpointDesc_AF_5_1 ;
+    ctro:hasAEname_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasArmAE_0 ctro:Arm_5_1 ;
+    ctro:hasArmAE_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberAffectedAE_0 5899 ;
+    ctro:hasNumberAffectedAE_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObservedResultAE_0 "84.2%"^^xsd:string ;
+    ctro:hasObservedResultAE_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:CTDesign ratio:freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:CTDesign_5_0 a ctro:CTDesign,
+        owl:NamedIndividual ;
+    rdfs:label "Double-dummy"^^xsd:string ;
+    ratio:isCustom true .
+
+ctro:ClinicalTrial ratio:freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:DesignGroup ratio:freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Design_5_0 a ctro:DesignGroup,
+        owl:NamedIndividual ;
+    rdfs:label "Design"^^xsd:string ;
+    ctro:analysesHealthCondition_0 ctro:AtrialFibrillation ;
+    ctro:analysesHealthCondition_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasAnalysisApproach_0 ctro:IntentionToTreat ;
+    ctro:hasAnalysisApproach_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasCTDesign_0 ctro:Randomized ;
+    ctro:hasCTDesign_1 ctro:Double-blind ;
+    ctro:hasCTDesign_2 ctro:CTDesign_5_0 ;
+    ctro:hasCTDesign_3 ctro:Multicenter ;
+    ctro:hasCTDesign_4 ctro:Multinational ;
+    ctro:hasCTDesign_freeindex "5"^^xsd:nonNegativeInteger ;
+    ctro:hasCTduration_0 "25"^^xsd:positiveInteger ;
+    ctro:hasCTduration_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberPatientsCT_0 "21105"^^xsd:positiveInteger ;
+    ctro:hasNumberPatientsCT_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:DiffBetweenGroups_5_0 a ctro:DiffBetweenGroups,
+        owl:NamedIndividual ;
+    rdfs:label "Diff-warfarin-edoxaban30-majorBleeding"^^xsd:string ;
+    ctro:hasConfIntervalDiff_0 "095% (0.41–0.55)"^^rdfs:Literal ;
+    ctro:hasConfIntervalDiff_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDiffGroupAbsValue_0 "0.47"^^xsd:float ;
+    ctro:hasDiffGroupAbsValue_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasMeasureName_0 ctro:DiffGroupsMeasureName_5_0 ;
+    ctro:hasMeasureName_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcome1_0 ctro:Outcome_5_0 ;
+    ctro:hasOutcome1_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcome2_0 ctro:Outcome_5_1 ;
+    ctro:hasOutcome2_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasPvalueDiff_0 "<0.001"^^xsd:string ;
+    ctro:hasPvalueDiff_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:DiffBetweenGroups_5_1 a ctro:DiffBetweenGroups,
+        owl:NamedIndividual ;
+    rdfs:label "Diff-warfarin-edoxaban60-majorBleeding"^^xsd:string ;
+    ctro:hasConfIntervalDiff_0 "95% (0.71–0.91)"^^rdfs:Literal ;
+    ctro:hasConfIntervalDiff_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDiffGroupAbsValue_0 "0.8"^^xsd:float ;
+    ctro:hasDiffGroupAbsValue_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasMeasureName_0 ctro:DiffGroupsMeasureName_5_0 ;
+    ctro:hasMeasureName_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcome1_0 ctro:Outcome_5_0 ;
+    ctro:hasOutcome1_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcome2_0 ctro:Outcome_5_2 ;
+    ctro:hasOutcome2_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasPvalueDiff_0 "<0."^^xsd:string ;
+    ctro:hasPvalueDiff_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:DiffBetweenGroups_5_2 a ctro:DiffBetweenGroups,
+        owl:NamedIndividual ;
+    rdfs:label "Diff-warfarin-edoxaban30-SEEorStroke"^^xsd:string ;
+    ctro:hasConfIntervalDiff_0 "95% (0.87–1.31)"^^rdfs:Literal ;
+    ctro:hasConfIntervalDiff_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDiffGroupAbsValue_0 "1.07"^^xsd:float ;
+    ctro:hasDiffGroupAbsValue_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasMeasureName_0 ctro:DiffGroupsMeasureName_5_0 ;
+    ctro:hasMeasureName_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcome1_0 ctro:Outcome_5_3 ;
+    ctro:hasOutcome1_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcome2_0 ctro:Outcome_5_4 ;
+    ctro:hasOutcome2_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasPvalueDiff_0 "0.005"^^xsd:string ;
+    ctro:hasPvalueDiff_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:DiffBetweenGroups_5_3 a ctro:DiffBetweenGroups,
+        owl:NamedIndividual ;
+    rdfs:label "Diff-warfarin-edoxaban60-SEEorStroke"^^xsd:string ;
+    ctro:hasConfIntervalDiff_0 "95% (0.63–0.99)"^^rdfs:Literal ;
+    ctro:hasConfIntervalDiff_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDiffGroupAbsValue_0 "0.79"^^xsd:float ;
+    ctro:hasDiffGroupAbsValue_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasMeasureName_0 ctro:DiffGroupsMeasureName_5_0 ;
+    ctro:hasMeasureName_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcome1_0 ctro:Outcome_5_3 ;
+    ctro:hasOutcome1_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcome2_0 ctro:Outcome_5_5 ;
+    ctro:hasOutcome2_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasPvalueDiff_0 "<0."^^xsd:string ;
+    ctro:hasPvalueDiff_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:DiffBetweenGroups_5_4 a ctro:DiffBetweenGroups,
+        owl:NamedIndividual ;
+    rdfs:label "Diff-warfarin-edoxaban30-combined"^^xsd:string ;
+    ctro:hasConfIntervalDiff_0 "95% (0.86–1.05)"^^rdfs:Literal ;
+    ctro:hasConfIntervalDiff_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDiffGroupAbsValue_0 "0.95"^^xsd:float ;
+    ctro:hasDiffGroupAbsValue_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasMeasureName_0 ctro:DiffGroupsMeasureName_5_0 ;
+    ctro:hasMeasureName_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcome1_0 ctro:Outcome_5_6 ;
+    ctro:hasOutcome1_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcome2_0 ctro:Outcome_5_7 ;
+    ctro:hasOutcome2_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasPvalueDiff_0 "0.32"^^xsd:string ;
+    ctro:hasPvalueDiff_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:DiffBetweenGroups_5_5 a ctro:DiffBetweenGroups,
+        owl:NamedIndividual ;
+    rdfs:label "Diff-warfarin-edoxaban60-combined"^^xsd:string ;
+    ctro:hasConfIntervalDiff_0 "95% (0.78–0.96)"^^rdfs:Literal ;
+    ctro:hasConfIntervalDiff_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDiffGroupAbsValue_0 "0.87"^^xsd:float ;
+    ctro:hasDiffGroupAbsValue_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasMeasureName_0 ctro:DiffGroupsMeasureName_5_0 ;
+    ctro:hasMeasureName_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcome1_0 ctro:Outcome_5_6 ;
+    ctro:hasOutcome1_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcome2_0 ctro:Outcome_5_8 ;
+    ctro:hasOutcome2_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasPvalueDiff_0 "0.005"^^xsd:string ;
+    ctro:hasPvalueDiff_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasStandardDevDiff_0 "" ;
+    ctro:hasStandardDevDiff_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:DiffGroupsMeasureName ratio:freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Drug ratio:freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:EndpointDesc_AF_5_0 a ctro:EndpointDesc_AF,
+        owl:NamedIndividual ;
+    rdfs:label "Stroke or Systematic Embolism"^^xsd:string ;
+    ratio:isCustom true .
+
+ctro:EndpointDesc_AF_5_2 a ctro:EndpointDesc_AF,
+        owl:NamedIndividual ;
+    rdfs:label "Combined"^^xsd:string ;
+    ratio:isCustom true .
+
+ctro:EvidenceQuality ratio:freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Evidence_5_0 a ctro:EvidenceQuality,
+        owl:NamedIndividual ;
+    rdfs:label "Potential Conflicts of Interest"^^xsd:string ;
+    ctro:hasConflictInterest_0 "Dr. Giugliano reports receiving consulting fees from Daiichi Sankyo, Janssen Pharmaceuticals, and Merck...(See more in paper)"^^xsd:string ;
+    ctro:hasConflictInterest_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasSponsor_0 "Daiichi Sankyo Pharma Development"^^xsd:string ;
+    ctro:hasSponsor_1 "" ;
+    ctro:hasSponsor_freeindex "2"^^xsd:nonNegativeInteger .
+
+ctro:Interv_5_0 a ctro:Intervention,
+        owl:NamedIndividual ;
+    rdfs:label "Intervention-warfarin" ;
+    ctro:hasDeliveryMethod_0 ctro:Oral ;
+    ctro:hasDeliveryMethod_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDoseValue_0 "Dose-adjusted to achieve an international normalized ratio (INR) of 2.0 to 3.0"^^rdfs:Literal ;
+    ctro:hasDoseValue_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDrug_0 ctro:Warfarin ;
+    ctro:hasDrug_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDuration_0 "" ;
+    ctro:hasDuration_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Intervention_5_1 a ctro:Intervention,
+        owl:NamedIndividual ;
+    rdfs:label "InterventionEdoxaban" ;
+    ctro:hasDeliveryMethod_0 ctro:Oral ;
+    ctro:hasDeliveryMethod_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDoseUnit_0 ctro:mg ;
+    ctro:hasDoseUnit_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDoseValue_0 "30"^^rdfs:Literal ;
+    ctro:hasDoseValue_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDrug_0 ctro:Drug_5_0 ;
+    ctro:hasDrug_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Intervention_5_2 a ctro:Intervention,
+        owl:NamedIndividual ;
+    rdfs:label "InterventionEdoxaban" ;
+    ctro:hasDeliveryMethod_0 ctro:Oral ;
+    ctro:hasDeliveryMethod_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDoseUnit_0 ctro:mg ;
+    ctro:hasDoseUnit_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDoseValue_0 "60"^^rdfs:Literal ;
+    ctro:hasDoseValue_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDrug_0 ctro:Drug_5_0 ;
+    ctro:hasDrug_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Intervention_5_3 a ctro:Intervention,
+        owl:NamedIndividual ;
+    rdfs:label "InterventionPlacebo" ;
+    ctro:hasDeliveryMethod_0 ctro:Oral ;
+    ctro:hasDeliveryMethod_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDrug_0 ctro:Placebo ;
+    ctro:hasDrug_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:isControl_0 true ;
+    ctro:isControl_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Intervention_5_4 a ctro:Intervention,
+        owl:NamedIndividual ;
+    rdfs:label "InterventionPlacebo"^^xsd:string ;
+    ctro:hasDeliveryMethod_0 ctro:Oral ;
+    ctro:hasDeliveryMethod_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDoseUnit_0 ctro:Number ;
+    ctro:hasDoseUnit_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDrug_0 ctro:Placebo ;
+    ctro:hasDrug_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:isControl_0 true ;
+    ctro:isControl_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Intervention_5_5 a ctro:Intervention,
+        owl:NamedIndividual ;
+    rdfs:label "InterventionPlacebo"^^xsd:string ;
+    ctro:hasDeliveryMethod_0 ctro:Oral ;
+    ctro:hasDeliveryMethod_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDrug_0 ctro:Placebo ;
+    ctro:hasDrug_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:isControl_0 true ;
+    ctro:isControl_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Population ratio:freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Population_5_0 a ctro:Population,
+        owl:NamedIndividual ;
+    rdfs:label "Population"^^xsd:string ;
+    ctro:hasAvgAge_0 "72"^^xsd:nonNegativeInteger ;
+    ctro:hasAvgAge_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasCountry_0 "" ;
+    ctro:hasCountry_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasExclusionCriteria_0 "Key exclusion criteria were atrial fibrillation due to a reversible disorder; an estimated creatinine clearance of less than 30 ml per minute; a high risk of bleeding; use of dual antiplatelet therapy; moderate-tosevere mitral stenosis; other indications for anticoagulation therapy; acute coronary syndromes, coronary revascularization, or stroke within 30 days before randomization; and an inability to adhere to study procedures."^^rdfs:Literal ;
+    ctro:hasExclusionCriteria_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasGender_0 ctro:Female ;
+    ctro:hasGender_1 ctro:Male ;
+    ctro:hasGender_freeindex "2"^^xsd:nonNegativeInteger ;
+    ctro:hasPreconditionDescription_0 "Patients with acute venous thromboembolism."^^xsd:string ;
+    ctro:hasPreconditionDescription_1 "Eligible patients were 21 years of age or older and had atrial fibrillation documented by means of an electrical tracing within the 12 months preceding randomization, a score of 2 or higher on the CHADS 2 risk assessment, and anticoagulation therapy planned for the duration of the trial."^^xsd:string ;
+    ctro:hasPreconditionDescription_freeindex "2"^^xsd:nonNegativeInteger .
+
+ctro:Pub_5_0 a ctro:Publication,
+        owl:NamedIndividual ;
+    rdfs:label "Publication"^^xsd:string ;
+    ctro:hasAuthor_0 "Robert P. Giugliano"^^xsd:string ;
+    ctro:hasAuthor_1 "Christian T. Ruff"^^xsd:string ;
+    ctro:hasAuthor_2 "Eugene Braunwald"^^xsd:string ;
+    ctro:hasAuthor_freeindex "3"^^xsd:nonNegativeInteger ;
+    ctro:hasJournal_0 "The New England Journal of Medicine"^^xsd:string ;
+    ctro:hasJournal_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasPMID_0 "24251359"^^rdfs:Literal ;
+    ctro:hasPMID_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasPublicationYear_0 "2013"^^xsd:positiveInteger ;
+    ctro:hasPublicationYear_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasTitle_0 "Edoxaban versus Warfarin in Patients with Atrial Fibrillation."^^xsd:string ;
+    ctro:hasTitle_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Publication ratio:freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Drug_5_0 a ctro:Drug,
+        owl:NamedIndividual ;
+    rdfs:label "Edoxaban"^^xsd:string ;
+    ratio:isCustom true .
+
+ctro:Outcome_5_1 a ctro:Outcome,
+        owl:NamedIndividual ;
+    rdfs:label "Outcome-edoxaban30-majorBleeding"^^xsd:string ;
+    ctro:hasArmOut_0 ctro:Arm_5_1 ;
+    ctro:hasArmOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPointOut_0 ctro:EndPoint_5_1 ;
+    ctro:hasEndPointOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasFinalNumberPatients_0 "7002"^^xsd:positiveInteger ;
+    ctro:hasFinalNumberPatients_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberAffected_0 25 ;
+    ctro:hasNumberAffected_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObservedResult_0 "% of patients/yr 1.61"^^xsd:string ;
+    ctro:hasObservedResult_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Outcome_5_2 a ctro:Outcome,
+        owl:NamedIndividual ;
+    rdfs:label "Outcome-edoxaban60-majorBleeding"^^xsd:string ;
+    ctro:hasArmOut_0 ctro:Arm_5_2 ;
+    ctro:hasArmOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPointOut_0 ctro:EndPoint_5_1 ;
+    ctro:hasEndPointOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasFinalNumberPatients_0 "7012"^^xsd:positiveInteger ;
+    ctro:hasFinalNumberPatients_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberAffected_0 418 ;
+    ctro:hasNumberAffected_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObservedResult_0 "% of patients/yr 2.75"^^xsd:string ;
+    ctro:hasObservedResult_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Outcome_5_4 a ctro:Outcome,
+        owl:NamedIndividual ;
+    rdfs:label "Outcome-edoxaban30-SEEorStroke"^^xsd:string ;
+    ctro:hasArmOut_0 ctro:Arm_5_1 ;
+    ctro:hasArmOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPointOut_0 ctro:EndPoint_5_0 ;
+    ctro:hasEndPointOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberAffected_0 253 ;
+    ctro:hasNumberAffected_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObservedResult_0 "% of patients/yr: 1.61"^^xsd:string ;
+    ctro:hasObservedResult_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasTimePoints_0 "treatment period"^^xsd:string ;
+    ctro:hasTimePoints_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Outcome_5_5 a ctro:Outcome,
+        owl:NamedIndividual ;
+    rdfs:label "Outcome-edoxaban60-SEEorStroke"^^xsd:string ;
+    ctro:hasArmOut_0 ctro:Arm_5_2 ;
+    ctro:hasArmOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPointOut_0 ctro:EndPoint_5_0 ;
+    ctro:hasEndPointOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberAffected_0 182 ;
+    ctro:hasNumberAffected_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObservedResult_0 "% of patients/yr: 1.18"^^xsd:string ;
+    ctro:hasObservedResult_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasTimePoints_0 "treatment period"^^xsd:string ;
+    ctro:hasTimePoints_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Outcome_5_7 a ctro:Outcome,
+        owl:NamedIndividual ;
+    rdfs:label "Outcome-edoxaban30-combined"^^xsd:string ;
+    ctro:hasArmOut_0 ctro:Arm_5_1 ;
+    ctro:hasArmOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPointOut_0 ctro:EndPoint_5_2 ;
+    ctro:hasEndPointOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberAffected_0 796 ;
+    ctro:hasNumberAffected_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObservedResult_0 "% of patients/yr 4.23"^^xsd:string ;
+    ctro:hasObservedResult_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Outcome_5_8 a ctro:Outcome,
+        owl:NamedIndividual ;
+    rdfs:label "Outcome-edoxaban60-combined"^^xsd:string ;
+    ctro:hasArmOut_0 ctro:Arm_5_2 ;
+    ctro:hasArmOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPointOut_0 ctro:EndPoint_5_2 ;
+    ctro:hasEndPointOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberAffected_0 728 ;
+    ctro:hasNumberAffected_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObservedResult_0 "% of patients/yr 3.85"^^xsd:string ;
+    ctro:hasObservedResult_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:AdverseEffect ratio:freeindex "3"^^xsd:nonNegativeInteger .
+
+ctro:Arm ratio:freeindex "3"^^xsd:nonNegativeInteger .
+
+ctro:EndPoint ratio:freeindex "3"^^xsd:nonNegativeInteger .
+
+ctro:EndpointDesc_AF ratio:freeindex "3"^^xsd:nonNegativeInteger .
+
+ctro:EndpointDesc_AF_5_1 a ctro:EndpointDesc_AF,
+        owl:NamedIndividual ;
+    rdfs:label "Overall Adverse Events (excluding bleeding) "^^xsd:string ;
+    ratio:isCustom true .
+
+ctro:Outcome_5_0 a ctro:Outcome,
+        owl:NamedIndividual ;
+    rdfs:label "Outcome-warfarin-majorBleeding" ;
+    ctro:hasArmOut_0 ctro:Arm_5_0 ;
+    ctro:hasArmOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPointOut_0 ctro:EndPoint_5_1 ;
+    ctro:hasEndPointOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasFinalNumberPatients_0 "7012"^^xsd:positiveInteger ;
+    ctro:hasFinalNumberPatients_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberAffected_0 524 ;
+    ctro:hasNumberAffected_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObservedResult_0 "% of patients/yr 3.43"^^xsd:string ;
+    ctro:hasObservedResult_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Outcome_5_3 a ctro:Outcome,
+        owl:NamedIndividual ;
+    rdfs:label "Outcome-warfarin-SEEorStroke"^^xsd:string ;
+    ctro:hasArmOut_0 ctro:Arm_5_0 ;
+    ctro:hasArmOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPointOut_0 ctro:EndPoint_5_0 ;
+    ctro:hasEndPointOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasFinalNumberPatients_0 "7036"^^xsd:positiveInteger ;
+    ctro:hasFinalNumberPatients_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberAffected_0 232 ;
+    ctro:hasNumberAffected_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObservedResult_0 "% of patients/yr: 1.5"^^xsd:string ;
+    ctro:hasObservedResult_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasTimePoints_0 "treatment period"^^xsd:string ;
+    ctro:hasTimePoints_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Outcome_5_6 a ctro:Outcome,
+        owl:NamedIndividual ;
+    rdfs:label "Outcome-warfarin-combined"^^xsd:string ;
+    ctro:hasArmOut_0 ctro:Arm_5_0 ;
+    ctro:hasArmOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPointOut_0 ctro:EndPoint_5_2 ;
+    ctro:hasEndPointOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasFinalNumberPatients_0 "7036"^^xsd:positiveInteger ;
+    ctro:hasFinalNumberPatients_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberAffected_0 831 ;
+    ctro:hasNumberAffected_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObservedResult_0 "% of patients/yr 4.43"^^xsd:string ;
+    ctro:hasObservedResult_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:EndPoint_5_0 a ctro:EndPoint,
+        owl:NamedIndividual ;
+    rdfs:label "Endpoint-SEEorStroke" ;
+    ctro:hasAggregationMethod_0 ctro:Count ;
+    ctro:hasAggregationMethod_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasAnalysisMetric_0 "" ;
+    ctro:hasAnalysisMetric_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPointDescriptionStr_0 "Efficacy Outcome"^^xsd:string ;
+    ctro:hasEndPointDescriptionStr_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndpointDescription_0 ctro:EndpointDesc_AF_5_0 ;
+    ctro:hasEndpointDescription_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndpointUnit_0 ctro:Number ;
+    ctro:hasEndpointUnit_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcomeType_0 "Primary" ;
+    ctro:hasOutcomeType_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:EndPoint_5_1 a ctro:EndPoint,
+        owl:NamedIndividual ;
+    rdfs:label "Endpoint-majorBleeding"^^xsd:string ;
+    ctro:hasAggregationMethod_0 ctro:Count ;
+    ctro:hasAggregationMethod_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPointDescriptionStr_0 "Safety Outcome"^^xsd:string ;
+    ctro:hasEndPointDescriptionStr_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndpointDescription_0 ctro:MajorBleed ;
+    ctro:hasEndpointDescription_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndpointUnit_0 ctro:Number ;
+    ctro:hasEndpointUnit_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcomeType_0 "Primary" ;
+    ctro:hasOutcomeType_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:EndPoint_5_2 a ctro:EndPoint,
+        owl:NamedIndividual ;
+    rdfs:label "Endpoint-Combined"^^xsd:string ;
+    ctro:hasAggregationMethod_0 ctro:Count ;
+    ctro:hasAggregationMethod_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasAnalysisMetric_0 "" ;
+    ctro:hasAnalysisMetric_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPointDescriptionStr_0 "Combined endpoint composed of: Stroke, systemic embolic event, or death from cardiovascular causes."^^xsd:string ;
+    ctro:hasEndPointDescriptionStr_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndpointDescription_0 ctro:EndpointDesc_AF_5_2 ;
+    ctro:hasEndpointDescription_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndpointUnit_0 ctro:Number ;
+    ctro:hasEndpointUnit_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcomeType_0 "Secondary" ;
+    ctro:hasOutcomeType_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Arm_5_0 a ctro:Arm,
+        owl:NamedIndividual ;
+    rdfs:label "Arm-warfarin" ;
+    ctro:hasIntervention_0 ctro:Interv_5_0 ;
+    ctro:hasIntervention_1 ctro:Intervention_5_5 ;
+    ctro:hasIntervention_freeindex "2"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberPatientsArm_0 "7036"^^xsd:positiveInteger ;
+    ctro:hasNumberPatientsArm_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Arm_5_1 a ctro:Arm,
+        owl:NamedIndividual ;
+    rdfs:label "Arm-edoxaban30" ;
+    ctro:hasIntervention_0 ctro:Intervention_5_1 ;
+    ctro:hasIntervention_1 ctro:Intervention_5_3 ;
+    ctro:hasIntervention_freeindex "2"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberPatientsArm_0 "7034"^^xsd:positiveInteger ;
+    ctro:hasNumberPatientsArm_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Arm_5_2 a ctro:Arm,
+        owl:NamedIndividual ;
+    rdfs:label "Arm-edoxaban60"^^xsd:string ;
+    ctro:hasIntervention_0 ctro:Intervention_5_2 ;
+    ctro:hasIntervention_1 ctro:Intervention_5_4 ;
+    ctro:hasIntervention_freeindex "2"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberPatientsArm_0 "7035"^^xsd:positiveInteger ;
+    ctro:hasNumberPatientsArm_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:DiffBetweenGroups ratio:freeindex "6"^^xsd:nonNegativeInteger .
+
+ctro:DiffGroupsMeasureName_5_0 a ctro:DiffGroupsMeasureName,
+        owl:NamedIndividual ;
+    rdfs:label "Hazard Ratio"^^xsd:string ;
+    ratio:isCustom true .
+
+ctro:Intervention ratio:freeindex "6"^^xsd:nonNegativeInteger .
+
+ctro:Outcome ratio:freeindex "9"^^xsd:nonNegativeInteger .
+

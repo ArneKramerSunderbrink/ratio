@@ -68,6 +68,16 @@ def db_populate_dummy():
     from ratio.knowledge_model import get_subgraph_knowledge
     with current_app.open_resource('dummy/knowledge_1.ttl') as f:
         get_subgraph_knowledge(1).load_rdf_data(f, 'turtle')
+    with current_app.open_resource('dummy/knowledge_2.ttl') as f:
+        get_subgraph_knowledge(3).load_rdf_data(f, 'turtle')
+    with current_app.open_resource('dummy/knowledge_3.ttl') as f:
+        get_subgraph_knowledge(4).load_rdf_data(f, 'turtle')
+    with current_app.open_resource('dummy/knowledge_4.ttl') as f:
+        get_subgraph_knowledge(5).load_rdf_data(f, 'turtle')
+    with current_app.open_resource('dummy/knowledge_5.ttl') as f:
+        get_subgraph_knowledge(6).load_rdf_data(f, 'turtle')
+    with current_app.open_resource('dummy/knowledge_6.ttl') as f:
+        get_subgraph_knowledge(7).load_rdf_data(f, 'turtle')
 
     with current_app.open_resource('dummy/empty_subgraph_template.ttl') as f:
         with open(current_app.config['EMPTY_SUBGRAPH_TEMPLATE'], 'wb+') as f2:

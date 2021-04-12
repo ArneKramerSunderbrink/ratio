@@ -27,7 +27,7 @@ ctro:CT_1_0 a ctro:ClinicalTrial,
     ctro:hasEndPoint_freeindex "2"^^xsd:nonNegativeInteger ;
     ctro:hasObjectiveDescription_0 "To find out whether dabigatran ( a new oral direct thrombin inhibitor) is as effective as Warfarin. (inferred from text.)"^^xsd:string ;
     ctro:hasObjectiveDescription_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasOutcome_0 ctro:Out_1_0 ;
+    ctro:hasOutcome_0 ctro:Outcome_1_0 ;
     ctro:hasOutcome_1 ctro:Outcome_1_1 ;
     ctro:hasOutcome_2 ctro:Outcome_1_2 ;
     ctro:hasOutcome_3 ctro:Outcome_1_3 ;
@@ -42,7 +42,7 @@ ctro:CT_1_0 a ctro:ClinicalTrial,
 ctro:AdverseEffect_1_0 a ctro:AdverseEffect,
         owl:NamedIndividual ;
     rdfs:label "Arm-dabigatran110-dyspepsia"^^xsd:string ;
-    ctro:hasAEname_0 ctro:Indigestion ;
+    ctro:hasAEname_0 ctro:HemorrhagicStroke ;
     ctro:hasAEname_freeindex "1"^^xsd:nonNegativeInteger ;
     ctro:hasArmAE_0 ctro:Arm_1_0 ;
     ctro:hasArmAE_freeindex "1"^^xsd:nonNegativeInteger ;
@@ -133,7 +133,7 @@ ctro:Intervention_1_1 a ctro:Intervention,
     ctro:isControl_0 false ;
     ctro:isControl_freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:Out_1_0 a ctro:Outcome,
+ctro:Outcome_1_0 a ctro:Outcome,
         owl:NamedIndividual ;
     rdfs:label "OutcomeMeasure-dabigatran110-SEE" ;
     ctro:hasArmOut_0 ctro:Arm_1_0 ;
@@ -221,12 +221,13 @@ ctro:Outcome_1_3 a ctro:Outcome,
     ctro:hasObservedResult_0 "%/yr 4.13"^^xsd:string ;
     ctro:hasObservedResult_freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:EndPoint_1_1 a ctro:EndPoint,
+ctro:EndPoint_1_0 a ctro:EndPoint,
         owl:NamedIndividual ;
-    rdfs:label "OUTCOME-ALL-CAUSE-DEAD"^^xsd:string ;
-    ctro:hasAggregationMethod_0 ctro:Count ;
-    ctro:hasAggregationMethod_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasEndPointDescriptionStr_0 "all-cause mortality"^^xsd:string ;
+    rdfs:label "OUTCOME-SSE"^^xsd:string ;
+    ctro:hasAggregationMethod_0 "" ;
+    ctro:hasAggregationMethod_1 ctro:Count ;
+    ctro:hasAggregationMethod_freeindex "2"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPointDescriptionStr_0 "Stroke or systemic embolism at the on-period"^^xsd:string ;
     ctro:hasEndPointDescriptionStr_freeindex "1"^^xsd:nonNegativeInteger ;
     ctro:hasEndpointDescription_0 ctro:AllCauseMortality ;
     ctro:hasEndpointDescription_freeindex "1"^^xsd:nonNegativeInteger ;
@@ -235,15 +236,14 @@ ctro:EndPoint_1_1 a ctro:EndPoint,
     ctro:hasOutcomeType_0 "Primary" ;
     ctro:hasOutcomeType_freeindex "1"^^xsd:nonNegativeInteger .
 
-ctro:EndPoint_1_0 a ctro:EndPoint,
+ctro:EndPoint_1_1 a ctro:EndPoint,
         owl:NamedIndividual ;
-    rdfs:label "OUTCOME-SSE"^^xsd:string ;
-    ctro:hasAggregationMethod_0 "" ;
-    ctro:hasAggregationMethod_1 ctro:Count ;
-    ctro:hasAggregationMethod_freeindex "2"^^xsd:nonNegativeInteger ;
-    ctro:hasEndPointDescriptionStr_0 "Stroke or systemic embolism"^^xsd:string ;
+    rdfs:label "OUTCOME-ALL-CAUSE-DEAD"^^xsd:string ;
+    ctro:hasAggregationMethod_0 ctro:Count ;
+    ctro:hasAggregationMethod_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPointDescriptionStr_0 "all-cause mortality"^^xsd:string ;
     ctro:hasEndPointDescriptionStr_freeindex "1"^^xsd:nonNegativeInteger ;
-    ctro:hasEndpointDescription_0 ctro:SSE ;
+    ctro:hasEndpointDescription_0 ctro:AllCauseMortality ;
     ctro:hasEndpointDescription_freeindex "1"^^xsd:nonNegativeInteger ;
     ctro:hasEndpointUnit_0 ctro:Number ;
     ctro:hasEndpointUnit_freeindex "1"^^xsd:nonNegativeInteger ;

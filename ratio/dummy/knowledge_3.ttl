@@ -1,0 +1,379 @@
+@prefix ctro: <http://www.semanticweb.org/root/ontologies/2018/6/ctro#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix ratio: <http://www.example.org/ratio-tool#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ctro:CT_4_0 a ctro:ClinicalTrial,
+        owl:NamedIndividual ;
+    rdfs:label "Clinical Trial"^^xsd:string ;
+    ratio:isRoot true ;
+    ctro:described_by_0 ctro:Pub_4_0 ;
+    ctro:described_by_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasAdverseEffect_0 ctro:AdverseEffect_4_0 ;
+    ctro:hasAdverseEffect_1 ctro:AdverseEffect_4_1 ;
+    ctro:hasAdverseEffect_freeindex "2"^^xsd:nonNegativeInteger ;
+    ctro:hasArm_0 ctro:Arm_4_0 ;
+    ctro:hasArm_1 ctro:Arm_4_1 ;
+    ctro:hasArm_freeindex "2"^^xsd:nonNegativeInteger ;
+    ctro:hasConclusionComment_0 "In patients with atrial fibrillation, apixaban was superior to warfarin in preventing stroke or systemic embolism, caused less bleeding, and resulted in lower mortality."^^xsd:string ;
+    ctro:hasConclusionComment_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDesignGroup_0 ctro:Design_4_0 ;
+    ctro:hasDesignGroup_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDiffBetweenGroups_0 ctro:DiffBetweenGroups_4_0 ;
+    ctro:hasDiffBetweenGroups_1 ctro:DiffBetweenGroups_4_1 ;
+    ctro:hasDiffBetweenGroups_2 ctro:DiffBetweenGroups_4_2 ;
+    ctro:hasDiffBetweenGroups_freeindex "3"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPoint_0 ctro:EndPoint_4_0 ;
+    ctro:hasEndPoint_1 ctro:EndPoint_4_1 ;
+    ctro:hasEndPoint_2 ctro:EndPoint_4_2 ;
+    ctro:hasEndPoint_freeindex "3"^^xsd:nonNegativeInteger ;
+    ctro:hasObjectiveDescription_0 "determine whether apixaban is non inferior to warfarin in reducing the rate of stroke, with key secondary objectives of testing for superiority with respect to the primary outcome and to the rates of major bleeding and death from any cause."^^xsd:string ;
+    ctro:hasObjectiveDescription_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcome_0 ctro:Outcome_4_0 ;
+    ctro:hasOutcome_1 ctro:Outcome_4_1 ;
+    ctro:hasOutcome_2 ctro:Outcome_4_2 ;
+    ctro:hasOutcome_3 ctro:Outcome_4_3 ;
+    ctro:hasOutcome_4 ctro:Outcome_4_4 ;
+    ctro:hasOutcome_5 ctro:Outcome_4_5 ;
+    ctro:hasOutcome_freeindex "6"^^xsd:nonNegativeInteger ;
+    ctro:hasPopulation_0 ctro:Population_4_0 ;
+    ctro:hasPopulation_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasQualityIndicator_0 ctro:Evidence_4_0 ;
+    ctro:hasQualityIndicator_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:AdverseEffect_4_0 a ctro:AdverseEffect,
+        owl:NamedIndividual ;
+    rdfs:label "Serious Adverse Events-apixaban" ;
+    ctro:hasAEname_0 "" ;
+    ctro:hasAEname_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasArmAE_0 ctro:Arm_4_0 ;
+    ctro:hasArmAE_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberAffectedAE_0 3182 ;
+    ctro:hasNumberAffectedAE_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObservedResultAE_0 "35%"^^xsd:string ;
+    ctro:hasObservedResultAE_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:AdverseEffect_4_1 a ctro:AdverseEffect,
+        owl:NamedIndividual ;
+    rdfs:label "Serious Adverse Events-warfarin"^^xsd:string ;
+    ctro:hasArmAE_0 ctro:Arm_4_1 ;
+    ctro:hasArmAE_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberAffectedAE_0 3302 ;
+    ctro:hasNumberAffectedAE_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObservedResultAE_0 "36.5%"^^xsd:string ;
+    ctro:hasObservedResultAE_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:CTDesign ratio:freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:CTDesign_4_0 a ctro:CTDesign,
+        owl:NamedIndividual ;
+    rdfs:label "Double-dummy"^^xsd:string ;
+    ratio:isCustom true .
+
+ctro:ClinicalTrial ratio:freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:DesignGroup ratio:freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Design_4_0 a ctro:DesignGroup,
+        owl:NamedIndividual ;
+    rdfs:label "Design"^^xsd:string ;
+    ctro:analysesHealthCondition_0 ctro:AtrialFibrillation ;
+    ctro:analysesHealthCondition_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasCTDesign_0 ctro:Double-blind ;
+    ctro:hasCTDesign_1 ctro:CTDesign_4_0 ;
+    ctro:hasCTDesign_2 ctro:Randomized ;
+    ctro:hasCTDesign_3 ctro:Multicenter ;
+    ctro:hasCTDesign_4 ctro:Multinational ;
+    ctro:hasCTDesign_freeindex "5"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberPatientsCT_0 "18201"^^xsd:positiveInteger ;
+    ctro:hasNumberPatientsCT_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:DiffBetweenGroups_4_0 a ctro:DiffBetweenGroups,
+        owl:NamedIndividual ;
+    rdfs:label "Diff-StrokeOrSSE-apixaban-warfarin"^^xsd:string ;
+    ctro:hasConfIntervalDiff_0 "95% CI (0.66–0.95)"^^rdfs:Literal ;
+    ctro:hasConfIntervalDiff_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDiffGroupAbsValue_0 "0.79"^^xsd:float ;
+    ctro:hasDiffGroupAbsValue_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasMeasureName_0 ctro:DiffGroupsMeasureName_4_0 ;
+    ctro:hasMeasureName_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcome1_0 ctro:Outcome_4_0 ;
+    ctro:hasOutcome1_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcome2_0 ctro:Outcome_4_1 ;
+    ctro:hasOutcome2_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasPvalueDiff_0 "0.021"^^xsd:string ;
+    ctro:hasPvalueDiff_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:DiffBetweenGroups_4_1 a ctro:DiffBetweenGroups,
+        owl:NamedIndividual ;
+    rdfs:label "Diff-MayorBleeding-apixaban-warfarin"^^xsd:string ;
+    ctro:hasConfIntervalDiff_0 "95% CI, 0.60 to 0.80"^^rdfs:Literal ;
+    ctro:hasConfIntervalDiff_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDiffGroupAbsValue_0 "0.6"^^xsd:float ;
+    ctro:hasDiffGroupAbsValue_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasMeasureName_0 ctro:DiffGroupsMeasureName_4_0 ;
+    ctro:hasMeasureName_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcome1_0 ctro:Outcome_4_2 ;
+    ctro:hasOutcome1_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcome2_0 ctro:Outcome_4_3 ;
+    ctro:hasOutcome2_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasPvalueDiff_0 "P<0.001"^^xsd:string ;
+    ctro:hasPvalueDiff_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:DiffBetweenGroups_4_2 a ctro:DiffBetweenGroups,
+        owl:NamedIndividual ;
+    rdfs:label "Diff-MyocardialInfarction-apixaban-warfarin"^^xsd:string ;
+    ctro:hasConfIntervalDiff_0 "95% (0.66–1.17)"^^rdfs:Literal ;
+    ctro:hasConfIntervalDiff_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDiffGroupAbsValue_0 "0.88"^^xsd:float ;
+    ctro:hasDiffGroupAbsValue_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasMeasureName_0 ctro:DiffGroupsMeasureName_4_0 ;
+    ctro:hasMeasureName_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcome1_0 ctro:Outcome_4_4 ;
+    ctro:hasOutcome1_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcome2_0 ctro:Outcome_4_5 ;
+    ctro:hasOutcome2_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasPvalueDiff_0 "0.37"^^xsd:string ;
+    ctro:hasPvalueDiff_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:DiffGroupsMeasureName ratio:freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Drug ratio:freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Drug_4_0 a ctro:Drug,
+        owl:NamedIndividual ;
+    rdfs:label "Apixaban"^^xsd:string ;
+    ratio:isCustom true .
+
+ctro:EndpointDesc_AF ratio:freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:EndpointDesc_AF_4_0 a ctro:EndpointDesc_AF,
+        owl:NamedIndividual ;
+    rdfs:label "Stroke or systemic embolism"^^xsd:string ;
+    ratio:isCustom true .
+
+ctro:EvidenceQuality ratio:freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Evidence_4_0 a ctro:EvidenceQuality,
+        owl:NamedIndividual ;
+    rdfs:label "Potential Conflicts of Interest"^^xsd:string ;
+    ctro:hasAuthorAffiliation_0 "Duke Clinical Research Institute"^^xsd:string ;
+    ctro:hasAuthorAffiliation_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasSponsor_0 "Bristol-Myers Squibb"^^xsd:string ;
+    ctro:hasSponsor_1 "Pfizer"^^xsd:string ;
+    ctro:hasSponsor_freeindex "2"^^xsd:nonNegativeInteger .
+
+ctro:Interv_4_0 a ctro:Intervention,
+        owl:NamedIndividual ;
+    rdfs:label "Intervention1" ;
+    ctro:hasDeliveryMethod_0 ctro:Oral ;
+    ctro:hasDeliveryMethod_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDoseUnit_0 ctro:mg ;
+    ctro:hasDoseUnit_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDoseValue_0 "5"^^rdfs:Literal ;
+    ctro:hasDoseValue_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDrug_0 ctro:Drug_4_0 ;
+    ctro:hasDrug_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDuration_0 "The median duration of follow-up was 1.8 years"^^rdfs:Literal ;
+    ctro:hasDuration_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasFreqInterval_0 ctro:TwiceAday ;
+    ctro:hasFreqInterval_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:isControl_0 "" ;
+    ctro:isControl_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Intervention_4_1 a ctro:Intervention,
+        owl:NamedIndividual ;
+    rdfs:label "Intervention1"^^xsd:string ;
+    ctro:hasDeliveryMethod_0 ctro:Oral ;
+    ctro:hasDeliveryMethod_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDoseValue_0 "adapted dose (target international normalized ratio, 2.0 to 3.0)"^^rdfs:Literal ;
+    ctro:hasDoseValue_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasDrug_0 ctro:Warfarin ;
+    ctro:hasDrug_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasFreqInterval_0 "" ;
+    ctro:hasFreqInterval_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Population ratio:freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Population_4_0 a ctro:Population,
+        owl:NamedIndividual ;
+    rdfs:label "Population"^^xsd:string ;
+    ctro:hasAvgAge_0 "70"^^xsd:nonNegativeInteger ;
+    ctro:hasAvgAge_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasExclusionCriteria_0 "Key exclusion criteria were atrial fibrillation due to a reversible cause, moderate or severe mitral stenosis, conditions other than atrial fibrillation that required anticoagulation (e.g., a prosthetic heart valve), stroke within the previous 7 days, a need for aspirin at a dose of >165 mg a day or for both aspirin and clopidogrel, and severe renal insufficiency (serum creatinine level of >2.5 mg per deciliter [221 µmol per liter] or calculated creatinine clearance of <25 ml per minute)."^^rdfs:Literal ;
+    ctro:hasExclusionCriteria_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasGender_0 ctro:Female ;
+    ctro:hasGender_1 ctro:Male ;
+    ctro:hasGender_freeindex "2"^^xsd:nonNegativeInteger ;
+    ctro:hasPreconditionDescription_0 "Eligible patients had atrial fibrillation or flutter at enrollment or two or more episodes of atrial fibrillation or flutter, as documented by electrocardiography, at least 2 weeks apart in the 12 months before enrollment."^^xsd:string ;
+    ctro:hasPreconditionDescription_1 "At least one of the following risk factors for stroke was required: an age of at least 75 years; previous stroke, transient ischemic attack, or systemic embolism; symptomatic heart failure within the previous 3 months or left ventricular ejection fraction of no more than 40%; diabetes mellitus; or hypertension requiring pharmacologic treatment."^^xsd:string ;
+    ctro:hasPreconditionDescription_freeindex "2"^^xsd:nonNegativeInteger .
+
+ctro:Pub_4_0 a ctro:Publication,
+        owl:NamedIndividual ;
+    rdfs:label "Publication"^^xsd:string ;
+    ctro:hasAuthor_0 "Christopher B. Granger"^^xsd:string ;
+    ctro:hasAuthor_1 "John H. Alexander"^^xsd:string ;
+    ctro:hasAuthor_2 "John J.V. McMurray"^^xsd:string ;
+    ctro:hasAuthor_freeindex "3"^^xsd:nonNegativeInteger ;
+    ctro:hasJournal_0 "The New England Journal of Medicine"^^xsd:string ;
+    ctro:hasJournal_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasPMID_0 "21870978"^^rdfs:Literal ;
+    ctro:hasPMID_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasPublicationYear_0 "2011"^^xsd:positiveInteger ;
+    ctro:hasPublicationYear_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasTitle_0 "Apixaban versus Warfarin in Patients with Atrial Fibrillation"^^xsd:string ;
+    ctro:hasTitle_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Publication ratio:freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:AdverseEffect ratio:freeindex "2"^^xsd:nonNegativeInteger .
+
+ctro:Arm ratio:freeindex "2"^^xsd:nonNegativeInteger .
+
+ctro:Intervention ratio:freeindex "2"^^xsd:nonNegativeInteger .
+
+ctro:Outcome_4_0 a ctro:Outcome,
+        owl:NamedIndividual ;
+    rdfs:label "Outcome-apixaban-StrokeOrSSE" ;
+    ctro:hasArmOut_0 ctro:Arm_4_0 ;
+    ctro:hasArmOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPointOut_0 ctro:EndPoint_4_0 ;
+    ctro:hasEndPointOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberAffected_0 212 ;
+    ctro:hasNumberAffected_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObservedResult_0 "%/year 1.27"^^xsd:string ;
+    ctro:hasObservedResult_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasResultDirection_0 "" ;
+    ctro:hasResultDirection_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Outcome_4_1 a ctro:Outcome,
+        owl:NamedIndividual ;
+    rdfs:label "Outcome-warfarin-StrokeOrSSE"^^xsd:string ;
+    ctro:hasArmOut_0 ctro:Arm_4_1 ;
+    ctro:hasArmOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPointOut_0 ctro:EndPoint_4_0 ;
+    ctro:hasEndPointOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberAffected_0 265 ;
+    ctro:hasNumberAffected_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObservedResult_0 "%/year 1.60"^^xsd:string ;
+    ctro:hasObservedResult_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Outcome_4_2 a ctro:Outcome,
+        owl:NamedIndividual ;
+    rdfs:label "Outcome-apixaban-MayorBleeding"^^xsd:string ;
+    ctro:hasArmOut_0 ctro:Arm_4_0 ;
+    ctro:hasArmOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPointOut_0 ctro:EndPoint_4_1 ;
+    ctro:hasEndPointOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberAffected_0 327 ;
+    ctro:hasNumberAffected_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasStatisticalTestName_0 "%/year 2.13"^^xsd:string ;
+    ctro:hasStatisticalTestName_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Outcome_4_3 a ctro:Outcome,
+        owl:NamedIndividual ;
+    rdfs:label "Outcome-warfarin-MayorBleeding"^^xsd:string ;
+    ctro:hasArmOut_0 ctro:Arm_4_1 ;
+    ctro:hasArmOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPointOut_0 ctro:EndPoint_4_1 ;
+    ctro:hasEndPointOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberAffected_0 462 ;
+    ctro:hasNumberAffected_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObservedResult_0 "%/year 3.09"^^xsd:string ;
+    ctro:hasObservedResult_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Outcome_4_4 a ctro:Outcome,
+        owl:NamedIndividual ;
+    rdfs:label "Outcome-apixaban-MyocardialInfarction"^^xsd:string ;
+    ctro:hasArmOut_0 ctro:Arm_4_0 ;
+    ctro:hasArmOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPointOut_0 ctro:EndPoint_4_2 ;
+    ctro:hasEndPointOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberAffected_0 90 ;
+    ctro:hasNumberAffected_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObservedResult_0 "%/year 0.53"^^xsd:string ;
+    ctro:hasObservedResult_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Outcome_4_5 a ctro:Outcome,
+        owl:NamedIndividual ;
+    rdfs:label "Outcome-warfarin-MyocardialInfarction"^^xsd:string ;
+    ctro:hasArmOut_0 ctro:Arm_4_1 ;
+    ctro:hasArmOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPointOut_0 ctro:EndPoint_4_2 ;
+    ctro:hasEndPointOut_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberAffected_0 102 ;
+    ctro:hasNumberAffected_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasObservedResult_0 "%/year 0.61"^^xsd:string ;
+    ctro:hasObservedResult_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:DiffBetweenGroups ratio:freeindex "3"^^xsd:nonNegativeInteger .
+
+ctro:DiffGroupsMeasureName_4_0 a ctro:DiffGroupsMeasureName,
+        owl:NamedIndividual ;
+    rdfs:label "Hazard ratio"^^xsd:string ;
+    ratio:isCustom true .
+
+ctro:EndPoint ratio:freeindex "3"^^xsd:nonNegativeInteger .
+
+ctro:EndPoint_4_0 a ctro:EndPoint,
+        owl:NamedIndividual ;
+    rdfs:label "StrokeOrSSE" ;
+    ctro:hasAggregationMethod_0 ctro:Count ;
+    ctro:hasAggregationMethod_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasAnalysisMetric_0 "" ;
+    ctro:hasAnalysisMetric_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPointDescriptionStr_0 "Efficacy Outcome"^^xsd:string ;
+    ctro:hasEndPointDescriptionStr_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndpointDescription_0 ctro:EndpointDesc_AF_4_0 ;
+    ctro:hasEndpointDescription_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndpointUnit_0 ctro:Number ;
+    ctro:hasEndpointUnit_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcomeType_0 "Primary" ;
+    ctro:hasOutcomeType_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:EndPoint_4_1 a ctro:EndPoint,
+        owl:NamedIndividual ;
+    rdfs:label "Major Bleeding"^^xsd:string ;
+    ctro:hasAggregationMethod_0 ctro:Count ;
+    ctro:hasAggregationMethod_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndPointDescriptionStr_0 "Safety Outcome"^^xsd:string ;
+    ctro:hasEndPointDescriptionStr_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndpointDescription_0 ctro:MajorBleed ;
+    ctro:hasEndpointDescription_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndpointUnit_0 ctro:Number ;
+    ctro:hasEndpointUnit_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcomeType_0 "Primary" ;
+    ctro:hasOutcomeType_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:EndPoint_4_2 a ctro:EndPoint,
+        owl:NamedIndividual ;
+    rdfs:label "Myocardial infarction"^^xsd:string ;
+    ctro:hasAggregationMethod_0 ctro:Count ;
+    ctro:hasAggregationMethod_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndpointDescription_0 ctro:MyocardialInfarction ;
+    ctro:hasEndpointDescription_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasEndpointUnit_0 ctro:Number ;
+    ctro:hasEndpointUnit_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasOutcomeType_0 "Secondary" ;
+    ctro:hasOutcomeType_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Arm_4_0 a ctro:Arm,
+        owl:NamedIndividual ;
+    rdfs:label "Arm-apixaban" ;
+    ctro:hasIntervention_0 ctro:Interv_4_0 ;
+    ctro:hasIntervention_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberPatientsArm_0 "9120"^^xsd:positiveInteger ;
+    ctro:hasNumberPatientsArm_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Arm_4_1 a ctro:Arm,
+        owl:NamedIndividual ;
+    rdfs:label "Arm-warfarin" ;
+    ctro:hasIntervention_0 ctro:Intervention_4_1 ;
+    ctro:hasIntervention_freeindex "1"^^xsd:nonNegativeInteger ;
+    ctro:hasNumberPatientsArm_0 "9081"^^xsd:positiveInteger ;
+    ctro:hasNumberPatientsArm_freeindex "1"^^xsd:nonNegativeInteger .
+
+ctro:Outcome ratio:freeindex "6"^^xsd:nonNegativeInteger .
+
