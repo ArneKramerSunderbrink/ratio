@@ -217,7 +217,187 @@
 </div>
 {% endmacro %}
 
-{% macro overview(id=1) %}
+{% macro overview(graph) %}
+<table class="color1">
+  <tr class="color2">
+    <td><b>
+      Study details:
+      {% set q = graph.query("""SELECT ?v WHERE {?p ctro:hasTitle ?v .}""") %}{{ q.bindings[0]['v'] if q else "No title was provided" }} ;
+      {% set q = graph.query("""SELECT ?v WHERE {?p ctro:hasPublicationYear ?v .}""") %}{{ q.bindings[0]['v'] if q else "No year was provided" }} ;
+      {% set q = graph.query("""SELECT ?v WHERE {?p ctro:hasAuthor ?v .}""") %}
+      {% if q %}
+      Authors: {% for row in q | sort() %}{{ row[0] }}{{ "" if loop.last else ", " }}{% endfor %}
+      {% else %}
+      No authors were provided
+      {% endif %}
+    </b></td>
+  </tr>
+  <tr>
+    <td>
+      Objective:
+      {% set q = graph.query("""SELECT ?v WHERE {?p ctro:hasObjectiveDescription ?v .}""") %}{{ q.bindings[0]['v'] if q else "No information was provided" }}
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Study design:
+      {% set q = graph.query("""SELECT ?v WHERE {?p ctro:hasCTDesign ?d . ?d rdfs:label ?v .}""") %}
+      {% if q %}
+      {% for row in q | sort() %}{{ row[0] }}{{ "" if loop.last else ", " }}{% endfor %}
+      {% else %}
+      No information was provided
+      {% endif %}
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Disease(s):
+      {% set q = graph.query("""SELECT ?v WHERE {?p ctro:analysesHealthCondition ?d . ?d rdfs:label ?v .}""") %}
+      {% if q %}
+      {% for row in q | sort() %}{{ row[0] }}{{ "" if loop.last else ", " }}{% endfor %}
+      {% else %}
+      No information was provided
+      {% endif %}
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Eligibility:
+      {% set q1 = graph.query("""SELECT ?v WHERE {?p ctro:hasPreconditionDescription ?v .}""") %}
+      {% set q2 = graph.query("""SELECT ?v WHERE {?p ctro:hasExclusionCriteria ?v .}""") %}
+      {% if q1 %}
+      Precondition: {% for row in q1 | sort() %}{{ row[0] }}{{ "" if loop.last else ", " }}{% endfor %}
+      {% endif %}
+      {{ "; " if q1 and q2 else "" }}
+      {% if q2 %}
+      Exclusion: {% for row in q2 | sort() %}{{ row[0] }}{{ "" if loop.last else ", " }}{% endfor %}
+      {% endif %}
+      {% if not q1 and not q2 %}
+      No information was provided
+      {% endif %}
+    </td>
+  </tr>
+  <tr>
+    <td>
+      Baseline Population:
+      Gender:
+      {% set q = graph.query("""SELECT ?v WHERE {?p ctro:hasGender ?d . ?d rdfs:label ?v .}""") %}
+      {% if q %}
+      {% for row in q | sort() %}{{ row[0] }}{{ "" if loop.last else ", " }}{% endfor %}
+      {% else %}
+      No information was provided
+      {% endif %};
+      Avg Age:
+      {% set q = graph.query("""SELECT ?v WHERE {?p ctro:hasAvgAge ?v .}""") %}
+      {% if q %}
+      {% for row in q | sort() %}{{ row[0] }}{{ "" if loop.last else ", " }}{% endfor %}
+      {% else %}
+      No information was provided
+      {% endif %}
+    </td>
+  </tr>
+  <tr><td class="separator-row"></td></tr>
+  <tr class="color2">
+    <th>Results</th>
+  </tr>
+  <tr>
+    <td class="table-container">
+      <table>
+        {% set arms = graph.query("""SELECT ?v WHERE {?p ctro:hasArm ?v .}""") | map('first') | sort() %}  {# map first because the query return a list of tuples of length 1 #}
+        {% set ends = graph.query("""SELECT ?v WHERE {?p ctro:hasEndPoint ?v .}""") | map('first') | sort() %}
+        <tr>
+          <td><b>Events / Arms</b></td>
+          {% for arm in arms %}
+          <td>
+            {% set q = graph.query("""SELECT ?v WHERE {?a rdfs:label ?v .}""", initBindings={'a': arm}) %}{{ q.bindings[0]['v'] if q else "No label was provided" }}:
+            {% set ints = graph.query("""SELECT ?v WHERE {?a ctro:hasIntervention ?v .}""", initBindings={'a': arm}) | map('first') | sort()%}
+            {% for i in ints %}
+            {% set q = graph.query("""SELECT ?v WHERE {?i ctro:hasDrug ?d . ?d rdfs:label ?v .}""", initBindings={'i': i}) %}{{ "Drug: " + q.bindings[0]['v'] + ", " if q else "" }}
+            {% set q = graph.query("""SELECT ?v WHERE {?i ctro:hasDoseValue ?v .}""", initBindings={'i': i}) %}{{ "Dose: " + q.bindings[0]['v'] + ", " if q else "" }}
+            {% set q = graph.query("""SELECT ?v WHERE {?i ctro:hasDoseUnit ?d . ?d rdfs:label ?v .}""", initBindings={'i': i}) %}{{ q.bindings[0]['v'] + ", " if q else "" }}
+            {% set q = graph.query("""SELECT ?v WHERE {?i ctro:hasFreqInterval ?d . ?d rdfs:label ?v .}""", initBindings={'i': i}) %}{{ "Frequency: " + q.bindings[0]['v'] + ", " if q else "" }}
+            {% set q = graph.query("""SELECT ?v WHERE {?i ctro:hasDeliveryMethod ?d . ?d rdfs:label ?v .}""", initBindings={'i': i}) %}{{ "Delivery method: " + q.bindings[0]['v'] + ", " if q else "" }}
+            {% set q = graph.query("""SELECT ?v WHERE {?i ctro:isControl ?v .}""", initBindings={'i': i}) %}{{ "Control or placebo: " + q.bindings[0]['v'] + ", " if q else "" }}
+            {% endfor %}
+            Number of patients:
+            {% set q = graph.query("""SELECT ?v WHERE {?a rdfs:hasNumberPatientsArm ?v .}""", initBindings={'a': arm}) %}{{ q.bindings[0]['v'] if q else "No information was provided" }}
+          </td>
+          {% endfor %}
+        </tr>
+
+        <tr class="table-light">
+          <td rowspan="4">Endpoint 1: Outcome Measure: Systematic Embolic Event; Outcome description: Stroke or systemic embolism, Primary</td>
+          <th colspan="2">Baseline values</th>
+        </tr>
+        <tr class="table-light">
+          <td>Number of patients in arm: 6015, Aggregation method: Count</td>
+          <td>Number of patients in arm: 6022, Aggregation method: Count</td>
+        </tr>
+        <tr class="table-light">
+          <th colspan="2">Result at last timepoint</th>
+        </tr>
+        <tr class="table-light">
+          <td>Number of patients affected: 182; Observed results: %/yr 1.53</td>
+          <td>Number of patients affected: 199; Observed results: %/yr 1.69</td>
+        </tr>
+
+        <tr class="table-gray">
+          <td rowspan="4">Endpoint 2: Outcome Measure: All-cause Mortality; Outcome description: alll-cause mortality, Primary</td>
+          <th colspan="2">Baseline values</th>
+        </tr>
+        <tr class="table-gray">
+          <td>Number of patients in arm: 6015, Aggregation method: Count</td>
+          <td>Number of patients in arm: 6022, Aggregation method: Count</td>
+        </tr>
+        <tr class="table-gray">
+          <th colspan="2">Result at last timepoint</th>
+        </tr>
+        <tr class="table-gray">
+          <td>No information was provided</td>
+          <td>No information was provided</td>
+        </tr>
+
+        <tr class="table-light">
+          <td>Adverse Event 1: Indigestion (dyspepsia)</td>
+          <td>Number of patients affected affected: 707</td>
+          <td>Number of patients affected affected: 348</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr><td class="separator-row"></td></tr>
+  <tr class="color2">
+    <th>Size of effect / difference between groups</th>
+  </tr>
+  <tr>
+    <td class="table-container">
+      <table>
+        <tr class="table-light">
+          <td>Endpoint 1 Arm 1 vs. Endpoint 1 Arm 2</td>
+          <td>Measurement: Hazard ratio</td>
+          <td>Absolute value: 0.88</td>
+          <td>Confidence interval: 95% (0.75–1.03); P-value: <0.00</td>
+        </tr>
+        <tr class="table-light">
+          <td>Endpoint 2 Arm 1 vs. Endpoint 2 Arm 2</td>
+          <td>Measurement: Odd ratio</td>
+          <td>Absolute value: 0.93</td>
+          <td>Confidence interval: 95% (0·55–1·55)</td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr><td class="separator-row"></td></tr>
+  <tr>
+    <td class="color2"><b>Conclusions:</b> In conclusion, we compared two doses of dabigatran with warfarin in patients who had atrial fibrillation and who were at risk for stroke. As compared with warfarin, the 110-mg dose of dabigatran was associated with similar rates of stroke and systemic embolism and lower rates of major hemorrhage; the 150-mg dose of dabigatran was associated with lower rates of stroke and systemic embolism but with a similar rate of major hemorrhage.</td>
+  </tr>
+  <tr><td class="separator-row"></td></tr>
+  <tr>
+    <td class="color2"><b>Potential conflict of interest:</b> Sponsor: Boehringer Ingelheim; Conflict of interest: An operations committee, with assistance from an international steering committee and with participation by the sponsor, was responsible for the design, conduct, and reporting of the study. Tby all appropriate national.</td>
+  </tr>
+</table>
+
+<!--
 {% if id == 1%}
 <table class="color1">
   <tr class="color2">
@@ -410,4 +590,5 @@
   </tr>
 </table>
 {% endif %}
+-->
 {% endmacro %}

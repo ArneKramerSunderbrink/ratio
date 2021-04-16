@@ -510,18 +510,23 @@ class SubgraphKnowledge:
 
         self.root = None  # forces a rebuild of the root entity from the updated graph on the next request
 
-    def get_clean_graph(self):
-        clean_graph = Graph()
-        clean_graph.namespace_manager = self.graph.namespace_manager
-        for t in self.get_root().get_triples():
-            clean_graph.add(t)
-        return clean_graph
-
-    def get_serialization(self, rdf_format='turtle', clean=True):
+    def get_graph(self, clean=False, ontology=False):
         if clean:
-            return self.get_clean_graph().serialize(format=rdf_format)
+            graph = Graph()
+            graph.namespace_manager = self.graph.namespace_manager
+            for t in self.get_root().get_triples():
+                graph.add(t)
         else:
-            return self.graph.serialize(format=rdf_format)
+            graph = self.graph
+
+        if ontology:
+            for t in get_ontology().graph[::]:
+                graph.add(t)
+
+        return graph
+
+    def get_serialization(self, rdf_format='turtle', clean=True, ontology=False):
+        return self.get_graph(clean, ontology).serialize(format=rdf_format)
 
 
 def get_subgraph_knowledge(subgraph_id):

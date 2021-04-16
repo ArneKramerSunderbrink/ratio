@@ -105,7 +105,8 @@ def overview(subgraph_id):
         )
         return redirect(url_for('tool.index', message=quote(message)))
 
-    return render_template('tool/overview.html', subgraph=subgraph)
+    return render_template('tool/overview.html', subgraph=subgraph,
+                           rdf_graph=get_subgraph_knowledge(subgraph_id).get_graph(clean=True, ontology=True))
 
 
 @bp.route('/_set_finished')

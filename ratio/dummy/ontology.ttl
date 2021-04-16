@@ -1319,7 +1319,7 @@ ctro:White rdf:type owl:NamedIndividual ,
 
 ctro:mg rdf:type owl:NamedIndividual ,
                  ctro:Mass ;
-        rdfs:comment "mg." ;
+        rdfs:label "mg." ;
         rdfs:isDefinedBy <http://purl.bioontology.org/ontology/RCD/X800J> .
 
 ctro:mmHg rdf:type owl:NamedIndividual ,
