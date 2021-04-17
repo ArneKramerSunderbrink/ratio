@@ -252,48 +252,40 @@
   <tr>
     <td>
       Disease(s):
+      {% set info = [] %}
       {% set q = graph.query("""SELECT ?v WHERE {?p ctro:analysesHealthCondition ?d . ?d rdfs:label ?v .}""") %}
-      {% if q %}
-      {% for row in q | sort() %}{{ row[0] }}{{ "" if loop.last else ", " }}{% endfor %}
-      {% else %}
-      No information was provided
-      {% endif %}
+      {% for row in q | sort() %}{{ info.append("Precondition: " + row[0]) or "" }}{% endfor %}
+      {{ info|join(', ') if info else "No information was provided"}}
     </td>
   </tr>
   <tr>
     <td>
       Eligibility:
-      {% set q1 = graph.query("""SELECT ?v WHERE {?p ctro:hasPreconditionDescription ?v .}""") %}
-      {% set q2 = graph.query("""SELECT ?v WHERE {?p ctro:hasExclusionCriteria ?v .}""") %}
-      {% if q1 %}
-      Precondition: {% for row in q1 | sort() %}{{ row[0] }}{{ "" if loop.last else ", " }}{% endfor %}
-      {% endif %}
-      {{ "; " if q1 and q2 else "" }}
-      {% if q2 %}
-      Exclusion: {% for row in q2 | sort() %}{{ row[0] }}{{ "" if loop.last else ", " }}{% endfor %}
-      {% endif %}
-      {% if not q1 and not q2 %}
-      No information was provided
-      {% endif %}
+      {% set info = [] %}
+      {% set q = graph.query("""SELECT ?v WHERE {?p ctro:hasPreconditionDescription ?v .}""") %}
+      {% for row in q | sort() %}{{ info.append("Precondition: " + row[0]) or "" }}{% endfor %}
+      {% set q = graph.query("""SELECT ?v WHERE {?p ctro:hasExclusionCriteria ?v .}""") %}
+      {% for row in q | sort() %}{{ info.append("Exclusion: " + row[0]) or "" }}{% endfor %}
+      {{ info|join(', ') if info else "No information was provided"}}
     </td>
   </tr>
   <tr>
     <td>
       Baseline Population:
-      Gender:
+      {% set info = [] %}
       {% set q = graph.query("""SELECT ?v WHERE {?p ctro:hasGender ?d . ?d rdfs:label ?v .}""") %}
-      {% if q %}
-      {% for row in q | sort() %}{{ row[0] }}{{ "" if loop.last else ", " }}{% endfor %}
-      {% else %}
-      No information was provided
-      {% endif %};
-      Avg Age:
+      {% for row in q | sort() %}{{ info.append("Gender: " + row[0]) or "" }}{% endfor %}
+      {% set q = graph.query("""SELECT ?v WHERE {?p ctro:hasMinAge ?v .}""") %}
+      {{ (info.append("Min. age: " + q.bindings[0]['v']) if q) or "" }}
+      {% set q = graph.query("""SELECT ?v WHERE {?p ctro:hasMaxAge ?v .}""") %}
+      {{ (info.append("Max. age: " + q.bindings[0]['v']) if q) or "" }}
       {% set q = graph.query("""SELECT ?v WHERE {?p ctro:hasAvgAge ?v .}""") %}
-      {% if q %}
-      {% for row in q | sort() %}{{ row[0] }}{{ "" if loop.last else ", " }}{% endfor %}
-      {% else %}
-      No information was provided
-      {% endif %}
+      {{ (info.append("Avg. age: " + q.bindings[0]['v']) if q) or "" }}
+      {% set q = graph.query("""SELECT ?v WHERE {?p ctro:hasEthnicity ?d . ?d rdfs:label ?v .}""") %}
+      {% for row in q | sort() %}{{ info.append("Ethnicity: " + row[0]) or "" }}{% endfor %}
+      {% set q = graph.query("""SELECT ?v WHERE {?p ctro:hasCountry ?d . ?d rdfs:label ?v .}""") %}
+      {% for row in q | sort() %}{{ info.append("Country: " + row[0]) or "" }}{% endfor %}
+      {{ info|join(', ') if info else "No information was provided"}}
     </td>
   </tr>
   <tr><td class="separator-row"></td></tr>
@@ -303,65 +295,125 @@
   <tr>
     <td class="table-container">
       <table>
-        {% set arms = graph.query("""SELECT ?v WHERE {?p ctro:hasArm ?v .}""") | map('first') | sort() %}  {# map first because the query return a list of tuples of length 1 #}
-        {% set ends = graph.query("""SELECT ?v WHERE {?p ctro:hasEndPoint ?v .}""") | map('first') | sort() %}
+        {% set arms = graph.query("""SELECT DISTINCT ?v WHERE {?p ctro:hasArm ?v .}""") | map('first') | sort() %}  {# map first because the query return a list of tuples of length 1 #}
+        {% set ends = graph.query("""SELECT DISTINCT ?v WHERE {?p ctro:hasEndPoint ?v .}""") | map('first') | sort() %}
+        {% set aes = graph.query("""SELECT DISTINCT ?v WHERE {?p ctro:hasAEname ?v .}""") | map('first') | sort() %}
         <tr>
           <td><b>Events / Arms</b></td>
           {% for arm in arms %}
           <td>
             {% set q = graph.query("""SELECT ?v WHERE {?a rdfs:label ?v .}""", initBindings={'a': arm}) %}{{ q.bindings[0]['v'] if q else "No label was provided" }}:
             {% set ints = graph.query("""SELECT ?v WHERE {?a ctro:hasIntervention ?v .}""", initBindings={'a': arm}) | map('first') | sort()%}
+            {% set info = [] %}
+
             {% for i in ints %}
-            {% set q = graph.query("""SELECT ?v WHERE {?i ctro:hasDrug ?d . ?d rdfs:label ?v .}""", initBindings={'i': i}) %}{{ "Drug: " + q.bindings[0]['v'] + ", " if q else "" }}
-            {% set q = graph.query("""SELECT ?v WHERE {?i ctro:hasDoseValue ?v .}""", initBindings={'i': i}) %}{{ "Dose: " + q.bindings[0]['v'] + ", " if q else "" }}
-            {% set q = graph.query("""SELECT ?v WHERE {?i ctro:hasDoseUnit ?d . ?d rdfs:label ?v .}""", initBindings={'i': i}) %}{{ q.bindings[0]['v'] + ", " if q else "" }}
-            {% set q = graph.query("""SELECT ?v WHERE {?i ctro:hasFreqInterval ?d . ?d rdfs:label ?v .}""", initBindings={'i': i}) %}{{ "Frequency: " + q.bindings[0]['v'] + ", " if q else "" }}
-            {% set q = graph.query("""SELECT ?v WHERE {?i ctro:hasDeliveryMethod ?d . ?d rdfs:label ?v .}""", initBindings={'i': i}) %}{{ "Delivery method: " + q.bindings[0]['v'] + ", " if q else "" }}
-            {% set q = graph.query("""SELECT ?v WHERE {?i ctro:isControl ?v .}""", initBindings={'i': i}) %}{{ "Control or placebo: " + q.bindings[0]['v'] + ", " if q else "" }}
+            {% set q = graph.query("""SELECT ?v WHERE {?i ctro:hasDrug ?d . ?d rdfs:label ?v .}""", initBindings={'i': i}) %}
+            {{ (info.append("Drug: " + q.bindings[0]['v']) if q) or "" }}
+            {% set q = graph.query("""SELECT ?v WHERE {?i ctro:hasDoseValue ?v .}""", initBindings={'i': i}) %}
+            {{ (info.append("Dose: " + q.bindings[0]['v']) if q) or "" }}
+            {% set q = graph.query("""SELECT ?v WHERE {?i ctro:hasDoseUnit ?d . ?d rdfs:label ?v .}""", initBindings={'i': i}) %}
+            {{ (info.append("Unit: " + q.bindings[0]['v']) if q) or "" }}
+            {% set q = graph.query("""SELECT ?v WHERE {?i ctro:hasFreqInterval ?d . ?d rdfs:label ?v .}""", initBindings={'i': i}) %}
+            {{ (info.append("Frequency: " + q.bindings[0]['v']) if q) or "" }}
+            {% set q = graph.query("""SELECT ?v WHERE {?i ctro:hasDeliveryMethod ?d . ?d rdfs:label ?v .}""", initBindings={'i': i}) %}
+            {{ (info.append("Delivery method: " + q.bindings[0]['v']) if q) or "" }}
+            {% set q = graph.query("""SELECT ?v WHERE {?i ctro:isControl ?v .}""", initBindings={'i': i}) %}
+            {{ (info.append("Control or placebo: " + q.bindings[0]['v']) if q) or "" }}
             {% endfor %}
-            Number of patients:
-            {% set q = graph.query("""SELECT ?v WHERE {?a rdfs:hasNumberPatientsArm ?v .}""", initBindings={'a': arm}) %}{{ q.bindings[0]['v'] if q else "No information was provided" }}
+
+            {% set q = graph.query("""SELECT ?v WHERE {?a ctro:hasNumberPatientsArm ?v .}""", initBindings={'a': arm}) %}
+            {{ (info.append("Number of patients: " + q.bindings[0]['v']) if q) or "" }}
+
+            {{ info|join(', ') if info else "No information was provided"}}
           </td>
           {% endfor %}
         </tr>
 
-        <tr class="table-light">
-          <td rowspan="4">Endpoint 1: Outcome Measure: Systematic Embolic Event; Outcome description: Stroke or systemic embolism, Primary</td>
-          <th colspan="2">Baseline values</th>
-        </tr>
-        <tr class="table-light">
-          <td>Number of patients in arm: 6015, Aggregation method: Count</td>
-          <td>Number of patients in arm: 6022, Aggregation method: Count</td>
-        </tr>
-        <tr class="table-light">
-          <th colspan="2">Result at last timepoint</th>
-        </tr>
-        <tr class="table-light">
-          <td>Number of patients affected: 182; Observed results: %/yr 1.53</td>
-          <td>Number of patients affected: 199; Observed results: %/yr 1.69</td>
-        </tr>
+        {% for end in ends %}
+        <tr class="{{ 'table-light' if loop.index0 % 2 == 0 else 'table-gray' }}">
+          <td rowspan="4">
+            {% set q = graph.query("""SELECT ?v WHERE {?e rdfs:label ?v .}""", initBindings={'e': end}) %}{{ q.bindings[0]['v'] if q else "Unlabeled endpoint" }}:
 
-        <tr class="table-gray">
-          <td rowspan="4">Endpoint 2: Outcome Measure: All-cause Mortality; Outcome description: alll-cause mortality, Primary</td>
-          <th colspan="2">Baseline values</th>
+            {% set info = [] %}
+            {% set q = graph.query("""SELECT ?v WHERE {?e ctro:hasEndpointDescription ?d . ?d rdfs:label ?v .}""", initBindings={'e': end}) %}
+            {{ (info.append("Outcome Measure: " + q.bindings[0]['v']) if q) or "" }}
+            {% set q = graph.query("""SELECT ?v WHERE {?e ctro:hasEndPointDescriptionStr ?v .}""", initBindings={'e': end}) %}
+            {{ (info.append("Endpoint description: " + q.bindings[0]['v']) if q) or "" }}
+            {% set q = graph.query("""SELECT ?v WHERE {?e ctro:hasOutcomeType ?v .}""", initBindings={'e': end}) %}
+            {{ (info.append("Outcome type: " + q.bindings[0]['v']) if q) or "" }}
+            {{ info|join(', ') if info else "No information was provided"}}
+          </td>
+          <th colspan="{{ arms|length }}">Baseline values</th>
         </tr>
-        <tr class="table-gray">
-          <td>Number of patients in arm: 6015, Aggregation method: Count</td>
-          <td>Number of patients in arm: 6022, Aggregation method: Count</td>
+        <tr class="{{ 'table-light' if loop.index0 % 2 == 0 else 'table-gray' }}">
+          {% for arm in arms %}
+          <td>
+            {% set info = [] %}
+            {% set q = graph.query("""SELECT ?v WHERE {?e ctro:hasBaselineValue ?v .}""", initBindings={'e': end}) %}
+            {{ (info.append("Baseline value: " + q.bindings[0]['v']) if q) or "" }}
+            {% set q = graph.query("""SELECT ?v WHERE {?e ctro:hasEndpointUnit ?d . ?d rdfs:label ?v .}""", initBindings={'e': end}) %}
+            {{ (info.append("Endpoint unit: " + q.bindings[0]['v']) if q) or "" }}
+            {% set q = graph.query("""SELECT ?v WHERE {?e ctro:hasAnalysisMetric ?d . ?d rdfs:label ?v .}""", initBindings={'e': end}) %}
+            {{ (info.append("Analysis metric: " + q.bindings[0]['v']) if q) or "" }}
+            {% set q = graph.query("""SELECT ?v WHERE {?e ctro:hasAggregationMethod ?d . ?d rdfs:label ?v .}""", initBindings={'e': end}) %}
+            {{ (info.append("Aggregation Method: " + q.bindings[0]['v']) if q) or "" }}
+            {{ info|join(', ') if info else "No information was provided"}}
+          </td>
+          {% endfor %}
         </tr>
-        <tr class="table-gray">
-          <th colspan="2">Result at last timepoint</th>
+        <tr class="{{ 'table-light' if loop.index0 % 2 == 0 else 'table-gray' }}">
+          <th colspan="{{ arms|length }}">Result at last time point</th>
         </tr>
-        <tr class="table-gray">
-          <td>No information was provided</td>
-          <td>No information was provided</td>
+        <tr class="{{ 'table-light' if loop.index0 % 2 == 0 else 'table-gray' }}">
+          {% for arm in arms %}
+          {% set out = graph.query("""SELECT ?v WHERE {?v ctro:hasArmOut ?a . ?v ctro:hasEndPointOut ?e .}""", initBindings={'a': arm, 'e': end}) %}
+          <td>
+            {% if out %}
+            {% set out = out.bindings[0]['v'] %}
+            {% set info = [] %}
+            {% set q = graph.query("""SELECT ?v WHERE {?o ctro:hasNumberAffected ?v .}""", initBindings={'o': out}) %}
+            {{ (info.append("Number of patients affected: " + q.bindings[0]['v']) if q) or "" }}
+            {% set q = graph.query("""SELECT ?v WHERE {?o ctro:hasAbsoluteValue ?v .}""", initBindings={'o': out}) %}
+            {{ (info.append("Absolute Value: " + q.bindings[0]['v']) if q) or "" }}
+            {% set q = graph.query("""SELECT ?v WHERE {?o ctro:hasRelativeValue ?v .}""", initBindings={'o': out}) %}
+            {{ (info.append("Relative Value: " + q.bindings[0]['v']) if q) or "" }}
+            {% set q = graph.query("""SELECT ?v WHERE {?o ctro:hasResultDirection ?v .}""", initBindings={'o': out}) %}
+            {{ (info.append("Direction of the change: " + q.bindings[0]['v']) if q) or "" }}
+            {% set q = graph.query("""SELECT ?v WHERE {?o ctro:hasObservedResult ?v .}""", initBindings={'o': out}) %}
+            {{ (info.append("Observed Result: " + q.bindings[0]['v']) if q) or "" }}
+            {{ info|join(', ') if info else "No information was provided"}}
+            {% else %}
+            No information was provided
+            {% endif %}
+          </td>
+          {% endfor %}
         </tr>
+        {% endfor %}
 
-        <tr class="table-light">
-          <td>Adverse Event 1: Indigestion (dyspepsia)</td>
-          <td>Number of patients affected affected: 707</td>
-          <td>Number of patients affected affected: 348</td>
+        {% for ae in aes %}
+        <tr class="{{ 'table-light' if (loop.index0 + ends|length) % 2 == 0 else 'table-gray' }}">
+          <td>
+            Adverse Event:
+            {% set q = graph.query("""SELECT ?v WHERE {?a rdfs:label ?v .}""", initBindings={'a': ae}) %}{{ q.bindings[0]['v'] if q else "Unlabeled" }}
+          </td>
+          {% for arm in arms %}
+          <td>
+            {% set q = graph.query("""SELECT ?v WHERE {?v ctro:hasAEname ?ae . ?v ctro:hasArmAE ?a}""", initBindings={'ae': ae, 'a': arm}) %}
+            {% if q %}
+            {% set ae = q.bindings[0]['v'] %}
+            {% set info = [] %}
+            {% set q = graph.query("""SELECT ?v WHERE {?ae ctro:hasNumberAffectedAE ?v .}""", initBindings={'ae': ae}) %}
+            {{ (info.append("Number of patients affected: " + q.bindings[0]['v']) if q) or "" }}
+            {% set q = graph.query("""SELECT ?v WHERE {?ae ctro:hasObservedResultAE ?v .}""", initBindings={'ae': ae}) %}
+            {{ (info.append("Observed result: " + q.bindings[0]['v']) if q) or "" }}
+            {{ info|join(', ') if info else "No information was provided"}}
+            {% else %}
+            No information was provided
+            {% endif%}
+          </td>
+          {% endfor %}
         </tr>
+        {% endfor %}
       </table>
     </td>
   </tr>

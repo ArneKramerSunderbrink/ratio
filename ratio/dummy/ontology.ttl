@@ -150,7 +150,8 @@ ctro:hasDoseUnit rdf:type owl:ObjectProperty ,
                  rdfs:range ctro:BioAndMedicalUnit ;
                  rdfs:label "Dose unit" .
 
-ctro:hasDeliveryMethod rdf:type owl:ObjectProperty ;
+ctro:hasDeliveryMethod rdf:type owl:ObjectProperty ,
+                                owl:FunctionalProperty ;
                        ratio:order "6"^^xsd:positiveInteger ;
                        rdfs:domain ctro:Intervention ;
                        rdfs:range ctro:DeliveryMethod ;
@@ -243,7 +244,8 @@ ctro:hasMeasureName rdf:type owl:ObjectProperty ,
                     rdfs:range ctro:DiffGroupsMeasureName ;
                     rdfs:label "Measure" .
 
-ctro:hasArmOut rdf:type owl:ObjectProperty ;
+ctro:hasArmOut rdf:type owl:ObjectProperty ,
+                        owl:FunctionalProperty ;
                ratio:order "1"^^xsd:positiveInteger ;
                rdfs:domain ctro:Outcome ;
                rdfs:range ctro:Arm ;
@@ -262,7 +264,8 @@ ctro:hasAdverseEffect rdf:type owl:ObjectProperty ;
                       rdfs:range ctro:AdverseEffect ;
                       rdfs:label "Adverse Event" .
 
-ctro:hasArmAE rdf:type owl:ObjectProperty ;
+ctro:hasArmAE rdf:type owl:ObjectProperty ,
+                       owl:FunctionalProperty ;
               ratio:order "1"^^xsd:positiveInteger ;
               rdfs:domain ctro:AdverseEffect ;
               rdfs:range ctro:Arm ;
@@ -357,7 +360,8 @@ ctro:hasMaxAge rdf:type owl:DatatypeProperty ,
                rdfs:range xsd:positiveInteger ;
                rdfs:label "Max. age" .
 
-ctro:hasAvgAge rdf:type owl:DatatypeProperty ;
+ctro:hasAvgAge rdf:type owl:DatatypeProperty ,
+                        owl:FunctionalProperty ;
                ratio:order "4"^^xsd:positiveInteger ;
                ratio:width "25"^^xsd:positiveInteger ;
                rdfs:domain ctro:Population ;
