@@ -46,8 +46,8 @@
             <div class="entity-label flex-flex">{{ frontend_config['Subgraph_term'] }}s</div>
           </div>
           <div class="entity-body" id="search-results">
-            {% for subgraph in results %}
-            {{ search_result(subgraph) }}
+            {% for subgraph in subgraphs %}
+            {{ search_result(subgraph, rdf_graphs[loop.index0]) }}
             {% endfor %}
             <div id="no-match-msg" style="display: none;">No studies with these characteristics have been found.</div>
           </div>

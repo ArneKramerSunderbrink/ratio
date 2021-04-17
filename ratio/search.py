@@ -33,7 +33,9 @@ def search_view():
         (user_id,)
     ).fetchall()
 
-    return render_template('search.html', filter=filter_object, results=rows)
+    rdf_graphs = [get_subgraph_knowledge(row['id']).get_graph(clean=True, ontology=True) for row in rows]
+
+    return render_template('search.html', filter=filter_object, subgraphs=rows, rdf_graphs=rdf_graphs)
 
 
 @bp.route('/_search')

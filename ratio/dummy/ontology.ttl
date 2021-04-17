@@ -613,7 +613,8 @@ ctro:hasDiffGroupAbsValue rdf:type owl:DatatypeProperty ,
                           rdfs:label "Absolute value" .
 
 
-ctro:hasDiffGroupRelValue rdf:type owl:DatatypeProperty ;
+ctro:hasDiffGroupRelValue rdf:type owl:DatatypeProperty ,
+                                   owl:FunctionalProperty ;
                           ratio:order "5"^^xsd:positiveInteger ;
                           ratio:width "25"^^xsd:positiveInteger ;
                           rdfs:domain ctro:DiffBetweenGroups ;
