@@ -203,12 +203,13 @@ button[disabled]{
 
 .navigation-dropdown {
   position: absolute;
-  right: 0;
+  left: 0;
 }
 
 .navigation-dropdown > button,
 .navigation-dropdown > a {
   width: 100%;
+  text-align: left;
 }
 
 .navigation-dropdown > button:disabled,

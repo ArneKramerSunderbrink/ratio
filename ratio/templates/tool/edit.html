@@ -12,11 +12,6 @@
 
 <div class="flex-column">
   <header class="w3-card flex-row color3" id="flex-fix">
-    <div class="flex-flex">{# just a spacer #}</div>
-    <div class="flex-fix">
-      <i class="fas fa-user w3-large"></i>
-      {{ g.user['username'] }}
-    </div>
     <div class="flex-fix navigation">
       <button class="w3-button flip-flipbutton flip-frontside" data-flipid="navigation-dropdown">{#
         #}<i class="fa fa-bars fa-lg"></i>
@@ -26,11 +21,16 @@
           #}<i class="fa fa-times fa-lg"></i>
         </button>
         <div class="w3-card color3 navigation-dropdown">
-          <a href="{{ url_for('tool.index') }}" class="w3-button">Home</a><br>
-          <a href="{{ url_for('search.search_view') }}" class="w3-button">{{ frontend_config['Subgraph_term'] }}s search</a><br>
-          <a href="{{ url_for('auth.logout') }}" class="w3-button">Log Out</a>
+          <a href="{{ url_for('tool.index') }}" class="w3-button"><i class="fas fa-home"></i> Home</a><br>
+          <a href="{{ url_for('search.search_view') }}" class="w3-button"><i class="fas fa-search"></i> {{ frontend_config['Subgraph_term'] }}s search</a><br>
+          <a href="{{ url_for('auth.logout') }}" class="w3-button"><i class="fas fa-sign-out-alt"></i> Log Out</a>
         </div>
       </div>
+    </div>
+    <div class="flex-flex">{# just a spacer #}</div>
+    <div class="flex-fix">
+      <i class="fas fa-user w3-large"></i>
+      {{ g.user['username'] }}
     </div>
   </header>
 
