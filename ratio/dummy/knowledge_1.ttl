@@ -135,7 +135,7 @@ ctro:Intervention_1_1 a ctro:Intervention,
 
 ctro:Outcome_1_0 a ctro:Outcome,
         owl:NamedIndividual ;
-    rdfs:label "OutcomeMeasure-dabigatran110-SEE" ;
+    rdfs:label "Outcome-dabigatran110-SEE" ;
     ctro:hasArmOut_0 ctro:Arm_1_0 ;
     ctro:hasArmOut_freeindex "1"^^xsd:nonNegativeInteger ;
     ctro:hasEndPointOut_0 ctro:EndPoint_1_0 ;
@@ -149,7 +149,7 @@ ctro:Outcome_1_0 a ctro:Outcome,
 
 ctro:Outcome_1_1 a ctro:Outcome,
         owl:NamedIndividual ;
-    rdfs:label "OutcomeMeasure-warfarin-SEE"^^xsd:string ;
+    rdfs:label "Outcome-warfarin-SEE" ;
     ctro:hasArmOut_0 ctro:Arm_1_1 ;
     ctro:hasArmOut_freeindex "1"^^xsd:nonNegativeInteger ;
     ctro:hasEndPointOut_0 ctro:EndPoint_1_0 ;
@@ -199,7 +199,7 @@ ctro:Intervention ratio:freeindex "2"^^xsd:nonNegativeInteger .
 
 ctro:Outcome_1_2 a ctro:Outcome,
         owl:NamedIndividual ;
-    rdfs:label "OutcomeMeasure-dabigatran110-AllCausedDead"^^xsd:string ;
+    rdfs:label "Outcome-dabigatran110-ALL-CAUSE-DEAD" ;
     ctro:hasArmOut_0 ctro:Arm_1_0 ;
     ctro:hasArmOut_freeindex "1"^^xsd:nonNegativeInteger ;
     ctro:hasEndPointOut_0 ctro:EndPoint_1_1 ;
@@ -211,7 +211,7 @@ ctro:Outcome_1_2 a ctro:Outcome,
 
 ctro:Outcome_1_3 a ctro:Outcome,
         owl:NamedIndividual ;
-    rdfs:label "OutcomeMeasure-warfarin-AllCausedDead"^^xsd:string ;
+    rdfs:label "Outcome-warfarin-ALL-CAUSE-DEAD" ;
     ctro:hasArmOut_0 ctro:Arm_1_1 ;
     ctro:hasArmOut_freeindex "1"^^xsd:nonNegativeInteger ;
     ctro:hasEndPointOut_0 ctro:EndPoint_1_1 ;
@@ -223,7 +223,7 @@ ctro:Outcome_1_3 a ctro:Outcome,
 
 ctro:EndPoint_1_0 a ctro:EndPoint,
         owl:NamedIndividual ;
-    rdfs:label "OUTCOME-SSE"^^xsd:string ;
+    rdfs:label "Endpoint-SSE" ;
     ctro:hasAggregationMethod_0 "" ;
     ctro:hasAggregationMethod_1 ctro:Count ;
     ctro:hasAggregationMethod_freeindex "2"^^xsd:nonNegativeInteger ;
@@ -238,7 +238,7 @@ ctro:EndPoint_1_0 a ctro:EndPoint,
 
 ctro:EndPoint_1_1 a ctro:EndPoint,
         owl:NamedIndividual ;
-    rdfs:label "OUTCOME-ALL-CAUSE-DEAD"^^xsd:string ;
+    rdfs:label "Endpoint-ALL-CAUSE-DEAD" ;
     ctro:hasAggregationMethod_0 ctro:Count ;
     ctro:hasAggregationMethod_freeindex "1"^^xsd:nonNegativeInteger ;
     ctro:hasEndPointDescriptionStr_0 "all-cause mortality"^^xsd:string ;
@@ -267,4 +267,3 @@ ctro:Arm_1_1 a ctro:Arm,
     ctro:hasNumberPatientsArm_freeindex "1"^^xsd:nonNegativeInteger .
 
 ctro:Outcome ratio:freeindex "4"^^xsd:nonNegativeInteger .
-

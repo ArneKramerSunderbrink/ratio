@@ -376,4 +376,3 @@ ctro:Arm_4_1 a ctro:Arm,
     ctro:hasNumberPatientsArm_freeindex "1"^^xsd:nonNegativeInteger .
 
 ctro:Outcome ratio:freeindex "6"^^xsd:nonNegativeInteger .
-

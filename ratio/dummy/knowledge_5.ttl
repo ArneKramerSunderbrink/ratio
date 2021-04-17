@@ -132,4 +132,3 @@ ctro:Arm_6_0 a ctro:Arm,
 ctro:EndPoint_6_0 a ctro:EndPoint,
         owl:NamedIndividual ;
     rdfs:label "Endpoint 1"^^xsd:string .
-

@@ -567,4 +567,3 @@ ctro:DiffGroupsMeasureName_5_0 a ctro:DiffGroupsMeasureName,
 ctro:Intervention ratio:freeindex "6"^^xsd:nonNegativeInteger .
 
 ctro:Outcome ratio:freeindex "9"^^xsd:nonNegativeInteger .
-

@@ -404,4 +404,3 @@ ctro:Arm_3_3 a ctro:Arm,
     ctro:hasIntervention_freeindex "1"^^xsd:nonNegativeInteger .
 
 ctro:Outcome ratio:freeindex "6"^^xsd:nonNegativeInteger .
-
