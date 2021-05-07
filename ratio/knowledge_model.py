@@ -246,6 +246,7 @@ class SubgraphKnowledge:
         db.commit()
 
         self.root = None  # forces a rebuild of the root entity from the updated graph on the next request
+        # todo unnecessary: that data is not persisted anyway...
 
         return index
 
@@ -347,7 +348,7 @@ class SubgraphKnowledge:
         for t in triples:
             self.graph.add(t)
 
-        # save add triples to database
+        # add triples to database
         db = get_db()
         db.executemany(
             'DELETE FROM knowledge WHERE subgraph_id = ? AND subject = ? AND predicate = ?',

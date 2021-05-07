@@ -255,13 +255,12 @@
       Disease(s):
       {% set info = [] %}
       {% set q = graph.query("""SELECT ?v WHERE {?p ctro:analysesHealthCondition ?d . ?d rdfs:label ?v .}""") %}
-      {% for row in q | sort() %}{{ info.append("Precondition: " + row[0]) or "" }}{% endfor %}
+      {% for row in q | sort() %}{{ info.append(row[0]) or "" }}{% endfor %}
       {{ info|join(', ') if info else "No information was provided"}}
     </td>
   </tr>
   <tr>
     <td>
-      Eligibility:
       {% set info = [] %}
       {% set q = graph.query("""SELECT ?v WHERE {?p ctro:hasPreconditionDescription ?v .}""") %}
       {% for row in q | sort() %}{{ info.append("Precondition: " + row[0]) or "" }}{% endfor %}
