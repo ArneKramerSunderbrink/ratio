@@ -9,69 +9,50 @@ ctro:CT_{id}_0 rdf:type owl:NamedIndividual ,
                      ctro:ClinicalTrial ;
             ratio:isRoot "true"^^xsd:boolean ;
             rdfs:label "Clinical Trial"^^xsd:string ;
-            ctro:described_by_0 ctro:Pub_{id}_0 ;
-            ctro:described_by_freeindex "1"^^xsd:nonNegativeInteger ;
-            ctro:hasDesignGroup_0 ctro:Design_{id}_0 ;
-            ctro:hasDesignGroup_freeindex "1"^^xsd:nonNegativeInteger ;
-            ctro:hasPopulation_0 ctro:Population_{id}_0 ;
-            ctro:hasPopulation_freeindex "1"^^xsd:nonNegativeInteger ;
-            ctro:hasQualityIndicator_0 ctro:Evidence_{id}_0 ;
-            ctro:hasQualityIndicator_freeindex "1"^^xsd:nonNegativeInteger ;
-            ctro:hasArm_0 ctro:Arm_{id}_0 ;
-            ctro:hasArm_1 ctro:Arm_{id}_1 ;
-            ctro:hasArm_freeindex "2"^^xsd:nonNegativeInteger ;
-            ctro:hasEndPoint_0 ctro:EndPoint_{id}_0 ;
-            ctro:hasEndPoint_freeindex "1"^^xsd:nonNegativeInteger ;
-            ctro:hasOutcome_0 ctro:Outcome_{id}_0 ;
-            ctro:hasOutcome_freeindex "1"^^xsd:nonNegativeInteger .
-ctro:ClinicalTrial ratio:freeindex "1"^^xsd:nonNegativeInteger .
+            ctro:described_by ctro:Pub_{id}_0 ;
+            ctro:hasDesignGroup ctro:Design_{id}_0 ;
+            ctro:hasPopulation ctro:Population_{id}_0 ;
+            ctro:hasQualityIndicator ctro:Evidence_{id}_0 ;
+            ctro:hasArm ctro:Arm_{id}_0 ;
+            ctro:hasArm ctro:Arm_{id}_1 ;
+            ctro:hasEndPoint ctro:EndPoint_{id}_0 ;
+            ctro:hasOutcome ctro:Outcome_{id}_0 .
 
 ctro:Pub_{id}_0 rdf:type owl:NamedIndividual ,
                       ctro:Publication ;
              rdfs:label "Publication"^^xsd:string .
-ctro:Publication ratio:freeindex "1"^^xsd:nonNegativeInteger .
 
 ctro:Design_{id}_0 rdf:type owl:NamedIndividual ,
                          ctro:DesignGroup ;
                 rdfs:label "Design"^^xsd:string .
-ctro:DesignGroup ratio:freeindex "1"^^xsd:nonNegativeInteger .
 
 ctro:Population_{id}_0 rdf:type owl:NamedIndividual ,
                              ctro:Population ;
                     rdfs:label "Population"^^xsd:string .
-ctro:Population ratio:freeindex "1"^^xsd:nonNegativeInteger .
 
 ctro:Evidence_{id}_0 rdf:type owl:NamedIndividual ,
                            ctro:EvidenceQuality;
                   rdfs:label "Potential Conflicts of Interest"^^xsd:string .
-ctro:EvidenceQuality ratio:freeindex "1"^^xsd:nonNegativeInteger .
 
 ctro:Arm_{id}_0 rdf:type owl:NamedIndividual ,
                       ctro:Arm;
              rdfs:label "Arm 1"^^xsd:string ;
-             ctro:hasIntervention_0 ctro:Interv_{id}_0 ;
-             ctro:hasIntervention_freeindex "1"^^xsd:nonNegativeInteger .
+             ctro:hasIntervention ctro:Interv_{id}_0 .
 
 ctro:Interv_{id}_0 rdf:type owl:NamedIndividual ,
                          ctro:Intervention ;
                 rdfs:label "Intervention 1"^^xsd:string .
-ctro:Intervention ratio:freeindex "1"^^xsd:nonNegativeInteger .
 
 ctro:Arm_{id}_1 rdf:type owl:NamedIndividual ,
                       ctro:Arm;
              rdfs:label "Arm 2"^^xsd:string .
-ctro:Arm ratio:freeindex "2"^^xsd:nonNegativeInteger .
 
 ctro:EndPoint_{id}_0 rdf:type owl:NamedIndividual ,
                               ctro:EndPoint ;
                      rdfs:label "Endpoint 1"^^xsd:string .
-ctro:EndPoint ratio:freeindex "1"^^xsd:nonNegativeInteger .
 
 ctro:Outcome_{id}_0 rdf:type owl:NamedIndividual ,
                              ctro:Outcome ;
-                    ctro:hasArmOut_0 ctro:Arm_{id}_0 ;
-                    ctro:hasArmOut_freeindex "1"^^xsd:nonNegativeInteger ;
-                    ctro:hasEndPointOut_0 ctro:EndPoint_{id}_0 ;
-                    ctro:hasEndPointOut_freeindex "1"^^xsd:nonNegativeInteger ;
+                    ctro:hasArmOut ctro:Arm_{id}_0 ;
+                    ctro:hasEndPointOut ctro:EndPoint_{id}_0 ;
                     rdfs:label "Arm 1 Endpoint 1 Data"^^xsd:string .
-ctro:Outcome ratio:freeindex "1"^^xsd:nonNegativeInteger .

@@ -5,6 +5,7 @@ from flask import g
 from flask import get_template_attribute
 from flask import jsonify
 from flask import request
+from flask import url_for
 
 from ratio.auth import login_required
 from ratio.auth import subgraph_access
@@ -35,7 +36,7 @@ def add_value():
     field = subgraph_knowledge.get_field(entity_uri, property_uri)
 
     if field.is_described:
-        return jsonify(error='You have to use /_add_entity to add a described individual')
+        return jsonify(error='You have to use {} to add a described individual'.format(url_for('knowledge.add_entity')))
     if field.is_functional and field.values:
         return jsonify(error='You cannot add more than one value to this field.')
 
@@ -192,18 +193,18 @@ def add_entity():
     if field.is_functional and field.values:
         return jsonify(error='You cannot add more than one value to this field.')
 
-    entity, index = subgraph_knowledge.new_individual(field.range_uri, entity_label, parent_uri, property_uri)
+    entity, index, option_fields = subgraph_knowledge.new_individual(
+        field.range_uri, entity_label, parent_uri, property_uri)
 
     render_entity_div = get_template_attribute('tool/macros.html', 'entity_div')
     entity_div = render_entity_div(entity, index=index)
 
-    option_fields = {str(f.property_uri) for f in subgraph_knowledge.get_fields()
-                     if f.is_object_property and not f.is_described and f.range_uri == entity.class_uri}
     if option_fields:
+        option_fields = [str(f.property_uri) for f in option_fields]
         render_option_div = get_template_attribute('tool/macros.html', 'option_div')
         option_div = render_option_div(entity, True)
         return jsonify(entity_div=entity_div, remove_plus=field.is_functional,
-                       option_fields=list(option_fields), option_div=option_div)
+                       option_fields=option_fields, option_div=option_div)
 
     return jsonify(entity_div=entity_div, remove_plus=field.is_functional)
 
@@ -234,9 +235,9 @@ def delete_entity():
 
     if property_uri:
         is_functional = get_ontology().is_functional(property_uri)
-        return jsonify(deleted=list(deleted), functional=is_functional)
+        return jsonify(deleted=deleted, functional=is_functional)
 
-    return jsonify(deleted=list(deleted))
+    return jsonify(deleted=deleted)
 
 
 @bp.route('/_undo_delete_entity')

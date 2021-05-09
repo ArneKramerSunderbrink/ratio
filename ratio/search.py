@@ -13,7 +13,7 @@ from rdflib import URIRef
 
 from ratio.auth import login_required
 from ratio.db import get_db, get_filter_description
-from ratio.knowledge_model import RATIO, build_option, get_subgraph_knowledge, get_ontology, guess_label, Option, \
+from ratio.knowledge_model import RATIO, Option, get_subgraph_knowledge, get_ontology, get_uri_suffix, \
     parse_n3_term, row_to_rdf
 
 bp = Blueprint('search', __name__)
@@ -111,7 +111,7 @@ class Filter:
 
 class FilterField:
     # todo much of this is redundant code from class Field, should be implemented in the same place
-    # having to update this in too different places already caused problems in the past
+    # having to update this in two different places already caused problems in the past
     def __init__(self, property_uri, filter_graph, ontology, knowledge):
         self.property_uri = property_uri
 
@@ -119,7 +119,7 @@ class FilterField:
         try:
             self.label = next(self.label)
         except StopIteration:
-            self.label = guess_label(property_uri)
+            self.label = get_uri_suffix(property_uri)
 
         self.comment = ontology.objects(property_uri, RDFS.comment)
         try:
@@ -164,7 +164,7 @@ class FilterField:
 
         self.options = list(set(self.options))
         if self.is_object_property:
-            self.options = [build_option(ontology, knowledge, o) for o in self.options]
+            self.options = [Option.from_knowledge(ontology, knowledge, o) for o in self.options]
             self.options.append(Option('', '', '', False))
         else:
             self.options.append('')

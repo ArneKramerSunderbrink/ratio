@@ -1005,11 +1005,6 @@ ctro:IOP rdf:type owl:NamedIndividual ,
 
 ctro:IOP_target rdf:type owl:NamedIndividual ,
                          ctro:EndpointDesc_Glaucoma ;
-                rdfs:isDefinedBy <> ;
-                rdfs:label "IOP Target" .
-
-ctro:IOP_target rdf:type owl:NamedIndividual ,
-                         ctro:EndpointDesc_Glaucoma ;
                 rdfs:isDefinedBy <http://www.semanticweb.org/root/ontologies/2018/6/ctro> ;
                 rdfs:label "IOP Target" .
 
