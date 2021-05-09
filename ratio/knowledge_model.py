@@ -294,19 +294,10 @@ class SubgraphKnowledge:
 
         self.root = None  # forces a rebuild of the root entity
 
-    def new_individual(self, class_uri, label, parent_uri, property_uri):
+    def new_individual(self, class_uri, label, deletable):
         if type(class_uri) == str:
             class_uri = URIRef(class_uri)
-        if type(parent_uri) == str:
-            parent_uri = URIRef(parent_uri)
-        if type(property_uri) == str:
-            property_uri = URIRef(property_uri)
         label = Literal(label, datatype=XSD.string)
-
-        field = self.get_field(parent_uri, property_uri)
-
-        # place in the list of values of the parent
-        value_index = max(self.properties[(parent_uri, property_uri)].keys(), default=0) + 1
 
         # construct a unique uri
         db = get_db()
@@ -322,24 +313,23 @@ class SubgraphKnowledge:
 
         uri = URIRef(next(uri + str(i) for i in count(1) if uri + str(i) not in used_uris))
 
-        entity = Entity.new(self.id, class_uri, uri, label, field.is_deletable)
+        entity = Entity.new(self.id, class_uri, uri, label, deletable)
 
         # update triples
         triples = [
-            (parent_uri, property_uri, uri, value_index),
-            (uri, RDF.type, OWL.NamedIndividual, None),
-            (uri, RDF.type, class_uri, None),
-            (uri, RDFS.label, label, None)
+            (uri, RDF.type, OWL.NamedIndividual),
+            (uri, RDF.type, class_uri),
+            (uri, RDFS.label, label)
         ]
 
         # add triples to graph
-        for s, p, o, i in triples:
-            self.graph.add((s, p, o))
+        for t in triples:
+            self.graph.add(t)
 
         # add triples to database
         db.executemany(
-            'INSERT INTO knowledge (subgraph_id, subject, predicate, object, property_index) VALUES (?, ?, ?, ?, ?)',
-            [(self.id, s.n3(), p.n3(), o.n3(), i) for s, p, o, i in triples]
+            'INSERT INTO knowledge (subgraph_id, subject, predicate, object) VALUES (?, ?, ?, ?)',
+            [(self.id, s.n3(), p.n3(), o.n3()) for s, p, o in triples]
         )
         db.commit()
 
@@ -349,7 +339,7 @@ class SubgraphKnowledge:
         option_fields = self.get_fields(
             filter_function=lambda f: f.is_object_property and not f.is_described and f.range_uri == entity.class_uri)
 
-        return entity, value_index, option_fields
+        return entity, option_fields
 
     def delete_individual_recursive(self, uri):
         if type(uri) == str:
@@ -498,6 +488,7 @@ class SubgraphKnowledge:
 
         if clean:
             graph.remove((None, RATIO.isRoot, None))
+            graph.remove((None, None, Literal('')))
             # remove unused custom options
             for s in graph[:RATIO.isCustom:TRUE]:
                 if s not in graph.objects():
@@ -563,8 +554,8 @@ class Field:
         return self.type == 'Subheading'
 
     def check_value(self, value):
-        """Checks if the value is valid and transforms it into a corresponding rdflib.Literal
-        Returns a pair of a validity message and the Literal
+        """Checks if the value is valid and transforms it into a corresponding rdflib Literal or URIRef
+        Returns a pair of a validity message and the Literal/URIRef
         If the value is valid the validity message is an emptystring.
         If the value is not valid instead of the literal, None is returned
         """
@@ -574,11 +565,15 @@ class Field:
             # them yet..)
             return '', Literal(value)
         elif self.is_object_property and self.options:
-            uri = URIRef(value)
+            uri = value if type(value) == URIRef else URIRef(value)
             if uri in (o.uri for o in self.options):
                 return '', uri
             else:
                 return 'Choose an option from the list.', None
+        elif self.is_object_property and self.is_described:
+            # we trust that the individual has the correct class, namely self.range_uri
+            uri = value if type(value) == URIRef else URIRef(value)
+            return '', uri
         elif self.options:
             lit = Literal(value, datatype=XSD.boolean) if self.range_uri == XSD.boolean else Literal(value)
             if lit in self.options:

@@ -193,8 +193,9 @@ def add_entity():
     if field.is_functional and field.values:
         return jsonify(error='You cannot add more than one value to this field.')
 
-    entity, index, option_fields = subgraph_knowledge.new_individual(
-        field.range_uri, entity_label, parent_uri, property_uri)
+    index = subgraph_knowledge.new_value(parent_uri, property_uri)
+    entity, option_fields = subgraph_knowledge.new_individual(field.range_uri, entity_label, field.is_deletable)
+    subgraph_knowledge.change_value(parent_uri, property_uri, index, entity.uri)
 
     render_entity_div = get_template_attribute('tool/macros.html', 'entity_div')
     entity_div = render_entity_div(entity, index=index)
