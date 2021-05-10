@@ -28,12 +28,10 @@ def close_db(e=None):
         db.close()
 
 
-def get_empty_subgraph_template(subgraph_id=None):
+def get_new_subgraph_instructions():
     """Returns empty subgraph template string"""
-    with current_app.open_resource(current_app.config['EMPTY_SUBGRAPH_TEMPLATE'], 'r') as f:
+    with current_app.open_resource(current_app.config['NEW_SUBGRAPH_INSTRUCTIONS'], 'r') as f:
         empty_subgraph_template = f.read()
-    if subgraph_id is not None:
-        empty_subgraph_template = empty_subgraph_template.format(id=subgraph_id)
     return empty_subgraph_template
 
 
@@ -63,7 +61,7 @@ def db_populate_dummy():
 
     from ratio.knowledge_model import get_ontology
     with current_app.open_resource('dummy/ontology.ttl') as f:
-        get_ontology().load_rdf_data(f, 'turtle')
+        get_ontology().load_rdf_data(f, 'turtle')  # todo just a test
 
     with current_app.open_resource('dummy/empty_subgraph_template.sql') as f:
         get_db().executescript(f.read().decode('utf8'))  # todo just a test
@@ -72,8 +70,8 @@ def db_populate_dummy():
     with current_app.open_resource('dummy/empty_subgraph_template.ttl') as f:
         get_subgraph_knowledge(2).load_rdf_data(f.read().decode('utf8').format(id=2))
 
-    with current_app.open_resource('dummy/empty_subgraph_template.ttl') as f:
-        with open(current_app.config['EMPTY_SUBGRAPH_TEMPLATE'], 'wb+') as f2:
+    with current_app.open_resource('dummy/new_subgraph.ratio') as f:
+        with open(current_app.config['NEW_SUBGRAPH_INSTRUCTIONS'], 'wb+') as f2:
             f2.write(f.read())
 
     with current_app.open_resource('dummy/filter.ttl') as f:

@@ -1,0 +1,18 @@
+# URIs can be given in turtle format: <URI> or prefix:URI
+# prefix labels (e.g. ctro) and variables names (e.g. arm_1) can be in [a-zA-Z0-9_)]+
+@prefix ctro: <http://www.semanticweb.org/root/ontologies/2018/6/ctro#> .
+
+# root_individual = root(class_uri, label)
+clinical_trial  = root(ctro:ClinicalTrial, "Clinical Trial")
+
+# new_individual = add_individual(class_uri, label, parent, property_uri)
+publication     = add_individual(ctro:Publication, "Publication", clinical_trial, ctro:described_by)
+design          = add_individual(ctro:DesignGroup, "Design", clinical_trial, ctro:hasDesignGroup)
+population      = add_individual(ctro:Population, "Population", clinical_trial, ctro:hasPopulation)
+quality         = add_individual(ctro:EvidenceQuality, "Potential Conflicts of Interest", clinical_trial, ctro:hasQualityIndicator)
+arm_1           = add_individual(ctro:Arm, "Arm 1", clinical_trial, ctro:hasArm)
+arm_2           = add_individual(ctro:Arm, "Arm 2", clinical_trial, ctro:hasArm)
+endpoint        = add_individual(ctro:EndPoint, "Endpoint 1", clinical_trial, ctro:hasEndPoint)
+outcome         = add_individual(ctro:Outcome, "Arm 1 Endpoint 1 Data", clinical_trial, ctro:hasOutcome)
+intervention_1  = add_individual(ctro:Intervention, "Intervention 1", arm_1, ctro:hasIntervention)
+intervention_2  = add_individual(ctro:Intervention, "Intervention 2", arm_2, ctro:hasIntervention)

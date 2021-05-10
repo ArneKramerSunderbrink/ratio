@@ -36,7 +36,10 @@ def parse_n3_term(s):
     elif s.startswith('"'):
         # value surrounded by unescaped quotes, can contain escaped quotes
         # the suffix cannot contain quotes
-        value, suffix = fullmatch(r'(?:"""|")((?:(?:[^"]|\\")*[^\\])?)(?:"""|")([^"]*)', s).group(1, 2)
+        try:
+            value, suffix = fullmatch(r'(?:"""|")((?:(?:[^"]|\\")*[^\\])?)(?:"""|")([^"]*)', s).group(1, 2)
+        except AttributeError:
+            raise ValueError('{} cannot be parsed'.format(s))
         if suffix:
             if suffix.startswith('@'):
                 return Literal(value, lang=suffix[1:])
@@ -69,8 +72,12 @@ def row_to_rdf(row):
     return subject, predicate, object_
 
 
-def get_subclasses(graph, class_):
-    stack = {class_}
+# todo the general graph functions in a graph parent class
+def get_subclasses(graph, class_uri):
+    if type(class_uri) == str:
+        class_uri = URIRef(class_uri)
+
+    stack = {class_uri}
     subclasses = set()
     while stack:
         c = stack.pop()
@@ -79,8 +86,11 @@ def get_subclasses(graph, class_):
     return subclasses
 
 
-def get_superclasses(graph, class_):
-    stack = {class_}
+def get_superclasses(graph, class_uri):
+    if type(class_uri) == str:
+        class_uri = URIRef(class_uri)
+
+    stack = {class_uri}
     superclasses = set()
     while stack:
         c = stack.pop()
@@ -89,9 +99,12 @@ def get_superclasses(graph, class_):
     return superclasses
 
 
-def get_tokens(graph, class_):
-    classes = {class_}
-    classes.update(get_subclasses(graph, class_))
+def get_tokens(graph, class_uri):
+    if type(class_uri) == str:
+        class_uri = URIRef(class_uri)
+
+    classes = {class_uri}
+    classes.update(get_subclasses(graph, class_uri))
     tokens = set()
     for c in classes:
         tokens.update(graph[:RDF.type:c])
@@ -139,10 +152,173 @@ class Ontology:
         # The prefix for new URIs created in the tool
         return next(self.graph.objects(RATIO.Configuration, RATIO.hasBase))
 
-    def is_functional(self, property_uri):
-        if type(property_uri) == str:
-            property_uri = URIRef(property_uri)
-        return OWL.FunctionalProperty in self.graph.objects(property_uri, RDF.type)
+    # Provide information about the things described by the ontology
+    def get_label(self, uri):
+        if type(uri) == str:
+            uri = URIRef(uri)
+
+        if type(uri) == BNode:
+            return 'Literal'
+        label = next(self.graph[uri:RDFS.label:], None)
+        if label is None:
+            label = get_uri_suffix(uri)
+        return label
+
+    def get_comment(self, uri):
+        if type(uri) == str:
+            uri = URIRef(uri)
+
+        return next(self.graph[uri:RDFS.comment:], None)
+
+    def get_tokens(self, class_uri):
+        return get_tokens(self.graph, class_uri)
+
+    # Information specific to properties
+    def get_property_order(self, uri):
+        if type(uri) == str:
+            uri = URIRef(uri)
+
+        return int(next(self.graph[uri:RATIO.order:], 0))
+
+    def get_property_type(self, uri):
+        if type(uri) == str:
+            uri = URIRef(uri)
+
+        if RATIO.Subheading in self.graph[uri:RDF.type:]:
+            return 'Subheading'
+        elif OWL.ObjectProperty in self.graph[uri:RDF.type:]:
+            return 'ObjectProperty'
+        elif OWL.DatatypeProperty in self.graph[uri:RDF.type:]:
+            return 'DatatypeProperty'
+        else:
+            raise ValueError('Now known type found for property {}'.format(uri))
+
+    def get_property_range(self, uri):
+        if type(uri) == str:
+            uri = URIRef(uri)
+
+        return next(self.graph[uri:RDFS.range:], None)
+
+    def get_property_width(self, uri):
+        if type(uri) == str:
+            uri = URIRef(uri)
+
+        return int(next(self.graph[uri:RATIO.width:], 50))
+
+    def is_property_add_custom_option_allowed(self, uri):
+        if type(uri) == str:
+            uri = URIRef(uri)
+
+        if self.get_property_type(uri) != 'ObjectProperty':
+            return False
+        else:
+            # Are the range objects described by a user in the tool
+            return not any(self.is_property_described(p) for p in self.graph[:RDFS.range:self.get_property_range(uri)])
+
+    def is_property_deletable(self, uri):
+        if type(uri) == str:
+            uri = URIRef(uri)
+
+        return FALSE not in self.graph[uri:RATIO.deletable:]
+
+    def is_property_described(self, uri):
+        if type(uri) == str:
+            uri = URIRef(uri)
+
+        return TRUE in self.graph[uri:RATIO.described:]
+
+    def is_property_functional(self, uri):
+        if type(uri) == str:
+            uri = URIRef(uri)
+
+        return OWL.FunctionalProperty in self.graph[uri:RDF.type:]
+
+    def check_property_value(self, property_uri, value, subgraph_id):
+        """Checks if the value is valid and transforms it into a corresponding rdflib Literal or URIRef
+        Returns a pair of a validity message and the Literal/URIRef
+        If the value is valid the validity message is an emptystring.
+        If the value is not valid instead of the literal, None is returned
+        """
+        knowledge = get_subgraph_knowledge(subgraph_id)  # todo once custom options are global this can be removed
+        type_ = self.get_property_type(property_uri)
+        is_object_property = type_ == 'ObjectProperty'
+        is_described = self.is_property_described(property_uri)
+        range_uri = self.get_property_range(property_uri)
+
+        # TODO custom options should be stored globally, than I can put all this into the Ontology class
+        # todo create option list only when needed the the if-elif-chain below
+        one_of = next(self.graph[range_uri:OWL.oneOf:], None)
+        if is_object_property and not is_described:
+            options = [Option.from_knowledge(subgraph_id, uri) for uri in self.get_tokens(range_uri)]
+            # options added by the user:
+            options += [Option.from_knowledge(subgraph_id, uri) for uri in knowledge.get_tokens(range_uri)]
+            options.sort(key=lambda option: option.label)
+        elif one_of is not None:
+            options = construct_list(self.graph, one_of)
+        elif range_uri == XSD.boolean:
+            options = [TRUE, FALSE]
+        else:
+            options = None
+
+        if value == '':
+            # Empty values are allowed but will be deleted on reloading the page
+            # (they are persisted in the db though because I have not found out what's the best occasion to delete
+            # them yet..)
+            return '', Literal(value)
+        elif is_object_property and options:
+            uri = value if type(value) == URIRef else URIRef(value)
+            if uri in (o.uri for o in options):
+                return '', uri
+            else:
+                return 'Choose an option from the list.', None
+        elif is_object_property and is_described:
+            # we trust that the individual has the correct class, namely self.range_uri
+            uri = value if type(value) == URIRef else URIRef(value)
+            return '', uri
+        elif options:
+            lit = Literal(value, datatype=XSD.boolean) if range_uri == XSD.boolean else Literal(value)
+            if lit in options:
+                return '', lit
+            else:
+                return 'Choose an option from the list.', None
+        elif range_uri == RDFS.Literal:
+            pass
+        elif range_uri == XSD.string:
+            pass
+        elif range_uri == XSD.float:
+            try:
+                float(value)
+            except (ValueError, SyntaxError):
+                return '{} is not a valid float.'.format(value), None
+        elif range_uri == XSD.integer:
+            try:
+                int(value)
+            except (ValueError, SyntaxError):
+                return '{} is not a valid integer.'.format(value), None
+        elif range_uri == XSD.nonNegativeInteger:
+            try:
+                i = int(value)
+            except (ValueError, SyntaxError):
+                return '{} is not a valid integer.'.format(value), None
+            if i < 0:
+                return '{} is not a non-negative value.'.format(value), None
+        elif range_uri == XSD.positiveInteger:
+            try:
+                i = int(value)
+            except (ValueError, SyntaxError):
+                return '{} is not a valid integer.'.format(value), None
+            if i <= 0:
+                return '{} is not a positive value.'.format(value), None
+        else:
+            return 'Unknown Datatype: {}'.format(range_uri), None
+        return '', Literal(value, datatype=range_uri)
+
+    # Information specific to classes
+    def get_class_properties(self, uri):
+        if type(uri) == str:
+            uri = URIRef(uri)
+
+        return self.graph[:RDFS.domain:uri]
 
 
 def get_ontology():
@@ -163,7 +339,7 @@ class SubgraphKnowledge:
         self.graph = Graph()
         # since rdf triples are not ordered but the values of the property fields in the tool are we need to store this
         # additional information outside the rdf graph object:
-        self.properties = defaultdict(dict)
+        self.properties = defaultdict(dict)  # includes deleted! (There has to be a better name for this?)
         self.root = None
 
         db = get_db()
@@ -256,17 +432,24 @@ class SubgraphKnowledge:
         if type(property_uri) == str:
             property_uri = URIRef(property_uri)
 
-        field = self.get_field(entity_uri, property_uri)
-
-        validity, value = field.check_value(value)
+        validity, value = get_ontology().check_property_value(property_uri, value, self.id)
         if validity:
             # the check returned an error message
             return validity
 
-        self.graph.remove((entity_uri, property_uri, None))
+        db = get_db()
+
+        # delete previous value from graph
+        prev_value = db.execute(
+            'SELECT object FROM knowledge '
+            '   WHERE subgraph_id = ? AND subject = ? AND predicate = ? AND property_index = ?',
+            (self.id, entity_uri.n3(), property_uri.n3(), index)
+        ).fetchone()['object']
+        self.graph.remove((entity_uri, property_uri, parse_n3_term(prev_value)))
+
+        # add new value to graph
         self.graph.add((entity_uri, property_uri, value))
         self.properties[(entity_uri, property_uri)][index] = value
-        db = get_db()
         db.execute(
             'UPDATE knowledge SET object = ? '
             '   WHERE subgraph_id = ? AND subject = ? AND predicate = ? AND property_index = ?',
@@ -294,7 +477,7 @@ class SubgraphKnowledge:
 
         self.root = None  # forces a rebuild of the root entity
 
-    def new_individual(self, class_uri, label, deletable):
+    def new_individual(self, class_uri, label, deletable, get_option_fields=False):
         if type(class_uri) == str:
             class_uri = URIRef(class_uri)
         label = Literal(label, datatype=XSD.string)
@@ -335,11 +518,13 @@ class SubgraphKnowledge:
 
         self.root = None  # forces a rebuild of the root entity
 
-        # fields with a list of options where the new entity has to be added
-        option_fields = self.get_fields(
-            filter_function=lambda f: f.is_object_property and not f.is_described and f.range_uri == entity.class_uri)
+        if get_option_fields:
+            # fields with a list of options where the new entity has to be added
+            option_fields = self.get_fields(
+                filter_function=lambda f: f.is_object_property and not f.is_described and f.range_uri == entity.class_uri)
+            return entity, option_fields
 
-        return entity, option_fields
+        return entity
 
     def delete_individual_recursive(self, uri):
         if type(uri) == str:
@@ -440,11 +625,11 @@ class SubgraphKnowledge:
         self.root = None  # forces a rebuild of the root entity
 
         # collect all property URIs where this new option needs to be attached to the range in the frontend
-        ontology = get_ontology().graph
+        ontology = get_ontology()
         classes = {class_uri}
         classes.update(get_superclasses(ontology, class_uri))
         properties = {p for c in classes for p in ontology[:RDFS.range:c]
-                      if TRUE not in ontology[p:RATIO.described:]}
+                      if ontology.is_property_described(p)}
 
         return option, properties
 
@@ -474,6 +659,85 @@ class SubgraphKnowledge:
 
         self.root = None  # forces a rebuild of the root entity
         self.get_root()  # to test immediately whether everything is building correctly
+
+    def execute_ratio_instructions(self, instructions):
+        # executes the instructions in a .ratio file
+        # used to initialize a new subgraph
+        prefixes = dict()
+        names = dict()
+
+        def parse_uri(s):
+            try:
+                prefix_label_, suffix, uri = \
+                    fullmatch(r'(?:(?:([a-zA-Z0-9_)]+):([^,\s]+))|<([^>]+)>)', s)\
+                    .group(1, 2, 3)
+            except AttributeError:
+                raise ValueError('URI "{}" could not be parsed.'.format(s))
+            if uri is None:
+                uri = prefixes[prefix_label_] + suffix
+            return URIRef(uri)
+
+        for line in instructions.splitlines():
+            if not line or line.isspace() or line[0] == '#':
+                continue
+
+            elif line[0] == '@':
+                # prefix definition
+                try:
+                    prefix_label, prefix = \
+                        fullmatch(r'\s*@prefix\s*([a-zA-Z0-9_)]+):\s*<([^>]+)>\s*.\s*', line)\
+                        .group(1, 2)
+                except AttributeError:
+                    raise ValueError('Line "{}" could not be parsed.'.format(line))
+                prefixes[prefix_label] = prefix
+
+            else:
+                # a command
+                try:
+                    name, command, arguments = \
+                        fullmatch(r'\s*([a-zA-Z0-9_)]+)\s*=\s*([a-zA-Z0-9_)]+)\((.*)\)\s*', line)\
+                        .group(1, 2, 3)
+                except AttributeError:
+                    raise ValueError('Line "{}" could not be parsed.'.format(line))
+
+                if command == 'root':
+                    # a command to creat the root entity
+                    try:
+                        class_uri, label = \
+                            fullmatch(r'\s*([^,\s]+)\s*,\s*"([^"]+)"\s*', arguments)\
+                            .group(1, 2)
+                    except AttributeError:
+                        raise ValueError('Arguments "{}" could not be parsed.'.format(arguments))
+                    class_uri = parse_uri(class_uri)
+                    label = label.strip()
+                    entity = self.new_individual(class_uri, label, False)
+                    names[name] = entity.uri
+                    self.graph.add((entity.uri, RATIO.isRoot, TRUE))
+                    db = get_db()
+                    db.execute(
+                        'INSERT INTO knowledge (subgraph_id, subject, predicate, object) VALUES (?, ?, ?, ?)',
+                        (self.id, entity.uri.n3(), RATIO.isRoot.n3(), TRUE.n3())
+                    )
+                    db.commit()
+
+                elif command == 'add_individual':
+                    # a command to create an individual and add it as a value
+                    try:
+                        class_uri, label, parent, property_uri = \
+                            fullmatch(r'\s*([^,\s]+)\s*,\s*"([^"]+)"\s*,\s*([a-zA-Z0-9_)]+)\s*,\s*([^,\s]+)\s*',
+                                      arguments)\
+                            .group(1, 2, 3, 4)
+                    except AttributeError:
+                        raise ValueError('Arguments "{}" could not be parsed.'.format(arguments))
+                    class_uri = parse_uri(class_uri)
+                    label = label.strip()
+                    property_uri = parse_uri(property_uri)
+                    parent_uri = names[parent]
+                    deletable = get_ontology().is_property_deletable(property_uri)
+                    index = self.new_value(parent_uri, property_uri)
+                    entity = self.new_individual(class_uri, label, deletable)
+                    names[name] = entity.uri
+                    self.change_value(parent_uri, property_uri, index, entity.uri)
 
     def get_graph(self, clean=False, ontology=False):
         graph = Graph()
@@ -505,6 +769,29 @@ class SubgraphKnowledge:
 
     def get_serialization(self, rdf_format='turtle', clean=True, ontology=False):
         return self.get_graph(clean, ontology).serialize(format=rdf_format)
+
+    # Provide information about the things described by the knowledge graph
+    def get_property_values(self, individual_uri, property_uri):
+        if type(individual_uri) == str:
+            individual_uri = URIRef(individual_uri)
+        if type(property_uri) == str:
+            property_uri = URIRef(property_uri)
+
+        values = self.properties[(individual_uri, property_uri)]
+        # filter values from deleted triples:
+        return {i: values[i] for i in values if values[i] in self.graph[individual_uri:property_uri:]}
+
+    def get_tokens(self, class_uri):
+        if type(class_uri) == str:
+            class_uri = URIRef(class_uri)
+
+        return get_tokens(self.graph, class_uri)
+
+    def get_individual_class(self, uri):
+        if type(uri) == str:
+            uri = URIRef(uri)
+
+        return next((type_ for type_ in self.graph[uri:RDF.type:] if type_ != OWL.NamedIndividual), None)
 
 
 def get_subgraph_knowledge(subgraph_id):
@@ -553,65 +840,6 @@ class Field:
     def is_subheading(self):
         return self.type == 'Subheading'
 
-    def check_value(self, value):
-        """Checks if the value is valid and transforms it into a corresponding rdflib Literal or URIRef
-        Returns a pair of a validity message and the Literal/URIRef
-        If the value is valid the validity message is an emptystring.
-        If the value is not valid instead of the literal, None is returned
-        """
-        if value == '':
-            # Empty values are allowed but will be deleted on reloading the page
-            # (they are persisted in the db though because I have not found out what's the best occasion to delete
-            # them yet..)
-            return '', Literal(value)
-        elif self.is_object_property and self.options:
-            uri = value if type(value) == URIRef else URIRef(value)
-            if uri in (o.uri for o in self.options):
-                return '', uri
-            else:
-                return 'Choose an option from the list.', None
-        elif self.is_object_property and self.is_described:
-            # we trust that the individual has the correct class, namely self.range_uri
-            uri = value if type(value) == URIRef else URIRef(value)
-            return '', uri
-        elif self.options:
-            lit = Literal(value, datatype=XSD.boolean) if self.range_uri == XSD.boolean else Literal(value)
-            if lit in self.options:
-                return '', lit
-            else:
-                return 'Choose an option from the list.', None
-        elif self.range_uri == RDFS.Literal:
-            pass
-        elif self.range_uri == XSD.string:
-            pass
-        elif self.range_uri == XSD.float:
-            try:
-                float(value)
-            except (ValueError, SyntaxError):
-                return '{} is not a valid float.'.format(value), None
-        elif self.range_uri == XSD.integer:
-            try:
-                int(value)
-            except (ValueError, SyntaxError):
-                return '{} is not a valid integer.'.format(value), None
-        elif self.range_uri == XSD.nonNegativeInteger:
-            try:
-                i = int(value)
-            except (ValueError, SyntaxError):
-                return '{} is not a valid integer.'.format(value), None
-            if i < 0:
-                return '{} is not a non-negative value.'.format(value), None
-        elif self.range_uri == XSD.positiveInteger:
-            try:
-                i = int(value)
-            except (ValueError, SyntaxError):
-                return '{} is not a valid integer.'.format(value), None
-            if i <= 0:
-                return '{} is not a positive value.'.format(value), None
-        else:
-            return 'Unknown Datatype: {}'.format(self.range_uri), None
-        return '', Literal(value, datatype=self.range_uri)
-
     def get_sorted_values(self):
         """Get (index, value)-pairs for non empty values sorted by index."""
         if self.is_object_property:
@@ -626,42 +854,27 @@ class Field:
     # Factories
     @classmethod
     def from_knowledge(cls, subgraph_id, individual_uri, property_uri):
-        knowledge = get_subgraph_knowledge(subgraph_id).graph
-        ontology = get_ontology().graph
+        knowledge = get_subgraph_knowledge(subgraph_id)
+        ontology = get_ontology()
 
-        label = next(ontology[property_uri:RDFS.label:], None)
-        if label is None:
-            label = get_uri_suffix(property_uri)
+        label = ontology.get_label(property_uri)
+        comment = ontology.get_comment(property_uri)
+        order = ontology.get_property_order(property_uri)
+        type_ = ontology.get_property_type(property_uri)
 
-        comment = next(ontology[property_uri:RDFS.comment:], None)
-
-        order = int(next(ontology.objects(property_uri, RATIO.order), 0))
-
-        if RATIO.Subheading in ontology[property_uri:RDF.type:]:
+        if type_ == 'Subheading':
             return cls.subheading(property_uri, label, comment, order)
 
-        range_class_uri = next(ontology[property_uri:RDFS.range:])
-        if type(range_class_uri) == BNode:
-            range_label = 'Literal'
-        else:
-            range_label = next(ontology[range_class_uri:RDFS.label:], None)
-            if range_label is None:
-                range_label = get_uri_suffix(range_class_uri)
+        range_class_uri = ontology.get_property_range(property_uri)
+        range_label = ontology.get_label(range_class_uri)
 
-        # Are the range objects described by a user in the tool
-        is_range_described = any(TRUE in ontology[p:RATIO.described:] for p in ontology[:RDFS.range:range_class_uri])
+        is_functional = ontology.is_property_functional(property_uri)
+        is_described = ontology.is_property_described(property_uri)
+        is_deletable = ontology.is_property_deletable(property_uri)
 
-        type_ = 'ObjectProperty' if OWL.ObjectProperty in ontology.objects(property_uri, RDF.type) \
-            else 'DatatypeProperty'
-        is_functional = OWL.FunctionalProperty in ontology[property_uri:RDF.type:]
-        is_described = TRUE in ontology[property_uri:RATIO.described:]
-        is_deletable = FALSE not in ontology[property_uri:RATIO.deletable:]
+        width = ontology.get_property_width(property_uri)
 
-        width = int(next(ontology[property_uri:RATIO.width:], 50))
-
-        values = get_subgraph_knowledge(subgraph_id).properties[(individual_uri, property_uri)]
-        # filter values from deleted triples:
-        values = {i: values[i] for i in values if values[i] in knowledge[individual_uri:property_uri:]}
+        values = knowledge.get_property_values(individual_uri, property_uri)
 
         if is_described:
             values = {i: Entity.from_knowledge(subgraph_id, values[i], is_deletable)
@@ -670,74 +883,64 @@ class Field:
             values = {i: Option.from_knowledge(subgraph_id, values[i])
                       for i in values if str(values[i]) != ''}
 
-        one_of = next(ontology[range_class_uri:OWL.oneOf:], None)
+        # TODO custom options should be stored globally, than I can put all this into the Ontology class
+        one_of = next(ontology.graph[range_class_uri:OWL.oneOf:], None)
         if type_ == 'ObjectProperty' and not is_described:
-            options = [Option.from_knowledge(subgraph_id, uri) for uri in get_tokens(ontology, range_class_uri)]
+            options = [Option.from_knowledge(subgraph_id, uri) for uri in ontology.get_tokens(range_class_uri)]
             # options added by the user:
-            options += [Option.from_knowledge(subgraph_id, uri) for uri in get_tokens(knowledge, range_class_uri)]
+            options += [Option.from_knowledge(subgraph_id, uri) for uri in knowledge.get_tokens(range_class_uri)]
             options.sort(key=lambda option: option.label)
         elif one_of is not None:
-            options = construct_list(ontology, one_of)
+            options = construct_list(ontology.graph, one_of)
         elif range_class_uri == XSD.boolean:
             options = [TRUE, FALSE]
         else:
             options = None
 
-        is_add_option_allowed = type_ == 'ObjectProperty' and not is_range_described
+        is_add_option_allowed = ontology.is_property_add_custom_option_allowed(property_uri)
 
         return cls(property_uri, label, comment, type_, is_described, is_deletable, is_functional,
                    range_class_uri, range_label, order, width, values, is_add_option_allowed, options)
 
     @classmethod
     def new(cls, subgraph_id, property_uri):
-        knowledge = get_subgraph_knowledge(subgraph_id).graph
-        ontology = get_ontology().graph
+        knowledge = get_subgraph_knowledge(subgraph_id)
+        ontology = get_ontology()
 
-        label = next(ontology[property_uri:RDFS.label:], None)
-        if label is None:
-            label = get_uri_suffix(property_uri)
+        label = ontology.get_label(property_uri)
+        comment = ontology.get_comment(property_uri)
+        order = ontology.get_property_order(property_uri)
+        type_ = ontology.get_property_type(property_uri)
 
-        comment = next(ontology[property_uri:RDFS.comment:], None)
-
-        order = int(next(ontology.objects(property_uri, RATIO.order), 0))
-
-        if RATIO.Subheading in ontology.objects(property_uri, RDF.type):
+        if type_ == 'Subheading':
             return cls.subheading(property_uri, label, comment, order)
 
-        range_class_uri = next(ontology[property_uri:RDFS.range:])
-        if type(range_class_uri) == BNode:
-            range_label = 'Literal'
-        else:
-            range_label = next(ontology[range_class_uri:RDFS.label:], None)
-            if range_label is None:
-                range_label = get_uri_suffix(range_class_uri)
+        range_class_uri = ontology.get_property_range(property_uri)
+        range_label = ontology.get_label(range_class_uri)
 
-        is_range_described = any(TRUE in ontology[p:RATIO.described:] for p in ontology[:RDFS.range:range_class_uri])
+        is_functional = ontology.is_property_functional(property_uri)
+        is_described = ontology.is_property_described(property_uri)
+        is_deletable = ontology.is_property_deletable(property_uri)
 
-        type_ = 'ObjectProperty' if OWL.ObjectProperty in ontology.objects(property_uri, RDF.type) \
-            else 'DatatypeProperty'
-        is_functional = OWL.FunctionalProperty in ontology[property_uri:RDF.type:]
-        is_described = TRUE in ontology[property_uri:RATIO.described:]
-        is_deletable = FALSE not in ontology[property_uri:RATIO.deletable:]
-
-        width = int(next(ontology[property_uri:RATIO.width:], 50))
+        width = ontology.get_property_width(property_uri)
 
         values = dict()
 
-        one_of = next(ontology[range_class_uri:OWL.oneOf:], None)
+        # TODO custom options should be stored globally, than I can put all this into the Ontology class
+        one_of = next(ontology.graph[range_class_uri:OWL.oneOf:], None)
         if type_ == 'ObjectProperty' and not is_described:
-            options = [Option.from_knowledge(subgraph_id, uri) for uri in get_tokens(ontology, range_class_uri)]
+            options = [Option.from_knowledge(subgraph_id, uri) for uri in ontology.get_tokens(range_class_uri)]
             # options added by the user:
-            options += [Option.from_knowledge(subgraph_id, uri) for uri in get_tokens(knowledge, range_class_uri)]
+            options += [Option.from_knowledge(subgraph_id, uri) for uri in knowledge.get_tokens(range_class_uri)]
             options.sort(key=lambda option: option.label)
         elif one_of is not None:
-            options = construct_list(ontology, one_of)
+            options = construct_list(ontology.graph, one_of)
         elif range_class_uri == XSD.boolean:
             options = [TRUE, FALSE]
         else:
             options = None
 
-        is_add_option_allowed = type_ == 'ObjectProperty' and not is_range_described
+        is_add_option_allowed = ontology.is_property_add_custom_option_allowed(property_uri)
 
         return cls(property_uri, label, comment, type_, is_described, is_deletable, is_functional,
                    range_class_uri, range_label, order, width, values, is_add_option_allowed, options)
@@ -762,25 +965,23 @@ class Option:
         """Searches for an individual with the given URI and a type defined in the ontology."""
 
         knowledge = get_subgraph_knowledge(subgraph_id).graph
-        ontology = get_ontology().graph
+        ontology = get_ontology()
 
-        if uri in ontology.subjects():
-            graph = ontology
+        # TODO custom options should be stored globally, than I can put all this into the Ontology class
+        if uri in ontology.graph.subjects():
+            graph = ontology.graph
         elif uri in knowledge.subjects():
             graph = knowledge
         else:
             raise ValueError('{} was not found in the ontology or the knowledge.'.format(uri))
 
-        label = next(graph[uri:RDFS.label:], None)
-        if label is None:
-            label = get_uri_suffix(uri)
-
-        comment = next(graph[uri:RDFS.comment:], None)
+        label = ontology.get_label(uri)
+        comment = ontology.get_comment(uri)
 
         class_uri = None
-        for o in graph[uri:RDF.type:]:
-            if o in ontology[:RDF.type:OWL.Class]:  # A class defined in the graph
-                class_uri = o
+        for type_ in graph[uri:RDF.type:]:
+            if type_ in ontology.graph[:RDF.type:OWL.Class]:  # A class defined in the graph
+                class_uri = type_
                 break
         if class_uri is None:
             raise KeyError('No type found for option ' + str(uri))
@@ -804,34 +1005,21 @@ class Entity:
     # Factories
     @classmethod
     def from_knowledge(cls, subgraph_id, uri, is_deletable):
-        knowledge = get_subgraph_knowledge(subgraph_id).graph
-        ontology = get_ontology().graph
+        knowledge = get_subgraph_knowledge(subgraph_id)
+        ontology = get_ontology()
 
-        # todo would be nicer with sparql query but that's very slow for some reason
-        # maybe consider using a real triple store?
-        # rdflib works with sleepycat: https://github.com/RDFLib/rdflib/blob/master/examples/sleepycat_example.py
-        # I'd need BerkeleyDB and bsddb3 (python bindings for BerkeleyDB)
-        class_uri = None
-        for o in knowledge[uri:RDF.type:]:
-            if o in ontology[:RDF.type:OWL.Class]:  # A class defined in the ontology
-                class_uri = o
-                break
+        class_uri = knowledge.get_individual_class(uri)
         if class_uri is None:
             raise ValueError('No type found for individual ' + str(uri))
 
-        label = next(knowledge[uri:RDFS.label:], None)
-        if label is None:
-            label = get_uri_suffix(uri)
+        label = ontology.get_label(uri)
 
-        comment = next(ontology[class_uri:RDFS.comment:], None)
-
-        class_label = next(ontology[class_uri:RDFS.label:], None)
-        if class_label is None:
-            class_label = get_uri_suffix(class_uri)
+        class_label = ontology.get_label(class_uri)
+        comment = ontology.get_comment(class_uri)
 
         fields = [
             Field.from_knowledge(subgraph_id, uri, property_uri)
-            for property_uri in ontology[:RDFS.domain:class_uri]
+            for property_uri in ontology.get_class_properties(class_uri)
         ]
         fields.sort(key=lambda field: field.order)
 
@@ -844,17 +1032,14 @@ class Entity:
 
     @classmethod
     def new(cls, subgraph_id, class_uri, uri, label, is_deletable):
-        ontology = get_ontology().graph
+        ontology = get_ontology()
 
-        class_label = next(ontology[class_uri:RDFS.label:], None)
-        if class_label is None:
-            class_label = get_uri_suffix(class_uri)
-
-        comment = next(ontology[class_uri:RDFS.comment:], None)
+        class_label = ontology.get_label(class_uri)
+        comment = ontology.get_comment(class_uri)
 
         fields = [
             Field.new(subgraph_id, property_uri)
-            for property_uri in ontology.subjects(RDFS.domain, class_uri)
+            for property_uri in ontology.get_class_properties(class_uri)
         ]
         fields.sort(key=lambda field: field.order)
 

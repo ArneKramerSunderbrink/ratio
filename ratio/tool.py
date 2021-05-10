@@ -13,7 +13,7 @@ from time import strftime
 from urllib.parse import quote, unquote
 
 from ratio.auth import login_required, subgraph_access
-from ratio.db import get_db, get_empty_subgraph_template
+from ratio.db import get_db, get_new_subgraph_instructions
 from ratio.knowledge_model import get_subgraph_knowledge
 
 MSG_SUBGRAPH_ACCESS = '{} with id {} does not exist or is not owned by user {} currently logged in.'
@@ -317,7 +317,7 @@ def add_subgraph():
         (user_id, subgraph_id)
     )
 
-    get_subgraph_knowledge(subgraph_id).load_rdf_data(get_empty_subgraph_template(subgraph_id))
+    get_subgraph_knowledge(subgraph_id).execute_ratio_instructions(get_new_subgraph_instructions())
 
     db.commit()
     return jsonify(redirect=url_for('tool.edit_view', subgraph_id=subgraph_id))
