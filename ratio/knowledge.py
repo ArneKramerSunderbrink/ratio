@@ -74,9 +74,8 @@ def change_value():
         return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
 
     subgraph_knowledge = get_subgraph_knowledge(subgraph_id)
-    field = subgraph_knowledge.get_field(entity_uri, property_uri)
 
-    if field.is_described:
+    if get_ontology().is_property_described(property_uri):
         return jsonify(error='You have to use /_change_label to change the label of a described individual')
 
     if index == -1:
@@ -113,14 +112,14 @@ def add_option():
         return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
 
     subgraph_knowledge = get_subgraph_knowledge(subgraph_id)
-    field = subgraph_knowledge.get_field(entity_uri, property_uri)
+    ontology = get_ontology()
 
-    if field.is_described:
+    if ontology.is_property_described(property_uri):
         return jsonify(error='Use _add_entity to add entities to a described field.')
-    if not field.is_add_option_allowed:
+    if not ontology.is_property_add_custom_option_allowed(property_uri):
         return jsonify(error='Adding options to this field is not allowed.')
 
-    option, option_fields = subgraph_knowledge.new_option(field.range_uri, label)
+    option, option_fields = subgraph_knowledge.new_option(ontology.get_property_range(property_uri), label)
 
     if index == -1:
         index = subgraph_knowledge.new_value(entity_uri, property_uri)
@@ -154,8 +153,7 @@ def change_label():
 
     subgraph_knowledge = get_subgraph_knowledge(subgraph_id)
 
-    entity = subgraph_knowledge.get_entity(entity_uri)
-    if not entity.is_deletable:
+    if not subgraph_knowledge.is_individual_deletable(entity_uri):
         return jsonify(error='You are not allowed to change the label of this entity.')
 
     subgraph_knowledge.change_label(entity_uri, label)
@@ -185,29 +183,33 @@ def add_entity():
         return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
 
     subgraph_knowledge = get_subgraph_knowledge(subgraph_id)
-    field = subgraph_knowledge.get_field(parent_uri, property_uri)
+    ontology = get_ontology()
+    field_is_deletable = ontology.is_property_deletable(property_uri)
+    field_is_functional = ontology.is_property_functional(property_uri)
+    field_values = subgraph_knowledge.get_property_values(parent_uri, property_uri)
+    field_range = ontology.get_property_range(property_uri)
 
-    if not field.is_deletable:
+    if not field_is_deletable:
         return jsonify(error='You are not allowed to add entities to this field.')
 
-    if field.is_functional and field.values:
+    if field_is_functional and field_values:
         return jsonify(error='You cannot add more than one value to this field.')
 
     index = subgraph_knowledge.new_value(parent_uri, property_uri)
-    entity, option_fields = subgraph_knowledge.new_individual(field.range_uri, entity_label, field.is_deletable, True)
+    entity, option_fields = subgraph_knowledge.new_individual(field_range, entity_label, True)
     subgraph_knowledge.change_value(parent_uri, property_uri, index, entity.uri)
 
     render_entity_div = get_template_attribute('tool/macros.html', 'entity_div')
-    entity_div = render_entity_div(entity, index=index)
+    entity_div = render_entity_div(entity, index=index, is_deletable=field_is_deletable)
 
     if option_fields:
         option_fields = [str(f.property_uri) for f in option_fields]
         render_option_div = get_template_attribute('tool/macros.html', 'option_div')
         option_div = render_option_div(entity, True)
-        return jsonify(entity_div=entity_div, remove_plus=field.is_functional,
+        return jsonify(entity_div=entity_div, remove_plus=field_is_functional,
                        option_fields=option_fields, option_div=option_div)
 
-    return jsonify(entity_div=entity_div, remove_plus=field.is_functional)
+    return jsonify(entity_div=entity_div, remove_plus=field_is_functional)
 
 
 @bp.route('/_delete_entity')
@@ -228,14 +230,13 @@ def delete_entity():
 
     subgraph_knowledge = get_subgraph_knowledge(subgraph_id)
 
-    entity = subgraph_knowledge.get_entity(entity_uri)
-    if not entity.is_deletable:
+    if not subgraph_knowledge.is_individual_deletable(entity_uri):
         return jsonify(error='You are not allowed to delete this entity.')
 
     deleted = subgraph_knowledge.delete_individual_recursive(entity_uri)
 
     if property_uri:
-        is_functional = get_ontology().is_functional(property_uri)
+        is_functional = get_ontology().is_property_functional(property_uri)
         return jsonify(deleted=deleted, functional=is_functional)
 
     return jsonify(deleted=deleted)

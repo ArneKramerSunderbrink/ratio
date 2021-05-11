@@ -73,6 +73,18 @@ def row_to_rdf(row):
 
 
 # todo the general graph functions in a graph parent class
+def get_label(graph, uri):
+    if type(uri) == str:
+        uri = URIRef(uri)
+
+    if type(uri) == BNode:
+        return 'Literal'
+    label = next(graph[uri:RDFS.label:], None)
+    if label is None:
+        label = get_uri_suffix(uri)
+    return label
+
+
 def get_subclasses(graph, class_uri):
     if type(class_uri) == str:
         class_uri = URIRef(class_uri)
@@ -135,6 +147,9 @@ class Ontology:
         else:
             self.graph.parse(file=data, format=rdf_format)
 
+        # todo check if the graph works: build root
+        #  check if property orders: [f.order for f in fields] != list(range(1, len(fields) + 1))
+
         db = get_db()
         db.execute('DELETE FROM ontology')
 
@@ -154,15 +169,7 @@ class Ontology:
 
     # Provide information about the things described by the ontology
     def get_label(self, uri):
-        if type(uri) == str:
-            uri = URIRef(uri)
-
-        if type(uri) == BNode:
-            return 'Literal'
-        label = next(self.graph[uri:RDFS.label:], None)
-        if label is None:
-            label = get_uri_suffix(uri)
-        return label
+        return get_label(self.graph, uri)
 
     def get_comment(self, uri):
         if type(uri) == str:
@@ -360,12 +367,20 @@ class SubgraphKnowledge:
                 self.properties[(subject, predicate)][index] = object_
 
     def get_root(self):
+        """Get a representation of the root of the subgraph and all its descendants
+        This is used to provide the information for rendering to Jinja.
+        Don't use it to check things like entity.label - knowledge.get_label(uri) is more efficient.
+        """
         if self.root is None:
             root_uri = next(self.graph[:RATIO.isRoot:TRUE])
-            self.root = Entity.from_knowledge(self.id, root_uri, False)
+            self.root = Entity.from_knowledge(self.id, root_uri)
         return self.root
 
     def get_entity(self, entity_uri):
+        """Get a representation of a owl:NamedIndividual
+        This is used to provide the information about an individual for rendering to Jinja.
+        Don't use it to check things like entity.label - knowledge.get_label(uri) is more efficient.
+        """
         if type(entity_uri) == str:
             entity_uri = URIRef(entity_uri)
 
@@ -381,6 +396,10 @@ class SubgraphKnowledge:
         raise KeyError('No entity with URI {} found.'.format(entity_uri))
 
     def get_field(self, entity_uri, property_uri):
+        """Get a representation of an owl:ObjectProperty or owl:DatatypeProperty of an Entity
+        This is used to provide the information about a field for rendering to Jinja.
+        Don't use it to check things like field.label - ontology.get_label(property_uri) is more efficient.
+        """
         if type(entity_uri) == str:
             entity_uri = URIRef(entity_uri)
         if type(property_uri) == str:
@@ -477,7 +496,7 @@ class SubgraphKnowledge:
 
         self.root = None  # forces a rebuild of the root entity
 
-    def new_individual(self, class_uri, label, deletable, get_option_fields=False):
+    def new_individual(self, class_uri, label, get_option_fields=False):
         if type(class_uri) == str:
             class_uri = URIRef(class_uri)
         label = Literal(label, datatype=XSD.string)
@@ -496,7 +515,7 @@ class SubgraphKnowledge:
 
         uri = URIRef(next(uri + str(i) for i in count(1) if uri + str(i) not in used_uris))
 
-        entity = Entity.new(self.id, class_uri, uri, label, deletable)
+        entity = Entity.new(self.id, class_uri, uri, label)
 
         # update triples
         triples = [
@@ -533,13 +552,12 @@ class SubgraphKnowledge:
         db = get_db()
         db_cursor = db.cursor()
 
-        stack = [self.get_entity(uri)]
+        stack = [uri]
         deleted = []
         while stack:
-            e = stack.pop()
-            u = e.uri
+            u = stack.pop()
             deleted.append(str(u))
-            stack += [f.values[i] for f in e.fields for i in f.values if f.is_described]
+            stack += self.get_individual_children(u)
 
             # remove links from parents
             self.graph.remove((None, None, u))
@@ -710,7 +728,7 @@ class SubgraphKnowledge:
                         raise ValueError('Arguments "{}" could not be parsed.'.format(arguments))
                     class_uri = parse_uri(class_uri)
                     label = label.strip()
-                    entity = self.new_individual(class_uri, label, False)
+                    entity = self.new_individual(class_uri, label)
                     names[name] = entity.uri
                     self.graph.add((entity.uri, RATIO.isRoot, TRUE))
                     db = get_db()
@@ -733,9 +751,8 @@ class SubgraphKnowledge:
                     label = label.strip()
                     property_uri = parse_uri(property_uri)
                     parent_uri = names[parent]
-                    deletable = get_ontology().is_property_deletable(property_uri)
                     index = self.new_value(parent_uri, property_uri)
-                    entity = self.new_individual(class_uri, label, deletable)
+                    entity = self.new_individual(class_uri, label)
                     names[name] = entity.uri
                     self.change_value(parent_uri, property_uri, index, entity.uri)
 
@@ -771,6 +788,9 @@ class SubgraphKnowledge:
         return self.get_graph(clean, ontology).serialize(format=rdf_format)
 
     # Provide information about the things described by the knowledge graph
+    def get_label(self, uri):
+        return get_label(self.graph, uri)
+
     def get_property_values(self, individual_uri, property_uri):
         if type(individual_uri) == str:
             individual_uri = URIRef(individual_uri)
@@ -793,6 +813,25 @@ class SubgraphKnowledge:
 
         return next((type_ for type_ in self.graph[uri:RDF.type:] if type_ != OWL.NamedIndividual), None)
 
+    def get_individual_children(self, uri):
+        if type(uri) == str:
+            uri = URIRef(uri)
+
+        return [value
+                for property_uri in get_ontology().get_class_properties(self.get_individual_class(uri))
+                for value in self.get_property_values(uri, property_uri)]
+
+    def is_individual_deletable(self, uri):
+        if type(uri) == str:
+            uri = URIRef(uri)
+
+        ontology = get_ontology()
+
+        if uri in self.graph[:RATIO.isRoot:TRUE]:
+            return False
+        parent_properties = self.graph.predicates(object=uri)
+        return all(ontology.is_property_deletable(p) for p in parent_properties)
+
 
 def get_subgraph_knowledge(subgraph_id):
     """Get SubgraphKnowledge of a certain subgraph.
@@ -808,7 +847,10 @@ def get_subgraph_knowledge(subgraph_id):
 
 
 class Field:
-    """Represents a possible owl:ObjectProperty or owl:DatatypeProperty of an Entity"""
+    """Represents a possible owl:ObjectProperty or owl:DatatypeProperty of an Entity
+    This is used to provide the information about a field for rendering to Jinja.
+    Don't use it to check things like field.label - ontology.get_label(property_uri) is more efficient.
+    """
     def __init__(self, property_uri, label, comment,
                  type_, is_described, is_deletable, is_functional,
                  range_uri, range_label,
@@ -857,6 +899,7 @@ class Field:
         knowledge = get_subgraph_knowledge(subgraph_id)
         ontology = get_ontology()
 
+        # todo put those things that are common to new and from knowledge in init
         label = ontology.get_label(property_uri)
         comment = ontology.get_comment(property_uri)
         order = ontology.get_property_order(property_uri)
@@ -877,7 +920,7 @@ class Field:
         values = knowledge.get_property_values(individual_uri, property_uri)
 
         if is_described:
-            values = {i: Entity.from_knowledge(subgraph_id, values[i], is_deletable)
+            values = {i: Entity.from_knowledge(subgraph_id, values[i])
                       for i in values if str(values[i]) != ''}
         elif type_ == 'ObjectProperty':
             values = {i: Option.from_knowledge(subgraph_id, values[i])
@@ -952,6 +995,10 @@ class Field:
 
 
 class Option:
+    """Represents a possible owl:ObjectProperty or owl:DatatypeProperty of an Entity
+    This is used to provide the information about an option for rendering to Jinja.
+    Don't use it to check things like option.label - ontology.get_label(uri) is more efficient.
+    """
     def __init__(self, uri, label, class_uri, is_custom, comment=None):
         self.uri = uri
         self.label = label
@@ -959,7 +1006,7 @@ class Option:
         self.is_custom = is_custom
         self.comment = comment
 
-    # Factory
+    # Factory  todo: after I made custom options global, decide whether its better to simply put this in init
     @classmethod
     def from_knowledge(cls, subgraph_id, uri):
         """Searches for an individual with the given URI and a type defined in the ontology."""
@@ -992,19 +1039,21 @@ class Option:
 
 
 class Entity:
-    """Represents a owl:NamedIndividual"""
-    def __init__(self, uri, label, comment, class_uri, class_label, fields, is_deletable):
+    """Represents a owl:NamedIndividual
+    This is used to provide the information about an individual for rendering to Jinja.
+    Don't use it to check things like entity.label - knowledge.get_label(uri) is more efficient.
+    """
+    def __init__(self, uri, label, comment, class_uri, class_label, fields):
         self.uri = uri
         self.label = label
         self.comment = comment
         self.class_uri = class_uri
         self.class_label = class_label
         self.fields = fields  # fields s.t. field.property_uri rdfs:domain self.uri
-        self.is_deletable = is_deletable
 
     # Factories
     @classmethod
-    def from_knowledge(cls, subgraph_id, uri, is_deletable):
+    def from_knowledge(cls, subgraph_id, uri):
         knowledge = get_subgraph_knowledge(subgraph_id)
         ontology = get_ontology()
 
@@ -1012,8 +1061,9 @@ class Entity:
         if class_uri is None:
             raise ValueError('No type found for individual ' + str(uri))
 
-        label = ontology.get_label(uri)
+        label = knowledge.get_label(uri)
 
+        # todo put those things that are common to new and from knowledge in init
         class_label = ontology.get_label(class_uri)
         comment = ontology.get_comment(class_uri)
 
@@ -1023,15 +1073,10 @@ class Entity:
         ]
         fields.sort(key=lambda field: field.order)
 
-        # todo just for debugging, should be tested when uploading a new ontology
-        if [f.order for f in fields] != list(range(1, len(fields) + 1)):
-            print('There is an error in the order of the fields of {}'.format(uri))
-            print([(f.order, f.label) for f in fields])
-
-        return cls(uri, label, comment, class_uri, class_label, fields, is_deletable)
+        return cls(uri, label, comment, class_uri, class_label, fields)
 
     @classmethod
-    def new(cls, subgraph_id, class_uri, uri, label, is_deletable):
+    def new(cls, subgraph_id, class_uri, uri, label):
         ontology = get_ontology()
 
         class_label = ontology.get_label(class_uri)
@@ -1043,10 +1088,5 @@ class Entity:
         ]
         fields.sort(key=lambda field: field.order)
 
-        # todo just for debugging, should be tested when uploading a new ontology
-        if [f.order for f in fields] != list(range(1, len(fields)+1)):
-            print('There is an error in the order of the fields of {}'.format(uri))
-            print([(f.order, f.label) for f in fields])
-
-        return cls(uri, label, comment, class_uri, class_label, fields, is_deletable)
+        return cls(uri, label, comment, class_uri, class_label, fields)
 
