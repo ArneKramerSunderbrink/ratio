@@ -77,6 +77,7 @@ def db_populate_dummy():
     with current_app.open_resource('dummy/ontology.ttl') as f:
         get_ontology().load_rdf_data(f, 'turtle')
 
+    # TODO add dummy CTs
     #from ratio.knowledge_model import get_subgraph_knowledge
     #with current_app.open_resource('dummy/empty_subgraph_template.ttl') as f:
     #    get_subgraph_knowledge(2).load_rdf_data(f.read().decode('utf8').format(id=2))

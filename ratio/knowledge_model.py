@@ -67,78 +67,103 @@ def get_uri_suffix(uri):
     return fullmatch(r'(?:.*[:#])*([^:#]*)', uri).group(1)
 
 
-# todo the general graph functions in a graph parent class
-def get_label(graph, uri):
-    if type(uri) == str:
-        uri = URIRef(uri)
+class KnowledgeGraph:
+    def __init__(self, graph):
+        self.graph = graph
 
-    if type(uri) == BNode:
-        return 'Literal'
-    label = next(graph[uri:RDFS.label:], None)
-    if label is None:
-        label = get_uri_suffix(uri)
-    return label
+    def load_rdf_data(self, data, rdf_format='turtle'):
+        self.graph = Graph()
+        if type(data) == str:
+            self.graph.parse(data=data, format=rdf_format)
+        else:
+            self.graph.parse(file=data, format=rdf_format)
+
+    def get_graph(self, clean=False):
+        graph = Graph()
+        graph.namespace_manager = self.graph.namespace_manager
+
+        for t in self.graph[::]:
+            graph.add(t)
+
+        return graph
+
+    def get_serialization(self, rdf_format='turtle', clean=True):
+        return self.get_graph(clean).serialize(format=rdf_format)
+
+    # Provide information about the things described by the graph
+    def get_label(self, uri):
+        if type(uri) == str:
+            uri = URIRef(uri)
+
+        if type(uri) == BNode:
+            return 'Literal'
+        label = next(self.graph[uri:RDFS.label:], None)
+        if label is None:
+            label = get_uri_suffix(uri)
+        return label
+
+    def get_comment(self, uri):
+        if type(uri) == str:
+            uri = URIRef(uri)
+
+        return next(self.graph[uri:RDFS.comment:], None)
+
+    def get_individual_class(self, uri):
+        if type(uri) == str:
+            uri = URIRef(uri)
+
+        return next((type_ for type_ in self.graph[uri:RDF.type:] if type_ != OWL.NamedIndividual), None)
+
+    def get_subclasses(self, class_uri):
+        if type(class_uri) == str:
+            class_uri = URIRef(class_uri)
+
+        stack = {class_uri}
+        subclasses = set()
+        while stack:
+            c = stack.pop()
+            s = self.graph[:RDFS.subClassOf:c]
+            stack.update(s)
+            subclasses.update(s)
+        return subclasses
+
+    def get_superclasses(self, class_uri):
+        if type(class_uri) == str:
+            class_uri = URIRef(class_uri)
+
+        stack = {class_uri}
+        superclasses = set()
+        while stack:
+            c = stack.pop()
+            stack.update(self.graph[c:RDFS.subClassOf:])
+            superclasses.update(self.graph[c:RDFS.subClassOf:])
+        return superclasses
+
+    def get_tokens(self, class_uri):
+        if type(class_uri) == str:
+            class_uri = URIRef(class_uri)
+
+        classes = {class_uri}
+        classes.update(self.get_subclasses(class_uri))
+        tokens = set()
+        for c in classes:
+            tokens.update(self.graph[:RDF.type:c])
+        return tokens
+
+    def construct_list(self, list_node):
+        """For parsing a rdf:List."""
+        list_ = []
+        while list_node != RDF.nil:
+            list_.append(next(self.graph.objects(list_node, RDF.first)))
+            list_node = next(self.graph.objects(list_node, RDF.rest))
+        return list_
 
 
-def get_individual_class(graph, uri):
-    if type(uri) == str:
-        uri = URIRef(uri)
-
-    return next((type_ for type_ in graph[uri:RDF.type:] if type_ != OWL.NamedIndividual), None)
-
-
-def get_subclasses(graph, class_uri):
-    if type(class_uri) == str:
-        class_uri = URIRef(class_uri)
-
-    stack = {class_uri}
-    subclasses = set()
-    while stack:
-        c = stack.pop()
-        stack.update(graph[:RDFS.subClassOf:c])
-        subclasses.update(graph[:RDFS.subClassOf:c])
-    return subclasses
-
-
-def get_superclasses(graph, class_uri):
-    if type(class_uri) == str:
-        class_uri = URIRef(class_uri)
-
-    stack = {class_uri}
-    superclasses = set()
-    while stack:
-        c = stack.pop()
-        stack.update(graph[c:RDFS.subClassOf:])
-        superclasses.update(graph[c:RDFS.subClassOf:])
-    return superclasses
-
-
-def get_tokens(graph, class_uri):
-    if type(class_uri) == str:
-        class_uri = URIRef(class_uri)
-
-    classes = {class_uri}
-    classes.update(get_subclasses(graph, class_uri))
-    tokens = set()
-    for c in classes:
-        tokens.update(graph[:RDF.type:c])
-    return tokens
-
-
-def construct_list(graph, list_node):
-    """For parsing a rdf:List."""
-    list_ = []
-    while list_node != RDF.nil:
-        list_.append(next(graph.objects(list_node, RDF.first)))
-        list_node = next(graph.objects(list_node, RDF.rest))
-    return list_
-
-
-class Ontology:
+class Ontology(KnowledgeGraph):
     """Wrapper for rdflib.Graph that connects it to the database."""
 
     def __init__(self):
-        self.graph = Graph()
+        super().__init__(Graph())
 
         db = get_db()
         for row in db.execute('SELECT * FROM ontology').fetchall():
@@ -210,14 +235,10 @@ class Ontology:
         return Option.from_ontology(uri), properties
 
     def load_rdf_data(self, data, rdf_format='turtle'):
-        self.graph = Graph()
-        if type(data) == str:
-            self.graph.parse(data=data, format=rdf_format)
-        else:
-            self.graph.parse(file=data, format=rdf_format)
+        super().load_rdf_data(data, rdf_format)
 
         # todo check if the graph works: build root and all possible children?
-        #  check if property orders: [f.order for f in fields] != list(range(1, len(fields) + 1))
+        #  check property orders: [f.order for f in fields] != list(range(1, len(fields) + 1))
 
         db = get_db()
         db.execute('DELETE FROM ontology')
@@ -233,11 +254,7 @@ class Ontology:
         db.commit()
 
     def get_graph(self, clean=False):
-        graph = Graph()
-        graph.namespace_manager = self.graph.namespace_manager
-
-        for t in self.graph[::]:
-            graph.add(t)
+        graph = super().get_graph()
 
         if clean:
             graph.remove((RATIO.Configuration, RATIO.hasBase, None))
@@ -249,22 +266,7 @@ class Ontology:
 
         return graph
 
-    def get_serialization(self, rdf_format='turtle', clean=True):
-        return self.get_graph(clean).serialize(format=rdf_format)
-
     # Provide information about the things described by the ontology
-    def get_label(self, uri):
-        return get_label(self.graph, uri)
-
-    def get_comment(self, uri):
-        if type(uri) == str:
-            uri = URIRef(uri)
-
-        return next(self.graph[uri:RDFS.comment:], None)
-
-    def get_individual_class(self, uri):
-        return get_individual_class(self.graph, uri)
-
     def get_creator(self, uri):
         if type(uri) == str:
             uri = URIRef(uri)
@@ -361,7 +363,7 @@ class Ontology:
                 return 'Choose an option from the list.', None
         elif one_of:
             # option field with literals as options defined as a list in the ontology
-            options = construct_list(self.graph, one_of)
+            options = self.construct_list(one_of)
             lit = Literal(value, datatype=XSD.boolean) if range_uri == XSD.boolean else Literal(value)
             if lit in options:
                 return '', lit
@@ -407,11 +409,6 @@ class Ontology:
         return '', Literal(value, datatype=range_uri)
 
     # Information specific to classes
-    def get_tokens(self, class_uri):
-        return get_tokens(self.graph, class_uri)
-
-    def get_superclasses(self, uri):
-        return get_superclasses(self.graph, uri)
 
     def get_class_child_properties(self, uri):
         # properties p such that (uri, property, child) is intended by the ontology
@@ -438,12 +435,12 @@ def get_ontology():
     return g.ontology
 
 
-class SubgraphKnowledge:
+class SubgraphKnowledge(KnowledgeGraph):
     """Manages knowledge about a subgraph."""
 
     def __init__(self, subgraph_id):
+        super().__init__(Graph())
         self.id = subgraph_id
-        self.graph = Graph()
         # since rdf triples are not ordered but the values of the property fields in the tool are we need to store this
         # additional information outside the rdf graph object:
         self.properties = defaultdict(dict)  # includes deleted! (There has to be a better name for this?)
@@ -696,12 +693,9 @@ class SubgraphKnowledge:
         self.root = None  # forces a rebuild of the root entity
 
     def load_rdf_data(self, data, rdf_format='turtle'):
-        self.graph = Graph()
+        super().load_rdf_data(data, rdf_format)
+
         self.properties = defaultdict(dict)
-        if type(data) == str:
-            self.graph.parse(data=data, format=rdf_format)
-        else:
-            self.graph.parse(file=data, format=rdf_format)
 
         db = get_db()
         db.execute('DELETE FROM knowledge WHERE subgraph_id = ?', (self.id,))
@@ -801,11 +795,7 @@ class SubgraphKnowledge:
                     self.change_value(parent_uri, property_uri, index, entity.uri)
 
     def get_graph(self, clean=False):
-        graph = Graph()
-        graph.namespace_manager = self.graph.namespace_manager
-
-        for t in self.graph[::]:
-            graph.add(t)
+        graph = super().get_graph()
 
         if clean:
             graph.remove((None, RATIO.isRoot, None))
@@ -813,13 +803,7 @@ class SubgraphKnowledge:
 
         return graph
 
-    def get_serialization(self, rdf_format='turtle', clean=True):
-        return self.get_graph(clean).serialize(format=rdf_format)
-
     # Provide information about the things described by the knowledge graph
-    def get_label(self, uri):
-        return get_label(self.graph, uri)
-
     def get_property_values(self, individual_uri, property_uri):
         if type(individual_uri) == str:
             individual_uri = URIRef(individual_uri)
@@ -829,12 +813,6 @@ class SubgraphKnowledge:
         values = self.properties[(individual_uri, property_uri)]
         # filter values from deleted triples:
         return {i: values[i] for i in values if values[i] in self.graph[individual_uri:property_uri:]}
-
-    def get_tokens(self, class_uri):
-        return get_tokens(self.graph, class_uri)
-
-    def get_individual_class(self, uri):
-        return get_individual_class(self.graph, uri)
 
     def get_individual_children(self, uri):
         if type(uri) == str:
@@ -920,62 +898,28 @@ class Field:
     # Factories
     @classmethod
     def from_knowledge(cls, subgraph_id, individual_uri, property_uri):
+        field = Field.new(subgraph_id, property_uri)
+        if field.type == 'Subheading':
+            return field
+
         knowledge = get_subgraph_knowledge(subgraph_id)
-        ontology = get_ontology()
 
-        # todo put those things that are common to new and from knowledge in init
-        label = ontology.get_label(property_uri)
-        comment = ontology.get_comment(property_uri)
-        order = ontology.get_property_order(property_uri)
-        type_ = ontology.get_property_type(property_uri)
+        field.values = knowledge.get_property_values(individual_uri, property_uri)
 
-        if type_ == 'Subheading':
-            return cls.subheading(property_uri, label, comment, order)
-
-        range_class_uri = ontology.get_property_range(property_uri)
-        range_label = ontology.get_label(range_class_uri)
-
-        is_functional = ontology.is_property_functional(property_uri)
-        is_described = ontology.is_property_described(property_uri)
-        is_deletable = ontology.is_property_deletable(property_uri)
-        is_add_option_allowed = ontology.is_property_add_custom_option_allowed(property_uri)
-
-        width = ontology.get_property_width(property_uri)
-
-        values = knowledge.get_property_values(individual_uri, property_uri)
-
-        if is_described:
-            values = {i: Entity.from_knowledge(subgraph_id, values[i])
-                      for i in values if str(values[i]) != ''}
-        elif type_ == 'ObjectProperty':
-            if is_add_option_allowed:
+        if field.is_described:
+            field.values = {i: Entity.from_knowledge(subgraph_id, field.values[i])
+                            for i in field.values if str(field.values[i]) != ''}
+        elif field.type == 'ObjectProperty':
+            if field.is_add_option_allowed:
                 # for options that are not described by the user in a different field of the interface
-                values = {i: Option.from_ontology(values[i])
-                          for i in values if str(values[i]) != ''}
+                field.values = {i: Option.from_ontology(field.values[i])
+                                for i in field.values if str(field.values[i]) != ''}
             else:
                 # for options that are described by the user in a different field of the interface
-                values = {i: Option.from_knowledge(values[i], subgraph_id)
-                          for i in values if str(values[i]) != ''}
+                field.values = {i: Option.from_knowledge(field.values[i], subgraph_id)
+                                for i in field.values if str(field.values[i]) != ''}
 
-        # todo put those things that are common to new and from knowledge in init
-        one_of = next(ontology.graph[range_class_uri:OWL.oneOf:], None)
-        if type_ == 'ObjectProperty' and not is_described:
-            if is_add_option_allowed:
-                # for options that are not described by the user in a different field of the interface
-                options = [Option.from_ontology(uri) for uri in ontology.get_tokens(range_class_uri)]
-            else:
-                # for options that are described by the user in a different field of the interface
-                options = [Option.from_knowledge(uri, subgraph_id) for uri in knowledge.get_tokens(range_class_uri)]
-            options.sort(key=lambda option: option.label)
-        elif one_of is not None:
-            options = construct_list(ontology.graph, one_of)
-        elif range_class_uri == XSD.boolean:
-            options = [TRUE, FALSE]
-        else:
-            options = None
-
-        return cls(property_uri, label, comment, type_, is_described, is_deletable, is_functional,
-                   range_class_uri, range_label, order, width, values, is_add_option_allowed, options)
+        return field
 
     @classmethod
     def new(cls, subgraph_id, property_uri):
@@ -1002,7 +946,6 @@ class Field:
 
         values = dict()
 
-        # todo put those things that are common to new and from knowledge in init
         one_of = next(ontology.graph[range_class_uri:OWL.oneOf:], None)
         if type_ == 'ObjectProperty' and not is_described:
             if is_add_option_allowed:
@@ -1011,7 +954,7 @@ class Field:
                 options = [Option.from_knowledge(uri, subgraph_id) for uri in knowledge.get_tokens(range_class_uri)]
             options.sort(key=lambda option: option.label)
         elif one_of is not None:
-            options = construct_list(ontology.graph, one_of)
+            options = ontology.construct_list(one_of)
         elif range_class_uri == XSD.boolean:
             options = [TRUE, FALSE]
         else:
@@ -1096,7 +1039,6 @@ class Entity:
 
         label = knowledge.get_label(uri)
 
-        # todo put those things that are common to new and from knowledge in init
         class_label = ontology.get_label(class_uri)
         comment = ontology.get_comment(class_uri)
 
