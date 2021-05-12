@@ -11,7 +11,8 @@ DROP TABLE IF EXISTS namespace;
 CREATE TABLE user (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   username TEXT UNIQUE NOT NULL,
-  password TEXT NOT NULL
+  password TEXT NOT NULL,
+  uri TEXT NOT NULL
 );
 
 CREATE TABLE subgraph (

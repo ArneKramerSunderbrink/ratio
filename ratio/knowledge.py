@@ -90,9 +90,10 @@ def change_value():
 @bp.route('/_add_option')
 @login_required
 def add_option():
-    # If an index is given, the corresponding value is changed the new option,
+    # If an index is given, the corresponding value is changed to the new option,
     # if index is -1 a new value is created first
     user_id = g.user['id']
+    user_uri = g.user['uri']
     subgraph_id = request.args.get('subgraph_id', 0, type=int)
     entity_uri = request.args.get('entity_uri', '', type=str)
     property_uri = request.args.get('property_uri', '', type=str)
@@ -119,7 +120,7 @@ def add_option():
     if not ontology.is_property_add_custom_option_allowed(property_uri):
         return jsonify(error='Adding options to this field is not allowed.')
 
-    option, option_fields = subgraph_knowledge.new_option(ontology.get_property_range(property_uri), label)
+    option, option_fields = ontology.new_option(ontology.get_property_range(property_uri), label, user_uri)
 
     if index == -1:
         index = subgraph_knowledge.new_value(entity_uri, property_uri)

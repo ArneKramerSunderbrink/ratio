@@ -340,7 +340,7 @@ def download_rdf(subgraph_id):
         subgraph_id,
         strftime('%Y-%m-%d-%H-%M-%S')
     )
-    content = get_subgraph_knowledge(subgraph_id).get_serialization(clean=True, ontology=False)
+    content = get_subgraph_knowledge(subgraph_id).get_serialization(clean=True, ontology=True) # todo clean without ont
 
     return Response(
         content,
