@@ -3,6 +3,7 @@
 from flask import Blueprint
 from flask import current_app
 from flask import g
+from flask import flash
 from flask import jsonify
 from flask import render_template
 from flask import request
@@ -13,8 +14,8 @@ from time import strftime
 from urllib.parse import quote, unquote
 
 from ratio.auth import login_required, subgraph_access
-from ratio.db import get_db, get_new_subgraph_instructions
-from ratio.knowledge_model import get_subgraph_knowledge
+from ratio.db import get_db, get_new_subgraph_instructions, get_db_backup, upload_backup
+from ratio.knowledge_model import get_ontology, get_subgraph_knowledge
 
 MSG_SUBGRAPH_ACCESS = '{} with id {} does not exist or is not owned by user {} currently logged in.'
 
@@ -323,6 +324,21 @@ def add_subgraph():
     return jsonify(redirect=url_for('tool.edit_view', subgraph_id=subgraph_id))
 
 
+@bp.route('/_download_ontology')
+@login_required
+def download_ontology():
+    filename = '{}_ontology_{}.ttl'.format(
+        current_app.config['FRONTEND_CONFIG']['tool_name'],
+        strftime('%Y-%m-%d-%H-%M-%S')
+    )
+    content = get_ontology().get_serialization(clean=True)
+
+    return Response(
+        content,
+        mimetype='text/plain',
+        headers={'Content-disposition': 'attachment; filename=' + filename})
+
+
 @bp.route('/<int:subgraph_id>/_download_rdf')
 @login_required
 def download_rdf(subgraph_id):
@@ -335,14 +351,56 @@ def download_rdf(subgraph_id):
         return jsonify(error=MSG_SUBGRAPH_ACCESS.format(current_app.config['FRONTEND_CONFIG']['Subgraph_term'],
                                                         subgraph_id, user_id))
 
-    filename = "{}_{}_{}.ttl".format(
+    filename = '{}_{}_{}.ttl'.format(
         current_app.config['FRONTEND_CONFIG']['Subgraph_term'],
         subgraph_id,
         strftime('%Y-%m-%d-%H-%M-%S')
     )
-    content = get_subgraph_knowledge(subgraph_id).get_serialization(clean=True, ontology=True) # todo clean without ont
+    content = get_subgraph_knowledge(subgraph_id).get_serialization(clean=True)
 
     return Response(
         content,
-        mimetype="text/plain",
-        headers={"Content-disposition": "attachment; filename="+filename})
+        mimetype='text/plain',
+        headers={'Content-disposition': 'attachment; filename=' + filename})
+
+
+@bp.route('/_download_db_backup')
+def download_db_backup():
+    if not g.user['admin']:
+        return jsonify(error='Only admin users are allowed to download and upload backups.')
+
+    filename = '{}_backup_{}.sqlite'.format(
+        current_app.config['FRONTEND_CONFIG']['tool_name'],
+        strftime('%Y-%m-%d-%H-%M-%S')
+    )
+    content = get_db_backup()
+
+    return Response(
+        content,
+        mimetype='application/sql',
+        headers={'Content-disposition': 'attachment; filename=' + filename})
+
+
+@bp.route('/_upload_db_backup', methods=['GET', 'POST'])
+def upload_db_backup():
+    if not g.user['admin']:
+        return jsonify(error='Only admin users are allowed to download and upload backups.')
+
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            return redirect(request.url)
+        file = request.files['file']
+        # if user does not select file, browser also submit an empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        upload_backup(file)
+        return redirect(url_for('tool.index', message=quote('Upload successful.')))
+    return '''
+    <!doctype html>
+    <form method=post enctype=multipart/form-data>
+      <input type=file name=file required>
+      <input type=submit value=Upload>
+    </form>
+    '''

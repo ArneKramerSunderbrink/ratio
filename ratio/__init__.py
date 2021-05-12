@@ -33,9 +33,11 @@ def create_app(test_config=None):
         SECRET_KEY='dev',
         # store the database in the instance folder
         DATABASE=os.path.join(app.instance_path, 'ratio.sqlite'),
-        # and instructions for creating new subgraphs
+        # place to store a temporary backup of the database
+        BACKUP=os.path.join(app.instance_path, 'backup.sqlite'),
+        # instructions for creating new subgraphs
         NEW_SUBGRAPH_INSTRUCTIONS=os.path.join(app.instance_path, 'new_subgraph.ratio'),
-        # and the file describing the filter
+        # the file describing the filter
         FILTER=os.path.join(app.instance_path, 'filter.ttl'),
         # Prepend URL_PREFIX to all routes, including static etc.
         URL_PREFIX='',

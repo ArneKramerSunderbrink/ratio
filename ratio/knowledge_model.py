@@ -147,29 +147,6 @@ class Ontology:
         for row in db.execute('SELECT * FROM namespace').fetchall():
             self.graph.namespace_manager.bind(row['prefix'], parse_n3_term(row['uri']))
 
-    def load_rdf_data(self, data, rdf_format='turtle'):
-        self.graph = Graph()
-        if type(data) == str:
-            self.graph.parse(data=data, format=rdf_format)
-        else:
-            self.graph.parse(file=data, format=rdf_format)
-
-        # todo check if the graph works: build root and all possible children?
-        #  check if property orders: [f.order for f in fields] != list(range(1, len(fields) + 1))
-
-        db = get_db()
-        db.execute('DELETE FROM ontology')
-
-        for subject, predicate, object_ in self.graph[::]:
-            db.execute('INSERT INTO ontology (subject, predicate, object) VALUES (?, ?, ?)',
-                       (subject.n3(), predicate.n3(), object_.n3()))
-
-        for prefix, uri in self.graph.namespaces():
-            db.execute('INSERT INTO namespace (prefix, uri) VALUES (?, ?)',
-                       (prefix, uri.n3()))
-
-        db.commit()
-
     def get_base(self):
         # The prefix for new URIs created in the tool
         return next(self.graph.objects(RATIO.Configuration, RATIO.hasBase))
@@ -231,6 +208,49 @@ class Ontology:
                       if not self.is_property_described(p)}
 
         return Option.from_ontology(uri), properties
+
+    def load_rdf_data(self, data, rdf_format='turtle'):
+        self.graph = Graph()
+        if type(data) == str:
+            self.graph.parse(data=data, format=rdf_format)
+        else:
+            self.graph.parse(file=data, format=rdf_format)
+
+        # todo check if the graph works: build root and all possible children?
+        #  check if property orders: [f.order for f in fields] != list(range(1, len(fields) + 1))
+
+        db = get_db()
+        db.execute('DELETE FROM ontology')
+
+        for subject, predicate, object_ in self.graph[::]:
+            db.execute('INSERT INTO ontology (subject, predicate, object) VALUES (?, ?, ?)',
+                       (subject.n3(), predicate.n3(), object_.n3()))
+
+        for prefix, uri in self.graph.namespaces():
+            db.execute('INSERT INTO namespace (prefix, uri) VALUES (?, ?)',
+                       (prefix, uri.n3()))
+
+        db.commit()
+
+    def get_graph(self, clean=False):
+        graph = Graph()
+        graph.namespace_manager = self.graph.namespace_manager
+
+        for t in self.graph[::]:
+            graph.add(t)
+
+        if clean:
+            graph.remove((RATIO.Configuration, RATIO.hasBase, None))
+            graph.remove((None, RATIO.deletable, None))
+            graph.remove((None, RATIO.described, None))
+            graph.remove((None, RATIO.order, None))
+            graph.remove((None, RATIO.width, None))
+            graph.remove((None, None, RATIO.Subheading))
+
+        return graph
+
+    def get_serialization(self, rdf_format='turtle', clean=True):
+        return self.get_graph(clean).serialize(format=rdf_format)
 
     # Provide information about the things described by the ontology
     def get_label(self, uri):
@@ -780,32 +800,21 @@ class SubgraphKnowledge:
                     names[name] = entity.uri
                     self.change_value(parent_uri, property_uri, index, entity.uri)
 
-    def get_graph(self, clean=False, ontology=False):
+    def get_graph(self, clean=False):
         graph = Graph()
         graph.namespace_manager = self.graph.namespace_manager
 
         for t in self.graph[::]:
             graph.add(t)
 
-        if ontology:
-            for t in get_ontology().graph[::]:
-                graph.add(t)
-
         if clean:
             graph.remove((None, RATIO.isRoot, None))
             graph.remove((None, None, Literal('')))
-            if ontology:
-                graph.remove((RATIO.Configuration, None, None))
-                graph.remove((None, RATIO.deletable, None))
-                graph.remove((None, RATIO.described, None))
-                graph.remove((None, RATIO.order, None))
-                graph.remove((None, RATIO.width, None))
-                graph.remove((None, None, RATIO.Subheading))
 
         return graph
 
-    def get_serialization(self, rdf_format='turtle', clean=True, ontology=False):
-        return self.get_graph(clean, ontology).serialize(format=rdf_format)
+    def get_serialization(self, rdf_format='turtle', clean=True):
+        return self.get_graph(clean).serialize(format=rdf_format)
 
     # Provide information about the things described by the knowledge graph
     def get_label(self, uri):
