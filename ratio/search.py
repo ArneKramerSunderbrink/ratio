@@ -44,6 +44,7 @@ def search():
     user_id = g.user['id']
     filter_data = {p: request.args.get(p, '', type=str) for p in request.args}
 
+    # todo get_result(filter_data) should be a method of the filter
     # get list of subgraphs that are finished and not deleted
     db = get_db()
     rows = db.execute(
@@ -51,20 +52,13 @@ def search():
         ' WHERE user_id = ? AND deleted = 0 AND finished = 1',
         (user_id,)
     ).fetchall()
-    subgraphs = {row['id'] for row in rows}
+    results = {row['id'] for row in rows}
+    knowledge = {subgraph_id: {(str(p), str(o))
+                               for s, p, o in get_subgraph_knowledge(subgraph_id).get_graph(clean=True)}
+                 for subgraph_id in results}
+    results = filter(lambda subgraph_id: all(po in knowledge[subgraph_id] for po in filter_data.items()), results)
 
-    results = subgraphs.copy()
-    # todo this should be a method of the filter
-    for id_ in subgraphs:
-        knowledge = {(str(p), str(o)) for s, p, o in get_subgraph_knowledge(id_).get_root().get_triples()}
-        for po in filter_data.items():
-            if po in knowledge:
-                continue
-            else:
-                results.remove(id_)
-                break
-
-    return jsonify(results=[str(id_) for id_ in results])
+    return jsonify(results=[str(subgraph_id) for subgraph_id in results])
 
 
 def get_filter():
@@ -103,7 +97,8 @@ class Filter:
         ]
         self.fields.sort(key=lambda field: field.order)
 
-        # todo just for debugging, should be tested when uploading a new ontology
+        # todo just for debugging, should be tested when uploading a new filter.ttl
+        # also, check that there are no described fields
         if [f.order for f in self.fields] != list(range(1, len(self.fields)+1)):
             print('There is an error in the order of the fields of the filter')
             print([(f.order, f.label) for f in self.fields])
@@ -153,19 +148,10 @@ class FilterField:
         except StopIteration:
             self.width = 50
 
-        self.options = []
-        for i, o in [(p[len(property_uri)+1:], o) for s, p, o in knowledge[::]
-                     if p.startswith(property_uri) and (type(o) == URIRef or o.value)]:
-            try:
-                int(i)
-            except ValueError:
-                continue
-            self.options.append(o)
-
-        self.options = list(set(self.options))
+        self.options = list(set(knowledge.objects(predicate=property_uri)))
         if self.is_object_property:
-            self.options = [Option.from_knowledge(ontology, knowledge, o) for o in self.options]
-            self.options.append(Option('', '', '', False))
+            self.options = [Option.from_ontology(o) for o in self.options]
+            self.options.append(Option('', '', ''))
         else:
             self.options.append('')
 

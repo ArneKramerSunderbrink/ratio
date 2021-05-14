@@ -5,19 +5,21 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 
-ctro:hasAuthor ratio:order "4"^^xsd:positiveInteger .
+ctro:analysesHealthCondition ratio:order "1"^^xsd:positiveInteger .
 
-ctro:hasPublicationYear ratio:order "5"^^xsd:positiveInteger ;
+ctro:hasEndpointDescription ratio:order "2"^^xsd:positiveInteger .
+
+ctro:hasAEname ratio:order "3"^^xsd:positiveInteger .
+
+ctro:hasDrug ratio:order "4"^^xsd:positiveInteger .
+
+ctro:hasAuthor ratio:order "5"^^xsd:positiveInteger .
+
+ctro:hasPublicationYear ratio:order "6"^^xsd:positiveInteger ;
                         ratio:width "25"^^xsd:positiveInteger .
 
-ctro:hasCountry ratio:order "6"^^xsd:positiveInteger ;
+ctro:hasCountry ratio:order "7"^^xsd:positiveInteger ;
                 ratio:width "25"^^xsd:positiveInteger .
 
-ctro:hasEndpointDescription ratio:order "1"^^xsd:positiveInteger .
-
-ctro:hasAEname ratio:order "2"^^xsd:positiveInteger .
-
-ctro:hasAvgAge ratio:order "7"^^xsd:positiveInteger ;
+ctro:hasAvgAge ratio:order "8"^^xsd:positiveInteger ;
                ratio:width "25"^^xsd:positiveInteger .
-
-ctro:hasDrug ratio:order "3"^^xsd:positiveInteger .

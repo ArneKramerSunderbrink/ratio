@@ -78,7 +78,8 @@ class KnowledgeGraph:
         else:
             self.graph.parse(file=data, format=rdf_format)
 
-    def get_graph(self, clean=False):
+    def get_graph(self, clean=False, ontology=None):
+        # the ontology argument is only used in the SubgraphKnowledge class
         graph = Graph()
         graph.namespace_manager = self.graph.namespace_manager
 
@@ -253,7 +254,7 @@ class Ontology(KnowledgeGraph):
 
         db.commit()
 
-    def get_graph(self, clean=False):
+    def get_graph(self, clean=False, ontology=None):
         graph = super().get_graph()
 
         if clean:
@@ -794,12 +795,17 @@ class SubgraphKnowledge(KnowledgeGraph):
                     names[name] = entity.uri
                     self.change_value(parent_uri, property_uri, index, entity.uri)
 
-    def get_graph(self, clean=False):
+    def get_graph(self, clean=False, ontology=False):
         graph = super().get_graph()
 
         if clean:
             graph.remove((None, RATIO.isRoot, None))
             graph.remove((None, None, Literal('')))
+
+        if ontology:
+            ontology = get_ontology().get_graph(clean)
+            for t in ontology[::]:
+                graph.add(t)
 
         return graph
 
