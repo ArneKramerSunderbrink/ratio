@@ -95,20 +95,6 @@ $(function () {
   // general change value call
   function get_json_change_value(input, get_value, button=null) {
     const index = $(input).attr('data-index');
-    if (index == -1) {
-      $(input).attr('data-index', -2);
-    } else if (index == -2) {
-      function wait_for_index() {
-        if ($(input).attr('data-index') == -2) {
-          setTimeout(wait_for_index, 100);
-          return;
-        }
-        get_json_change_value(input, get_value, button);
-        return;
-      }
-      wait_for_index();
-      return;
-    }
     const property = $(input).closest('div.field');
     const property_uri = property.attr('data-property-uri');
     const entity_uri = $(input).closest('div.entity').attr('data-entity-uri');
@@ -128,9 +114,6 @@ $(function () {
         set_validity(input, data.validity);
       } else {
         set_validity(input, '');
-      }
-      if (index == -1) {
-        $(input).attr('data-index', String(data.index));
       }
       if (button != null) {
         button.disabled = false;
@@ -231,12 +214,9 @@ $(function () {
       } else {
         input.value = data.option_label;
         input.setAttribute('data-option-uri', data.option_uri);
-        if (index == -1) {
-          input.setAttribute('data-index', String(data.index));
-        }
         // reset add entity input
         form.first()[0].reset();
-        // add option to all corrsponding fields
+        // add option to all corresponding fields
         data.option_fields.forEach(function(uri) {
           $('div.field[data-property-uri="'+uri+'"] div.options').append(data.option_div);
         });

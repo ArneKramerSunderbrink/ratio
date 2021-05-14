@@ -58,7 +58,7 @@ def change_value():
     subgraph_id = request.args.get('subgraph_id', 0, type=int)
     entity_uri = request.args.get('entity_uri', '', type=str)
     property_uri = request.args.get('property_uri', '', type=str)
-    index = request.args.get('index', -2, type=int)
+    index = request.args.get('index', 0, type=int)
     value = request.args.get('value', '', type=str).strip()
 
     if not subgraph_id:
@@ -67,7 +67,7 @@ def change_value():
         return jsonify(error='Entity URI cannot be empty.')
     if not property_uri or property_uri.isspace():
         return jsonify(error='Property URI cannot be empty.')
-    if index < -1:
+    if index < 1:
         return jsonify(error='Index cannot be empty.')
 
     if not subgraph_access(user_id, subgraph_id):
@@ -78,34 +78,31 @@ def change_value():
     if get_ontology().is_property_described(property_uri):
         return jsonify(error='You have to use /_change_label to change the label of a described individual')
 
-    if index == -1:
-        index = subgraph_knowledge.new_value(entity_uri, property_uri)
+    if index == subgraph_knowledge.get_property_free_index(entity_uri, property_uri):
+        subgraph_knowledge.new_value(entity_uri, property_uri)
     validity = subgraph_knowledge.change_value(entity_uri, property_uri, index, value)
     if validity:
-        return jsonify(index=index, validity=validity)
+        return jsonify(validity=validity)
 
-    return jsonify(index=index)
+    return jsonify()
 
 
 @bp.route('/_add_option')
 @login_required
 def add_option():
-    # If an index is given, the corresponding value is changed to the new option,
-    # if index is -1 a new value is created first
+    # If an index is given, the corresponding value is changed to the new option
     user_id = g.user['id']
     user_uri = g.user['uri']
     subgraph_id = request.args.get('subgraph_id', 0, type=int)
     entity_uri = request.args.get('entity_uri', '', type=str)
     property_uri = request.args.get('property_uri', '', type=str)
     label = request.args.get('label', '', type=str)
-    index = request.args.get('index', -2, type=int)
+    index = request.args.get('index', 0, type=int)
 
     if not subgraph_id:
         return jsonify(error='Subgraph id cannot be empty.')
     if not property_uri or property_uri.isspace():
         return jsonify(error='Property URI cannot be empty.')
-    if not entity_uri or entity_uri.isspace():
-        return jsonify(error='Entity URI cannot be empty.')
     if not label or label.isspace():
         return jsonify(error='Label cannot be empty.')
 
@@ -122,9 +119,13 @@ def add_option():
 
     option, option_fields = ontology.new_option(ontology.get_property_range(property_uri), label, user_uri)
 
-    if index == -1:
-        index = subgraph_knowledge.new_value(entity_uri, property_uri)
     if index >= 0:
+        # not only add the option to the ontology but also to the list of values of the field
+        if not entity_uri or entity_uri.isspace():
+            return jsonify(error='Entity URI cannot be empty.')
+
+        if index == subgraph_knowledge.get_property_free_index(entity_uri, property_uri):
+            index = subgraph_knowledge.new_value(entity_uri, property_uri)
         subgraph_knowledge.change_value(entity_uri, property_uri, index, option.uri)
 
     render_option_div = get_template_attribute('tool/macros.html', 'option_div')

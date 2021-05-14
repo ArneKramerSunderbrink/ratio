@@ -526,7 +526,7 @@ class SubgraphKnowledge(KnowledgeGraph):
         if type(property_uri) == str:
             property_uri = URIRef(property_uri)
 
-        index = max(self.properties[(entity_uri, property_uri)].keys(), default=0) + 1
+        index = self.get_property_free_index(entity_uri, property_uri)
         value = Literal('')
 
         self.graph.add((entity_uri, property_uri, value))
@@ -814,6 +814,13 @@ class SubgraphKnowledge(KnowledgeGraph):
         # filter values from deleted triples:
         return {i: values[i] for i in values if values[i] in self.graph[individual_uri:property_uri:]}
 
+    def get_property_free_index(self, entity_uri, property_uri):
+        if type(entity_uri) == str:
+            entity_uri = URIRef(entity_uri)
+        if type(property_uri) == str:
+            property_uri = URIRef(property_uri)
+        return max(self.properties[(entity_uri, property_uri)].keys(), default=0) + 1
+
     def get_individual_children(self, uri):
         if type(uri) == str:
             uri = URIRef(uri)
@@ -856,7 +863,7 @@ class Field:
     def __init__(self, property_uri, label, comment,
                  type_, is_described, is_deletable, is_functional,
                  range_uri, range_label,
-                 order, width, values, is_add_option_allowed, options=None):
+                 order, width, values, free_index, is_add_option_allowed, options=None):
         self.property_uri = property_uri
         self.label = label
         self.comment = comment
@@ -869,6 +876,7 @@ class Field:
         self.order = order
         self.width = width
         self.values = values
+        self.free_index = free_index
         self.is_add_option_allowed = is_add_option_allowed
         self.options = options
 
@@ -905,6 +913,7 @@ class Field:
         knowledge = get_subgraph_knowledge(subgraph_id)
 
         field.values = knowledge.get_property_values(individual_uri, property_uri)
+        field.free_index = knowledge.get_property_free_index(individual_uri, property_uri)
 
         if field.is_described:
             field.values = {i: Entity.from_knowledge(subgraph_id, field.values[i])
@@ -945,6 +954,7 @@ class Field:
         width = ontology.get_property_width(property_uri)
 
         values = dict()
+        free_index = 1
 
         one_of = next(ontology.graph[range_class_uri:OWL.oneOf:], None)
         if type_ == 'ObjectProperty' and not is_described:
@@ -961,12 +971,12 @@ class Field:
             options = None
 
         return cls(property_uri, label, comment, type_, is_described, is_deletable, is_functional,
-                   range_class_uri, range_label, order, width, values, is_add_option_allowed, options)
+                   range_class_uri, range_label, order, width, values, free_index, is_add_option_allowed, options)
 
     @classmethod
     def subheading(cls, property_uri, label, comment, order):
         return cls(property_uri, label, comment, 'Subheading', False, False, True,
-                   None, None, order, None, dict(), False, [])
+                   None, None, order, None, dict(), None, False, [])
 
 
 class Option:

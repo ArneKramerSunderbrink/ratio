@@ -161,7 +161,7 @@
         <div class="field-value-list">
           {% if field.options is not none %}
             {% if not field.get_sorted_values() %}
-            {{ value_options(field, '', -1) }}
+            {{ value_options(field, '', field.free_index) }}
             {% else %}
             {% for index, value in field.get_sorted_values() %}
             {{ value_options(field, value, index) }}
@@ -169,7 +169,7 @@
             {% endif %}
           {% else %}
             {% if not field.get_sorted_values() %}
-            {{ value_free(field, '', -1) }}
+            {{ value_free(field, '', field.free_index) }}
             {% else %}
             {% for index, value in field.get_sorted_values() %}
             {{ value_free(field, value, index) }}
