@@ -62,7 +62,7 @@ $(function () {
         }
       });
     }
-    get_json_change_value(input[0], function() { return ''; }, button);
+    get_json_change_value(input[0], '', button);
     form.addClass('deleted');
     // Display message
     $('div#knowledge-delete-msg > span').text('Value has been deleted.');
@@ -71,7 +71,7 @@ $(function () {
       const button = this;
       button.disabled = true;
       if (old_value != '') {
-        get_json_change_value(input[0], function() { return old_value; }, button);
+        get_json_change_value(input[0], old_value, button);
       }
       form.removeClass('deleted');
       $('div#knowledge-delete-msg').css('display', 'none');
@@ -93,7 +93,7 @@ $(function () {
   }
 
   // general change value call
-  function get_json_change_value(input, get_value, button=null) {
+  function get_json_change_value(input, value, button=null) {
     const index = $(input).attr('data-index');
     const property = $(input).closest('div.field');
     const property_uri = property.attr('data-property-uri');
@@ -104,7 +104,7 @@ $(function () {
       { name: 'entity_uri', value: entity_uri },
       { name: 'property_uri', value: property_uri },
       { name: 'index', value: index},
-      { name: 'value', value: get_value()}
+      { name: 'value', value: value}
     ];
 
     $.getJSON(window.SCRIPT_ROOT + '/_change_value', data, function(data) {
@@ -126,7 +126,7 @@ $(function () {
   // Change value
   $('div#scroll-container').on('input', 'div.literal-input', function() {
     const input = this;
-    get_json_change_value(input, function() { return input.innerText; });
+    get_json_change_value(input, input.innerText);
   });
 
   // Special functionality for options Fields
@@ -158,7 +158,7 @@ $(function () {
     } else {
       value = this.textContent;
     }
-    get_json_change_value(input, function () { return value; });
+    get_json_change_value(input, value);
   });
 
   // Check validity of option input
@@ -189,7 +189,7 @@ $(function () {
     } else {
       value = '';
     }
-    get_json_change_value(input, function () { return value; });
+    get_json_change_value(input, value);
   });
 
   // Add option
@@ -220,6 +220,8 @@ $(function () {
         data.option_fields.forEach(function(uri) {
           $('div.field[data-property-uri="'+uri+'"] div.options').append(data.option_div);
         });
+        // remove focus from input to the dropdown disappears
+        document.activeElement.blur()
       }
       button.disabled = false;
     })
