@@ -26,18 +26,38 @@ $(function () {
       { name: "entity_uri", value: entity_uri }
     ];
 
-    $.getJSON(window.SCRIPT_ROOT + '/_add_value', data, function(data) {
-      if (data.error) {
-        alert(data.error);
-      } else {
-        const value_div = $(data.value_div)
-        field.find('div.field-value-list').append(value_div);
-        value_div.find('div.literal-input, input.option-input').focus();
-      }
-      button.disabled = false;
-    })
-    .fail(function() { alert('getJSON request failed!'); });
-
+    // if the field has a unregistered value, call get_json_change_value(unregistered_input, '') first
+    // so it becomes a real value the backend actually knows about
+    // otherwise the new value and the unregistered value would have the same index
+    const unregistered_input = field.find('*[data-unregistered]');
+    if (unregistered_input.length > 0) {
+      alert('123');
+      get_json_change_value(unregistered_input[0], '', null, function() {
+        $.getJSON(window.SCRIPT_ROOT + '/_add_value', data, function(data) {
+          if (data.error) {
+            alert(data.error);
+          } else {
+            const value_div = $(data.value_div)
+            field.find('div.field-value-list').append(value_div);
+            value_div.find('div.literal-input, input.option-input').focus();
+          }
+          button.disabled = false;
+        })
+        .fail(function() { alert('getJSON request failed!'); });
+      });
+    } else {
+      $.getJSON(window.SCRIPT_ROOT + '/_add_value', data, function(data) {
+        if (data.error) {
+          alert(data.error);
+        } else {
+          const value_div = $(data.value_div)
+          field.find('div.field-value-list').append(value_div);
+          value_div.find('div.literal-input, input.option-input').focus();
+        }
+        button.disabled = false;
+      })
+      .fail(function() { alert('getJSON request failed!'); });
+    }
     return false;
   });
 
@@ -93,7 +113,7 @@ $(function () {
   }
 
   // general change value call
-  function get_json_change_value(input, value, button=null) {
+  function get_json_change_value(input, value, button=null, callback_=null) {
     const index = $(input).attr('data-index');
     const property = $(input).closest('div.field');
     const property_uri = property.attr('data-property-uri');
@@ -115,8 +135,12 @@ $(function () {
       } else {
         set_validity(input, '');
       }
+      input.removeAttribute('data-unregistered');
       if (button != null) {
         button.disabled = false;
+      }
+      if (callback_ != null) {
+        callback_();
       }
     })
     .fail(function() { alert('getJSON request failed!'); });
@@ -192,7 +216,7 @@ $(function () {
     get_json_change_value(input, value);
   });
 
-  // Add option
+  // Add custom option
   $('div#scroll-container').on('submit', '.add-option-form', function() {
     const form = $(this);
     const button = form.find('button')[0];

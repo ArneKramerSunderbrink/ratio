@@ -77,12 +77,12 @@
 {% endif %}
 {% endmacro %}
 
-{% macro value_options(field, value, index) %}
+{% macro value_options(field, value, index, unregistered=False) %}
 <div class="option-form flex-row">
   <input type="hidden" autofocus>
   <div class="flex-flex">
     {% if field.is_object_property %}
-    <input class="w3-input option-input" type="text" name="label" value="{{ value.label }}" data-option-uri="{{ value.uri }}" data-index="{{index}}">
+    <input class="w3-input option-input" type="text" name="label" value="{{ value.label }}" data-option-uri="{{ value.uri }}" data-index="{{index}}"{% if unregistered %} data-unregistered=""{% endif %}>
     {% else %}
     <input class="w3-input option-input" type="text" name="label" value="{{ value }}" data-index="{{index}}">
     {% endif %}
@@ -114,9 +114,9 @@
 {% endmacro %}
 
 
-{% macro value_free(field, value, index) %}
+{% macro value_free(field, value, index, unregistered=False) %}
 <div class="literal-form flex-row">
-  <div class="w3-input literal-input flex-flex" data-index="{{index}}" contentEditable>{{ value }}</div>
+  <div class="w3-input literal-input flex-flex" data-index="{{index}}"{% if unregistered %} data-unregistered=""{% endif %} contentEditable>{{ value }}</div>
   {% if not field.is_functional %}
   <button class="w3-button tiny-button flex-fix delete-value-button" title="Delete value">{#
     #}<i class="fas fa-minus"></i>
@@ -161,7 +161,7 @@
         <div class="field-value-list">
           {% if field.options is not none %}
             {% if not field.get_sorted_values() %}
-            {{ value_options(field, '', field.free_index) }}
+            {{ value_options(field, '', field.free_index, True) }}
             {% else %}
             {% for index, value in field.get_sorted_values() %}
             {{ value_options(field, value, index) }}
@@ -169,7 +169,7 @@
             {% endif %}
           {% else %}
             {% if not field.get_sorted_values() %}
-            {{ value_free(field, '', field.free_index) }}
+            {{ value_free(field, '', field.free_index, True) }}
             {% else %}
             {% for index, value in field.get_sorted_values() %}
             {{ value_free(field, value, index) }}

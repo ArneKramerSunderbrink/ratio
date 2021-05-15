@@ -119,25 +119,26 @@ class KnowledgeGraph:
         if type(class_uri) == str:
             class_uri = URIRef(class_uri)
 
-        stack = {class_uri}
+        stack = set(self.graph[:RDFS.subClassOf:class_uri])
         subclasses = set()
         while stack:
             c = stack.pop()
-            s = self.graph[:RDFS.subClassOf:c]
-            stack.update(s)
-            subclasses.update(s)
+            subclasses.add(c)
+            stack.update(self.graph[:RDFS.subClassOf:c])
+            stack = stack - subclasses  # just to be sure in case there's a loop in the ontology
         return subclasses
 
     def get_superclasses(self, class_uri):
         if type(class_uri) == str:
             class_uri = URIRef(class_uri)
 
-        stack = {class_uri}
+        stack = {self.graph[class_uri:RDFS.subClassOf:]}
         superclasses = set()
         while stack:
             c = stack.pop()
+            superclasses.add(c)
             stack.update(self.graph[c:RDFS.subClassOf:])
-            superclasses.update(self.graph[c:RDFS.subClassOf:])
+            stack = stack - superclasses  # just to be sure in case there's a loop in the ontology
         return superclasses
 
     def get_tokens(self, class_uri):
@@ -146,10 +147,7 @@ class KnowledgeGraph:
 
         classes = {class_uri}
         classes.update(self.get_subclasses(class_uri))
-        tokens = set()
-        for c in classes:
-            tokens.update(self.graph[:RDF.type:c])
-        return tokens
+        return {token for c in classes for token in self.graph[:RDF.type:c]}
 
     def construct_list(self, list_node):
         """For parsing a rdf:List."""
@@ -459,7 +457,7 @@ class SubgraphKnowledge(KnowledgeGraph):
             subject, predicate, object_ = row_to_rdf(row)
             index = row['property_index']
             deleted = row['deleted']
-            if deleted is None:
+            if deleted is None and str(object_) != '':
                 self.graph.add((subject, predicate, object_))
             if index is not None:
                 self.properties[(subject, predicate)][index] = object_
@@ -899,15 +897,8 @@ class Field:
         return self.type == 'Subheading'
 
     def get_sorted_values(self):
-        """Get (index, value)-pairs for non empty values sorted by index."""
-        if self.is_object_property:
-            if self.is_described:
-                return sorted(self.values.items(), key=lambda i: i[0])
-            else:
-                non_empty = [i for i in self.values if type(self.values[i]) != Literal]
-        else:
-            non_empty = [i for i in self.values if self.values[i].value != '']
-        return sorted([(i, self.values[i]) for i in non_empty], key=lambda iv: iv[0])
+        """Get (index, value)-pairs for values sorted by index."""
+        return sorted(self.values.items(), key=lambda i: i[0])
 
     # Factories
     @classmethod
@@ -922,17 +913,14 @@ class Field:
         field.free_index = knowledge.get_property_free_index(individual_uri, property_uri)
 
         if field.is_described:
-            field.values = {i: Entity.from_knowledge(subgraph_id, field.values[i])
-                            for i in field.values if str(field.values[i]) != ''}
+            field.values = {i: Entity.from_knowledge(subgraph_id, field.values[i]) for i in field.values}
         elif field.type == 'ObjectProperty':
             if field.is_add_option_allowed:
                 # for options that are not described by the user in a different field of the interface
-                field.values = {i: Option.from_ontology(field.values[i])
-                                for i in field.values if str(field.values[i]) != ''}
+                field.values = {i: Option.from_ontology(field.values[i]) for i in field.values}
             else:
                 # for options that are described by the user in a different field of the interface
-                field.values = {i: Option.from_knowledge(field.values[i], subgraph_id)
-                                for i in field.values if str(field.values[i]) != ''}
+                field.values = {i: Option.from_knowledge(field.values[i], subgraph_id) for i in field.values}
 
         return field
 

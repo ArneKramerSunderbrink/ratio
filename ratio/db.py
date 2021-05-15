@@ -70,17 +70,13 @@ def db_init_command():
 
 def db_populate_dummy():
     """Populates database with dummy data for testing and development."""
-    with current_app.open_resource('dummy/admin.sql') as f:
+    # TODO add dummy as sql backup
+    with current_app.open_resource('dummy/admin.sql') as f:  # todo I won't need this afterwards
         get_db().executescript(f.read().decode('utf8'))
 
     from ratio.knowledge_model import get_ontology
-    with current_app.open_resource('dummy/ontology.ttl') as f:
+    with current_app.open_resource('dummy/ontology.ttl') as f:  # todo I won't need this afterwards
         get_ontology().load_rdf_data(f, 'turtle')
-
-    # TODO add dummy CTs
-    #from ratio.knowledge_model import get_subgraph_knowledge
-    #with current_app.open_resource('dummy/empty_subgraph_template.ttl') as f:
-    #    get_subgraph_knowledge(2).load_rdf_data(f.read().decode('utf8').format(id=2))
 
     with current_app.open_resource('dummy/new_subgraph.ratio') as f:
         with open(current_app.config['NEW_SUBGRAPH_INSTRUCTIONS'], 'wb+') as f2:
