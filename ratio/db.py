@@ -70,13 +70,18 @@ def db_init_command():
 
 def db_populate_dummy():
     """Populates database with dummy data for testing and development."""
-    # TODO add dummy as sql backup
-    with current_app.open_resource('dummy/admin.sql') as f:  # todo I won't need this afterwards
-        get_db().executescript(f.read().decode('utf8'))
+    # This database contains
+    # - 4 users: guest (pw: guest), osanchez, akramersunderbrink, pcimiano, All but guest have admin rights
+    # - The ctro ontology
+    # - User osanchez has access to seven example subgraphs
+    with current_app.open_resource('dummy/dummy_db.sqlite') as f1:
+        with open(current_app.config['DATABASE'], 'wb+') as f2:
+            f2.write(f1.read())
 
-    from ratio.knowledge_model import get_ontology
-    with current_app.open_resource('dummy/ontology.ttl') as f:  # todo I won't need this afterwards
-        get_ontology().load_rdf_data(f, 'turtle')
+    # These lines can be used to overwrite the ontology in dummy_db.sqlite with a newer one
+    #from ratio.knowledge_model import get_ontology
+    #with current_app.open_resource('dummy/ontology.ttl') as f:
+    #    get_ontology().load_rdf_data(f, 'turtle')
 
     with current_app.open_resource('dummy/new_subgraph.ratio') as f:
         with open(current_app.config['NEW_SUBGRAPH_INSTRUCTIONS'], 'wb+') as f2:

@@ -202,7 +202,7 @@ def add_entity():
     subgraph_knowledge.change_value(parent_uri, property_uri, index, entity.uri)
 
     render_entity_div = get_template_attribute('tool/macros.html', 'entity_div')
-    entity_div = render_entity_div(entity, index=index, is_deletable=field_is_deletable)
+    entity_div = render_entity_div(entity, index=index, is_deletable=field_is_deletable, collapsed=False)
 
     if option_fields:
         option_fields = [str(f.property_uri) for f in option_fields]

@@ -31,7 +31,6 @@ $(function () {
     // otherwise the new value and the unregistered value would have the same index
     const unregistered_input = field.find('*[data-unregistered]');
     if (unregistered_input.length > 0) {
-      alert('123');
       get_json_change_value(unregistered_input[0], '', null, function() {
         $.getJSON(window.SCRIPT_ROOT + '/_add_value', data, function(data) {
           if (data.error) {
@@ -238,6 +237,7 @@ $(function () {
       } else {
         input.value = data.option_label;
         input.setAttribute('data-option-uri', data.option_uri);
+        set_validity(input, '');
         // reset add entity input
         form.first()[0].reset();
         // add option to all corresponding fields

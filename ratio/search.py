@@ -35,7 +35,7 @@ def search_view():
 
     rdf_graphs = [get_subgraph_knowledge(row['id']).get_graph(clean=True, ontology=True) for row in rows]
 
-    return render_template('search.html', filter=filter_object, subgraphs=rows, rdf_graphs=rdf_graphs)
+    return render_template('tool/search.html', filter=filter_object, subgraphs=rows, rdf_graphs=rdf_graphs)
 
 
 @bp.route('/_search')
@@ -148,7 +148,7 @@ class FilterField:
         except StopIteration:
             self.width = 50
 
-        self.options = list(set(knowledge.objects(predicate=property_uri)))
+        self.options = list({o for o in knowledge.objects(predicate=property_uri) if str(o) != ''})
         if self.is_object_property:
             self.options = [Option.from_ontology(o) for o in self.options]
             self.options.append(Option('', '', ''))

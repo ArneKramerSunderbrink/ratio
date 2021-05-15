@@ -331,82 +331,6 @@ class Ontology(KnowledgeGraph):
 
         return OWL.FunctionalProperty in self.graph[uri:RDF.type:]
 
-    def check_property_value(self, property_uri, value):
-        """Checks if the value is valid and transforms it into a corresponding rdflib Literal or URIRef
-        Returns a pair of a validity message and the Literal/URIRef
-        If the value is valid the validity message is an emptystring.
-        If the value is not valid instead of the literal, None is returned
-        """
-        type_ = self.get_property_type(property_uri)
-        is_object_property = type_ == 'ObjectProperty'
-        is_described = self.is_property_described(property_uri)
-        range_uri = self.get_property_range(property_uri)
-        one_of = next(self.graph[range_uri:OWL.oneOf:], None)
-
-        if value == '':
-            # Empty values are allowed but will be deleted on reloading the page
-            # (they are persisted in the db though because I have not found out what's the best occasion to delete
-            # them yet..)
-            return '', Literal(value)
-        elif is_object_property and is_described:
-            # we trust that the individual has the correct class, namely self.range_uri
-            uri = value if type(value) == URIRef else URIRef(value)
-            return '', uri
-        elif is_object_property:
-            # option field with objects as options, not literals
-            options = self.get_tokens(range_uri)
-            uri = value if type(value) == URIRef else URIRef(value)
-            if uri in options:
-                return '', uri
-            else:
-                return 'Choose an option from the list.', None
-        elif one_of:
-            # option field with literals as options defined as a list in the ontology
-            options = self.construct_list(one_of)
-            lit = Literal(value, datatype=XSD.boolean) if range_uri == XSD.boolean else Literal(value)
-            if lit in options:
-                return '', lit
-            else:
-                return 'Choose an option from the list.', None
-        elif range_uri == XSD.boolean:
-            # option field with option True and False
-            lit = Literal(value, datatype=XSD.boolean) if range_uri == XSD.boolean else Literal(value)
-            if lit in (TRUE, FALSE):
-                return '', lit
-            else:
-                return 'Choose an TRUE or FALSE.', None
-        elif range_uri == RDFS.Literal:
-            pass
-        elif range_uri == XSD.string:
-            pass
-        elif range_uri == XSD.float:
-            try:
-                float(value)
-            except (ValueError, SyntaxError):
-                return '{} is not a valid float.'.format(value), None
-        elif range_uri == XSD.integer:
-            try:
-                int(value)
-            except (ValueError, SyntaxError):
-                return '{} is not a valid integer.'.format(value), None
-        elif range_uri == XSD.nonNegativeInteger:
-            try:
-                i = int(value)
-            except (ValueError, SyntaxError):
-                return '{} is not a valid integer.'.format(value), None
-            if i < 0:
-                return '{} is not a non-negative value.'.format(value), None
-        elif range_uri == XSD.positiveInteger:
-            try:
-                i = int(value)
-            except (ValueError, SyntaxError):
-                return '{} is not a valid integer.'.format(value), None
-            if i <= 0:
-                return '{} is not a positive value.'.format(value), None
-        else:
-            return 'Unknown Datatype: {}'.format(range_uri), None
-        return '', Literal(value, datatype=range_uri)
-
     # Information specific to classes
 
     def get_class_child_properties(self, uri):
@@ -547,7 +471,7 @@ class SubgraphKnowledge(KnowledgeGraph):
         if type(property_uri) == str:
             property_uri = URIRef(property_uri)
 
-        validity, value = get_ontology().check_property_value(property_uri, value)
+        validity, value = self.check_property_value(property_uri, value)
         if validity:
             # the check returned an error message
             return validity
@@ -641,6 +565,13 @@ class SubgraphKnowledge(KnowledgeGraph):
 
         db = get_db()
         db_cursor = db.cursor()
+
+        for p,o in self.graph[uri::]:
+            print(p,o) # todo test
+        print(self.get_individual_children(uri))
+        print([property_uri
+                for property_uri in get_ontology().get_class_child_properties(self.get_individual_class(uri))
+                if get_ontology().is_property_described(property_uri)])
 
         stack = [uri]
         deleted = []
@@ -808,6 +739,90 @@ class SubgraphKnowledge(KnowledgeGraph):
         return graph
 
     # Provide information about the things described by the knowledge graph
+    def check_property_value(self, property_uri, value):
+        """Checks if the value is valid and transforms it into a corresponding rdflib Literal or URIRef
+        Returns a pair of a validity message and the Literal/URIRef
+        If the value is valid the validity message is an emptystring.
+        If the value is not valid instead of the literal, None is returned
+        """
+        ontology = get_ontology()
+        is_object_property = ontology.get_property_type(property_uri) == 'ObjectProperty'
+        is_described = ontology.is_property_described(property_uri)
+        range_uri = ontology.get_property_range(property_uri)
+        one_of = next(ontology.graph[range_uri:OWL.oneOf:], None)
+
+        if value == '':
+            # Empty values are allowed but will be deleted on reloading the page
+            # (they are persisted in the db though because I have not found out what's the best occasion to delete
+            # them yet..)
+            return '', Literal(value)
+        elif is_object_property and is_described:
+            # we trust that the individual has the correct class, namely self.range_uri
+            uri = value if type(value) == URIRef else URIRef(value)
+            return '', uri
+        elif is_object_property and ontology.is_property_add_custom_option_allowed(property_uri):
+            # option field with objects as options, not literals
+            options = ontology.get_tokens(range_uri)
+            uri = value if type(value) == URIRef else URIRef(value)
+            if uri in options:
+                return '', uri
+            else:
+                return 'Choose an option from the list.', None
+        elif is_object_property:
+            # option field with objects as options that are described at some other place in the tool
+            options = self.get_tokens(range_uri)
+            uri = value if type(value) == URIRef else URIRef(value)
+            if uri in options:
+                return '', uri
+            else:
+                return 'Choose an option from the list.', None
+        elif one_of:
+            # option field with literals as options defined as a list in the ontology
+            options = ontology.construct_list(one_of)
+            lit = Literal(value, datatype=XSD.boolean) if range_uri == XSD.boolean else Literal(value)
+            if lit in options:
+                return '', lit
+            else:
+                return 'Choose an option from the list.', None
+        elif range_uri == XSD.boolean:
+            # option field with option True and False
+            lit = Literal(value, datatype=XSD.boolean) if range_uri == XSD.boolean else Literal(value)
+            if lit in (TRUE, FALSE):
+                return '', lit
+            else:
+                return 'Choose an TRUE or FALSE.', None
+        elif range_uri == RDFS.Literal:
+            pass
+        elif range_uri == XSD.string:
+            pass
+        elif range_uri == XSD.float:
+            try:
+                float(value)
+            except (ValueError, SyntaxError):
+                return '{} is not a valid float.'.format(value), None
+        elif range_uri == XSD.integer:
+            try:
+                int(value)
+            except (ValueError, SyntaxError):
+                return '{} is not a valid integer.'.format(value), None
+        elif range_uri == XSD.nonNegativeInteger:
+            try:
+                i = int(value)
+            except (ValueError, SyntaxError):
+                return '{} is not a valid integer.'.format(value), None
+            if i < 0:
+                return '{} is not a non-negative value.'.format(value), None
+        elif range_uri == XSD.positiveInteger:
+            try:
+                i = int(value)
+            except (ValueError, SyntaxError):
+                return '{} is not a valid integer.'.format(value), None
+            if i <= 0:
+                return '{} is not a positive value.'.format(value), None
+        else:
+            return 'Unknown Datatype: {}'.format(range_uri), None
+        return '', Literal(value, datatype=range_uri)
+
     def get_property_values(self, individual_uri, property_uri):
         if type(individual_uri) == str:
             individual_uri = URIRef(individual_uri)
@@ -816,7 +831,8 @@ class SubgraphKnowledge(KnowledgeGraph):
 
         values = self.properties[(individual_uri, property_uri)]
         # filter values from deleted triples:
-        return {i: values[i] for i in values if values[i] in self.graph[individual_uri:property_uri:]}
+        return {i: values[i] for i in values
+                if values[i] in self.graph[individual_uri:property_uri:] and str(values[i]) != ''}
 
     def get_property_free_index(self, entity_uri, property_uri):
         if type(entity_uri) == str:
@@ -829,9 +845,12 @@ class SubgraphKnowledge(KnowledgeGraph):
         if type(uri) == str:
             uri = URIRef(uri)
 
+        ontology = get_ontology()
+
         return [value
-                for property_uri in get_ontology().get_class_child_properties(self.get_individual_class(uri))
-                for value in self.get_property_values(uri, property_uri)]
+                for property_uri in ontology.get_class_child_properties(self.get_individual_class(uri))
+                if ontology.is_property_described(property_uri)
+                for value in self.get_property_values(uri, property_uri).values()]
 
     def is_individual_deletable(self, uri):
         if type(uri) == str:
