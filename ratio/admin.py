@@ -1,7 +1,7 @@
 from flask import current_app
 from flask import Blueprint
-from flask import jsonify
 from flask import redirect
+from flask import render_template
 from flask import request
 from flask import Response
 from flask import url_for
@@ -17,7 +17,7 @@ bp = Blueprint('admin', __name__)
 @bp.route('/admin')
 @admin_required
 def admin():
-    return jsonify(bla='blabal')
+    return render_template('tool/admin.html')
 
 
 @bp.route('/_download_db_backup')
