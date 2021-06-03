@@ -31,13 +31,6 @@ header > * {
   position: relative;
 }
 
-#scroll-container {
-  height: 100%;
-  overflow: auto;
-  padding: 0.5em 0em 0.5em 0em;
-  width: 100%;
-}
-
 /* login */
 .login-center {
   width: 21em;

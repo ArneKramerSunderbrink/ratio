@@ -1,60 +1,34 @@
 {% from "tool/macros.html" import entity_div %}
 
-{% extends 'base.html' %}
+{% extends 'tool/layout.html' %}
 
 {% block title %}{{ frontend_config['tool_name'] }} - {{ subgraph['name'] }}{% endblock %}
 
-{% block content %}
+{% block header_content %}
+<div class="flex-fix ghost-center"><b>Editor</b></div>
+<div class="flex-flex">{# just a spacer #}</div>
+{% endblock %}
+
+{% block body_content %}
 <script type=text/javascript>
   window.SUBGRAPH_ID = {{ subgraph['id'] }};
 </script>
 <script src="{{ url_for('static', filename='js/knowledge.js') }}" defer></script>
 
-<div class="flex-column">
-  <header class="w3-card flex-row color3" id="flex-fix">
-    <div class="flex-fix navigation">
-      <button class="w3-button flip-flipbutton flip-frontside" data-flipid="navigation-dropdown">{#
-        #}<i class="fa fa-bars fa-lg"></i>
-      </button>
-      <div class="flip-flipside" data-flipid="navigation-dropdown" style="display: none;">
-        <button class="w3-button flip-frontbutton" data-flipid="navigation-dropdown">{#
-          #}<i class="fa fa-times fa-lg"></i>
-        </button>
-        <div class="w3-card color3 navigation-dropdown">
-          <a href="{{ url_for('tool.index') }}" class="w3-button"><i class="fas fa-home"></i> Home</a><br>
-          <a href="{{ url_for('search.search_view') }}" class="w3-button"><i class="fas fa-search"></i> {{ frontend_config['Subgraph_term'] }}s search</a><br>
-          <a href="{{ url_for('auth.logout') }}" class="w3-button"><i class="fas fa-sign-out-alt"></i> Log Out</a>
-        </div>
-      </div>
-    </div>
-    <div class="flex-fix ghost-center"><b>Editor</b></div>
-    <div class="flex-flex">{# just a spacer #}</div>
-    <div class="flex-fix">
-      <i class="fas fa-user w3-large"></i>
-      {{ g.user['username'] }}
-    </div>
-  </header>
-
-  <section id="flex-body" class="color0">
-    <div id="scroll-container">
-      <div id="subgraph-header" class="flex-row entity-border color2">
-        <b class="flex-text">{{ frontend_config['Subgraph_term'] }}: {{ subgraph['name'] }}</b>
-        <a href="{{ url_for('tool.overview', subgraph_id=subgraph['id']) }}" class="w3-button flex-fix">
-          <i class="fas fa-table w3-large"></i> Overview table
-        </a>
-      </div>
-      {{ entity_div(root, true) }}
-      <div style="height: 11em;">{# just a spacer #}</div>
-      <div class="w3-panel w3-card-4 flex-row message" id="knowledge-delete-msg">
-        <span class="flex-fix"></span>
-        <button class="w3-button w3-text-green flex-fix">Undo.</button>
-        <div class="flex-flex"></div>
-        <button class="w3-button big-button flex-fix" title="Cancel">{#
-          #}<i class="fas fa-times fa-lg"></i>
-        </button>
-      </div>
-    </div>
-  </section>
+<div id="subgraph-header" class="flex-row entity-border color2">
+  <b class="flex-text">{{ frontend_config['Subgraph_term'] }}: {{ subgraph['name'] }}</b>
+  <a href="{{ url_for('tool.overview', subgraph_id=subgraph['id']) }}" class="w3-button flex-fix">
+    <i class="fas fa-table w3-large"></i> Overview table
+  </a>
 </div>
-
+{{ entity_div(root, is_root=true, id='root-entity') }}
+<div style="height: 11em;">{# just a spacer #}</div>
+<div class="w3-panel w3-card-4 flex-row message" id="knowledge-delete-msg">
+  <span class="flex-fix"></span>
+  <button class="w3-button w3-text-green flex-fix">Undo.</button>
+  <div class="flex-flex"></div>
+  <button class="w3-button big-button flex-fix" title="Cancel">{#
+    #}<i class="fas fa-times fa-lg"></i>
+  </button>
+</div>
 {% endblock %}

@@ -1,47 +1,21 @@
-{% extends 'base.html' %}
+{% extends 'tool/layout.html' %}
 
 {% block title %}{{ frontend_config['tool_name'] }} - Admin{% endblock %}
 
-{% block content %}
+{% block header_content %}
+<div class="flex-fix ghost-center"><b>Admin Interface</b></div>
+<div class="flex-flex">{# just a spacer #}</div>
+{% endblock %}
+
+{% block body_content %}
 <!--TODO <script src="{{ url_for('static', filename='js/search.js') }}" defer></script>-->
 
-<div class="flex-column">
-  <header class="w3-card flex-row flex-fix color3">
-    <div class="flex-fix navigation"> <!--todo-->
-      <button class="w3-button flip-flipbutton flip-frontside" data-flipid="navigation-dropdown">{#
-        #}<i class="fa fa-bars fa-lg"></i>
-      </button>
-      <div class="flip-flipside" data-flipid="navigation-dropdown" style="display: none;">
-        <button class="w3-button flip-frontbutton" data-flipid="navigation-dropdown">{#
-          #}<i class="fa fa-times fa-lg"></i>
-        </button>
-        <div class="w3-card color3 navigation-dropdown">
-          <a href="{{ url_for('tool.index') }}" class="w3-button"><i class="fas fa-home"></i> Home</a><br>
-          <button class="w3-button" disabled><i class="fas fa-search"></i> {{ frontend_config['Subgraph_term'] }}s search</button><br>
-          <a href="{{ url_for('auth.logout') }}" class="w3-button"><i class="fas fa-sign-out-alt"></i> Log Out</a>
-        </div>
-      </div>
-    </div>
-    <div class="flex-fix ghost-center"><b>Admin Interface</b></div>
-    <div class="flex-flex">{# just a spacer #}</div>
-    <div class="flex-fix ghost-center">
-      <i class="fas fa-user w3-large"></i> {{ g.user['username'] }}
-    </div>
-  </header>
-
-  <section id="flex-body" class="color0">
-    <div id="scroll-container">
-      <div class="entity-body">
-        <div class="entity entity-border" style="margin-top: 1em;">
-          <div class="entity-title color2 flex-row">
-            <div class="entity-label flex-flex">Test title</div>
-          </div>
-          <div class="entity-body" id="search-results">
-            Blablablablablababla
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+<div class="entity entity-border" style="margin-top: 1em;">
+  <div class="entity-title color2 flex-row">
+    <div class="entity-label flex-flex">Test title</div>
+  </div>
+  <div class="entity-body" id="search-results">
+    TODO <!--TODO-->
+  </div>
 </div>
 {% endblock %}

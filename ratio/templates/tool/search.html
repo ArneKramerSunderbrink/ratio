@@ -1,59 +1,33 @@
 {% from "tool/macros.html" import entity_div %}
 {% from "tool/macros.html" import search_result %}
 
-{% extends 'base.html' %}
+{% extends 'tool/layout.html' %}
 
 {% block title %}{{ frontend_config['tool_name'] }} - Search{% endblock %}
 
-{% block content %}
+{% block header_content %}
+<div class="flex-fix ghost-center"><b>{{ frontend_config['Subgraph_term'] }}s search</b></div>
+<div class="font-small flex-flex">
+  Select the characteristics of the {{ frontend_config['subgraph_term'] }}s whose overview you would like to see.<br>
+  Do not input any filter to retrieve all the existing {{ frontend_config['subgraph_term'] }}s.<br>
+  <b>Only {{ frontend_config['subgraph_term'] }}s marked as finished are considered.</b>
+</div>
+{% endblock %}
+
+{% block body_content %}
 <script src="{{ url_for('static', filename='js/search.js') }}" defer></script>
 
-<div class="flex-column">
-  <header class="w3-card flex-row flex-fix color3">
-    <div class="flex-fix navigation">
-      <button class="w3-button flip-flipbutton flip-frontside" data-flipid="navigation-dropdown">{#
-        #}<i class="fa fa-bars fa-lg"></i>
-      </button>
-      <div class="flip-flipside" data-flipid="navigation-dropdown" style="display: none;">
-        <button class="w3-button flip-frontbutton" data-flipid="navigation-dropdown">{#
-          #}<i class="fa fa-times fa-lg"></i>
-        </button>
-        <div class="w3-card color3 navigation-dropdown">
-          <a href="{{ url_for('tool.index') }}" class="w3-button"><i class="fas fa-home"></i> Home</a><br>
-          <button class="w3-button" disabled><i class="fas fa-search"></i> {{ frontend_config['Subgraph_term'] }}s search</button><br>
-          <a href="{{ url_for('auth.logout') }}" class="w3-button"><i class="fas fa-sign-out-alt"></i> Log Out</a>
-        </div>
-      </div>
-    </div>
-    <div class="flex-fix ghost-center"><b>{{ frontend_config['Subgraph_term'] }}s search</b></div>
-    <div class="font-small flex-flex">
-      Select the characteristics of the {{ frontend_config['subgraph_term'] }}s whose overview you would like to see.<br>
-      Do not input any filter to retrieve all the existing {{ frontend_config['subgraph_term'] }}s.<br>
-      <b>Only {{ frontend_config['subgraph_term'] }}s marked as finished are considered.</b>
-    </div>
-    <div class="flex-fix ghost-center">
-      <i class="fas fa-user w3-large"></i> {{ g.user['username'] }}
-    </div>
-  </header>
+{{ entity_div(filter, is_root=false, is_deletable=False, collapsed=False, id='filter-entity') }}
 
-  <section id="flex-body" class="color0">
-    <div id="scroll-container">
-      <div class="entity-body">
-        {{ entity_div(filter, false, collapsed=False) }}
-
-        <div class="entity entity-border" style="margin-top: 1em;">
-          <div class="entity-title color2 flex-row">
-            <div class="entity-label flex-flex">{{ frontend_config['Subgraph_term'] }}s</div>
-          </div>
-          <div class="entity-body" id="search-results">
-            {% for subgraph in subgraphs %}
-            {{ search_result(subgraph, rdf_graphs[loop.index0]) }}
-            {% endfor %}
-            <div id="no-match-msg" style="display: none;">No studies with these characteristics have been found.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
+<div class="entity entity-border" style="margin-top: 1em;">
+  <div class="entity-title color2 flex-row">
+    <div class="entity-label flex-flex">{{ frontend_config['Subgraph_term'] }}s</div>
+  </div>
+  <div class="entity-body" id="search-results">
+    {% for subgraph in subgraphs %}
+    {{ search_result(subgraph, rdf_graphs[loop.index0]) }}
+    {% endfor %}
+    <div id="no-match-msg" style="display: none;">No studies with these characteristics have been found.</div>
+  </div>
 </div>
 {% endblock %}

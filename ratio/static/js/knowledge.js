@@ -13,7 +13,7 @@ $(function () {
   });
 
   // Add value
-  $('div#scroll-container').on('click', 'div.field > div > button', function() {
+  $('div#root-entity').on('click', 'div.field > div > button', function() {
     const button = this;
     button.disabled = true;
     const field = $(this).closest('div.field');
@@ -61,7 +61,7 @@ $(function () {
   });
 
   // Delete Value
-  $('div#scroll-container').on('click', 'button.delete-value-button', function() {
+  $('div#root-entity').on('click', 'button.delete-value-button', function() {
     const button = this;
     button.disabled = true;
     const form = $(this).closest('.literal-form, .option-form');
@@ -147,14 +147,14 @@ $(function () {
 
   // Special functionality for literal fields
   // Change value
-  $('div#scroll-container').on('input', 'div.literal-input', function() {
+  $('div#root-entity').on('input', 'div.literal-input', function() {
     const input = this;
     get_json_change_value(input, input.innerText);
   });
 
   // Special functionality for options Fields
   // Filter
-  $('div#scroll-container').on('input', 'input.option-input', function() {
+  $('div#root-entity').on('input', 'input.option-input', function() {
     const filter_string = this.value.toUpperCase();
     $(this).next('.options-dropdown').find('.option:not(.deleted)').each(function() {
       if ($(this).text().toUpperCase().indexOf(filter_string) > -1) {
@@ -164,14 +164,14 @@ $(function () {
       }
     });
   });
-  $('div#scroll-container').on('focus', 'input.option-input', function() {
+  $('div#root-entity').on('focus', 'input.option-input', function() {
     $(this).next('.options-dropdown').find('.option').each(function() {
       $(this).css('display', '');
     });
   });
 
   // Select option
-  $('div#scroll-container').on('click', '.option', function() {
+  $('div#root-entity').on('click', '.option', function() {
     const input = $(this).closest('.options-dropdown').prev('.option-input')[0];
     let value = '';
     input.value = this.textContent;
@@ -187,7 +187,7 @@ $(function () {
   // Check validity of option input
   // I found no way to discriminate between focus switching within the form (to the custom option input)
   // or out of the form and only then check validity
-  $('div#scroll-container').on('focusout', '.option-form', function() {
+  $('div#root-entity').on('focusout', '.option-form', function() {
     // if value not in options, .setCustomValidity("Invalid option.")
     const input = $(this).find('.option-input')[0];
     let value = false;
@@ -216,7 +216,7 @@ $(function () {
   });
 
   // Add custom option
-  $('div#scroll-container').on('submit', '.add-option-form', function() {
+  $('div#root-entity').on('submit', '.add-option-form', function() {
     const form = $(this);
     const button = form.find('button')[0];
     button.disabled = true;
@@ -256,7 +256,7 @@ $(function () {
 
   // Special functionality for Entities
   // Change label
-  $('div#scroll-container').on('input', 'div.entity-label', function() {
+  $('div#root-entity').on('input', 'div.entity-label', function() {
     const entity_uri = $(this).closest('div.entity').attr('data-entity-uri');
     const label = this.innerText.replace(/\r?\n|\r/g, "");
 
@@ -279,7 +279,7 @@ $(function () {
   });
 
   // Add entity
-  $('div#scroll-container').on('submit', 'form.add-entity-form', function() {
+  $('div#root-entity').on('submit', 'form.add-entity-form', function() {
     const button = $(this).find('button')[0];
     button.disabled = true;
     const field = $(this).closest('div.entity-field');
@@ -318,7 +318,7 @@ $(function () {
   });
 
   // Delete entity
-  $('div#scroll-container').on('click', 'button.delete-entity-button', function() {
+  $('div#root-entity').on('click', 'button.delete-entity-button', function() {
     const button = this;
     button.disabled = true;
     const field = $(this).closest('div.entity-field');

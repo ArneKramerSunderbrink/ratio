@@ -1,44 +1,68 @@
-{% from "tool/macros.html" import entity_div %}
+{% from "tool/macros.html" import subgraph_row with context%}
 
-{% extends 'base.html' %}
+{% extends 'tool/layout.html' %}
 
 {% block title %}{{ frontend_config['tool_name'] }}{% endblock %}
 
-{% block content %}
-<div class="flex-column">
-  <header class="w3-card flex-row flex-fix color3">
-    <div class="flex-fix navigation">
-      <button class="w3-button flip-flipbutton flip-frontside" data-flipid="navigation-dropdown">{#
-        #}<i class="fa fa-bars fa-lg"></i>
-      </button>
-      <div class="flip-flipside" data-flipid="navigation-dropdown" style="display: none;">
-        <button class="w3-button flip-frontbutton" data-flipid="navigation-dropdown">{#
-          #}<i class="fa fa-times fa-lg"></i>
-        </button>
-        <div class="w3-card color3 navigation-dropdown">
-          <button class="w3-button" disabled><i class="fas fa-home"></i> Home</button><br>
-          <a href="{{ url_for('search.search_view') }}" class="w3-button"><i class="fas fa-search"></i> {{ frontend_config['Subgraph_term'] }}s search</a><br>
-          <a href="{{ url_for('auth.logout') }}" class="w3-button"><i class="fas fa-sign-out-alt"></i> Log Out</a>
-        </div>
-      </div>
-    </div>
-    <a class="ghost-center" id="ratio-logo" href="http://ratio.sc.cit-ec.uni-bielefeld.de/home/">{#
-      #}<img src="{{ url_for('static', filename='ratiofarbig.jpg') }}" alt="Ratio logo"></img>
-    </a>
-    <div class="flex-fix ghost-center"><b>{{ frontend_config['tool_name'] }}</b></div>
-    <div class="font-small flex-flex">
-      {{ frontend_config['tool_description'] }}
-      <br>
-      Please create a new {{ frontend_config['subgraph_term'] }} or click on the one you would like to edit.
-    </div>
-    <div class="flex-fix ghost-center">
-      <i class="fas fa-user w3-large"></i> {{ g.user['username'] }}
-    </div>
-  </header>
+{% block header_content %}
+<a class="ghost-center" id="ratio-logo" href="http://ratio.sc.cit-ec.uni-bielefeld.de/home/">{#
+  #}<img src="{{ url_for('static', filename='ratiofarbig.jpg') }}" alt="Ratio logo"></img>
+</a>
+<div class="flex-fix ghost-center"><b>{{ frontend_config['tool_name'] }}</b></div>
+<div class="font-small flex-flex">
+  {{ frontend_config['tool_description'] }}
+  <br>
+  Please create a new {{ frontend_config['subgraph_term'] }} or click on the one you would like to edit.
+</div>
+{% endblock %}
 
-  <section id="flex-body" class="index-body color0">
-    {% include 'tool/subgraph_menu.html' %}
-  </section>
+{% block body_content %}
+<script src="{{ url_for('static', filename='js/subgraph_menu.js') }}" defer></script>
+
+<div class="flex-row">
+  <div class="flex-flex">
+    <div class="flip-frontside" data-flipid="new-subgraph">
+      <button class="w3-button button-border flex-fix flip-flipbutton color2" data-flipid="new-subgraph">
+        <i class="fas fa-plus w3-large"></i> Create a new {{ frontend_config['subgraph_term'] }}
+      </button>
+    </div>
+    <div class="flip-flipside button-border" data-flipid="new-subgraph" style="display: none;">
+      <form class="flex-row" id="new-subgraph-form" method="post">
+        <input class="w3-input flex-flex"
+               type="text" placeholder="Name of new {{ frontend_config['subgraph_term'] }}..." name="name" id="new-subgraph-name" required style="border-bottom: 0">
+        <button type="submit" class="w3-button flex-fix" title="Add {{ frontend_config['subgraph_term'] }}">
+          <i class="fas fa-plus fa-lg"></i>
+        </button>
+        <a href="#" class="w3-button flex-fix flip-frontbutton" data-flipid="new-subgraph" title="Cancel">
+          <i class="fas fa-times fa-lg"></i>
+        </a>
+      </form>
+    </div>
+  </div>
+  <a href="{{ url_for('tool.download_ontology') }}" class="w3-button button-border flex-fix color2">
+    <i class="fas fa-project-diagram w3-large"></i> Download Ontology
+  </a>
+</div>
+<div id="subgraph-list-box">
+  <div id="subgraph-list">
+    {% for subgraph in subgraph_list %}
+      {{ subgraph_row(subgraph['id'], subgraph['name'], subgraph['finished']) }}
+    {% endfor %}
+  </div>
 </div>
 
+<div class="w3-panel w3-card-4 message" data-subgraph-id="0" style="display: none"
+     id="subgraph-menu-delete-msg">
+  <span></span>
+  <a href="#" class="w3-margin-left w3-text-green">Undo.</a>
+</div>
+<div class="w3-panel w3-card-4 flip-flipside-msg message" data-flipid="subgraph-list-0" style="display: none"
+     id="subgraph-menu-edit-msg"></div>
+<div class="w3-panel w3-card-4 flip-flipside-msg message" data-flipid="new-subgraph" style="display: none"
+     id="subgraph-menu-add-msg"></div>
+{% if message %}
+<div class="w3-panel w3-card-4 message">
+  {{ message }}
+</div>
+{% endif %}
 {% endblock %}

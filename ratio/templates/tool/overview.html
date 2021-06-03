@@ -1,42 +1,17 @@
 {% from "tool/macros.html" import overview %}
 
-{% extends 'base.html' %}
+{% extends 'tool/layout.html' %}
 
 {% block title %}{{ frontend_config['tool_name'] }} Overview{{ ' - '+subgraph['name'] if subgraph }}{% endblock %}
 
-{% block content %}
-<div class="flex-column">
-  <header class="w3-card flex-row flex-fix color3">
-    <div class="flex-fix navigation">
-      <button class="w3-button flip-flipbutton flip-frontside" data-flipid="navigation-dropdown">{#
-        #}<i class="fa fa-bars fa-lg"></i>
-      </button>
-      <div class="flip-flipside" data-flipid="navigation-dropdown" style="display: none;">
-        <button class="w3-button flip-frontbutton" data-flipid="navigation-dropdown">{#
-          #}<i class="fa fa-times fa-lg"></i>
-        </button>
-        <div class="w3-card color3 navigation-dropdown">
-          <a href="{{ url_for('tool.index') }}" class="w3-button"><i class="fas fa-home"></i> Home</a><br>
-          <a href="{{ url_for('search.search_view') }}" class="w3-button"><i class="fas fa-search"></i> {{ frontend_config['Subgraph_term'] }}s search</a><br>
-          <a href="{{ url_for('auth.logout') }}" class="w3-button"><i class="fas fa-sign-out-alt"></i> Log Out</a>
-        </div>
-      </div>
-    </div>
-    <a href="{{ url_for('tool.edit_view', subgraph_id=subgraph['id']) }}" class="w3-button flex-fix">
-      <i class="fas fa-pen w3-large"></i> Return to edit
-    </a>
-    <div class="flex-flex">{# just a spacer #}</div>
-    <div class="flex-fix">
-      <i class="fas fa-user w3-large"></i>
-      {{ g.user['username'] }}
-    </div>
-  </header>
+{% block header_content %}
+<a href="{{ url_for('tool.edit_view', subgraph_id=subgraph['id']) }}" class="w3-button flex-fix">
+  <i class="fas fa-pen w3-large"></i> Return to edit
+</a>
+<div class="flex-flex">{# just a spacer #}</div>
+{% endblock %}
 
-  <section id="flex-body" class="color0">
-    <div id="scroll-container" style="padding: 1em;">
-      {{ overview(rdf_graph) }}
-      <div style="height: 11em;">{# just a spacer #}</div>
-    </div>
-  </section>
-</div>
+{% block body_content %}
+{{ overview(rdf_graph) }}
+<div style="height: 11em;">{# just a spacer #}</div>
 {% endblock %}

@@ -126,8 +126,8 @@
 {% endmacro %}
 
 
-{% macro entity_div(entity, is_root=False, is_deletable=True, index=0, collapsed=True) %}
-<div class="entity{% if not is_root %} entity-border{% endif %}" data-entity-uri="{{ entity.uri }}" data-index="{{index}}">
+{% macro entity_div(entity, is_root=False, is_deletable=True, index=0, collapsed=True, id='') %}
+<div class="entity{% if not is_root %} entity-border{% endif %}" data-entity-uri="{{ entity.uri }}" data-index="{{index}}"{% if id %} id="{{ id }}"{% endif %}>
   {# entity header #}
   {% if not is_root %}
   <div class="entity-title color2 flex-row">

@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="flex-column">
+  <header class="w3-card flex-row flex-fix color3">
+    <div class="flex-fix navigation">
+      <button class="w3-button flip-flipbutton flip-frontside" data-flipid="navigation-dropdown">{#
+        #}<i class="fa fa-bars fa-lg"></i>
+      </button>
+      <div class="flip-flipside" data-flipid="navigation-dropdown" style="display: none;">
+        <button class="w3-button flip-frontbutton" data-flipid="navigation-dropdown">{#
+          #}<i class="fa fa-times fa-lg"></i>
+        </button>
+        <div class="w3-card color3 navigation-dropdown"> <!--todo-->
+          {% if request.endpoint == 'tool.index' %}
+          <button class="w3-button" disabled><i class="fas fa-home"></i> Home</button><br>
+          {% else %}
+          <a href="{{ url_for('tool.index') }}" class="w3-button"><i class="fas fa-home"></i> Home</a><br>
+          {% endif %}
+
+          {% if request.endpoint == 'search.search_view' %}
+          <button class="w3-button" disabled><i class="fas fa-search"></i> {{ frontend_config['Subgraph_term'] }}s search</button><br>
+          {% else %}
+          <a href="{{ url_for('search.search_view') }}" class="w3-button"><i class="fas fa-search"></i> {{ frontend_config['Subgraph_term'] }}s search</a><br>
+          {% endif %}
+
+          {% if g.user['admin'] %}
+          {% if request.endpoint == 'admin.admin' %}
+          <button class="w3-button" disabled><i class="fas fa-cogs"></i> Admin</button><br>
+          {% else %}
+          <a href="{{ url_for('admin.admin') }}" class="w3-button"><i class="fas fa-cogs"></i> Admin</a><br>
+          {% endif %}
+          {% endif %}
+
+          <a href="{{ url_for('auth.logout') }}" class="w3-button"><i class="fas fa-sign-out-alt"></i> Log Out</a>
+        </div>
+      </div>
+    </div>
+    {% block header_content %}
+    <div class="flex-flex">{# just a spacer #}</div>
+    {% endblock %}
+    <div class="flex-fix ghost-center">
+      <i class="fas fa-user w3-large"></i> {{ g.user['username'] }}
+    </div>
+  </header>
+
+  <section id="flex-body" class="index-body color0">
+    {% block body_content %}
+    {% endblock %}
+  </section>
+</div>
+{% endblock %}

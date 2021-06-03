@@ -4,7 +4,7 @@
 
 $(function(){
   // filter options
-  $('div#scroll-container').on('input', 'input.option-input', function() {
+  $('div#filter-entity').on('input', 'input.option-input', function() {
     const filter_string = this.value.toUpperCase();
     $(this).next('.options-dropdown').find('.option:not(.deleted)').each(function() {
       if ($(this).text().toUpperCase().indexOf(filter_string) > -1) {
@@ -14,14 +14,14 @@ $(function(){
       }
     });
   });
-  $('div#scroll-container').on('focus', 'input.option-input', function() {
+  $('div#filter-entity').on('focus', 'input.option-input', function() {
     $(this).next('.options-dropdown').find('.option').each(function() {
       $(this).css('display', '');
     });
   });
 
   // Select option
-  $('div#scroll-container').on('click', '.option', function() {
+  $('div#filter-entity').on('click', '.option', function() {
     const input = $(this).closest('.options-dropdown').prev('.option-input')[0];
     let value = '';
     input.value = this.textContent;
@@ -48,7 +48,7 @@ $(function(){
   }
 
   // Check validity of option input
-  $('div#scroll-container').on('focusout', '.option-form', function() {
+  $('div#filter-entity').on('focusout', '.option-form', function() {
     // if value not in options, .setCustomValidity("Invalid option.")
     const input = $(this).find('.option-input')[0];
     let value = false;
