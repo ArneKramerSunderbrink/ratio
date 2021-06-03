@@ -49,7 +49,7 @@ def get_db_backup():
         return f.read()
 
 
-def upload_backup(backup_file):
+def upload_db_backup(backup_file):
     with open(current_app.config['DATABASE'], 'wb+') as f:
         f.write(backup_file.read())
 

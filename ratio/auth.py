@@ -30,6 +30,19 @@ def login_required(view):
     return wrapped_view
 
 
+def admin_required(view):
+    """View decorator that redirects non-admin users to the login page."""
+
+    @wraps(view)
+    def wrapped_view(*args, **kwargs):
+        if g.user is None or not g.user['admin']:
+            return redirect(url_for('auth.login/admin', next_url=request.full_path))
+
+        return view(*args, **kwargs)
+
+    return wrapped_view
+
+
 @bp.before_app_request
 def load_logged_in_user():
     """If a user id is stored in the session, load the user object from the database into ``g.user``."""
@@ -43,6 +56,7 @@ def load_logged_in_user():
         )
 
 
+@bp.route('/login/admin', methods=('GET', 'POST'), endpoint='login/admin')
 @bp.route('/login', methods=('GET', 'POST'))
 def login():
     """Log in a registered user by adding the user id to the session."""
@@ -90,7 +104,9 @@ def login():
 
         flash(error)
 
-    return render_template('login.html')
+    admin = 'admin' in request.url_rule.rule
+
+    return render_template('login.html', admin=admin)
 
 
 @bp.route('/logout')

@@ -38,6 +38,16 @@ header > * {
   width: 100%;
 }
 
+/* login */
+.login-center {
+  width: 21em;
+}
+
+.login-center input[type="text"],
+.login-center input[type="password"] {
+  width: 95%;
+}
+
 /* tool index */
 .index-body {
   padding: 2em 1em;

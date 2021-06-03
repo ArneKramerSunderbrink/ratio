@@ -4,19 +4,22 @@
 
 {% block content %}
 <div class="w3-display-container color2" style="height:100vh">
-    <div class="w3-display-middle">
+    <div class="w3-display-middle login-center">
         <form class="w3-container w3-card-4 color1" method="post">
             <p>
-                <input class="w3-input" style="width:90%"
+                <input class="w3-input"
                        type="text" name="username" id="username" value="{{ request.form['username'] or '' }}" required>
                 <label for="username">Name</label>
             <p>
-                <input class="w3-input" style="width:90%" type="password" name="password" id="password" required>
+                <input class="w3-input" type="password" name="password" id="password" required>
                 <label for="password">Password</label>
             <p>
                 <input class="w3-button button-border w3-section w3-ripple" type="submit" value="Log In">
         </form>
 
+        {% if admin %}
+        <div class="w3-panel w3-card-4 message">Please log in with an admin account.</div>
+        {% endif %}
         {% for message in get_flashed_messages() %}
         <div class="w3-panel w3-card-4 message">{{ message }}</div>
         {% endfor %}

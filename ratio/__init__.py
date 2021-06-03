@@ -108,9 +108,10 @@ def create_app(test_config=None):
     db.init_app(app)
 
     # apply the blueprints to the app
-    from ratio import auth, tool, knowledge, search
+    from ratio import auth, admin, tool, knowledge, search
 
     app.register_blueprint(auth.bp)
+    app.register_blueprint(admin.bp)
     app.register_blueprint(tool.bp)
     app.register_blueprint(knowledge.bp)
     app.register_blueprint(search.bp)
