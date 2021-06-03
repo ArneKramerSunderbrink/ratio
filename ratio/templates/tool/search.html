@@ -1,5 +1,5 @@
-{% from "tool/macros.html" import entity_div %}
-{% from "tool/macros.html" import search_result %}
+{% from "tool/edit_macros.html" import entity_div %}
+{% from "tool/overview_table.html" import overview %}
 
 {% extends 'tool/layout.html' %}
 
@@ -31,3 +31,29 @@
   </div>
 </div>
 {% endblock %}
+
+{% macro search_result(subgraph, rdf_graph) %}
+<div class="entity entity-border" data-subgraph-id="{{ subgraph['id'] }}">
+  <div class="entity-title color2 flex-row">
+    {# collapse button #}
+    <button class="w3-button flex-fix flip-frontside flip-flipbutton" data-flipid="collapse-{{ subgraph['id'] }}">{#
+      #}<i class="fas fa-chevron-right"></i>
+    </button>
+    <button class="w3-button flex-fix flip-flipside flip-frontbutton" data-flipid="collapse-{{ subgraph['id'] }}" style="display: none;">{#
+      #}<i class="fas fa-chevron-down"></i>
+    </button>
+
+    <div class="entity-label flex-text">{{ subgraph['name'] }}</div>
+    <a href="{{ url_for('tool.edit_view', subgraph_id=subgraph['id']) }}" class="w3-button flex-fix" title="Edit">{#
+      #}<i class="fas fa-pen"></i>
+    </a>
+    <a href="{{ request.script_root }}/{{ subgraph['id'] }}/_download_rdf" class="w3-button flex-fix" title="Download RDF">{#
+      #}<i class="fas fa-project-diagram"></i>
+    </a>
+  </div>
+
+  <div class="entity-body flip-flipside" data-flipid="collapse-{{ subgraph['id'] }}" style="display: none;">
+    {{ overview(rdf_graph) }}
+  </div>
+</div>
+{% endmacro %}

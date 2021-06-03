@@ -43,9 +43,9 @@ def add_value():
     index = subgraph_knowledge.new_value(entity_uri, property_uri)
 
     if field.options is None:
-        render_value_div = get_template_attribute('tool/macros.html', 'value_free')
+        render_value_div = get_template_attribute('tool/edit_macros.html', 'value_free')
     else:
-        render_value_div = get_template_attribute('tool/macros.html', 'value_options')
+        render_value_div = get_template_attribute('tool/edit_macros.html', 'value_options')
     value_div = render_value_div(field, '', index)
 
     return jsonify(value_div=value_div)
@@ -128,7 +128,7 @@ def add_option():
             index = subgraph_knowledge.new_value(entity_uri, property_uri)
         subgraph_knowledge.change_value(entity_uri, property_uri, index, option.uri)
 
-    render_option_div = get_template_attribute('tool/macros.html', 'option_div')
+    render_option_div = get_template_attribute('tool/edit_macros.html', 'option_div')
     option_div = render_option_div(option, True)
 
     return jsonify(option_div=option_div, option_fields=list(option_fields),
@@ -201,12 +201,12 @@ def add_entity():
     entity, option_fields = subgraph_knowledge.new_individual(field_range, entity_label, True)
     subgraph_knowledge.change_value(parent_uri, property_uri, index, entity.uri)
 
-    render_entity_div = get_template_attribute('tool/macros.html', 'entity_div')
+    render_entity_div = get_template_attribute('tool/edit_macros.html', 'entity_div')
     entity_div = render_entity_div(entity, index=index, is_deletable=field_is_deletable, collapsed=False)
 
     if option_fields:
         option_fields = [str(f.property_uri) for f in option_fields]
-        render_option_div = get_template_attribute('tool/macros.html', 'option_div')
+        render_option_div = get_template_attribute('tool/edit_macros.html', 'option_div')
         option_div = render_option_div(entity, True)
         return jsonify(entity_div=entity_div, remove_plus=field_is_functional,
                        option_fields=option_fields, option_div=option_div)

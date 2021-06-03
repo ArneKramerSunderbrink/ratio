@@ -1,0 +1,154 @@
+{% macro entity_field(entity, field) %}
+<div class="entity-field" data-property-uri="{{ field.property_uri }}">
+  {% if field.is_deletable %}
+  <div class="entity-field-title flex-row">
+    <span class="entity-field-label flex-fix" {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}:</span>
+    <div class="add-entity-div flex-flex flex-row" {% if field.values and field.is_functional %}style="display: none;"{% endif %}>
+      <button class="w3-button tiny-button flex-fix flip-frontside flip-flipbutton" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}" title="Add {{ field.range_label }}">{#
+        #}<i class="fas fa-plus"></i>
+      </button>
+      <div class="flex-flex flip-frontside" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}"></div>
+      {# add described entity #}
+      <div class="flex-flex flip-flipside" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}" style="display: none; margin-left: 0.5em;">
+        <form class="flex-row add-entity-form">
+            <input class="w3-input flex-flex" type="text" name="label" placeholder="{{ field.range_label }} name..." required style="padding: 0 8px; border-bottom: 0">
+            <button type="submit" class="w3-button tiny-button flex-fix" title="Add {{ field.range_label }}">{#
+              #}<i class="fas fa-plus"></i>
+            </button>
+          </form>
+      </div>
+      <button class="w3-button tiny-button flex-fix flip-flipside flip-frontbutton" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}" title="Cancel" style="display: none;">{#
+        #}<i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+  {% endif %}
+  <div class="entity-field-value-list">
+    {% for index, value in field.get_sorted_values() %}
+    {{ entity_div(value, index=index, is_deletable=field.is_deletable) }}
+    {% endfor %}
+  </div>
+</div>
+{% endmacro %}
+
+{% macro option_div(option, is_object) %}
+{% if is_object %}
+<div class="option" data-option-uri="{{ option.uri }}"{% if option.comment is not none %} title="{{ option.comment }}"{% endif %}>{{ option.label }}</div>
+{% else %}
+<div class="option">{{ option }}</div>
+{% endif %}
+{% endmacro %}
+
+{% macro value_options(field, value, index, unregistered=False) %}
+<div class="option-form flex-row">
+  <input type="hidden" autofocus>
+  <div class="flex-flex">
+    {% if field.is_object_property %}
+    <input class="w3-input option-input" type="text" name="label" value="{{ value.label }}" data-option-uri="{{ value.uri }}" data-index="{{index}}"{% if unregistered %} data-unregistered=""{% endif %}>
+    {% else %}
+    <input class="w3-input option-input" type="text" name="label" value="{{ value }}" data-index="{{index}}">
+    {% endif %}
+
+    {% if field.options or field.is_add_option_allowed %}
+    <div class="options-dropdown"><div class="color1">
+      <div class="options">
+        {% for option in field.options %}
+        {{ option_div(option, field.is_object_property) }}
+        {% endfor %}
+      </div>
+      {% if field.is_add_option_allowed %}
+      <form class="add-option-form flex-row">
+        <input class="w3-input flex-flex" type="text" name="label" placeholder="Add option...">
+        <button type="submit" class="w3-button tiny-button flex-fix" title="Add {{ field.range_label }} to the list of options.">{#
+          #}<i class="fas fa-plus"></i>
+        </button>
+      </form>
+      {% endif %}
+    </div></div>
+    {% endif %}
+  </div>
+  {% if not field.is_functional %}
+  <button class="w3-button tiny-button flex-fix delete-value-button" title="Delete value">{#
+    #}<i class="fas fa-minus"></i>
+  </button>
+  {% endif %}
+</div>
+{% endmacro %}
+
+
+{% macro value_free(field, value, index, unregistered=False) %}
+<div class="literal-form flex-row">
+  <div class="w3-input literal-input flex-flex" data-index="{{index}}"{% if unregistered %} data-unregistered=""{% endif %} contentEditable>{{ value }}</div>
+  {% if not field.is_functional %}
+  <button class="w3-button tiny-button flex-fix delete-value-button" title="Delete value">{#
+    #}<i class="fas fa-minus"></i>
+  </button>
+  {% endif %}
+</div>
+{% endmacro %}
+
+
+{% macro entity_div(entity, is_root=False, is_deletable=True, index=0, collapsed=True, id='') %}
+<div class="entity{% if not is_root %} entity-border{% endif %}" data-entity-uri="{{ entity.uri }}" data-index="{{index}}"{% if id %} id="{{ id }}"{% endif %}>
+  {# entity header #}
+  {% if not is_root %}
+  <div class="entity-title color2 flex-row">
+    {# collapse button #}
+    <button class="w3-button flex-fix flip-frontside flip-flipbutton" data-flipid="collapse-{{ entity.uri }}" {% if not collapsed %}style="display: none;"{% endif %}>{#
+      #}<i class="fas fa-chevron-right"></i>
+    </button>
+    <button class="w3-button flex-fix flip-flipside flip-frontbutton" data-flipid="collapse-{{ entity.uri }}" {% if collapsed %}style="display: none;"{% endif %}>{#
+      #}<i class="fas fa-chevron-down"></i>
+    </button>
+
+    <div class="entity-label flex-flex" {% if entity.comment %}title="{{ entity.comment }}"{% endif %} {% if is_deletable %}contentEditable{% endif %}>{{ entity.label }}</div>
+    {% if is_deletable %}
+    <button class="w3-button flex-fix delete-entity-button" title="Delete {{ entity.class_label }}">{#
+      #}<i class="fas fa-minus"></i>
+    </button>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <div class="entity-body{%if is_root%} color0{% else %} flip-flipside{% endif %}"{%if not is_root %} data-flipid="collapse-{{ entity.uri }}" {% if collapsed %}style="display: none;"{% endif %}{% endif %}>
+    {% for field in entity.fields %}
+    {% if field.is_subheading %}
+    <div class="knowledge-subheading" {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}</div>
+    {% elif field.is_described %}
+    {{ entity_field(entity, field) }}
+    {% else %}
+    <div class="field color1" data-property-uri="{{ field.property_uri }}" style="width: calc({{ field.width }}% - 1.3em); min-width: calc(70em * 0.01 * min(50, {{ field.width }}) - 1.3em);">
+      <div class="flex-row">
+        <span class="field-label flex-fix" {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}:</span>
+        <div class="field-value-list">
+          {% if field.options is not none %}
+            {% if not field.get_sorted_values() %}
+            {{ value_options(field, '', field.free_index, True) }}
+            {% else %}
+            {% for index, value in field.get_sorted_values() %}
+            {{ value_options(field, value, index) }}
+            {% endfor %}
+            {% endif %}
+          {% else %}
+            {% if not field.get_sorted_values() %}
+            {{ value_free(field, '', field.free_index, True) }}
+            {% else %}
+            {% for index, value in field.get_sorted_values() %}
+            {{ value_free(field, value, index) }}
+            {% endfor %}
+            {% endif %}
+          {% endif %}
+        </div>
+        {% if not field.is_functional %}
+        <button class="w3-button tiny-button flex-fix" title="Add {{ field.range_label }}">{#
+          #}<i class="fas fa-plus"></i>
+        </button>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+</div>
+{% endmacro %}
+
