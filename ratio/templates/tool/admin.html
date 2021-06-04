@@ -8,14 +8,78 @@
 {% endblock %}
 
 {% block body_content %}
-<!--TODO <script src="{{ url_for('static', filename='js/search.js') }}" defer></script>-->
+<!--TODO <script src="{{ url_for('static', filename='js/admin.js') }}" defer></script>-->
 
-<div class="entity entity-border" style="margin-top: 1em;">
+<div class="entity entity-border"> <!--todo make collapsabel-->
   <div class="entity-title color2 flex-row">
-    <div class="entity-label flex-flex">Test title</div>
+    <div class="entity-label flex-flex">User administration</div>
   </div>
-  <div class="entity-body" id="search-results">
-    TODO <!--TODO-->
+  <div class="entity-body">
+    <div>
+      <div class="flip-frontside" data-flipid="new-user">
+        <button class="w3-button button-border flex-fix flip-flipbutton color2" data-flipid="new-user">
+          <i class="fas fa-plus w3-large"></i> Create a new user
+        </button>
+      </div>
+      <div class="flip-flipside button-border" data-flipid="new-user" style="display: none;">
+        <form class="flex-row" id="new-user-form" method="post">
+          <input class="w3-input flex-flex"
+                 type="text" placeholder="Name of new user..." name="name" required style="border-bottom: 0">
+          <input class="w3-input flex-flex"
+                 type="password" placeholder="Password of new user..." name="name" required style="border-bottom: 0">
+          <input type="checkbox" id="new-user-admin" style="display: none">
+          <label for="new-user-admin" class="w3-button big-button flex-fix">{#
+            #}<i class="fa {{ 'fa-check-square' if subgraph_finished else 'fa-square' }} fa-lg"></i>
+          </label>
+          <button type="submit" class="w3-button flex-fix" title="Add user">
+            <i class="fas fa-plus fa-lg"></i>
+          </button>
+          <a href="#" class="w3-button flex-fix flip-frontbutton" data-flipid="new-user" title="Cancel">
+            <i class="fas fa-times fa-lg"></i>
+          </a>
+        </form>
+      </div>
+    </div>
+    <div id="subgraph-list-box">
+      <div id="subgraph-list">
+        {% for user in user_list %}
+          {{ user_row(user) }}
+        {% endfor %}
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}
+
+{% macro user_row(user) %}
+<div class="item" data-user-id="{{ user['id'] }}">
+  <div class="flip-frontside" data-flipid="user-list-{{ user['id'] }}">
+    <div class="flex-row">
+      <div class="w3-button flex-text">{{ user['username'] }}{% if user['admin'] %}<div class="w3-button" title="This user has admin rights"><i class="fas fa-cogs"></i></div>{% endif %}</div>
+      <button class="w3-button big-button flex-fix flip-flipbutton" data-flipid="user-list-{{ user['id'] }}" title="Edit user">{#
+        #}<i class="fas fa-pen fa-lg"></i>
+      </button>
+    </div>
+  </div>
+  <div class="flip-flipside" data-flipid="user-list-{{ user['id'] }}" style="display: none">
+    <form class="flex-row">
+      <input class="w3-input flex-flex" type="text" name="name" value="{{ user['username'] }}" required>
+      <input class="w3-input flex-flex" type="password" name="password" value="" placeholder="New password">
+      <input type="checkbox" id="user-{{ user['id'] }}-admin" style="display: none"
+             {% if user['admin'] %}checked{% endif %}>
+      <label for="user-{{ user['id'] }}-admin" class="w3-button big-button flex-fix">{#
+        #}Admin <i class="fa {{ 'fa-check-square' if user['admin'] else 'fa-square' }} fa-lg"></i>
+      </label>
+      <button type="submit" class="w3-button big-button flex-fix w3-right" title="Save changes">{#
+        #}<i class="fas fa-save fa-lg"></i>
+      </button>
+      <button class="w3-button big-button flex-fix w3-right delete-subgraph-button" title="Delete user">{#
+        #}<i class="fas fa-minus fa-lg"></i>
+      </button>
+      <button class="w3-button big-button flex-fix flip-frontbutton" data-flipid="user-list-{{ user['id'] }}" title="Cancel">{#
+        #}<i class="fas fa-times fa-lg"></i>
+      </button>
+    </form>
+  </div>
+</div>
+{% endmacro %}

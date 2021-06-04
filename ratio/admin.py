@@ -9,7 +9,7 @@ from time import strftime
 from urllib.parse import quote
 
 from ratio.auth import admin_required
-from ratio.db import get_db_backup, upload_db_backup
+from ratio.db import get_db, get_db_backup, upload_db_backup
 
 bp = Blueprint('admin', __name__)
 
@@ -17,7 +17,15 @@ bp = Blueprint('admin', __name__)
 @bp.route('/admin')
 @admin_required
 def admin():
-    return render_template('tool/admin.html')
+    db = get_db()
+
+    user_list = db.execute(
+        'SELECT id, username, admin'
+        ' FROM user'
+        ' ORDER BY id ASC',
+    ).fetchall()
+
+    return render_template('tool/admin.html', user_list=user_list)
 
 
 @bp.route('/_download_db_backup')

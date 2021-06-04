@@ -136,6 +136,8 @@ header > * {
   min-width: 2.5em;
   height: 2.5em;
   border-radius: 2px;
+  padding: 5px;
+  text-align: center;
 }
 
 .tiny-button {
@@ -150,7 +152,6 @@ header > * {
   border-radius: 8px;
 }
 
-.big-button,
 .tiny-button,
 .entity-title > a,
 .entity-title > button {
