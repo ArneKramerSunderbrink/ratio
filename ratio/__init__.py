@@ -28,6 +28,7 @@ def create_app(test_config=None):
     """Create and configure an instance of the Flask application."""
 
     app = Flask(__name__, instance_relative_config=True)
+    # Note that some of the configuration things are overwritten when deploying the tool. See deploy/deploy.sh!
     app.config.from_mapping(
         # a default secret that should be overridden by instance config
         SECRET_KEY='dev',
@@ -45,8 +46,8 @@ def create_app(test_config=None):
         GUNICORN_LOGGER=False,
         # Frontend config dictionary
         FRONTEND_CONFIG=dict(
-            tool_name='CTrO-Map',
-            tool_description='CTrO-Map allows capturing the information contained in published clinical trials and '
+            tool_name='CtrO-Editor',
+            tool_description='CtrO-Editor allows capturing the information contained in published clinical trials and '
                              'exports it into a semantic machine-readable format (RDF).',
             Subgraph_term='Clinical trial',
             subgraph_term='clinical trial',

@@ -5,7 +5,7 @@ Specifically the translation of an rdf ontology into Python classes
 from ast import literal_eval
 from collections import defaultdict
 from itertools import count
-from re import fullmatch
+from re import fullmatch, DOTALL
 
 from flask import g
 from rdflib import BNode
@@ -35,11 +35,12 @@ def parse_n3_term(s):
         return URIRef(s[1:-1])
     elif s.startswith('"'):
         # value surrounded by quotes (" or """), the suffix cannot contain quotes
+        # Can contain newlines (that's what the DOTALL flag is for)
         try:
-            value, suffix = fullmatch(r'((?:"""|").*?(?:"""|"))([^"]*)', s).group(1, 2)
+            value, suffix = fullmatch(r'((?:"""|").*?(?:"""|"))([^"]*)', s, DOTALL).group(1, 2)
             value = literal_eval(value)  # unquote
         except AttributeError:
-            raise ValueError('{} cannot be parsed'.format(s))
+            raise ValueError('{} cannot be parsed'.format(repr(s)))
         if suffix:
             if suffix.startswith('@'):
                 return Literal(value, lang=suffix[1:])

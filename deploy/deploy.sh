@@ -27,8 +27,8 @@ echo "URL_PREFIX = '/ratio'" >> venv/var/ratio-instance/config.py
 echo "GUNICORN_LOGGER = True" >> venv/var/ratio-instance/config.py
 # Configure frontend
 echo "FRONTEND_CONFIG=dict(
-    tool_name='CTrO-Map',
-    tool_description='CTrO-Map allows capturing the information contained in published clinical trials and '
+    tool_name='CtrO-Editor',
+    tool_description='CtrO-Editor allows capturing the information contained in published clinical trials and '
                      'exports it into a semantic machine-readable format (RDF).',
     Subgraph_term='Clinical trial',
     subgraph_term='clinical trial',
