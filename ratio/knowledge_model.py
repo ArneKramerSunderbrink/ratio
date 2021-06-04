@@ -2,6 +2,7 @@
 Specifically the translation of an rdf ontology into Python classes
 """
 
+from ast import literal_eval
 from collections import defaultdict
 from itertools import count
 from re import fullmatch
@@ -33,10 +34,10 @@ def parse_n3_term(s):
     if s.startswith('<') and s.endswith('>'):
         return URIRef(s[1:-1])
     elif s.startswith('"'):
-        # value surrounded by unescaped quotes, can contain escaped quotes
-        # the suffix cannot contain quotes
+        # value surrounded by quotes (" or """), the suffix cannot contain quotes
         try:
-            value, suffix = fullmatch(r'(?:"""|")((?:(?:[^"]|\\")*[^\\])?)(?:"""|")([^"]*)', s).group(1, 2)
+            value, suffix = fullmatch(r'((?:"""|").*?(?:"""|"))([^"]*)', s).group(1, 2)
+            value = literal_eval(value)  # unquote
         except AttributeError:
             raise ValueError('{} cannot be parsed'.format(s))
         if suffix:
