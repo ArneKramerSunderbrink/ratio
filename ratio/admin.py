@@ -8,9 +8,11 @@ from flask import Response
 from flask import url_for
 from time import strftime
 from urllib.parse import quote, unquote
+from werkzeug.security import generate_password_hash
 
 from ratio.auth import admin_required
 from ratio.db import get_db, get_db_backup, upload_db_backup
+from ratio.knowledge_model import get_ontology
 
 bp = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -30,6 +32,35 @@ def index(message=None):
     ).fetchall()
 
     return render_template('tool/admin.html', user_list=user_list, message=message)
+
+
+@bp.route('/_add_user', methods=['POST'])
+@admin_required
+def add_subgraph():
+    user_name = request.json.get('name')
+    user_password = request.json.get('password')
+    user_is_admin = request.json.get('admin') is not None
+
+    if user_name is None or user_name.isspace():
+        return jsonify(error='Username cannot be empty.')
+    if user_password is None or user_password.isspace():
+        return jsonify(error='Password cannot be empty.')
+    user_password = generate_password_hash(user_password)
+
+    user_uri = get_ontology().get_new_uri_user().n3()
+
+    db = get_db()
+    db_cursor = db.cursor()
+    db_cursor.execute(
+        'INSERT INTO user (username, password, admin, uri) VALUES (?, ?, ?, ?)',
+        (user_name, user_password, user_is_admin, user_uri)
+    )
+    user_id = db_cursor.lastrowid
+    db.commit()
+
+    # todo render user row and add to list
+
+    return jsonify()  # todo
 
 
 @bp.route('/_download_db_backup')

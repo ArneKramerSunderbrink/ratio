@@ -1,10 +1,9 @@
 /**
- * Javascript code related to the subgraph list:
- * Toggling finished-checkboxes,
- * editing subgraph names, adding new subgraphs, deleting subgraphs and undoing that delete.
+ * Javascript code related to the admin interface.
  */
 
 $(function() {
+  /*
   // finished checkboxes
   $('div#subgraph-list').on('change', ':checkbox', function() {
     const finished = $(this).prop('checked');
@@ -87,18 +86,20 @@ $(function() {
 
     return false;
   });
-
-  // add subgraph
-  $('form#new-subgraph-form').on('submit', function() {
+  */
+  // add user
+  $('form#new-user-form').on('submit', function() {
+    const form = $(this);
     const data = form_to_object(this);
 
-    postJSON(window.SCRIPT_ROOT + '/_add_subgraph', data, function(data) {
+    postJSON(window.SCRIPT_ROOT + 'admin/_add_user', data, function(data) {
       if (data.error) {
-        $('div#subgraph-menu-add-msg').text(data.error);
-        $('div#subgraph-menu-add-msg').css('display', 'block');
-        $('input#new-subgraph-name').focus();
+        $('div.message > span').text(data.error);
+        $('div.message').css('display', '');
+        form.find('input').first().focus();
       } else {
-        window.location = data.redirect;
+        alert('success');
+        //window.location = data.redirect;
       }
     });
 

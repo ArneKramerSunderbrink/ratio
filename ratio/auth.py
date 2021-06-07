@@ -10,7 +10,6 @@ from flask import session
 from flask import url_for
 from functools import wraps
 from werkzeug.security import check_password_hash
-from werkzeug.security import generate_password_hash
 
 from ratio.db import get_db
 

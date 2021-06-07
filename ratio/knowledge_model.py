@@ -191,11 +191,17 @@ class Ontology(KnowledgeGraph):
         used_uris.update({str(parse_n3_term(row['subject'])) for row in db.execute(
             'SELECT DISTINCT subject FROM ontology'
         ).fetchall()})
+        used_uris.update({str(parse_n3_term(row['uri'])) for row in db.execute(
+            'SELECT DISTINCT uri FROM user'
+        ).fetchall()})
 
         uri = str(base) + get_uri_suffix(class_uri) + '_'
         if subgraph_id:
             uri += str(subgraph_id) + '_'
         return URIRef(next(uri + str(i) for i in count(1) if uri + str(i) not in used_uris))
+
+    def get_new_uri_user(self):
+        return self.get_new_uri('User', base=RATIO)
 
     def new_option(self, class_uri, label, creator_uri):
         if type(class_uri) == str:

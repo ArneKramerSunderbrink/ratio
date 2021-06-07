@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block body_content %}
-<!--TODO <script src="{{ url_for('static', filename='js/admin.js') }}" defer></script>-->
+<script src="{{ url_for('static', filename='js/admin.js') }}" defer></script>
 
 <div class="entity entity-border">
   <div class="entity-title color2 flex-row">
@@ -26,8 +26,8 @@
           <input class="w3-input flex-flex"
                  type="text" placeholder="Name of new user..." name="name" required style="border-bottom: 0">
           <input class="w3-input flex-flex"
-                 type="password" placeholder="Password of new user..." name="name" required style="border-bottom: 0">
-          <input type="checkbox" id="new-user-admin" style="display: none">
+                 type="password" placeholder="Password of new user..." name="password" required style="border-bottom: 0">
+          <input type="checkbox" id="new-user-admin" name="admin" value="admin" style="display: none">
           <label for="new-user-admin" class="w3-button big-button flex-fix">{#
             #}<i class="fa fa-square fa-lg"></i>
           </label>
@@ -78,15 +78,13 @@
   </div>
 </div>
 
-{% if message %}
-<div class="w3-panel w3-card-4 flex-row flip-frontside message" data-flipid="message">
+<div class="w3-panel w3-card-4 flex-row flip-frontside message" data-flipid="message"{% if not message %} style="display: none"{% endif %}>
   <span class="flex-fix">{{ message }}</span>
   <div class="flex-flex">{# just a spacer #}</div>
   <button class="w3-button big-button flex-fix flip-flipbutton" title="Close message" data-flipid="message">{#
     #}<i class="fas fa-times fa-lg"></i>
   </button>
 </div>
-{% endif %}
 {% endblock %}
 
 {% macro user_row(user) %}
