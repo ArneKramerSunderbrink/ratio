@@ -71,14 +71,14 @@ def create_app(test_config=None):
     def inject_frontend_config():
         return dict(frontend_config=app.config['FRONTEND_CONFIG'])
 
-    if app.config['GUNICORN_LOGGER']:  # pragma: no cover
+    if app.config['GUNICORN_LOGGER']:
         # do logging via gunicorn and with the gunicorn level
         gunicorn_logger = logging.getLogger('gunicorn.error')
         app.logger.handlers = gunicorn_logger.handlers
         app.logger.setLevel(gunicorn_logger.level)
 
     @app.route('/_test_logging')
-    def test_logging():  # pragma: no cover
+    def test_logging():
         app.logger.debug('this is a DEBUG message')
         app.logger.info('this is an INFO message')
         app.logger.warning('this is a WARNING message')
@@ -87,7 +87,7 @@ def create_app(test_config=None):
         return jsonify('Debug, info, warning, error and critical message logged.')
 
     @app.route('/_color_picker', methods=('GET', 'POST'))
-    def color_picker():  # pragma: no cover
+    def color_picker():
         # only for development
         if request.method == 'POST':
             app.config['FRONTEND_CONFIG']['color0'] = request.form['color0']

@@ -25,10 +25,10 @@
           {% endif %}
 
           {% if g.user['admin'] %}
-          {% if request.endpoint == 'admin.admin' %}
+          {% if request.endpoint == 'admin.index' %}
           <button class="w3-button" disabled><i class="fas fa-cogs"></i> Admin</button><br>
           {% else %}
-          <a href="{{ url_for('admin.admin') }}" class="w3-button"><i class="fas fa-cogs"></i> Admin</a><br>
+          <a href="{{ url_for('admin.index') }}" class="w3-button"><i class="fas fa-cogs"></i> Admin</a><br>
           {% endif %}
           {% endif %}
 

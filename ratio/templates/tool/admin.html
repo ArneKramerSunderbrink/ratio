@@ -10,7 +10,7 @@
 {% block body_content %}
 <!--TODO <script src="{{ url_for('static', filename='js/admin.js') }}" defer></script>-->
 
-<div class="entity entity-border"> <!--todo make collapsabel-->
+<div class="entity entity-border">
   <div class="entity-title color2 flex-row">
     <div class="entity-label flex-flex">User administration</div>
   </div>
@@ -29,7 +29,7 @@
                  type="password" placeholder="Password of new user..." name="name" required style="border-bottom: 0">
           <input type="checkbox" id="new-user-admin" style="display: none">
           <label for="new-user-admin" class="w3-button big-button flex-fix">{#
-            #}<i class="fa {{ 'fa-check-square' if subgraph_finished else 'fa-square' }} fa-lg"></i>
+            #}<i class="fa fa-square fa-lg"></i>
           </label>
           <button type="submit" class="w3-button flex-fix" title="Add user">
             <i class="fas fa-plus fa-lg"></i>
@@ -49,6 +49,40 @@
     </div>
   </div>
 </div>
+
+<div class="entity entity-border">
+  <div class="entity-title color2 flex-row">
+    <div class="entity-label flex-flex">Backups</div>
+  </div>
+  <div class="entity-body">
+    <div class="flex-row backup-row">
+      <a href="{{ url_for('admin.download_backup') }}" class="w3-button button-border flex-fix color2">
+        <i class="fas fa-file-download w3-large"></i> Download backup
+      </a>
+
+      <div class="flip-frontside flex-fix" data-flipid="upload-backup">
+        <button class="w3-button button-border flex-fix flip-flipbutton color2" data-flipid="upload-backup">
+          <i class="fas fa-file-upload w3-large"></i> Upload backup
+        </button>
+      </div>
+      <div class="flip-flipside button-border" data-flipid="upload-backup" style="display: none;">
+        <form class="flex-row" method="post" action="{{ url_for('admin.upload_backup') }}" enctype = "multipart/form-data">
+          <input class="w3-input flex-flex" type=file name=file required>
+          <input class="w3-button flex-fix" type=submit value=Upload>
+          <a href="#" class="w3-button flex-fix flip-frontbutton" data-flipid="upload-backup" title="Cancel">
+            <i class="fas fa-times fa-lg"></i>
+          </a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% if message %}
+<div class="w3-panel w3-card-4 message">
+  {{ message }}
+</div>
+{% endif %}
 {% endblock %}
 
 {% macro user_row(user) %}

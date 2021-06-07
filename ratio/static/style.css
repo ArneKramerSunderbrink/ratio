@@ -442,3 +442,8 @@ table table {
 .table-container {
   padding: 0 !important;
 }
+
+/* Admin */
+.backup-row > * {
+  margin: 0.5em;
+}
