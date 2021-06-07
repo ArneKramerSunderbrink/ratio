@@ -79,8 +79,12 @@
 </div>
 
 {% if message %}
-<div class="w3-panel w3-card-4 message">
-  {{ message }}
+<div class="w3-panel w3-card-4 flex-row flip-frontside message" data-flipid="message">
+  <span class="flex-fix">{{ message }}</span>
+  <div class="flex-flex">{# just a spacer #}</div>
+  <button class="w3-button big-button flex-fix flip-flipbutton" title="Close message" data-flipid="message">{#
+    #}<i class="fas fa-times fa-lg"></i>
+  </button>
 </div>
 {% endif %}
 {% endblock %}

@@ -16,10 +16,10 @@ from ratio.db import get_db, get_filter_description
 from ratio.knowledge_model import RATIO, Option, get_subgraph_knowledge, get_ontology, get_uri_suffix, \
     parse_n3_term, row_to_rdf
 
-bp = Blueprint('search', __name__)
+bp = Blueprint('search', __name__, url_prefix='/search')
 
 
-@bp.route('/search')
+@bp.route('')
 @login_required
 def search_view():
     user_id = g.user['id']
@@ -38,7 +38,7 @@ def search_view():
     return render_template('tool/search.html', filter=filter_object, subgraphs=rows, rdf_graphs=rdf_graphs)
 
 
-@bp.route('/_search')
+@bp.route('_search')
 @login_required
 def search():
     user_id = g.user['id']

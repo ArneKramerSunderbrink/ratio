@@ -388,10 +388,6 @@ button[disabled]{
 /* Message */
 .message{
   background-color: #FFE5B4;
-}
-
-#knowledge-delete-msg {
-  display: none;
   position: fixed;
   bottom: 0;
   width: 80%;
@@ -399,6 +395,10 @@ button[disabled]{
   right: 10%;
   padding: 0.5em 1em;
   align-items: center;
+}
+
+#knowledge-delete-msg {
+  display: none;
 }
 
 #knowledge-delete-msg > span {
