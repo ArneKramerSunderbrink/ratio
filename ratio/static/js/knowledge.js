@@ -18,21 +18,19 @@ $(function () {
     button.disabled = true;
     const field = $(this).closest('div.field');
     const entity = $(this).closest('div.entity');
-    const property_uri = field.attr('data-property-uri');
-    const entity_uri = entity.attr('data-entity-uri');
-    const data = [
-      { name: "subgraph_id", value: window.SUBGRAPH_ID },
-      { name: "property_uri", value: property_uri },
-      { name: "entity_uri", value: entity_uri }
-    ];
+    const data = {
+      subgraph_id: window.SUBGRAPH_ID,
+      property_uri: field.attr('data-property-uri'),
+      entity_uri: entity.attr('data-entity-uri')
+    };
 
-    // if the field has a unregistered value, call get_json_change_value(unregistered_input, '') first
+    // if the field has a unregistered value, call post_json_change_value(unregistered_input, '') first
     // so it becomes a real value the backend actually knows about
     // otherwise the new value and the unregistered value would have the same index
     const unregistered_input = field.find('*[data-unregistered]');
     if (unregistered_input.length > 0) {
-      get_json_change_value(unregistered_input[0], '', null, function() {
-        $.getJSON(window.SCRIPT_ROOT + '/_add_value', data, function(data) {
+      post_json_change_value(unregistered_input[0], '', null, function() {
+        postJSON(window.SCRIPT_ROOT + '/_add_value', data, function(data) {
           if (data.error) {
             alert(data.error);
           } else {
@@ -41,11 +39,10 @@ $(function () {
             value_div.find('div.literal-input, input.option-input').focus();
           }
           button.disabled = false;
-        })
-        .fail(function() { alert('getJSON request failed!'); });
+        });
       });
     } else {
-      $.getJSON(window.SCRIPT_ROOT + '/_add_value', data, function(data) {
+      postJSON(window.SCRIPT_ROOT + '/_add_value', data, function(data) {
         if (data.error) {
           alert(data.error);
         } else {
@@ -54,8 +51,7 @@ $(function () {
           value_div.find('div.literal-input, input.option-input').focus();
         }
         button.disabled = false;
-      })
-      .fail(function() { alert('getJSON request failed!'); });
+      });
     }
     return false;
   });
@@ -81,7 +77,7 @@ $(function () {
         }
       });
     }
-    get_json_change_value(input[0], '', button);
+    post_json_change_value(input[0], '', button);
     form.addClass('deleted');
     // Display message
     $('div#knowledge-delete-msg > span').text('Value has been deleted.');
@@ -90,7 +86,7 @@ $(function () {
       const button = this;
       button.disabled = true;
       if (old_value != '') {
-        get_json_change_value(input[0], old_value, button);
+        post_json_change_value(input[0], old_value, button);
       }
       form.removeClass('deleted');
       $('div#knowledge-delete-msg').css('display', 'none');
@@ -112,21 +108,16 @@ $(function () {
   }
 
   // general change value call
-  function get_json_change_value(input, value, button=null, callback_=null) {
-    const index = $(input).attr('data-index');
-    const property = $(input).closest('div.field');
-    const property_uri = property.attr('data-property-uri');
-    const entity_uri = $(input).closest('div.entity').attr('data-entity-uri');
+  function post_json_change_value(input, value, button=null, callback_=null) {
+    const data = {
+      subgraph_id: window.SUBGRAPH_ID,
+      entity_uri: $(input).closest('div.entity').attr('data-entity-uri'),
+      property_uri: $(input).closest('div.field').attr('data-property-uri'),
+      index: $(input).attr('data-index'),
+      value: value
+    };
 
-    const data = [
-      { name: 'subgraph_id', value: window.SUBGRAPH_ID },
-      { name: 'entity_uri', value: entity_uri },
-      { name: 'property_uri', value: property_uri },
-      { name: 'index', value: index},
-      { name: 'value', value: value}
-    ];
-
-    $.getJSON(window.SCRIPT_ROOT + '/_change_value', data, function(data) {
+    postJSON(window.SCRIPT_ROOT + '/_change_value', data, function(data) {
       if (data.error) {
         alert(data.error);
       } else if (data.validity) {
@@ -141,15 +132,14 @@ $(function () {
       if (callback_ != null) {
         callback_();
       }
-    })
-    .fail(function() { alert('getJSON request failed!'); });
+    });
   }
 
   // Special functionality for literal fields
   // Change value
   $('div#root-entity').on('input', 'div.literal-input', function() {
     const input = this;
-    get_json_change_value(input, input.innerText);
+    post_json_change_value(input, input.innerText);
   });
 
   // Special functionality for options Fields
@@ -181,7 +171,7 @@ $(function () {
     } else {
       value = this.textContent;
     }
-    get_json_change_value(input, value);
+    post_json_change_value(input, value);
   });
 
   // Check validity of option input
@@ -212,7 +202,7 @@ $(function () {
     } else {
       value = '';
     }
-    get_json_change_value(input, value);
+    post_json_change_value(input, value);
   });
 
   // Add custom option
@@ -220,18 +210,14 @@ $(function () {
     const form = $(this);
     const button = form.find('button')[0];
     button.disabled = true;
-    const entity_uri = form.closest('div.entity').attr('data-entity-uri');
-    const field = form.closest('div.field');
-    const property_uri = field.attr('data-property-uri');
-    const data = form.serializeArray();
     const input = $(this).closest('.options-dropdown').prev('.option-input')[0];
-    const index = $(input).attr('data-index');
-    data.push({ name: "subgraph_id", value: window.SUBGRAPH_ID });
-    data.push({ name: "entity_uri", value: entity_uri });
-    data.push({ name: "property_uri", value: property_uri });
-    data.push({ name: "index", value: index });
+    const data = form_to_object(this);
+    data.subgraph_id = window.SUBGRAPH_ID;
+    data.entity_uri = form.closest('div.entity').attr('data-entity-uri');
+    data.property_uri = form.closest('div.field').attr('data-property-uri');
+    data.index = $(input).attr('data-index');
 
-    $.getJSON(window.SCRIPT_ROOT + '/_add_option', data, function(data) {
+    postJSON(window.SCRIPT_ROOT + '/_add_option', data, function(data) {
       if (data.error) {
         alert(data.error);
       } else {
@@ -248,8 +234,7 @@ $(function () {
         document.activeElement.blur()
       }
       button.disabled = false;
-    })
-    .fail(function() { alert('getJSON request failed!'); });
+    });
 
     return false;
   });
@@ -260,22 +245,21 @@ $(function () {
     const entity_uri = $(this).closest('div.entity').attr('data-entity-uri');
     const label = this.innerText.replace(/\r?\n|\r/g, "");
 
-    const data = [
-      { name: 'subgraph_id', value: window.SUBGRAPH_ID },
-      { name: 'entity_uri', value: entity_uri },
-      { name: 'label', value: label}
-    ];
+    const data = {
+      subgraph_id: window.SUBGRAPH_ID,
+      entity_uri: entity_uri,
+      label : label
+    };
 
     // update option fields
     $('input.option-input[data-option-uri="'+entity_uri+'"]').val(label);
     $('div.option[data-option-uri="'+entity_uri+'"]').text(label);
 
-    $.getJSON(window.SCRIPT_ROOT + '/_change_label', data, function(data) {
+    postJSON(window.SCRIPT_ROOT + '/_change_label', data, function(data) {
       if (data.error) {
         alert(data.error);
       }
-    })
-    .fail(function() { alert('getJSON request failed!'); });
+    });
   });
 
   // Add entity
@@ -283,14 +267,12 @@ $(function () {
     const button = $(this).find('button')[0];
     button.disabled = true;
     const field = $(this).closest('div.entity-field');
-    const property_uri = field.attr('data-property-uri');
-    const entity_uri = $(this).closest('div.entity').attr('data-entity-uri');
-    const data = $(this).serializeArray();
-    data.push({ name: "subgraph_id", value: window.SUBGRAPH_ID });
-    data.push({ name: "property_uri", value: property_uri });
-    data.push({ name: "entity_uri", value: entity_uri });
+    const data = form_to_object(this);
+    data.subgraph_id = window.SUBGRAPH_ID;
+    data.property_uri = field.attr('data-property-uri');
+    data.entity_uri = $(this).closest('div.entity').attr('data-entity-uri');
 
-    $.getJSON(window.SCRIPT_ROOT + '/_add_entity', data, function(data) {
+    postJSON(window.SCRIPT_ROOT + '/_add_entity', data, function(data) {
       if (data.error) {
         alert(data.error);
       } else {
@@ -311,8 +293,7 @@ $(function () {
         }
       }
       button.disabled = false;
-    })
-    .fail(function() { alert('getJSON request failed!'); });
+    });
 
     return false;
   });
@@ -322,16 +303,14 @@ $(function () {
     const button = this;
     button.disabled = true;
     const field = $(this).closest('div.entity-field');
-    const property_uri = field.attr('data-property-uri');
     const entity = $(this).closest('div.entity');
-    const entity_uri = entity.attr('data-entity-uri');
-    const data = [
-      { name: "subgraph_id", value: window.SUBGRAPH_ID },
-      { name: "property_uri", value: property_uri },
-      { name: "entity_uri", value: entity_uri }
-    ];
+    const data = {
+      subgraph_id: window.SUBGRAPH_ID,
+      property_uri: field.attr('data-property-uri'),
+      entity_uri: entity.attr('data-entity-uri')
+    };
 
-    $.getJSON(window.SCRIPT_ROOT + '/_delete_entity', data, function(data_return) {
+    postJSON(window.SCRIPT_ROOT + '/_delete_entity', data, function(data_return) {
       if (data_return.error) {
         alert(data_return.error);
       } else {
@@ -353,7 +332,7 @@ $(function () {
         $('div#knowledge-delete-msg > button:first').on('click', function() {
           const button = this;
           button.disabled = true;
-          $.getJSON(window.SCRIPT_ROOT + '/_undo_delete_entity', data, function(data_return) {
+          postJSON(window.SCRIPT_ROOT + '/_undo_delete_entity', data, function(data_return) {
             if (data_return.error) {
               alert(data_return.error);
             } else {
@@ -367,15 +346,13 @@ $(function () {
               $('div#knowledge-delete-msg').css('display', 'none');
             }
             button.disabled = false;
-          })
-          .fail(function() { alert('getJSON request failed!'); });
+          });
           return false;
         });
         $('div#knowledge-delete-msg').css('display', 'flex');
       }
       button.disabled = false;
-    })
-    .fail(function() { alert('getJSON request failed!'); });
+    });
 
     return false;
   });

@@ -1,6 +1,20 @@
-/**
- * Javascript code for the flip pattern described in dev_ressources/pattern_flip.html.
- */
+function form_to_object(form) {
+  return Object.fromEntries(new FormData(form).entries());
+}
+
+function postJSON(url, data, success) {
+  // shorthand like jquery getJSON
+  $.ajax({
+    url: url,
+    type: "POST",
+    data: JSON.stringify(data),
+    contentType: "application/json; charset=utf-8",
+    dataType: "json",
+    success: success
+   }).fail(function() { alert('Request failed!'); });
+}
+
+// Javascript code for the flip pattern described in dev_ressources/pattern_flip.html.
 
 function flip_front(id) {
   // the swapping is done in order for the function to also work with elements that have

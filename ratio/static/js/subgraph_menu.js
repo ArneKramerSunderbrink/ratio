@@ -22,23 +22,22 @@ $(function() {
       link.removeClass('text-green');
     }
 
-    $.getJSON(window.SCRIPT_ROOT + '/_set_finished', {subgraph_id: subgraph_id, finished: finished}, function (data) {
+    postJSON(window.SCRIPT_ROOT + '/_set_finished', {subgraph_id: subgraph_id, finished: finished}, function (data) {
       if (data.error) { alert(data.error); }
-    })
-    .fail(function() { alert('getJSON request failed!'); });
+    });
 
     return false;
   });
 
   // edit subgraph name
   $('div#subgraph-list').on('submit', 'form', function() {
-    const data = $(this).serializeArray();
     const list_item = $(this).closest('.item');
-    const subgraph_id = list_item.attr('data-subgraph-id')
+    const subgraph_id = list_item.attr('data-subgraph-id');
     const flipid = 'subgraph-list-' + subgraph_id;
-    data.push({ name: 'subgraph_id', value: subgraph_id });
+    const data = form_to_object(this);
+    data.subgraph_id = subgraph_id;
 
-    $.getJSON(window.SCRIPT_ROOT + '/_edit_subgraph_name', data, function(data) {
+    postJSON(window.SCRIPT_ROOT + '/_edit_subgraph_name', data, function(data) {
       if (data.error) {
         $('div#subgraph-menu-edit-msg').text(data.error);
         $('div#subgraph-menu-edit-msg').attr('data-flipid', flipid)
@@ -48,8 +47,7 @@ $(function() {
         list_item.find('a:first').text(data.name);
         flip_front(flipid);
       }
-    })
-    .fail(function() { alert('getJSON request failed!'); });
+    });
 
     return false;
   });
@@ -58,7 +56,7 @@ $(function() {
   $('div#subgraph-list').on('click', 'button.delete-subgraph-button', function() {
     const item = $(this).closest('.item');
     const subgraph_id = item.attr('data-subgraph-id');
-    $.getJSON(window.SCRIPT_ROOT + '/_delete_subgraph', {subgraph_id: subgraph_id}, function(data) {
+    postJSON(window.SCRIPT_ROOT + '/_delete_subgraph', {subgraph_id: subgraph_id}, function(data) {
       if (data.error) {
         $('div#subgraph-menu-edit-msg').text(data.error);
         $('div#subgraph-menu-edit-msg').attr('data-flipid', 'subgraph-list-' + subgraph_id)
@@ -69,8 +67,7 @@ $(function() {
         $('div#subgraph-menu-delete-msg > span').text('"' + data.name + '" has been deleted.');
         $('div#subgraph-menu-delete-msg').css('display', 'block');
       }
-    })
-    .fail(function() { alert('getJSON request failed!'); });
+    });
 
     return false;
   });
@@ -79,24 +76,23 @@ $(function() {
   $('div#subgraph-menu-delete-msg > a').on('click', function() {
     const subgraph_id = this.parentNode.getAttribute('data-subgraph-id');
     const item = $('div#subgraph-list > div.item[data-subgraph-id="' + subgraph_id + '"]')
-    $.getJSON(window.SCRIPT_ROOT + '/_undo_delete_subgraph', {subgraph_id: subgraph_id}, function(data) {
+    postJSON(window.SCRIPT_ROOT + '/_undo_delete_subgraph', {subgraph_id: subgraph_id}, function(data) {
       if (data.error) {
         alert(data.error);  // if everything runs correctly this will never happen
       } else {
         item.css('display', 'block');
         $('div#subgraph-menu-delete-msg').css('display', 'none');
       }
-    })
-    .fail(function() { alert('getJSON request failed!'); });
+    });
 
     return false;
   });
 
 // add subgraph
   $('form#new-subgraph-form').on('submit', function() {
-    const data = $(this).serialize();
+    const data = form_to_object(this);
 
-    $.getJSON(window.SCRIPT_ROOT + '/_add_subgraph', data, function(data) {
+    postJSON(window.SCRIPT_ROOT + '/_add_subgraph', data, function(data) {
       if (data.error) {
         $('div#subgraph-menu-add-msg').text(data.error);
         $('div#subgraph-menu-add-msg').css('display', 'block');
@@ -104,8 +100,7 @@ $(function() {
       } else {
         window.location = data.redirect;
       }
-    })
-    .fail(function() { alert('getJSON request failed!'); });
+    });
 
     return false;
   });

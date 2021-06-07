@@ -485,8 +485,9 @@ class SubgraphKnowledge(KnowledgeGraph):
             'SELECT object FROM knowledge '
             '   WHERE subgraph_id = ? AND subject = ? AND predicate = ? AND property_index = ?',
             (self.id, entity_uri.n3(), property_uri.n3(), index)
-        ).fetchone()['object']
-        self.graph.remove((entity_uri, property_uri, parse_n3_term(prev_value)))
+        ).fetchone()
+        if prev_value:
+            self.graph.remove((entity_uri, property_uri, parse_n3_term(prev_value['object'])))
 
         # add new value to graph
         self.graph.add((entity_uri, property_uri, value))
@@ -567,13 +568,6 @@ class SubgraphKnowledge(KnowledgeGraph):
 
         db = get_db()
         db_cursor = db.cursor()
-
-        for p,o in self.graph[uri::]:
-            print(p,o) # todo test
-        print(self.get_individual_children(uri))
-        print([property_uri
-                for property_uri in get_ontology().get_class_child_properties(self.get_individual_class(uri))
-                if get_ontology().is_property_described(property_uri)])
 
         stack = [uri]
         deleted = []

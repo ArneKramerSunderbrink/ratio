@@ -78,13 +78,13 @@ $(function(){
     // collect all values from the filter fields
     const filter = $('div.entity[data-entity-uri="http://www.example.org/ratio-tool#Filter"]');
     filter.css('cursor', 'progress');
-    const data = [];
+    const data = {};
     filter.find('input.option-input').each(function() {
       if (this.value != '') {
         if ($(this).is('[data-option-uri]')) {
-          data.push({ name: $(this).closest('div.field').attr('data-property-uri'), value: $(this).attr('data-option-uri') });
+          data[$(this).closest('div.field').attr('data-property-uri')] = $(this).attr('data-option-uri');
         } else {
-          data.push({ name: $(this).closest('div.field').attr('data-property-uri'), value: this.value });
+          data[$(this).closest('div.field').attr('data-property-uri')] = this.value;
         }
       }
     });
@@ -92,7 +92,7 @@ $(function(){
     if (JSON.stringify(data) == window.filter_data) { return; }  // nothing changed
 
     window.filter_data = JSON.stringify(data);
-    $.getJSON(window.SCRIPT_ROOT + '/_search', data, function(data) {
+    postJSON(window.SCRIPT_ROOT + 'search/_search', data, function(data) {
       if (data.error) {
         alert(data.error);
       } else {
@@ -111,8 +111,7 @@ $(function(){
         }
         filter.css('cursor', '');
       }
-    })
-    .fail(function() { alert('getJSON request failed!'); });
+    });
   }
 
 });

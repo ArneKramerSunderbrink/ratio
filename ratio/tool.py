@@ -109,7 +109,7 @@ def overview(subgraph_id):
                            rdf_graph=get_subgraph_knowledge(subgraph_id).get_graph(clean=True, ontology=True))
 
 
-@bp.route('/_set_finished')
+@bp.route('/_set_finished', methods=['POST'])
 @login_required
 def set_finished():
     """Changes the finished flag of a subgraph.
@@ -126,11 +126,18 @@ def set_finished():
 
     """
     user_id = g.user['id']
-    subgraph_id = request.args.get('subgraph_id', 0, type=int)
-    finished = request.args.get('finished', '', type=str)
+    subgraph_id = request.json.get('subgraph_id')
+    finished = request.json.get('finished')
 
-    if not subgraph_id:
+    if subgraph_id is None:
         return jsonify(error='{} id cannot be empty.'.format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
+    try:
+        subgraph_id = int(subgraph_id)
+    except ValueError:
+        return jsonify(error='{} id has to be an integer.'
+                       .format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
+    if finished is None:
+        return jsonify(error='Argument "finished" cannot be empty.')
 
     db = get_db()
 
@@ -138,18 +145,14 @@ def set_finished():
         return jsonify(error=MSG_SUBGRAPH_ACCESS.format(current_app.config['FRONTEND_CONFIG']['Subgraph_term'],
                                                         subgraph_id, user_id))
 
-    if finished == 'true' or finished == 'false':
-        finished = finished == 'true'
-        db.execute(
-            'UPDATE subgraph SET finished = ? WHERE id = ?', (finished, subgraph_id)
-        )
-        db.commit()
-        return jsonify()
-    else:
-        return jsonify(error='Argument "finished" has to be "true" or "false"')
+    db.execute(
+        'UPDATE subgraph SET finished = ? WHERE id = ?', (finished, subgraph_id)
+    )
+    db.commit()
+    return jsonify()
 
 
-@bp.route('/_edit_subgraph_name')
+@bp.route('/_edit_subgraph_name', methods=['POST'])
 @login_required
 def edit_subgraph_name():
     """Changes the name of a subgraph.
@@ -167,12 +170,17 @@ def edit_subgraph_name():
 
     """
     user_id = g.user['id']
-    subgraph_id = request.args.get('subgraph_id', 0, type=int)
-    subgraph_name = request.args.get('name', '', type=str)
+    subgraph_id = request.json.get('subgraph_id')
+    subgraph_name = request.json.get('name')
 
-    if not subgraph_id:
+    if subgraph_id is None:
         return jsonify(error='{} id cannot be empty.'.format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
-    if not subgraph_name or subgraph_name.isspace():
+    try:
+        subgraph_id = int(subgraph_id)
+    except ValueError:
+        return jsonify(error='{} id has to be an integer.'
+                       .format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
+    if subgraph_name is None or subgraph_name.isspace():
         return jsonify(error='{} name cannot be empty.'.format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
 
     db = get_db()
@@ -191,7 +199,7 @@ def edit_subgraph_name():
     return jsonify(name=subgraph_name)
 
 
-@bp.route('/_delete_subgraph')
+@bp.route('/_delete_subgraph', methods=['POST'])
 @login_required
 def delete_subgraph():
     """Marks a subgraph as deleted.
@@ -211,10 +219,15 @@ def delete_subgraph():
 
     """
     user_id = g.user['id']
-    subgraph_id = request.args.get('subgraph_id', 0, type=int)
+    subgraph_id = request.json.get('subgraph_id')
 
-    if not subgraph_id:
+    if subgraph_id is None:
         return jsonify(error='{} id cannot be empty.'.format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
+    try:
+        subgraph_id = int(subgraph_id)
+    except ValueError:
+        return jsonify(error='{} id has to be an integer.'
+                       .format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
 
     db = get_db()
     db_cursor = db.cursor()
@@ -236,7 +249,7 @@ def delete_subgraph():
     return jsonify(name=subgraph_name)
 
 
-@bp.route('/_undo_delete_subgraph')
+@bp.route('/_undo_delete_subgraph', methods=['POST'])
 @login_required
 def undo_delete_subgraph():
     """Marks a subgraph as not deleted.
@@ -252,10 +265,15 @@ def undo_delete_subgraph():
 
     """
     user_id = g.user['id']
-    subgraph_id = request.args.get('subgraph_id', 0, type=int)
+    subgraph_id = request.json.get('subgraph_id')
 
-    if not subgraph_id:
+    if subgraph_id is None:
         return jsonify(error='{} id cannot be empty.'.format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
+    try:
+        subgraph_id = int(subgraph_id)
+    except ValueError:
+        return jsonify(error='{} id has to be an integer.'
+                       .format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
 
     db = get_db()
     db_cursor = db.cursor()
@@ -280,7 +298,7 @@ def undo_delete_subgraph():
     return jsonify()
 
 
-@bp.route('/_add_subgraph')
+@bp.route('/_add_subgraph', methods=['POST'])
 @login_required
 def add_subgraph():
     """Add a new subgraph.
@@ -297,9 +315,9 @@ def add_subgraph():
 
     """
     user_id = g.user['id']
-    subgraph_name = request.args.get('name', '', type=str)
+    subgraph_name = request.json.get('name')
 
-    if not subgraph_name or subgraph_name.isspace():
+    if subgraph_name is None or subgraph_name.isspace():
         return jsonify(error='{} name cannot be empty.'.format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
 
     db = get_db()

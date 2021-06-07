@@ -1,6 +1,7 @@
 """Functionality related to editing of knowledge."""
 
 from flask import Blueprint
+from flask import current_app
 from flask import g
 from flask import get_template_attribute
 from flask import jsonify
@@ -16,18 +17,25 @@ MSG_SUBGRAPH_ACCESS = 'Subgraph with id {} does not exist or is not owned by use
 bp = Blueprint('knowledge', __name__)
 
 
-@bp.route('/_add_value')
+@bp.route('/_add_value', methods=['POST'])
 @login_required
 def add_value():
     user_id = g.user['id']
-    subgraph_id = request.args.get('subgraph_id', 0, type=int)
-    property_uri = request.args.get('property_uri', '', type=str)
-    entity_uri = request.args.get('entity_uri', '', type=str)
+    subgraph_id = request.json.get('subgraph_id')
+    property_uri = request.json.get('property_uri')
+    entity_uri = request.json.get('entity_uri')
 
-    if not subgraph_id:
+    if subgraph_id is None:
         return jsonify(error='Subgraph id cannot be empty.')
-    if not property_uri or property_uri.isspace():
+    try:
+        subgraph_id = int(subgraph_id)
+    except ValueError:
+        return jsonify(error='{} id has to be an integer.'
+                       .format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
+    if property_uri is None or property_uri.isspace():
         return jsonify(error='Property URI cannot be empty.')
+    if entity_uri is None or property_uri.isspace():
+        return jsonify(error='Entity URI cannot be empty.')
 
     if not subgraph_access(user_id, subgraph_id):
         return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
@@ -51,24 +59,35 @@ def add_value():
     return jsonify(value_div=value_div)
 
 
-@bp.route('/_change_value')
+@bp.route('/_change_value', methods=['POST'])
 @login_required
 def change_value():
     user_id = g.user['id']
-    subgraph_id = request.args.get('subgraph_id', 0, type=int)
-    entity_uri = request.args.get('entity_uri', '', type=str)
-    property_uri = request.args.get('property_uri', '', type=str)
-    index = request.args.get('index', 0, type=int)
-    value = request.args.get('value', '', type=str).strip()
+    subgraph_id = request.json.get('subgraph_id')
+    entity_uri = request.json.get('entity_uri')
+    property_uri = request.json.get('property_uri')
+    index = request.json.get('index')
+    value = request.json.get('value').strip()
 
-    if not subgraph_id:
+    if subgraph_id is None:
         return jsonify(error='Subgraph id cannot be empty.')
-    if not entity_uri or entity_uri.isspace():
+    try:
+        subgraph_id = int(subgraph_id)
+    except ValueError:
+        return jsonify(error='{} id has to be an integer.'
+                       .format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
+    if entity_uri is None or entity_uri.isspace():
         return jsonify(error='Entity URI cannot be empty.')
-    if not property_uri or property_uri.isspace():
+    if property_uri is None or property_uri.isspace():
         return jsonify(error='Property URI cannot be empty.')
-    if index < 1:
+    if index is None:
         return jsonify(error='Index cannot be empty.')
+    try:
+        index = int(index)
+    except ValueError:
+        return jsonify(error='Index has to be an integer.')
+    if value is None:
+        return jsonify(error='Value cannot be empty.')
 
     if not subgraph_access(user_id, subgraph_id):
         return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
@@ -80,30 +99,35 @@ def change_value():
 
     if index == subgraph_knowledge.get_property_free_index(entity_uri, property_uri):
         subgraph_knowledge.new_value(entity_uri, property_uri)
-    validity = subgraph_knowledge.change_value(entity_uri, property_uri, index, value)
+    validity = subgraph_knowledge.change_value(entity_uri, property_uri, index, value.strip())
     if validity:
         return jsonify(validity=validity)
 
     return jsonify()
 
 
-@bp.route('/_add_option')
+@bp.route('/_add_option', methods=['POST'])
 @login_required
 def add_option():
     # If an index is given, the corresponding value is changed to the new option
     user_id = g.user['id']
     user_uri = g.user['uri']
-    subgraph_id = request.args.get('subgraph_id', 0, type=int)
-    entity_uri = request.args.get('entity_uri', '', type=str)
-    property_uri = request.args.get('property_uri', '', type=str)
-    label = request.args.get('label', '', type=str)
-    index = request.args.get('index', 0, type=int)
+    subgraph_id = request.json.get('subgraph_id')
+    entity_uri = request.json.get('entity_uri')
+    property_uri = request.json.get('property_uri')
+    label = request.json.get('label')
+    index = request.json.get('index')
 
-    if not subgraph_id:
+    if subgraph_id is None:
         return jsonify(error='Subgraph id cannot be empty.')
-    if not property_uri or property_uri.isspace():
+    try:
+        subgraph_id = int(subgraph_id)
+    except ValueError:
+        return jsonify(error='{} id has to be an integer.'
+                       .format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
+    if property_uri is None or property_uri.isspace():
         return jsonify(error='Property URI cannot be empty.')
-    if not label or label.isspace():
+    if label is None or label.isspace():
         return jsonify(error='Label cannot be empty.')
 
     if not subgraph_access(user_id, subgraph_id):
@@ -119,9 +143,13 @@ def add_option():
 
     option, option_fields = ontology.new_option(ontology.get_property_range(property_uri), label, user_uri)
 
-    if index >= 0:
+    if index is not None:
+        try:
+            index = int(index)
+        except ValueError:
+            return jsonify(error='Index has to be an integer.')
         # not only add the option to the ontology but also to the list of values of the field
-        if not entity_uri or entity_uri.isspace():
+        if entity_uri is None or entity_uri.isspace():
             return jsonify(error='Entity URI cannot be empty.')
 
         if index == subgraph_knowledge.get_property_free_index(entity_uri, property_uri):
@@ -135,19 +163,24 @@ def add_option():
                    option_label=option.label, option_uri=option.uri, index=index)
 
 
-@bp.route('/_change_label')
+@bp.route('/_change_label', methods=['POST'])
 @login_required
 def change_label():
     user_id = g.user['id']
-    subgraph_id = request.args.get('subgraph_id', 0, type=int)
-    entity_uri = request.args.get('entity_uri', '', type=str)
-    label = request.args.get('label', '', type=str)
+    subgraph_id = request.json.get('subgraph_id')
+    entity_uri = request.json.get('entity_uri')
+    label = request.json.get('label')
 
-    if not subgraph_id:
-        return jsonify(error='Subgraph id cannot be empty.')
-    if not entity_uri or entity_uri.isspace():
+    if subgraph_id is None:
+        return jsonify(error='{} id cannot be empty.'.format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
+    try:
+        subgraph_id = int(subgraph_id)
+    except ValueError:
+        return jsonify(error='{} id has to be an integer.'
+                       .format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
+    if entity_uri is None or entity_uri.isspace():
         return jsonify(error='Entity URI cannot be empty.')
-    if not label or label.isspace():
+    if label is None or label.isspace():
         return jsonify(error='Label cannot be empty.')
 
     if not subgraph_access(user_id, subgraph_id):
@@ -158,27 +191,32 @@ def change_label():
     if not subgraph_knowledge.is_individual_deletable(entity_uri):
         return jsonify(error='You are not allowed to change the label of this entity.')
 
-    subgraph_knowledge.change_label(entity_uri, label)
+    subgraph_knowledge.change_label(entity_uri, label.strip())
 
     return jsonify()
 
 
-@bp.route('/_add_entity')
+@bp.route('/_add_entity', methods=['POST'])
 @login_required
 def add_entity():
     user_id = g.user['id']
-    subgraph_id = request.args.get('subgraph_id', 0, type=int)
-    property_uri = request.args.get('property_uri', '', type=str)
-    parent_uri = request.args.get('entity_uri', '', type=str)
-    entity_label = request.args.get('label', '', type=str)
+    subgraph_id = request.json.get('subgraph_id')
+    property_uri = request.json.get('property_uri')
+    parent_uri = request.json.get('entity_uri')
+    entity_label = request.json.get('label')
 
-    if not subgraph_id:
-        return jsonify(error='Subgraph id cannot be empty.')
-    if not property_uri or property_uri.isspace():
+    if subgraph_id is None:
+        return jsonify(error='{} id cannot be empty.'.format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
+    try:
+        subgraph_id = int(subgraph_id)
+    except ValueError:
+        return jsonify(error='{} id has to be an integer.'
+                       .format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
+    if property_uri is None or property_uri.isspace():
         return jsonify(error='Property URI cannot be empty.')
-    if not parent_uri or parent_uri.isspace():
+    if parent_uri is None or parent_uri.isspace():
         return jsonify(error='Parent URI cannot be empty.')
-    if not entity_label or entity_label.isspace():
+    if entity_label is None or entity_label.isspace():
         return jsonify(error='Entity label cannot be empty.')
 
     if not subgraph_access(user_id, subgraph_id):
@@ -214,17 +252,22 @@ def add_entity():
     return jsonify(entity_div=entity_div, remove_plus=field_is_functional)
 
 
-@bp.route('/_delete_entity')
+@bp.route('/_delete_entity', methods=['POST'])
 @login_required
 def delete_entity():
     user_id = g.user['id']
-    subgraph_id = request.args.get('subgraph_id', 0, type=int)
-    entity_uri = request.args.get('entity_uri', '', type=str)
-    property_uri = request.args.get('property_uri', '', type=str)
+    subgraph_id = request.json.get('subgraph_id')
+    entity_uri = request.json.get('entity_uri')
+    property_uri = request.json.get('property_uri')
 
-    if not subgraph_id:
-        return jsonify(error='Subgraph id cannot be empty.')
-    if not entity_uri or entity_uri.isspace():
+    if subgraph_id is None:
+        return jsonify(error='{} id cannot be empty.'.format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
+    try:
+        subgraph_id = int(subgraph_id)
+    except ValueError:
+        return jsonify(error='{} id has to be an integer.'
+                       .format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
+    if entity_uri is None or entity_uri.isspace():
         return jsonify(error='Entity URI cannot be empty.')
 
     if not subgraph_access(user_id, subgraph_id):
@@ -244,16 +287,21 @@ def delete_entity():
     return jsonify(deleted=deleted)
 
 
-@bp.route('/_undo_delete_entity')
+@bp.route('/_undo_delete_entity', methods=['POST'])
 @login_required
 def undo_delete_entity():
     user_id = g.user['id']
-    subgraph_id = request.args.get('subgraph_id', 0, type=int)
-    entity_uri = request.args.get('entity_uri', '', type=str)
+    subgraph_id = request.json.get('subgraph_id')
+    entity_uri = request.json.get('entity_uri')
 
-    if not subgraph_id:
-        return jsonify(error='Subgraph id cannot be empty.')
-    if not entity_uri or entity_uri.isspace():
+    if subgraph_id is None:
+        return jsonify(error='{} id cannot be empty.'.format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
+    try:
+        subgraph_id = int(subgraph_id)
+    except ValueError:
+        return jsonify(error='{} id has to be an integer.'
+                       .format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
+    if entity_uri is None or entity_uri.isspace():
         return jsonify(error='Entity URI cannot be empty.')
 
     if not subgraph_access(user_id, subgraph_id):

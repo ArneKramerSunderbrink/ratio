@@ -38,11 +38,12 @@ def search_view():
     return render_template('tool/search.html', filter=filter_object, subgraphs=rows, rdf_graphs=rdf_graphs)
 
 
-@bp.route('_search')
+@bp.route('_search', methods=['POST'])
 @login_required
 def search():
     user_id = g.user['id']
-    filter_data = {p: request.args.get(p, '', type=str) for p in request.args}
+
+    filter_data = request.json
 
     # todo get_result(filter_data) should be a method of the filter
     # get list of subgraphs that are finished and not deleted
