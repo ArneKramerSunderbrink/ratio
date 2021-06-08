@@ -98,8 +98,11 @@ $(function() {
         $('div.message').css('display', '');
         form.find('input').first().focus();
       } else {
-        alert('success');
-        //window.location = data.redirect;
+        // add user
+        $('div#user-list').first().append($(data.user_row));
+        // reset add user input
+        form.reset();
+        flip_front('new-user');
       }
     });
 

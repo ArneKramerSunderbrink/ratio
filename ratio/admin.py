@@ -1,6 +1,7 @@
 from flask import current_app
 from flask import Blueprint
 from flask import jsonify
+from flask import get_template_attribute
 from flask import redirect
 from flask import render_template
 from flask import request
@@ -26,7 +27,7 @@ def index(message=None):
 
     db = get_db()
     user_list = db.execute(
-        'SELECT id, username, admin'
+        'SELECT id, username, admin, uri'
         ' FROM user'
         ' ORDER BY id ASC',
     ).fetchall()
@@ -56,11 +57,16 @@ def add_subgraph():
         (user_name, user_password, user_is_admin, user_uri)
     )
     user_id = db_cursor.lastrowid
+    user = db_cursor.execute(
+        'SELECT id, username, admin, uri FROM user WHERE id = ?',
+        (user_id,)
+    ).fetchone()
     db.commit()
 
-    # todo render user row and add to list
+    render_user_row = get_template_attribute('tool/admin_macros.html', 'user_row')
+    user_row = render_user_row(user)
 
-    return jsonify()  # todo
+    return jsonify(user_row=user_row)
 
 
 @bp.route('/_download_db_backup')

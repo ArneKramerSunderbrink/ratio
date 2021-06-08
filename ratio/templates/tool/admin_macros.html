@@ -1,0 +1,32 @@
+{% macro user_row(user) %}
+<div class="item" data-user-id="{{ user['id'] }}">
+  <div class="flip-frontside" data-flipid="user-list-{{ user['id'] }}">
+    <div class="flex-row">
+      <div class="w3-button flex-text" title="URI: {{ user['uri'] }}">{{ user['username'] }}{% if user['admin'] %}<div class="w3-button" title="This user has admin rights"><i class="fas fa-cogs"></i></div>{% endif %}</div>
+      <button class="w3-button big-button flex-fix flip-flipbutton" data-flipid="user-list-{{ user['id'] }}" title="Edit user">{#
+        #}<i class="fas fa-pen fa-lg"></i>
+      </button>
+    </div>
+  </div>
+  <div class="flip-flipside" data-flipid="user-list-{{ user['id'] }}" style="display: none">
+    <form class="flex-row">
+      <input class="w3-input flex-flex" type="text" name="name" value="{{ user['username'] }}" required>
+      <input class="w3-input flex-flex" type="password" name="password" value="" placeholder="New password">
+      <input type="checkbox" id="user-{{ user['id'] }}-admin" style="display: none"
+             {% if user['admin'] %}checked{% endif %}>
+      <label for="user-{{ user['id'] }}-admin" class="w3-button big-button flex-fix">{#
+        #}Admin <i class="fa {{ 'fa-check-square' if user['admin'] else 'fa-square' }} fa-lg"></i>
+      </label>
+      <button type="submit" class="w3-button big-button flex-fix w3-right" title="Save changes">{#
+        #}<i class="fas fa-save fa-lg"></i>
+      </button>
+      <button class="w3-button big-button flex-fix w3-right delete-subgraph-button" title="Delete user">{#
+        #}<i class="fas fa-minus fa-lg"></i>
+      </button>
+      <button class="w3-button big-button flex-fix flip-frontbutton" data-flipid="user-list-{{ user['id'] }}" title="Cancel">{#
+        #}<i class="fas fa-times fa-lg"></i>
+      </button>
+    </form>
+  </div>
+</div>
+{% endmacro %}

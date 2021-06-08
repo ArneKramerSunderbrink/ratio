@@ -46,19 +46,22 @@ header > * {
   padding: 2em 1em;
 }
 
-#subgraph-list-box {
+#subgraph-list-box,
+#user-list-box {
   border: 2px solid rgba(0, 0, 0, 0.6);
   border-radius: 4px;
   margin-top: 1em;
 }
 
-#subgraph-list {
+#subgraph-list,
+#user-list {
   height: 50vh;
   overflow: auto;
   background-color: white;
 }
 
-#subgraph-list > div {
+#subgraph-list > div,
+#user-list > div {
   padding: 0;
 }
 
