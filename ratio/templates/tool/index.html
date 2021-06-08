@@ -49,18 +49,24 @@
   </div>
 </div>
 
-<div class="w3-panel w3-card-4 message" data-subgraph-id="0" style="display: none"
-     id="subgraph-menu-delete-msg">
-  <span></span>
-  <a href="#" class="w3-margin-left w3-text-green">Undo.</a>
-</div>
-<div class="w3-panel w3-card-4 flip-flipside-msg message" data-flipid="subgraph-list-0" style="display: none"
-     id="subgraph-menu-edit-msg"></div>
-<div class="w3-panel w3-card-4 flip-flipside-msg message" data-flipid="new-subgraph" style="display: none"
-     id="subgraph-menu-add-msg"></div>
-{% if message %}
-<div class="w3-panel w3-card-4 message">
-  {{ message }}
+<div class="messages"> {# <!--TODO macro for messages--> #}
+  <div class="w3-panel w3-card-4 flex-row message" data-subgraph-id="0" style="display: none"
+       id="subgraph-menu-delete-msg">
+    <span class="flex-fix"></span>
+    <button class="w3-button w3-text-green flex-fix">Undo.</button>
+    <div class="flex-flex">{# just a spacer #}</div>
+    <button class="w3-button big-button flex-fix close-msg" title="Close message">{#
+      #}<i class="fas fa-times fa-lg"></i>
+    </button>
+  </div>
+  <div class="w3-panel w3-card-4 flip-flipside-msg message" data-flipid="subgraph-list-0" style="display: none"
+       id="subgraph-menu-edit-msg"></div>
+  <div class="w3-panel w3-card-4 flip-flipside-msg message" data-flipid="new-subgraph" style="display: none"
+       id="subgraph-menu-add-msg"></div>
+  {% if message %}
+  <div class="w3-panel w3-card-4 message">
+    {{ message }}
+  </div>
 </div>
 {% endif %}
 {% endblock %}

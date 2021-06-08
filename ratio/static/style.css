@@ -394,28 +394,18 @@ button[disabled]{
 }
 
 /* Message */
-.message {
-  background-color: #FFE5B4;
+.messages {
   position: fixed;
   bottom: 0;
   width: 80%;
   left: 10%;
   right: 10%;
-  padding: 0.5em 1em;
-  align-items: center;
 }
 
-.login-message {
+.message {
   background-color: #FFE5B4;
   padding: 0.5em 1em;
-}
-
-#knowledge-delete-msg {
-  display: none;
-}
-
-#knowledge-delete-msg > span {
-  margin-right: 0.5em;
+  align-items: center;
 }
 
 /* Result table */

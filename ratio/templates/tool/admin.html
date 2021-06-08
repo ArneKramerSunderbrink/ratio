@@ -80,11 +80,21 @@
   </div>
 </div>
 
-<div class="w3-panel w3-card-4 flex-row flip-frontside message" data-flipid="message"{% if not message %} style="display: none"{% endif %}>
-  <span class="flex-fix">{{ message }}</span>
-  <div class="flex-flex">{# just a spacer #}</div>
-  <button class="w3-button big-button flex-fix flip-flipbutton" title="Close message" data-flipid="message">{#
-    #}<i class="fas fa-times fa-lg"></i>
-  </button>
+<div class="messages">
+  <div class="w3-panel w3-card-4 flex-row message" {% if not message %} style="display: none"{% endif %}>
+    <span class="flex-fix">{{ message }}</span>
+    <div class="flex-flex">{# just a spacer #}</div>
+    <button class="w3-button big-button flex-fix close-msg" title="Close message">{#
+      #}<i class="fas fa-times fa-lg"></i>
+    </button>
+  </div>
+  <div class="w3-panel w3-card-4 flex-row message" style="display: none" id="user-delete-msg">
+    <span class="flex-fix"></span>
+    <button class="w3-button w3-text-green flex-fix">Undo.</button>
+    <div class="flex-flex">{# just a spacer #}</div>
+    <button class="w3-button big-button flex-fix close-msg" title="Close message">{#
+      #}<i class="fas fa-times fa-lg"></i>
+    </button>
+  </div>
 </div>
 {% endblock %}

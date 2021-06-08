@@ -115,9 +115,12 @@ def add_user():
 
     db = get_db()
     db_cursor = db.cursor()
+
+    # todo check if username is unique 'There is already a (potentially deleted) user of that name.'
+
     db_cursor.execute(
         'INSERT INTO user (username, password, admin, uri) VALUES (?, ?, ?, ?)',
-        (user_name, user_password, user_is_admin, user_uri)
+        (user_name.strip(), user_password, user_is_admin, user_uri)
     )
     user_id = db_cursor.lastrowid
     user = db_cursor.execute(

@@ -18,16 +18,14 @@ function postJSON(url, data, success) {
 }
 
 // Change checkbox icons
-$(function() {
-  $('body').on('change', ':checkbox', function() {
-    const icon = $('label[for="' + $(this).attr('id') + '"]').children('i');
-    if ($(this).prop('checked')) {
-      icon.removeClass().addClass('fa fa-check-square fa-lg');
-    } else {
-      icon.removeClass().addClass('fa fa-square fa-lg');
-    }
-    // No return so the event can be consumed later by other js code e.g. in subgraph_menu.js
-  });
+$('document').on('change', ':checkbox', function() {
+  const icon = $('label[for="' + $(this).attr('id') + '"]').children('i');
+  if ($(this).prop('checked')) {
+    icon.removeClass().addClass('fa fa-check-square fa-lg');
+  } else {
+    icon.removeClass().addClass('fa fa-square fa-lg');
+  }
+  // No return so the event can be consumed later by other js code e.g. in subgraph_menu.js
 });
 
 // Javascript code for the flip pattern described in dev_ressources/pattern_flip.html.
@@ -70,4 +68,10 @@ $(document).on('keyup', '.flip-flipside', function(e) {
     flip_front(this.getAttribute('data-flipid'));
     e.stopPropagation();
   }
+});
+
+// Simpler functionality for messages
+$(document).on('click', '.close-msg', function() {
+  $(this).parent().css('display', 'none');
+  return false;
 });

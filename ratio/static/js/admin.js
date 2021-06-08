@@ -14,8 +14,8 @@ $(function() {
 
     postJSON(window.SCRIPT_ROOT + 'admin/_edit_user', data, function(data) {
       if (data.error) {
-        $('div.message > span').text(data.error);
-        $('div.message').css('display', '');
+        $('div.message:first > span').text(data.error);
+        $('div.message:first').css('display', '');
         form.find('input').first().focus();
       } else {
         list_item.find('div.flip-frontside > div > div > span').text(data.user_name);
@@ -38,15 +38,14 @@ $(function() {
     const user_id = item.attr('data-user-id');
     postJSON(window.SCRIPT_ROOT + 'admin/_delete_user', {user_id: user_id}, function(data) {
       if (data.error) {
-        $('div.message > span').text(data.error);
-        $('div.message').css('display', '');
+        $('div.message:first > span').text(data.error);
+        $('div.message:first').css('display', '');
         form.find('input').first().focus();
       } else {
         item.css('display', 'none');
-        // todo add the message to the html
-        $('div#user-menu-delete-msg').attr('data-user-id', user_id);
-        $('div#user-menu-delete-msg > span').text('"' + data.name + '" has been deleted.');
-        $('div#user-menu-delete-msg').css('display', 'block');
+        $('div#user-delete-msg').attr('data-user-id', user_id);
+        $('div#user-delete-msg > span').text('"' + data.name + '" has been deleted.');
+        $('div#user-delete-msg').css('display', '');
       }
     });
 
@@ -54,7 +53,7 @@ $(function() {
   });
 /*
   // undo delete Subgraph
-  $('div#subgraph-menu-delete-msg > a').on('click', function() {
+  $('div#subgraph-menu-delete-msg > button').on('click', function() {
     const subgraph_id = this.parentNode.getAttribute('data-subgraph-id');
     const item = $('div#subgraph-list > div.item[data-subgraph-id="' + subgraph_id + '"]')
     postJSON(window.SCRIPT_ROOT + '/_undo_delete_subgraph', {subgraph_id: subgraph_id}, function(data) {
@@ -76,8 +75,8 @@ $(function() {
 
     postJSON(window.SCRIPT_ROOT + 'admin/_add_user', data, function(data) {
       if (data.error) {
-        $('div.message > span').text(data.error);
-        $('div.message').css('display', '');
+        $('div.message:first > span').text(data.error);
+        $('div.message:first').css('display', '');
         $(form).find('input').first().focus();
       } else {
         // add user
