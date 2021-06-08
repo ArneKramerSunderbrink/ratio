@@ -35,9 +35,43 @@ def index(message=None):
     return render_template('tool/admin.html', user_list=user_list, message=message)
 
 
+@bp.route('/_edit_user', methods=['POST'])
+@admin_required
+def edit_user():
+    user_id = request.json.get('user_id')
+    user_name = request.json.get('name')
+    user_password = request.json.get('password')
+    user_is_admin = request.json.get('admin') is not None
+
+    if user_id is None:
+        return jsonify(error='User id cannot be empty.')
+    try:
+        user_id = int(user_id)
+    except ValueError:
+        return jsonify(error='User id has to be an integer.')
+    if user_name is None or user_name.isspace():
+        return jsonify(error='User name cannot be empty.')
+
+    db = get_db()
+
+    db.execute(
+        'UPDATE user SET username = ?, admin = ? WHERE id = ?',
+        (user_name, user_is_admin, user_id)
+    )
+
+    if user_password is not None and not user_password.isspace():
+        db.execute(
+            'UPDATE user SET password = ? WHERE id = ?',
+            (generate_password_hash(user_password), user_id)
+        )
+
+    db.commit()
+    return jsonify(user_name=user_name, user_is_admin=user_is_admin)
+
+
 @bp.route('/_add_user', methods=['POST'])
 @admin_required
-def add_subgraph():
+def add_user():
     user_name = request.json.get('name')
     user_password = request.json.get('password')
     user_is_admin = request.json.get('admin') is not None

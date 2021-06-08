@@ -3,47 +3,24 @@
  */
 
 $(function() {
-  /*
-  // finished checkboxes
-  $('div#subgraph-list').on('change', ':checkbox', function() {
-    const finished = $(this).prop('checked');
-    const subgraph_id = parseInt(this.id.substring(9));
-
-    const link = $(this).prev();
-    const menu_box = $('label[for="finished-'+subgraph_id+'"]').children('i');
-    if (finished) {
-      menu_box.removeClass().addClass('fa fa-check-square fa-lg');
-      menu_box.prop('title', 'Finished');
-      link.addClass('text-green');
-    } else {
-      menu_box.removeClass().addClass('fa fa-square fa-lg');
-      menu_box.prop('title', 'Not finished');
-      link.removeClass('text-green');
-    }
-
-    postJSON(window.SCRIPT_ROOT + '/_set_finished', {subgraph_id: subgraph_id, finished: finished}, function (data) {
-      if (data.error) { alert(data.error); }
-    });
-
-    return false;
-  });
-
-  // edit subgraph name
-  $('div#subgraph-list').on('submit', 'form', function() {
-    const list_item = $(this).closest('.item');
-    const subgraph_id = list_item.attr('data-subgraph-id');
-    const flipid = 'subgraph-list-' + subgraph_id;
+  // edit user
+  $('div#user-list').on('submit', 'form', function() {
+    const form = $(this);
+    const list_item = form.closest('.item');
+    const user_id = list_item.attr('data-user-id');
+    const flipid = 'user-list-' + user_id;
     const data = form_to_object(this);
-    data.subgraph_id = subgraph_id;
+    data.user_id = user_id;
 
-    postJSON(window.SCRIPT_ROOT + '/_edit_subgraph_name', data, function(data) {
+    postJSON(window.SCRIPT_ROOT + 'admin/_edit_user', data, function(data) {
       if (data.error) {
-        $('div#subgraph-menu-edit-msg').text(data.error);
-        $('div#subgraph-menu-edit-msg').attr('data-flipid', flipid)
-        $('div#subgraph-menu-edit-msg').css('display', 'block');
-        list_item.find('form > input').focus();
+        $('div.message > span').text(data.error);
+        $('div.message').css('display', '');
+        form.find('input').first().focus();
       } else {
-        list_item.find('a:first').text(data.name);
+        //list_item.find('a:first').text(data.user_name);
+        //data.user_is_admin  // todo admin button to all but only on admins display
+        //todo edits to frontend
         flip_front(flipid);
       }
     });
@@ -51,6 +28,7 @@ $(function() {
     return false;
   });
 
+  /*
   // delete subgraph
   $('div#subgraph-list').on('click', 'button.delete-subgraph-button', function() {
     const item = $(this).closest('.item');
