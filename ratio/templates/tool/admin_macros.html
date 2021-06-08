@@ -2,8 +2,10 @@
 <div class="item" data-user-id="{{ user['id'] }}">
   <div class="flip-frontside" data-flipid="user-list-{{ user['id'] }}">
     <div class="flex-row">
-      <div class="w3-button flex-text" title="URI: {{ user['uri'] }}">{{ user['username'] }}</div>
-      {% if user['admin'] %}<div class="w3-button big-button" title="This user has admin rights"><i class="fas fa-cogs"></i></div>{% endif %}
+      <div class="w3-button flex-text" title="URI: {{ user['uri'] }}">{#
+        #}<i class="fas fa-cogs" title="This user has admin rights"style="margin-right: 0.5em;{% if not user['admin'] %} display: none;{% endif %}"></i>{#
+        #}<span>{{ user['username'] }}</span>{#
+      #}</div>
       <button class="w3-button big-button flex-fix flip-flipbutton" data-flipid="user-list-{{ user['id'] }}" title="Edit user">{#
         #}<i class="fas fa-pen fa-lg"></i>
       </button>

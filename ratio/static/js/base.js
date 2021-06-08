@@ -19,7 +19,7 @@ function postJSON(url, data, success) {
 
 // Change checkbox icons
 $(function() {
-  $(':checkbox').on('change', function() {
+  $('body').on('change', ':checkbox', function() {
     const icon = $('label[for="' + $(this).attr('id') + '"]').children('i');
     if ($(this).prop('checked')) {
       icon.removeClass().addClass('fa fa-check-square fa-lg');

@@ -18,9 +18,13 @@ $(function() {
         $('div.message').css('display', '');
         form.find('input').first().focus();
       } else {
-        //list_item.find('a:first').text(data.user_name);
-        //data.user_is_admin  // todo admin button to all but only on admins display
-        //todo edits to frontend
+        list_item.find('div.flip-frontside > div > div > span').text(data.user_name);
+        //alert(list_item.find('div.flip-frontside > div > div > i').css('display'));
+        if (data.user_is_admin) {
+          list_item.find('div.flip-frontside > div > div > i').css('display', '');
+        } else {
+          list_item.find('div.flip-frontside > div > div > i').css('display', 'none');
+        }
         flip_front(flipid);
       }
     });
