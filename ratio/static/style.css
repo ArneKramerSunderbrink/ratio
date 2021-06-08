@@ -41,28 +41,10 @@ header > * {
   width: 95%;
 }
 
-/* tool index */
-.index-body {
-  padding: 2em 1em;
-}
-
-#subgraph-list-box,
-#user-list-box {
-  border: 2px solid rgba(0, 0, 0, 0.6);
-  border-radius: 4px;
-  margin-top: 1em;
-}
-
-#subgraph-list,
-#user-list {
-  height: 50vh;
-  overflow: auto;
-  background-color: white;
-}
-
-#subgraph-list > div,
-#user-list > div {
-  padding: 0;
+/* General stuff */
+.w3-input {
+  padding: 7.5px 16px;
+  background: #f5f5f5;
 }
 
 /* Flex containers */
@@ -224,6 +206,29 @@ button[disabled]{
   cursor: default !important;
 }
 
+/* tool index */
+.index-body {
+  padding: 2em 1em;
+}
+
+#subgraph-list-box,
+#user-list-box {
+  border: 2px solid rgba(0, 0, 0, 0.6);
+  border-radius: 4px;
+  margin-top: 1em;
+}
+
+#subgraph-list,
+#user-list {
+  height: 50vh;
+  overflow: auto;
+  background-color: white;
+}
+
+#subgraph-list > div,
+#user-list > div {
+  padding: 0;
+}
 
 /* Knowledge */
 #subgraph-header {

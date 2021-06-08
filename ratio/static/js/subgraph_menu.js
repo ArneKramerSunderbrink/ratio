@@ -11,14 +11,12 @@ $(function() {
     const subgraph_id = parseInt(this.id.substring(9));
 
     const link = $(this).prev();
-    const menu_box = $('label[for="finished-'+subgraph_id+'"]').children('i');
+    const icon = $('label[for="finished-'+subgraph_id+'"]').children('i');
     if (finished) {
-      menu_box.removeClass().addClass('fa fa-check-square fa-lg');
-      menu_box.prop('title', 'Finished');
+      icon.prop('title', 'Finished');
       link.addClass('text-green');
     } else {
-      menu_box.removeClass().addClass('fa fa-square fa-lg');
-      menu_box.prop('title', 'Not finished');
+      icon.prop('title', 'Not finished');
       link.removeClass('text-green');
     }
 
