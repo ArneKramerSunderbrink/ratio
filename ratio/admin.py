@@ -29,6 +29,7 @@ def index(message=None):
     user_list = db.execute(
         'SELECT id, username, admin, uri'
         ' FROM user'
+        ' WHERE deleted = 0'
         ' ORDER BY id ASC',
     ).fetchall()
 
@@ -67,6 +68,34 @@ def edit_user():
 
     db.commit()
     return jsonify(user_name=user_name, user_is_admin=user_is_admin)
+
+
+@bp.route('/_delete_user', methods=['POST'])
+@admin_required
+def delete_subgraph():
+    user_id = request.json.get('user_id')
+
+    if user_id is None:
+        return jsonify(error='User id cannot be empty.')
+    try:
+        user_id = int(user_id)
+    except ValueError:
+        return jsonify(error='User id has to be an integer.')
+
+    db = get_db()
+    db_cursor = db.cursor()
+
+    user_name = db_cursor.execute(
+        'SELECT username FROM user WHERE id = ?', (user_id,)
+    ).fetchone()[0]
+
+    db_cursor.execute(
+        'UPDATE user SET deleted = 1 WHERE id = ?', (user_id,)
+    )
+
+    db.commit()
+
+    return jsonify(name=user_name)
 
 
 @bp.route('/_add_user', methods=['POST'])

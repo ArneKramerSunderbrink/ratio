@@ -394,7 +394,7 @@ button[disabled]{
 }
 
 /* Message */
-.message{
+.message {
   background-color: #FFE5B4;
   position: fixed;
   bottom: 0;
@@ -403,6 +403,11 @@ button[disabled]{
   right: 10%;
   padding: 0.5em 1em;
   align-items: center;
+}
+
+.login-message {
+  background-color: #FFE5B4;
+  padding: 0.5em 1em;
 }
 
 #knowledge-delete-msg {

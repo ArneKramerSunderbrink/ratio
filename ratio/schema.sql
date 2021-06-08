@@ -13,14 +13,22 @@ CREATE TABLE user (
   username TEXT UNIQUE NOT NULL,
   password TEXT NOT NULL,
   admin BIT NOT NULL,
-  uri TEXT NOT NULL
+  uri TEXT NOT NULL,
+  deleted BIT NOT NULL DEFAULT 0
+);
+
+INSERT INTO user (username, password, admin, uri) VALUES (
+  'admin',
+  'pbkdf2:sha256:150000$f1G40PP3$d2452fd97994b486a1238f20941aa313439a7cadd3de7e494304f9fab27241cc',
+  1,
+  '<http://www.example.org/ratio-tool#User_1>'
 );
 
 CREATE TABLE subgraph (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
-  finished BIT NOT NULL,
-  deleted BIT NOT NULL
+  finished BIT NOT NULL DEFAULT 0,
+  deleted BIT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE access (

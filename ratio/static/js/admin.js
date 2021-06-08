@@ -19,7 +19,6 @@ $(function() {
         form.find('input').first().focus();
       } else {
         list_item.find('div.flip-frontside > div > div > span').text(data.user_name);
-        //alert(list_item.find('div.flip-frontside > div > div > i').css('display'));
         if (data.user_is_admin) {
           list_item.find('div.flip-frontside > div > div > i').css('display', '');
         } else {
@@ -32,27 +31,28 @@ $(function() {
     return false;
   });
 
-  /*
-  // delete subgraph
-  $('div#subgraph-list').on('click', 'button.delete-subgraph-button', function() {
+
+  // delete user
+  $('div#user-list').on('click', 'button.delete-user-button', function() {
     const item = $(this).closest('.item');
-    const subgraph_id = item.attr('data-subgraph-id');
-    postJSON(window.SCRIPT_ROOT + '/_delete_subgraph', {subgraph_id: subgraph_id}, function(data) {
+    const user_id = item.attr('data-user-id');
+    postJSON(window.SCRIPT_ROOT + 'admin/_delete_user', {user_id: user_id}, function(data) {
       if (data.error) {
-        $('div#subgraph-menu-edit-msg').text(data.error);
-        $('div#subgraph-menu-edit-msg').attr('data-flipid', 'subgraph-list-' + subgraph_id)
-        $('div#subgraph-menu-edit-msg').css('display', 'block');
+        $('div.message > span').text(data.error);
+        $('div.message').css('display', '');
+        form.find('input').first().focus();
       } else {
         item.css('display', 'none');
-        $('div#subgraph-menu-delete-msg').attr('data-subgraph-id', subgraph_id);
-        $('div#subgraph-menu-delete-msg > span').text('"' + data.name + '" has been deleted.');
-        $('div#subgraph-menu-delete-msg').css('display', 'block');
+        // todo add the message to the html
+        $('div#user-menu-delete-msg').attr('data-user-id', user_id);
+        $('div#user-menu-delete-msg > span').text('"' + data.name + '" has been deleted.');
+        $('div#user-menu-delete-msg').css('display', 'block');
       }
     });
 
     return false;
   });
-
+/*
   // undo delete Subgraph
   $('div#subgraph-menu-delete-msg > a').on('click', function() {
     const subgraph_id = this.parentNode.getAttribute('data-subgraph-id');
@@ -71,14 +71,14 @@ $(function() {
   */
   // add user
   $('form#new-user-form').on('submit', function() {
-    const form = $(this);
-    const data = form_to_object(this);
+    const form = this;
+    const data = form_to_object(form);
 
     postJSON(window.SCRIPT_ROOT + 'admin/_add_user', data, function(data) {
       if (data.error) {
         $('div.message > span').text(data.error);
         $('div.message').css('display', '');
-        form.find('input').first().focus();
+        $(form).find('input').first().focus();
       } else {
         // add user
         $('div#user-list').first().append($(data.user_row));
