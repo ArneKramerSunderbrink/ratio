@@ -57,6 +57,6 @@ CREATE TABLE ontology (
 );
 
 CREATE TABLE namespace (
-  prefix TEXT,
+  prefix TEXT NOT NULL,
   uri TEXT NOT NULL
 );

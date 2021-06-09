@@ -12,7 +12,7 @@ $(function() {
     const data = form_to_object(this);
     data.user_id = user_id;
 
-    postJSON(window.SCRIPT_ROOT + 'admin/_edit_user', data, function(data) {
+    postJSON(window.SCRIPT_ROOT + '/admin/_edit_user', data, function(data) {
       if (data.error) {
         $('div.message:first > span').text(data.error);
         $('div.message:first').css('display', '');
@@ -36,7 +36,7 @@ $(function() {
   $('div#user-list').on('click', 'button.delete-user-button', function() {
     const item = $(this).closest('.item');
     const user_id = item.attr('data-user-id');
-    postJSON(window.SCRIPT_ROOT + 'admin/_delete_user', {user_id: user_id}, function(data) {
+    postJSON(window.SCRIPT_ROOT + '/admin/_delete_user', {user_id: user_id}, function(data) {
       if (data.error) {
         $('div.message:first > span').text(data.error);
         $('div.message:first').css('display', '');
@@ -55,7 +55,7 @@ $(function() {
   $('div#user-delete-msg > button:first').on('click', function() {
     const user_id = this.parentNode.getAttribute('data-user-id');
     const item = $('div#user-list > div.item[data-user-id="' + user_id + '"]')
-    postJSON(window.SCRIPT_ROOT + 'admin/_undo_delete_user', {user_id: user_id}, function(data) {
+    postJSON(window.SCRIPT_ROOT + '/admin/_undo_delete_user', {user_id: user_id}, function(data) {
       if (data.error) {
         $('div.message:first > span').text(data.error);
         $('div.message:first').css('display', '');
@@ -73,7 +73,7 @@ $(function() {
     const form = this;
     const data = form_to_object(form);
 
-    postJSON(window.SCRIPT_ROOT + 'admin/_add_user', data, function(data) {
+    postJSON(window.SCRIPT_ROOT + '/admin/_add_user', data, function(data) {
       if (data.error) {
         $('div.message:first > span').text(data.error);
         $('div.message:first').css('display', '');

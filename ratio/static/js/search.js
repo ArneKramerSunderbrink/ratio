@@ -92,7 +92,7 @@ $(function(){
     if (JSON.stringify(data) == window.filter_data) { return; }  // nothing changed
 
     window.filter_data = JSON.stringify(data);
-    postJSON(window.SCRIPT_ROOT + 'search/_search', data, function(data) {
+    postJSON(window.SCRIPT_ROOT + '/search/_search', data, function(data) {
       if (data.error) {
         alert(data.error);
       } else {
