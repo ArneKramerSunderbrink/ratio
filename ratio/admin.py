@@ -1,5 +1,6 @@
 from flask import current_app
 from flask import Blueprint
+from flask import g
 from flask import jsonify
 from flask import get_template_attribute
 from flask import redirect
@@ -50,6 +51,8 @@ def edit_user():
         user_id = int(user_id)
     except ValueError:
         return jsonify(error='User id has to be an integer.')
+    if user_id == g.user['id'] and not user_is_admin:
+        return jsonify(error='You cannot remove admin rights from your own account.')
     if user_name is None or user_name.isspace():
         return jsonify(error='User name cannot be empty.')
 
@@ -81,6 +84,8 @@ def delete_subgraph():
         user_id = int(user_id)
     except ValueError:
         return jsonify(error='User id has to be an integer.')
+    if user_id == g.user['id']:
+        return jsonify(error='You cannot delete your own account.')
 
     db = get_db()
     db_cursor = db.cursor()
@@ -98,6 +103,27 @@ def delete_subgraph():
     return jsonify(name=user_name)
 
 
+@bp.route('/_undo_delete_user', methods=['POST'])
+@admin_required
+def undo_delete_user():
+    user_id = request.json.get('user_id')
+
+    if user_id is None:
+        return jsonify(error='User id cannot be empty.')
+    try:
+        user_id = int(user_id)
+    except ValueError:
+        return jsonify(error='User id has to be an integer.')
+
+    db = get_db()
+    db.execute(
+        'UPDATE user SET deleted = 0 WHERE id = ?', (user_id,)
+    )
+    db.commit()
+
+    return jsonify()
+
+
 @bp.route('/_add_user', methods=['POST'])
 @admin_required
 def add_user():
@@ -107,6 +133,7 @@ def add_user():
 
     if user_name is None or user_name.isspace():
         return jsonify(error='Username cannot be empty.')
+    user_name = user_name.strip()
     if user_password is None or user_password.isspace():
         return jsonify(error='Password cannot be empty.')
     user_password = generate_password_hash(user_password)
@@ -116,11 +143,14 @@ def add_user():
     db = get_db()
     db_cursor = db.cursor()
 
-    # todo check if username is unique 'There is already a (potentially deleted) user of that name.'
+    if user_name in (r['username'] for r in db_cursor.execute(
+        'SELECT username FROM user'
+    ).fetchall()):
+        return jsonify(error='There is already a (potentially deleted) user of that name.')
 
     db_cursor.execute(
         'INSERT INTO user (username, password, admin, uri) VALUES (?, ?, ?, ?)',
-        (user_name.strip(), user_password, user_is_admin, user_uri)
+        (user_name, user_password, user_is_admin, user_uri)
     )
     user_id = db_cursor.lastrowid
     user = db_cursor.execute(

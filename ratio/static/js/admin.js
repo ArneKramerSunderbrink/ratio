@@ -40,7 +40,6 @@ $(function() {
       if (data.error) {
         $('div.message:first > span').text(data.error);
         $('div.message:first').css('display', '');
-        form.find('input').first().focus();
       } else {
         item.css('display', 'none');
         $('div#user-delete-msg').attr('data-user-id', user_id);
@@ -51,23 +50,24 @@ $(function() {
 
     return false;
   });
-/*
-  // undo delete Subgraph
-  $('div#subgraph-menu-delete-msg > button').on('click', function() {
-    const subgraph_id = this.parentNode.getAttribute('data-subgraph-id');
-    const item = $('div#subgraph-list > div.item[data-subgraph-id="' + subgraph_id + '"]')
-    postJSON(window.SCRIPT_ROOT + '/_undo_delete_subgraph', {subgraph_id: subgraph_id}, function(data) {
+
+  // undo delete user
+  $('div#user-delete-msg > button:first').on('click', function() {
+    const user_id = this.parentNode.getAttribute('data-user-id');
+    const item = $('div#user-list > div.item[data-user-id="' + user_id + '"]')
+    postJSON(window.SCRIPT_ROOT + 'admin/_undo_delete_user', {user_id: user_id}, function(data) {
       if (data.error) {
-        alert(data.error);  // if everything runs correctly this will never happen
+        $('div.message:first > span').text(data.error);
+        $('div.message:first').css('display', '');
       } else {
         item.css('display', 'block');
-        $('div#subgraph-menu-delete-msg').css('display', 'none');
+        $('div#user-delete-msg').css('display', 'none');
       }
     });
 
     return false;
   });
-  */
+
   // add user
   $('form#new-user-form').on('submit', function() {
     const form = this;
