@@ -3,8 +3,8 @@ import os
 
 from flask import Flask
 from flask import jsonify
-from flask import render_template
-from flask import request
+
+from ratio.db import db_init_app
 
 
 class URLPrefixMiddleware:
@@ -86,17 +86,6 @@ def create_app(test_config=None):
         app.logger.critical('this is a CRITICAL message')
         return jsonify('Debug, info, warning, error and critical message logged.')
 
-    @app.route('/_color_picker', methods=('GET', 'POST'))
-    def color_picker():
-        # only for development
-        if request.method == 'POST':
-            app.config['FRONTEND_CONFIG']['color0'] = request.form['color0']
-            app.config['FRONTEND_CONFIG']['color1'] = request.form['color1']
-            app.config['FRONTEND_CONFIG']['color2'] = request.form['color2']
-            app.config['FRONTEND_CONFIG']['color3'] = request.form['color3']
-
-        return render_template('color_picker.html')
-
     # ensure the instance folder exists
     try:
         os.makedirs(app.instance_path)
@@ -104,9 +93,7 @@ def create_app(test_config=None):
         pass
 
     # register the database commands
-    from ratio import db
-
-    db.init_app(app)
+    db_init_app(app)
 
     # apply the blueprints to the app
     from ratio import auth, admin, tool, knowledge, search

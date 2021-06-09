@@ -119,7 +119,7 @@ def db_load_backup_command(backup_file):
     click.echo('Loaded backup into the database.')
 
 
-def init_app(app):
+def db_init_app(app):
     """Register database functions with the Flask app.
     This is called by the application factory.
     """
