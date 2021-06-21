@@ -1,7 +1,9 @@
 """Functionality for searching the database"""
 
 from flask import Blueprint
+from flask import current_app
 from flask import g
+from flask import get_template_attribute
 from flask import jsonify
 from flask import render_template
 from flask import request
@@ -9,7 +11,6 @@ from rdflib import Graph
 from rdflib import OWL
 from rdflib import RDF
 from rdflib import RDFS
-from rdflib import URIRef
 
 from ratio.auth import login_required
 from ratio.db import get_db, get_filter_description
@@ -22,27 +23,20 @@ bp = Blueprint('search', __name__, url_prefix='/search')
 @bp.route('')
 @login_required
 def search_view():
-    user_id = g.user['id']
-
     filter_object = get_filter()
 
     db = get_db()
     rows = db.execute(
         'SELECT id, name FROM access JOIN subgraph ON subgraph_id = id'
-        ' WHERE user_id = ? AND deleted = 0  AND finished = 1',
-        (user_id,)
+        ' WHERE deleted = 0  AND finished = 1'
     ).fetchall()
 
-    rdf_graphs = [get_subgraph_knowledge(row['id']).get_graph(clean=True, ontology=True) for row in rows]
-
-    return render_template('tool/search.html', filter=filter_object, subgraphs=rows, rdf_graphs=rdf_graphs)
+    return render_template('tool/search.html', filter=filter_object, subgraphs=rows)
 
 
 @bp.route('_search', methods=['POST'])
 @login_required
 def search():
-    user_id = g.user['id']
-
     filter_data = request.json
 
     # todo get_result(filter_data) should be a method of the filter
@@ -50,8 +44,7 @@ def search():
     db = get_db()
     rows = db.execute(
         'SELECT id FROM access JOIN subgraph ON subgraph_id = id'
-        ' WHERE user_id = ? AND deleted = 0 AND finished = 1',
-        (user_id,)
+        ' WHERE deleted = 0 AND finished = 1'
     ).fetchall()
     results = {row['id'] for row in rows}
     knowledge = {subgraph_id: {(str(p), str(o))
@@ -60,6 +53,40 @@ def search():
     results = filter(lambda subgraph_id: all(po in knowledge[subgraph_id] for po in filter_data.items()), results)
 
     return jsonify(results=[str(subgraph_id) for subgraph_id in results])
+
+
+@bp.route('/_get_overview', methods=['POST'])
+@login_required
+def get_overview():
+    subgraph_id = request.json.get('subgraph_id')
+
+    if subgraph_id is None:
+        return jsonify(error='Subgraph id cannot be empty.')
+    try:
+        subgraph_id = int(subgraph_id)
+    except ValueError:
+        return jsonify(error='{} id has to be an integer.'
+                       .format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
+
+    db = get_db()
+    subgraph = db.execute(
+        'SELECT * FROM subgraph WHERE id = ?', (subgraph_id,)
+    ).fetchone()
+
+    if subgraph is None:
+        return jsonify(error='{} with id {} does not exist.'.format(
+            current_app.config['FRONTEND_CONFIG']['Subgraph_term'], subgraph_id
+        ))
+
+    if not subgraph['finished']:
+        return jsonify(error='You have no access to {} with id {}.'.format(
+            current_app.config['FRONTEND_CONFIG']['subgraph_term'], subgraph_id
+        ))
+
+    render_overview_table = get_template_attribute('tool/overview_table.html', 'overview')
+    overview_table = render_overview_table(get_subgraph_knowledge(subgraph_id).get_graph(clean=True, ontology=True))
+
+    return jsonify(overview_table=overview_table)
 
 
 def get_filter():

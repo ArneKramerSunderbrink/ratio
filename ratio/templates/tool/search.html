@@ -1,5 +1,4 @@
 {% from "tool/edit_macros.html" import entity_div %}
-{% from "tool/overview_table.html" import overview %}
 
 {% extends 'tool/layout.html' %}
 
@@ -25,14 +24,14 @@
   </div>
   <div class="entity-body" id="search-results">
     {% for subgraph in subgraphs %}
-    {{ search_result(subgraph, rdf_graphs[loop.index0]) }}
+    {{ search_result(subgraph) }}
     {% endfor %}
     <div id="no-match-msg" style="display: none;">No studies with these characteristics have been found.</div>
   </div>
 </div>
 {% endblock %}
 
-{% macro search_result(subgraph, rdf_graph) %}
+{% macro search_result(subgraph) %}
 <div class="entity entity-border" data-subgraph-id="{{ subgraph['id'] }}">
   <div class="entity-title color2 flex-row">
     {# collapse button #}
@@ -53,7 +52,7 @@
   </div>
 
   <div class="entity-body flip-flipside" data-flipid="collapse-{{ subgraph['id'] }}" style="display: none;">
-    {{ overview(rdf_graph) }}
+    <div class="overview-table-placeholder" data-subgraph-id="{{ subgraph['id'] }}"><i class="fas fa-table w3-large"></i> Loading overview table...</div>
   </div>
 </div>
 {% endmacro %}

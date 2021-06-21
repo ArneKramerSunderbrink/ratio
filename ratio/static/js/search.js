@@ -114,4 +114,18 @@ $(function(){
     });
   }
 
+  // load overview table
+  $('div#search-results').on('click', '.flip-flipbutton', function() {
+    const placeholder = $('.flip-flipside[data-flipid="' + this.getAttribute('data-flipid') + '"]').children('.overview-table-placeholder');
+    if (placeholder.length > 0) {
+        const subgraph_id = placeholder[0].getAttribute('data-subgraph-id');
+        postJSON(window.SCRIPT_ROOT + '/search/_get_overview', {subgraph_id: subgraph_id}, function(data) {
+          if (data.error) {
+            alert(data.error);
+          } else {
+            placeholder.replaceWith(data.overview_table);
+          }
+        });
+    }
+  });
 });

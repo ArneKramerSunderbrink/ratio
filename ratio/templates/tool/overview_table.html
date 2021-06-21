@@ -22,16 +22,6 @@
   </tr>
   <tr>
     <td>
-      Study design:
-      {% set q = graph.query("""SELECT ?v WHERE {?p ctro:hasCTDesign ?d . ?d rdfs:label ?v .}""") %}
-      {% if q %}
-      {% for row in q | sort() %}{{ row[0] }}{{ "" if loop.last else ", " }}{% endfor %}
-      {% else %}
-      No information was provided
-      {% endif %}
-
-      <br>
-      Test:
       {% set info = [] %}
       {% set q = graph.query("""SELECT ?v WHERE {?p ctro:hasCTDesign ?d . ?d rdfs:label ?v .}""") %}
       {% for row in q | sort() %}{{ info.append(row[0]) or "" }}{% endfor %}
