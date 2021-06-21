@@ -29,6 +29,15 @@
       {% else %}
       No information was provided
       {% endif %}
+
+      <br>
+      Test:
+      {% set info = [] %}
+      {% set q = graph.query("""SELECT ?v WHERE {?p ctro:hasCTDesign ?d . ?d rdfs:label ?v .}""") %}
+      {% for row in q | sort() %}{{ info.append(row[0]) or "" }}{% endfor %}
+      {% set q = graph.query("""SELECT ?v WHERE {?p ctro:hasCTduration ?v .}""") %}
+      {% for row in q | sort() %}{{ info.append("Trial duration (in weeks): " + row[0]) or "" }}{% endfor %}
+      {{ info|join(', ') if info else "No information was provided"}}
     </td>
   </tr>
   <tr>

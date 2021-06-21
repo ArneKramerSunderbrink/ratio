@@ -7,7 +7,7 @@ A tool to add knowledge to a rdf knowledgebase.
 Install
 -------
 
-    # clone the repository
+Clone the repository
     $ git clone https://github.com/ArneKramerSunderbrink/ratio
     $ cd ratio
 
