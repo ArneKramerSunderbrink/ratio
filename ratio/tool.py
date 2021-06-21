@@ -69,6 +69,43 @@ def edit_view(subgraph_id):
         return redirect(url_for('tool.index', message=quote(message)))
 
     if not subgraph_access(user_id, subgraph_id):
+        if subgraph['finished']:
+            message = 'This is a read-only view. You have no access to {} with id {}.'.format(
+                current_app.config['FRONTEND_CONFIG']['subgraph_term'], subgraph_id
+            )
+            return redirect(url_for('tool.read_only_view', subgraph_id=subgraph_id, message=quote(message)))
+        else:
+            message = 'You have no access to {} with id {}.'.format(
+                current_app.config['FRONTEND_CONFIG']['subgraph_term'], subgraph_id
+            )
+            return redirect(url_for('tool.index', message=quote(message)))
+
+    root = get_subgraph_knowledge(subgraph_id).get_root()
+
+    return render_template('tool/edit.html', subgraph=subgraph, root=root, read_only=False)
+
+
+@bp.route('/<int:subgraph_id>/read_only')
+@bp.route('/<int:subgraph_id>/read_only/msg:<string:message>')
+@login_required
+def read_only_view(subgraph_id, message=None):
+    """Edit view.
+    Displays knowledge about a subgraph and allows users to edit it."""
+    db = get_db()
+
+    subgraph = db.execute(
+        'SELECT * FROM subgraph WHERE id = ?', (subgraph_id,)
+    ).fetchone()
+
+    if subgraph is None:
+        message = '{} with id {} does not exist.'.format(
+            current_app.config['FRONTEND_CONFIG']['Subgraph_term'], subgraph_id
+        )
+        # for some reason I need to unquote two times (once via url_for, once via quote) on the server, else
+        # I'd get a bad request
+        return redirect(url_for('tool.index', message=quote(message)))
+
+    if not subgraph['finished']:
         message = 'You have no access to {} with id {}.'.format(
             current_app.config['FRONTEND_CONFIG']['subgraph_term'], subgraph_id
         )
@@ -76,7 +113,8 @@ def edit_view(subgraph_id):
 
     root = get_subgraph_knowledge(subgraph_id).get_root()
 
-    return render_template('tool/edit.html', subgraph=subgraph, root=root)
+    # todo message?
+    return render_template('tool/edit.html', subgraph=subgraph, root=root, read_only=True)
 
 
 @bp.route('/<int:subgraph_id>/overview')
@@ -99,7 +137,7 @@ def overview(subgraph_id):
         )
         return redirect(url_for('tool.index', message=quote(message)))
 
-    if not subgraph_access(user_id, subgraph_id):
+    if not subgraph_access(user_id, subgraph_id) and not subgraph['finished']:
         message = 'You have no access to {} with id {}.'.format(
             current_app.config['FRONTEND_CONFIG']['subgraph_term'], subgraph_id
         )

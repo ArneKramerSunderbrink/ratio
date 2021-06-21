@@ -2,18 +2,20 @@
 
 {% extends 'tool/layout.html' %}
 
-{% block title %}{{ frontend_config['tool_name'] }} - {{ subgraph['name'] }}{% endblock %}
+{% block title %}{{ frontend_config['tool_name'] }} - {{ subgraph['name'] }}{{ ' (read-only)' if read_only else '' }}{% endblock %}
 
 {% block header_content %}
-<div class="flex-fix ghost-center"><b>Editor</b></div>
+<div class="flex-fix ghost-center"><b>Editor{{ ' (read-only)' if read_only else '' }}</b></div>
 <div class="flex-flex">{# just a spacer #}</div>
 {% endblock %}
 
 {% block body_content %}
+{% if not read_only %}
 <script type=text/javascript>
   window.SUBGRAPH_ID = {{ subgraph['id'] }};
 </script>
 <script src="{{ url_for('static', filename='js/knowledge.js') }}" defer></script>
+{% endif %}
 
 <div id="subgraph-header" class="flex-row entity-border color2">
   <b class="flex-text">{{ frontend_config['Subgraph_term'] }}: {{ subgraph['name'] }}</b>
@@ -21,7 +23,7 @@
     <i class="fas fa-table w3-large"></i> Overview table
   </a>
 </div>
-{{ entity_div(root, is_root=true, id='root-entity') }}
+{{ entity_div(root, is_root=true, id='root-entity', read_only=read_only) }}
 <div style="height: 11em;">{# just a spacer #}</div>
 <div class="messages">
   <div class="w3-panel w3-card-4 flex-row message" style="display: none" id="knowledge-delete-msg">

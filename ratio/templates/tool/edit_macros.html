@@ -1,8 +1,9 @@
-{% macro entity_field(entity, field) %}
+{% macro entity_field(entity, field, read_only=False) %}
 <div class="entity-field" data-property-uri="{{ field.property_uri }}">
   {% if field.is_deletable %}
   <div class="entity-field-title flex-row">
     <span class="entity-field-label flex-fix" {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}:</span>
+    {% if not read_only %}
     <div class="add-entity-div flex-flex flex-row" {% if field.values and field.is_functional %}style="display: none;"{% endif %}>
       <button class="w3-button tiny-button flex-fix flip-frontside flip-flipbutton" data-flipid="{{ entity.uri + '::' + field.property_uri + '::new_value' }}" title="Add {{ field.range_label }}">{#
         #}<i class="fas fa-plus"></i>
@@ -21,11 +22,12 @@
         #}<i class="fas fa-times"></i>
       </button>
     </div>
+    {% endif %}
   </div>
   {% endif %}
   <div class="entity-field-value-list">
     {% for index, value in field.get_sorted_values() %}
-    {{ entity_div(value, index=index, is_deletable=field.is_deletable) }}
+    {{ entity_div(value, index=index, is_deletable=field.is_deletable, read_only=read_only) }}
     {% endfor %}
   </div>
 </div>
@@ -39,14 +41,14 @@
 {% endif %}
 {% endmacro %}
 
-{% macro value_options(field, value, index, unregistered=False) %}
+{% macro value_options(field, value, index, unregistered=False, read_only=False) %}
 <div class="option-form flex-row">
   <input type="hidden" autofocus>
   <div class="flex-flex">
     {% if field.is_object_property %}
-    <input class="w3-input option-input" type="text" name="label" value="{{ value.label }}" data-option-uri="{{ value.uri }}" data-index="{{index}}"{% if unregistered %} data-unregistered=""{% endif %}>
+    <input class="w3-input option-input" type="text" name="label" value="{{ value.label }}" data-option-uri="{{ value.uri }}" data-index="{{index}}"{% if unregistered %} data-unregistered=""{% endif %}{% if read_only %} readonly{% endif %}>
     {% else %}
-    <input class="w3-input option-input" type="text" name="label" value="{{ value }}" data-index="{{index}}">
+    <input class="w3-input option-input" type="text" name="label" value="{{ value }}" data-index="{{index}}"{% if unregistered %} data-unregistered=""{% endif %}{% if read_only %} readonly{% endif %}>
     {% endif %}
 
     {% if field.options or field.is_add_option_allowed %}
@@ -56,7 +58,7 @@
         {{ option_div(option, field.is_object_property) }}
         {% endfor %}
       </div>
-      {% if field.is_add_option_allowed %}
+      {% if field.is_add_option_allowed and not read_only %}
       <form class="add-option-form flex-row">
         <input class="w3-input flex-flex" type="text" name="label" placeholder="Add option...">
         <button type="submit" class="w3-button tiny-button flex-fix" title="Add {{ field.range_label }} to the list of options.">{#
@@ -67,7 +69,7 @@
     </div></div>
     {% endif %}
   </div>
-  {% if not field.is_functional %}
+  {% if not field.is_functional and not read_only %}
   <button class="w3-button tiny-button flex-fix delete-value-button" title="Delete value">{#
     #}<i class="fas fa-minus"></i>
   </button>
@@ -76,10 +78,10 @@
 {% endmacro %}
 
 
-{% macro value_free(field, value, index, unregistered=False) %}
+{% macro value_free(field, value, index, unregistered=False, read_only=False) %}
 <div class="literal-form flex-row">
-  <div class="w3-input literal-input flex-flex" data-index="{{index}}"{% if unregistered %} data-unregistered=""{% endif %} contentEditable>{{ value }}</div>
-  {% if not field.is_functional %}
+  <div class="w3-input literal-input flex-flex" data-index="{{index}}"{% if unregistered %} data-unregistered=""{% endif %}{% if not read_only %} contentEditable{% endif %}>{{ value }}</div>
+  {% if not field.is_functional and not read_only %}
   <button class="w3-button tiny-button flex-fix delete-value-button" title="Delete value">{#
     #}<i class="fas fa-minus"></i>
   </button>
@@ -88,7 +90,7 @@
 {% endmacro %}
 
 
-{% macro entity_div(entity, is_root=False, is_deletable=True, index=0, collapsed=True, id='') %}
+{% macro entity_div(entity, is_root=False, is_deletable=True, index=0, collapsed=True, id='', read_only=False) %}
 <div class="entity{% if not is_root %} entity-border{% endif %}" data-entity-uri="{{ entity.uri }}" data-index="{{index}}"{% if id %} id="{{ id }}"{% endif %}>
   {# entity header #}
   {% if not is_root %}
@@ -101,8 +103,8 @@
       #}<i class="fas fa-chevron-down"></i>
     </button>
 
-    <div class="entity-label flex-flex" {% if entity.comment %}title="{{ entity.comment }}"{% endif %} {% if is_deletable %}contentEditable{% endif %}>{{ entity.label }}</div>
-    {% if is_deletable %}
+    <div class="entity-label flex-flex" {% if entity.comment %}title="{{ entity.comment }}"{% endif %} {% if is_deletable and not read_only %}contentEditable{% endif %}>{{ entity.label }}</div>
+    {% if is_deletable and not read_only %}
     <button class="w3-button flex-fix delete-entity-button" title="Delete {{ entity.class_label }}">{#
       #}<i class="fas fa-minus"></i>
     </button>
@@ -115,7 +117,7 @@
     {% if field.is_subheading %}
     <div class="knowledge-subheading" {% if field.comment %}title="{{ field.comment }}"{% endif %}>{{ field.label }}</div>
     {% elif field.is_described %}
-    {{ entity_field(entity, field) }}
+    {{ entity_field(entity, field, read_only=read_only) }}
     {% else %}
     <div class="field color1" data-property-uri="{{ field.property_uri }}" style="width: calc({{ field.width }}% - 1.3em); min-width: calc(70em * 0.01 * min(50, {{ field.width }}) - 1.3em);">
       <div class="flex-row">
@@ -123,23 +125,23 @@
         <div class="field-value-list">
           {% if field.options is not none %}
             {% if not field.get_sorted_values() %}
-            {{ value_options(field, '', field.free_index, True) }}
+            {{ value_options(field, '', field.free_index, True, read_only=read_only) }}
             {% else %}
             {% for index, value in field.get_sorted_values() %}
-            {{ value_options(field, value, index) }}
+            {{ value_options(field, value, index, read_only=read_only) }}
             {% endfor %}
             {% endif %}
           {% else %}
             {% if not field.get_sorted_values() %}
-            {{ value_free(field, '', field.free_index, True) }}
+            {{ value_free(field, '', field.free_index, True, read_only=read_only) }}
             {% else %}
             {% for index, value in field.get_sorted_values() %}
-            {{ value_free(field, value, index) }}
+            {{ value_free(field, value, index, read_only=read_only) }}
             {% endfor %}
             {% endif %}
           {% endif %}
         </div>
-        {% if not field.is_functional %}
+        {% if not field.is_functional and not read_only %}
         <button class="w3-button tiny-button flex-fix" title="Add {{ field.range_label }}">{#
           #}<i class="fas fa-plus"></i>
         </button>
