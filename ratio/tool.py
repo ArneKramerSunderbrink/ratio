@@ -112,6 +112,17 @@ def read_only_view(subgraph_id):
     return render_template('tool/edit.html', subgraph=subgraph, root=root, read_only=True)
 
 
+@bp.app_template_filter()
+def query_value(q):
+    """Jinja2 filter for rendering a query result in overview_table.html"""
+    return str(next(row for row in q)[0])
+
+@bp.app_template_filter()
+def query_values(q):
+    """Jinja2 filter for rendering query results in overview_table.html"""
+    return [str(row[0]) for row in q]
+
+
 @bp.route('/<int:subgraph_id>/overview')
 @login_required
 def overview(subgraph_id):
