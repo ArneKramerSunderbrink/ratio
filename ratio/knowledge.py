@@ -308,8 +308,8 @@ def undo_delete_entity():
         return jsonify(error=MSG_SUBGRAPH_ACCESS.format(subgraph_id, user_id))
 
     # TODO actually we should check whether restoring the information would violate any
-    # functional property constraints, but that would be very complicated and currently we
-    # have no described functional deletable entities where that could happen
+    #  functional property constraints, but that would be very complicated and currently we
+    #  have no described functional deletable entities where that could happen
 
     subgraph_knowledge = get_subgraph_knowledge(subgraph_id)
     subgraph_knowledge.undo_delete_individual(entity_uri)

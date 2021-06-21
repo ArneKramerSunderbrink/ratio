@@ -192,4 +192,4 @@ def upload_backup():
     if file.filename == '':
         return jsonify(error='File cannot be empty.')
     upload_db_backup(file)
-    return redirect(url_for('admin.index', message=quote('Upload successful.')))  # todo redirect to admin
+    return redirect(url_for('admin.index', message=quote('Upload successful.')))
