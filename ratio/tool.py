@@ -70,10 +70,7 @@ def edit_view(subgraph_id):
 
     if not subgraph_access(user_id, subgraph_id):
         if subgraph['finished']:
-            message = 'This is a read-only view. You have no access to {} with id {}.'.format(
-                current_app.config['FRONTEND_CONFIG']['subgraph_term'], subgraph_id
-            )
-            return redirect(url_for('tool.read_only_view', subgraph_id=subgraph_id, message=quote(message)))
+            return redirect(url_for('tool.read_only_view', subgraph_id=subgraph_id))
         else:
             message = 'You have no access to {} with id {}.'.format(
                 current_app.config['FRONTEND_CONFIG']['subgraph_term'], subgraph_id
@@ -86,9 +83,8 @@ def edit_view(subgraph_id):
 
 
 @bp.route('/<int:subgraph_id>/read_only')
-@bp.route('/<int:subgraph_id>/read_only/msg:<string:message>')
 @login_required
-def read_only_view(subgraph_id, message=None):
+def read_only_view(subgraph_id):
     """Edit view.
     Displays knowledge about a subgraph and allows users to edit it."""
     db = get_db()
@@ -113,7 +109,6 @@ def read_only_view(subgraph_id, message=None):
 
     root = get_subgraph_knowledge(subgraph_id).get_root()
 
-    # todo message?
     return render_template('tool/edit.html', subgraph=subgraph, root=root, read_only=True)
 
 

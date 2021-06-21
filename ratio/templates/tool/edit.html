@@ -34,5 +34,14 @@
       #}<i class="fas fa-times fa-lg"></i>
     </button>
   </div>
+  {% if read_only %}
+  <div class="w3-panel w3-card-4 flex-row message">
+    <span class="flex-fix">This is a read-only view.</span>
+    <div class="flex-flex">{# just a spacer #}</div>
+    <button class="w3-button big-button flex-fix close-msg" title="Close message">{#
+      #}<i class="fas fa-times fa-lg"></i>
+    </button>
+  </div>
+  {% endif %}
 </div>
 {% endblock %}
