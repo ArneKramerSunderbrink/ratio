@@ -23,8 +23,6 @@ $(function() {
     postJSON(window.SCRIPT_ROOT + '/_set_finished', {subgraph_id: subgraph_id, finished: finished}, function (data) {
       if (data.error) { alert(data.error); }
     });
-
-    return false;
   });
 
   // edit subgraph name
