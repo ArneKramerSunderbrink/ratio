@@ -5,7 +5,7 @@ import sqlite3
 from flask import current_app
 from flask import g
 from flask.cli import with_appcontext
-
+from os.path import isfile
 
 def get_db():
     """Connect to the application's configured database.
@@ -54,10 +54,13 @@ def upload_db_backup(backup_file):
 
 
 def get_admin_message():
-    with current_app.open_resource(current_app.config['ADMIN_MESSAGE'], 'r') as f:
-        show_message, message = f.read().split('\n')
-        show_message = show_message == '1'
-    return show_message, message
+    if isfile(current_app.config['ADMIN_MESSAGE']):
+        with current_app.open_resource(current_app.config['ADMIN_MESSAGE'], 'r') as f:
+            show_message, message = f.read().split('\n')
+            show_message = show_message == '1'
+        return show_message, message
+    else:
+        return False, ''
 
 
 def set_admin_message(show_message, message):
