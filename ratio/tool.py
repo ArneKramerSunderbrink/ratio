@@ -224,7 +224,7 @@ def edit_subgraph_name():
     except ValueError:
         return jsonify(error='{} id has to be an integer.'
                        .format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
-    if subgraph_name is None or subgraph_name.isspace():
+    if not subgraph_name or subgraph_name.isspace():
         return jsonify(error='{} name cannot be empty.'.format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
 
     db = get_db()
@@ -361,7 +361,7 @@ def add_subgraph():
     user_id = g.user['id']
     subgraph_name = request.json.get('name')
 
-    if subgraph_name is None or subgraph_name.isspace():
+    if not subgraph_name or subgraph_name.isspace():
         return jsonify(error='{} name cannot be empty.'.format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
 
     db = get_db()

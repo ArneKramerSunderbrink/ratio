@@ -53,7 +53,7 @@ def edit_user():
         return jsonify(error='User id has to be an integer.')
     if user_id == g.user['id'] and not user_is_admin:
         return jsonify(error='You cannot remove admin rights from your own account.')
-    if user_name is None or user_name.isspace():
+    if not user_name or user_name.isspace():
         return jsonify(error='User name cannot be empty.')
 
     db = get_db()
@@ -131,10 +131,10 @@ def add_user():
     user_password = request.json.get('password')
     user_is_admin = request.json.get('admin') is not None
 
-    if user_name is None or user_name.isspace():
+    if not user_name or user_name.isspace():
         return jsonify(error='Username cannot be empty.')
     user_name = user_name.strip()
-    if user_password is None or user_password.isspace():
+    if not user_password or user_password.isspace():
         return jsonify(error='Password cannot be empty.')
     user_password = generate_password_hash(user_password)
 
@@ -185,7 +185,6 @@ def download_backup():
 def upload_backup():
     # check if the post request has the file part
     if 'file' not in request.files:
-        print('request.files', request.files)
         return jsonify(error='File cannot be empty.')
     file = request.files['file']
     # if user does not select file, browser also submit an empty part without filename
@@ -193,3 +192,22 @@ def upload_backup():
         return jsonify(error='File cannot be empty.')
     upload_db_backup(file)
     return redirect(url_for('admin.index', message=quote('Upload successful.')))
+
+
+@bp.route('/_change_admin_message', methods=['POST'])
+@admin_required
+def change_admin_message():
+    message = request.form.get('message')
+    show_message = request.form.get('show-message') is not None
+
+    if show_message and (not message or message.isspace()):
+        return redirect(url_for('admin.index', message=quote('Message cannot be empty.')))
+    message = message.strip()
+
+    # todo store message
+
+    msg = 'Changed admin message.'
+    if show_message:
+        msg += ' Admin message active.'
+
+    return redirect(url_for('admin.index', message=quote(msg)))

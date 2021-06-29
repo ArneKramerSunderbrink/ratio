@@ -30,8 +30,8 @@
           <input class="w3-input flex-flex"
                  type="password" placeholder="Password of new user..." name="password" required style="border-bottom: 0">
           <input type="checkbox" id="new-user-admin" name="admin" value="admin" style="display: none">
-          <label for="new-user-admin" class="w3-button big-button flex-fix">{#
-            #}<i class="fa fa-square fa-lg"></i>
+          <label for="new-user-admin" class="w3-button flex-fix">
+            Admin <i class="fa fa-square fa-lg"></i>
           </label>
           <button type="submit" class="w3-button flex-fix" title="Add user">
             <i class="fas fa-plus fa-lg"></i>
@@ -68,7 +68,7 @@
         </button>
       </div>
       <div class="flip-flipside button-border" data-flipid="upload-backup" style="display: none;">
-        <form class="flex-row" method="post" action="{{ url_for('admin.upload_backup') }}" enctype = "multipart/form-data">
+        <form class="flex-row" method="post" action="{{ url_for('admin.upload_backup') }}" enctype="multipart/form-data">
           <input class="w3-input flex-flex" type=file name=file required>
           <input class="w3-button flex-fix" type=submit value=Upload>
           <a href="#" class="w3-button flex-fix flip-frontbutton" data-flipid="upload-backup" title="Cancel">
@@ -77,6 +77,22 @@
         </form>
       </div>
     </div>
+  </div>
+</div>
+
+<div class="entity entity-border">
+  <div class="entity-title color2 flex-row">
+    <div class="entity-label flex-flex">Admin message</div>
+  </div>
+  <div class="entity-body">
+    <form class="flex-row button-border" method="post" action="{{ url_for('admin.change_admin_message') }}">
+      <input class="w3-input flex-flex" type="text" placeholder="Message to show all users..." name="message" style="border-bottom: 0"> <!--todo values-->
+      <input type="checkbox" id="show-admin-message" name="show-message" value="show-message" style="display: none">
+      <label for="show-admin-message" class="w3-button flex-fix">
+        Display <i class="fa fa-square fa-lg"></i>
+      </label>
+      <input class="w3-button flex-fix" type=submit value=Save>
+    </form>
   </div>
 </div>
 

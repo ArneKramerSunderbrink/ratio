@@ -32,9 +32,9 @@ def add_value():
     except ValueError:
         return jsonify(error='{} id has to be an integer.'
                        .format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
-    if property_uri is None or property_uri.isspace():
+    if not property_uri or property_uri.isspace():
         return jsonify(error='Property URI cannot be empty.')
-    if entity_uri is None or property_uri.isspace():
+    if not entity_uri or property_uri.isspace():
         return jsonify(error='Entity URI cannot be empty.')
 
     if not subgraph_access(user_id, subgraph_id):
@@ -76,9 +76,9 @@ def change_value():
     except ValueError:
         return jsonify(error='{} id has to be an integer.'
                        .format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
-    if entity_uri is None or entity_uri.isspace():
+    if not entity_uri or entity_uri.isspace():
         return jsonify(error='Entity URI cannot be empty.')
-    if property_uri is None or property_uri.isspace():
+    if not property_uri or property_uri.isspace():
         return jsonify(error='Property URI cannot be empty.')
     if index is None:
         return jsonify(error='Index cannot be empty.')
@@ -125,9 +125,9 @@ def add_option():
     except ValueError:
         return jsonify(error='{} id has to be an integer.'
                        .format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
-    if property_uri is None or property_uri.isspace():
+    if not property_uri or property_uri.isspace():
         return jsonify(error='Property URI cannot be empty.')
-    if label is None or label.isspace():
+    if not label or label.isspace():
         return jsonify(error='Label cannot be empty.')
 
     if not subgraph_access(user_id, subgraph_id):
@@ -149,7 +149,7 @@ def add_option():
         except ValueError:
             return jsonify(error='Index has to be an integer.')
         # not only add the option to the ontology but also to the list of values of the field
-        if entity_uri is None or entity_uri.isspace():
+        if not entity_uri or entity_uri.isspace():
             return jsonify(error='Entity URI cannot be empty.')
 
         if index == subgraph_knowledge.get_property_free_index(entity_uri, property_uri):
@@ -178,9 +178,9 @@ def change_label():
     except ValueError:
         return jsonify(error='{} id has to be an integer.'
                        .format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
-    if entity_uri is None or entity_uri.isspace():
+    if not entity_uri or entity_uri.isspace():
         return jsonify(error='Entity URI cannot be empty.')
-    if label is None or label.isspace():
+    if not label or label.isspace():
         return jsonify(error='Label cannot be empty.')
 
     if not subgraph_access(user_id, subgraph_id):
@@ -212,11 +212,11 @@ def add_entity():
     except ValueError:
         return jsonify(error='{} id has to be an integer.'
                        .format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
-    if property_uri is None or property_uri.isspace():
+    if not property_uri or property_uri.isspace():
         return jsonify(error='Property URI cannot be empty.')
-    if parent_uri is None or parent_uri.isspace():
+    if not parent_uri or parent_uri.isspace():
         return jsonify(error='Parent URI cannot be empty.')
-    if entity_label is None or entity_label.isspace():
+    if not entity_label or entity_label.isspace():
         return jsonify(error='Entity label cannot be empty.')
 
     if not subgraph_access(user_id, subgraph_id):
@@ -267,7 +267,7 @@ def delete_entity():
     except ValueError:
         return jsonify(error='{} id has to be an integer.'
                        .format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
-    if entity_uri is None or entity_uri.isspace():
+    if not entity_uri or entity_uri.isspace():
         return jsonify(error='Entity URI cannot be empty.')
 
     if not subgraph_access(user_id, subgraph_id):
@@ -301,7 +301,7 @@ def undo_delete_entity():
     except ValueError:
         return jsonify(error='{} id has to be an integer.'
                        .format(current_app.config['FRONTEND_CONFIG']['Subgraph_term']))
-    if entity_uri is None or entity_uri.isspace():
+    if not entity_uri or entity_uri.isspace():
         return jsonify(error='Entity URI cannot be empty.')
 
     if not subgraph_access(user_id, subgraph_id):
