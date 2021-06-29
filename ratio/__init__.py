@@ -36,6 +36,8 @@ def create_app(test_config=None):
         DATABASE=os.path.join(app.instance_path, 'ratio.sqlite'),
         # place to store a temporary backup of the database
         BACKUP=os.path.join(app.instance_path, 'backup.sqlite'),
+        # place to store an admin message that can be shown to all users
+        ADMIN_MESSAGE=os.path.join(app.instance_path, 'admin_message.text'),
         # instructions for creating new subgraphs
         NEW_SUBGRAPH_INSTRUCTIONS=os.path.join(app.instance_path, 'new_subgraph.ratio'),
         # the file describing the filter

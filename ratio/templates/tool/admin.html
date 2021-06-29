@@ -29,7 +29,7 @@
                  type="text" placeholder="Name of new user..." name="name" required style="border-bottom: 0">
           <input class="w3-input flex-flex"
                  type="password" placeholder="Password of new user..." name="password" required style="border-bottom: 0">
-          <input type="checkbox" id="new-user-admin" name="admin" value="admin" style="display: none">
+          <input type="checkbox" id="new-user-admin" name="admin" style="display: none">
           <label for="new-user-admin" class="w3-button flex-fix">
             Admin <i class="fa fa-square fa-lg"></i>
           </label>
@@ -86,10 +86,10 @@
   </div>
   <div class="entity-body">
     <form class="flex-row button-border" method="post" action="{{ url_for('admin.change_admin_message') }}">
-      <input class="w3-input flex-flex" type="text" placeholder="Message to show all users..." name="message" style="border-bottom: 0"> <!--todo values-->
-      <input type="checkbox" id="show-admin-message" name="show-message" value="show-message" style="display: none">
+      <input class="w3-input flex-flex" type="text" value="{{ admin_message }}" placeholder="Message to show all users..." name="message" style="border-bottom: 0"> <!--todo values-->
+      <input type="checkbox" id="show-admin-message" name="show-message"{% if show_admin_message %} checked{% endif %} style="display: none">
       <label for="show-admin-message" class="w3-button flex-fix">
-        Display <i class="fa fa-square fa-lg"></i>
+        Display <i class="fa {{ 'fa-check-square' if show_admin_message else 'fa-square' }} fa-lg"></i>
       </label>
       <input class="w3-button flex-fix" type=submit value=Save>
     </form>

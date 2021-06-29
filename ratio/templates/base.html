@@ -23,4 +23,10 @@
   window.SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
 </script>
 
+{% if g.admin_message %}
+<script>
+  alert({{ g.admin_message }});
+</script>
+{% endif %}
+
 {% block content %}{% endblock %}

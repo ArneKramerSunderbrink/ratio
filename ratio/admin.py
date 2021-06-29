@@ -13,7 +13,7 @@ from urllib.parse import quote, unquote
 from werkzeug.security import generate_password_hash
 
 from ratio.auth import admin_required
-from ratio.db import get_db, get_db_backup, upload_db_backup
+from ratio.db import get_db, get_db_backup, upload_db_backup, get_admin_message, set_admin_message
 from ratio.knowledge_model import get_ontology
 
 bp = Blueprint('admin', __name__, url_prefix='/admin')
@@ -34,7 +34,13 @@ def index(message=None):
         ' ORDER BY id ASC',
     ).fetchall()
 
-    return render_template('tool/admin.html', user_list=user_list, message=message)
+    show_admin_message, admin_message = get_admin_message()
+
+    return render_template(
+        'tool/admin.html', user_list=user_list,
+        show_admin_message=show_admin_message, admin_message=admin_message,
+        message=message
+    )
 
 
 @bp.route('/_edit_user', methods=['POST'])
@@ -204,7 +210,7 @@ def change_admin_message():
         return redirect(url_for('admin.index', message=quote('Message cannot be empty.')))
     message = message.strip()
 
-    # todo store message
+    set_admin_message(show_message, message)
 
     msg = 'Changed admin message.'
     if show_message:

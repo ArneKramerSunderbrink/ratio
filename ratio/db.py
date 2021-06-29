@@ -31,8 +31,7 @@ def close_db(e=None):
 def get_new_subgraph_instructions():
     """Returns empty subgraph template string"""
     with current_app.open_resource(current_app.config['NEW_SUBGRAPH_INSTRUCTIONS'], 'r') as f:
-        empty_subgraph_template = f.read()
-    return empty_subgraph_template
+        return f.read()
 
 
 def get_filter_description():
@@ -52,6 +51,18 @@ def get_db_backup():
 def upload_db_backup(backup_file):
     with open(current_app.config['DATABASE'], 'wb+') as f:
         f.write(backup_file.read())
+
+
+def get_admin_message():
+    with current_app.open_resource(current_app.config['ADMIN_MESSAGE'], 'r') as f:
+        show_message, message = f.read().split('\n')
+        show_message = show_message == '1'
+    return show_message, message
+
+
+def set_admin_message(show_message, message):
+    with open(current_app.config['ADMIN_MESSAGE'], 'wb+') as f:
+        f.write(bytes('{}\n{}'.format(1 if show_message else 0, message), encoding='utf8'))
 
 
 def db_init():

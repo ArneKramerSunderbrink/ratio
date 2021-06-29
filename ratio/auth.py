@@ -11,7 +11,7 @@ from flask import url_for
 from functools import wraps
 from werkzeug.security import check_password_hash
 
-from ratio.db import get_db
+from ratio.db import get_db, get_admin_message
 
 bp = Blueprint('auth', __name__)
 
@@ -53,6 +53,10 @@ def load_logged_in_user():
         g.user = (
             get_db().execute('SELECT * FROM user WHERE id = ?', (user_id,)).fetchone()
         )
+
+    show_admin_message, admin_message = get_admin_message()
+    if show_admin_message:
+        g.admin_message = admin_message
 
 
 @bp.route('/login/admin', methods=('GET', 'POST'), endpoint='login/admin')
