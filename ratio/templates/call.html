@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ frontend_config['tool_name'] }} - Call{% endblock %}
+
+{% block content %}
+<div class="w3-container color2" style="height: 100%;">
+  <h1>
+    <a id="ratio-logo" href="http://ratio.sc.cit-ec.uni-bielefeld.de/home/">{#
+      #}<img src="{{ url_for('static', filename='ratiofarbig.jpg') }}" alt="Ratio logo"></img>{#
+    #}</a>{#
+    #}Call for participation in capturing clinical trial information with CTrO-Editor.
+  </h1>
+
+  <p>If you are a medical student in the last years of study, or if you are familiar with clinical trial publications, this may be of your interest.</p>
+
+  <p>In the Semantic Computing Group at the Bielefeld University we are developing web tools and machine learning methods to help health practitioners in decision-making based on clinical evidence, and also in the support of living systematic reviews (i.e., reviews that are constantly updated). We have developed the CTrO-Editor tool to manually capture information from clinical trial publications and export it into a semantic-machine-readable format (RDF) that can be inserted into a knowledge base.
+  To evaluate CtrO-Editor, we are asking for your kind participation on the following task:</p>
+
+  <h2>Task:</h2>
+  <ul>
+    <li>Capture one clinical trial with our tool and give us feedback about it.</li>
+    <li>As a thank you for your time and effort, you will be considered in a raffle for a Thalia voucher of 100 Euros.</li>
+  </ul>
+
+  <p>If you would like to participate:</p>
+  <ul>
+    <li>If interested, contact <a href="mailto:olivia.sanchez@uni-bielefeld.de?subject=CTrO-Editor%20participation">Olivia Sanchez</a> to get a clinical trial and an account to access CTrO-Editor.</li>
+  </ul>
+
+  <h2>Resources</h2>
+
+  <ul>
+    <li><a href="https://webtentacle1.techfak.uni-bielefeld.de/ratio/">Link to CTrO-Editor</a></li>
+    <li><a href="https://drive.google.com/file/d/13qME6RMKtWx1t_HBnRwzsLRslyr7JAfF/view?usp=sharing">This video</a> (german only) explains the objective of the task and demonstrates the general use of the tool.</li>
+    <li>A quick guide to the use of CTrO-Editor:
+      <ul>
+        <li><a href="https://drive.google.com/file/d/1DpIg88GKtSpsgMvpoGb9GlwlMq-s-Ce1/view?usp=sharing">English version</a></li>
+        <li><a href="https://drive.google.com/file/d/1zF1ZNFHig9e057bMzluQZf_Ly4ISBRJ1/view?usp=sharing">German version</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <p>Thank you for your attention, and looking forward to your participation.</p>
+</div>
+{% endblock %}

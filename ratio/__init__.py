@@ -48,7 +48,7 @@ def create_app(test_config=None):
         GUNICORN_LOGGER=False,
         # Frontend config dictionary
         FRONTEND_CONFIG=dict(
-            tool_name='CtrO-Editor',
+            tool_name='CTrO-Editor',
             tool_description='CtrO-Editor allows capturing the information contained in published clinical trials and '
                              'exports it into a semantic machine-readable format (RDF).',
             Subgraph_term='Clinical trial',
@@ -98,12 +98,13 @@ def create_app(test_config=None):
     db_init_app(app)
 
     # apply the blueprints to the app
-    from ratio import auth, admin, tool, knowledge, search
+    from ratio import auth, admin, tool, knowledge, search, call
 
     app.register_blueprint(auth.bp)
     app.register_blueprint(admin.bp)
     app.register_blueprint(tool.bp)
     app.register_blueprint(knowledge.bp)
     app.register_blueprint(search.bp)
+    app.register_blueprint(call.bp)
 
     return app
