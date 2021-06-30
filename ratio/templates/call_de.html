@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ frontend_config['tool_name'] }} - Call{% endblock %}
+
+{% block content %}
+<div class="w3-container color2" style="height: 100%;">
+  <h1>
+    <a id="ratio-logo" href="http://ratio.sc.cit-ec.uni-bielefeld.de/home/">{#
+      #}<img src="{{ url_for('static', filename='ratiofarbig.jpg') }}" alt="Ratio logo"></img>{#
+    #}</a>{#
+    #}Aufruf zur Teilnahme bei der Erfassung von Informationen über klinische Studien mit CTrO-Editor.
+  </h1>
+
+  <p>(You can find an english version of this call <a href="{{ url_for('call.call_en') }}">here</a>)</p>
+
+  <p>Wenn Sie in den letzten Semestern des Medizinstudiums sind oder mit Veröffentlichungen zu klinischen Studien vertraut, könnte dies für Sie interessant sein.</p>
+
+  <p>In der Semantic Computing Group an der Universität Bielefeld entwickeln wir Web-Tools und Machine-Learning-Methoden, um Ärzten bei der Entscheidungsfindung auf der Grundlage klinischer Evidenz zu helfen und auch zur Unterstützung von <i>living systematic reviews</i> (d.h. Reviews, die ständig aktualisiert werden). Wir haben das Tool CTrO-Editor entwickelt, um Informationen aus Veröffentlichungen klinischer Studien manuell zu erfassen und in ein semantisches maschinenlesbares Format (RDF) zu exportieren, das in eine Wissensdatenbank importiert werden kann.
+   Zur Evaluierung des CtrO-Editors bitten wir um Ihre Teilnahme an der folgenden Aufgabe:</p>
+
+  <h2>Aufgabe:</h2>
+  <ul>
+    <li>Erfassen Sie mit unserem Tool eine klinische Studie und geben Sie uns Feedback dazu.</li>
+    <li>Als Dankeschön für Ihre Zeit und Mühe werden Sie bei einer Verlosung für einen Thalia-Gutschein berücksichtigt.</li>
+  </ul>
+
+  <p>Wenn Sie teilnehmen möchten:</p>
+  <ul>
+    <li>Bei Interesse, kontaktieren Sie <a href="mailto:olivia.sanchez@uni-bielefeld.de?subject=CTrO-Editor%20Teilnahme">Olivia Sanchez</a> um eine klinische Studie und Zugangsadten für CTrO-Editor zu erhalten.</li>
+  </ul>
+
+  <h2>Resourcen:</h2>
+
+  <ul>
+    <li><a href="https://webtentacle1.techfak.uni-bielefeld.de/ratio/">Link zum CTrO-Editor</a></li>
+    <li><a href="https://drive.google.com/file/d/13qME6RMKtWx1t_HBnRwzsLRslyr7JAfF/view?usp=sharing">Dieses Video</a> erklärt das Ziel der Aufgabe und demonstriert die Verwendung des Tools.</li>
+    <li>Kurzer Leitfaden zum Arbeiten mit CTrO-Editor:
+      <ul>
+        <li><a href="https://drive.google.com/file/d/1DpIg88GKtSpsgMvpoGb9GlwlMq-s-Ce1/view?usp=sharing">Englische Version</a></li>
+        <li><a href="https://drive.google.com/file/d/1zF1ZNFHig9e057bMzluQZf_Ly4ISBRJ1/view?usp=sharing">Deutsche Version</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <p>Vielen Dank für Ihre Aufmerksamkeit, wir freuen uns auf Ihre Teilnahme.</p>
+</div>
+{% endblock %}
