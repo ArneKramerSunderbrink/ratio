@@ -174,6 +174,10 @@ def add_user():
 @bp.route('/_download_db_backup')
 @admin_required
 def download_backup():
+    """
+    The backup includes the instance/ratio.sqlite file, not the admin_message.txt, filter.ttl or new_subgraph.ratio!
+    """
+
     filename = '{}_backup_{}.sqlite'.format(
         current_app.config['FRONTEND_CONFIG']['tool_name'],
         strftime('%Y-%m-%d-%H-%M-%S')
