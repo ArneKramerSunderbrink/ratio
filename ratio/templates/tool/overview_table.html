@@ -6,8 +6,8 @@
       Study details:
       {% set q = graph.query("""SELECT ?v WHERE {?p ctro:hasTitle ?v .}""") %}{{ q | query_value if q else "No title was provided" }},
       {% set q = graph.query("""SELECT ?v WHERE {?p ctro:hasPublicationYear ?v .}""") %}{{ q | query_value if q else "No year was provided" }},
-      {% set q = graph.query("""SELECT ?v WHERE {?p ctro:hasAuthor ?v .}""") %}
-      {% if q %}Authors: {{ q | sort | query_values | join(', ') }}{% else %}No authors were provided{% endif %}
+      {% set q = graph.query("""SELECT ?v WHERE {?p ctro:hasAuthor ?v .}""") %}{{ "Authors: " + q | sort | query_values | join(', ') if q else "No authors were provided" }},
+      {% set q = graph.query("""SELECT ?v WHERE {?p ctro:hasPMID ?v .}""") %}{{ "PMID: " + q | query_value if q else "No PMID was provided" }}
     </b></td>
   </tr>
   <tr>
