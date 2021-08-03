@@ -121,7 +121,14 @@ def logout():
 
 def subgraph_access(user_id, subgraph_id):
     """Checks if user has access to a given subgraph."""
-    access = get_db().execute(
+    db = get_db()
+    admin = db.execute(
+        'SELECT * FROM user WHERE id = ?', (user_id,)
+    ).fetchone()['admin']
+    if admin:
+        return True
+
+    access = db.execute(
         'SELECT EXISTS ('
         ' SELECT 1 FROM access JOIN subgraph ON subgraph_id = id WHERE user_id = ? AND subgraph_id = ? AND deleted = 0'
         ')',
