@@ -1,0 +1,41 @@
+{% from "tool/admin_macros.html" import user_row %}
+
+{% extends 'tool/layout.html' %}
+
+{% block title %}{{ frontend_config['tool_name'] }} - User administration: {{ user['username'] }}{% endblock %}
+
+{% block header_content %}
+<div class="flex-fix ghost-center"><b>User administration: {{ user['username'] }}</b></div>
+<div class="flex-flex">{# just a spacer #}</div>
+{% endblock %}
+
+{% block body_content %}
+<script src="{{ url_for('static', filename='js/admin.js') }}" defer></script>
+
+<div class="entity entity-border">
+  <div class="entity-title color2 flex-row">
+    <div class="entity-label flex-flex">Accessible {{ frontend_config['subgraph_term'] }}s</div>
+  </div>
+  <div class="entity-body">
+    <div id="subgraph-list-box">
+      <div id="subgraph-list">
+        {% for subgraph in subgraph_list %}
+          <div class="item">
+            <div class="flex-row">
+              <a href="{{ url_for('tool.edit_view', subgraph_id=subgraph['id']) }}"
+                 class="w3-button flex-text{% if subgraph['finished'] %} text-green{% endif %}">{{ subgraph['name'] }}</a>
+              <div class="w3-button big-button flex-fix" title="{{ 'Finished' if subgraph['finished'] else 'Not finished' }}">{#
+                #}<i class="fa {{ 'fa-check-square' if subgraph['finished'] else 'fa-square' }} fa-lg"></i>
+              </div>
+              <a href="{{ url_for('tool.download_rdf', subgraph_id=subgraph['id']) }}" class="w3-button big-button flex-fix" title="Download RDF">{#
+                #}<i class="fas fa-project-diagram"></i>
+              </a>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

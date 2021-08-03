@@ -43,6 +43,26 @@ def index(message=None):
     )
 
 
+@bp.route('user<int:user_id>')
+@admin_required
+def user_administration(user_id):
+
+    db = get_db()
+    user = db.execute(
+        'SELECT * FROM user WHERE id = ?', (user_id,)
+    ).fetchone()
+
+    subgraph_list = db.execute(
+        'SELECT id, name, finished'
+        ' FROM access JOIN subgraph ON subgraph_id = id'
+        ' WHERE user_id = ? and deleted = 0'
+        ' ORDER BY subgraph_id ASC',
+        (user_id,)
+    ).fetchall()
+
+    return render_template('tool/admin_user.html', user=user, subgraph_list=subgraph_list)
+
+
 @bp.route('/_edit_user', methods=['POST'])
 @admin_required
 def edit_user():

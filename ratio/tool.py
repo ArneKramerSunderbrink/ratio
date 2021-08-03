@@ -40,7 +40,7 @@ def index(message=None):
         'SELECT id, name, finished'
         ' FROM access JOIN subgraph ON subgraph_id = id'
         ' WHERE user_id = ? and deleted = 0'
-        ' ORDER BY user_id ASC',
+        ' ORDER BY subgraph_id ASC',
         (user_id,)
     ).fetchall()
 

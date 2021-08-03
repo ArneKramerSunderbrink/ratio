@@ -83,7 +83,7 @@
              title="{{ 'Finished' if subgraph_finished else 'Not finished' }}">{#
         #}<i class="fa {{ 'fa-check-square' if subgraph_finished else 'fa-square' }} fa-lg"></i>
       </label>
-      <a href="{{ request.script_root }}/{{ subgraph_id }}/_download_rdf" class="w3-button big-button flex-fix" title="Download RDF">{#
+      <a href="{{ url_for('tool.download_rdf', subgraph_id=subgraph_id) }}" class="w3-button big-button flex-fix" title="Download RDF">{#
         #}<i class="fas fa-project-diagram"></i>
       </a>
       <button class="w3-button big-button flex-fix flip-flipbutton" data-flipid="subgraph-list-{{ subgraph_id }}" title="Edit {{ frontend_config['subgraph_term'] }} name">{#
