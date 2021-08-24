@@ -332,6 +332,7 @@ button[disabled]{
   background-color: white;
   min-height: 1.5em;
   max-height: calc(4.5em + 1px);  /* Three lines + border */
+  position: sticky;
   overflow: auto;
 }
 

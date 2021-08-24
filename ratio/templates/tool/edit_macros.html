@@ -46,9 +46,9 @@
   <input type="hidden" autofocus>
   <div class="flex-flex">
     {% if field.is_object_property %}
-    <input class="w3-input option-input" type="text" name="label" value="{{ value.label }}" data-option-uri="{{ value.uri }}" data-index="{{index}}"{% if unregistered %} data-unregistered=""{% endif %}{% if read_only %} readonly{% endif %}>
+    <input class="w3-input option-input" type="text" name="label" value="{{ value.label }}" autocomplete="off" data-option-uri="{{ value.uri }}" data-index="{{index}}"{% if unregistered %} data-unregistered=""{% endif %}{% if read_only %} readonly{% endif %}>
     {% else %}
-    <input class="w3-input option-input" type="text" name="label" value="{{ value }}" data-index="{{index}}"{% if unregistered %} data-unregistered=""{% endif %}{% if read_only %} readonly{% endif %}>
+    <input class="w3-input option-input" type="text" name="label" value="{{ value }}" autocomplete="off" data-index="{{index}}"{% if unregistered %} data-unregistered=""{% endif %}{% if read_only %} readonly{% endif %}>
     {% endif %}
 
     {% if field.options or field.is_add_option_allowed %}

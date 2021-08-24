@@ -479,11 +479,6 @@ class SubgraphKnowledge(KnowledgeGraph):
         if type(property_uri) == str:
             property_uri = URIRef(property_uri)
 
-        validity, value = self.check_property_value(property_uri, value)
-        if validity:
-            # the check returned an error message
-            return validity
-
         db = get_db()
 
         # delete previous value from graph
@@ -496,6 +491,19 @@ class SubgraphKnowledge(KnowledgeGraph):
             self.graph.remove((entity_uri, property_uri, parse_n3_term(prev_value['object'])))
 
         # add new value to graph
+        validity, value = self.check_property_value(property_uri, value)
+        if validity:
+            # the check returned an error message
+            del self.properties[(entity_uri, property_uri)][index]
+            db.execute(
+                'UPDATE knowledge SET object = ? '
+                '   WHERE subgraph_id = ? AND subject = ? AND predicate = ? AND property_index = ?',
+                (Literal('').n3(), self.id, entity_uri.n3(), property_uri.n3(), index)
+            )
+            db.commit()
+            self.root = None
+            return validity
+
         self.graph.add((entity_uri, property_uri, value))
         self.properties[(entity_uri, property_uri)][index] = value
         db.execute(

@@ -100,9 +100,11 @@ $(function () {
   function set_validity(element, validity) {
     if (validity == '') {
       element.style.boxShadow = '';
+      element.style.zIndex = 0;
       element.title = '';
     } else {
-      element.style.boxShadow = '0 0 2px 1px red';
+      element.style.boxShadow = '0 0 6px 2px red';
+      element.style.zIndex = 1;
       element.title = validity;
     }
   }
@@ -194,10 +196,10 @@ $(function () {
         }
       });
       if (value === false) {
-        console.log('false');
-        set_validity(input, 'Choose an option from the list.');
+        // delete value from database to not store the last valid input, that led to confusions
+        // value gets forwarded to server where it gets checked again and deleting and production of validity message happens
+        value = input.value;
         input.removeAttribute('data-option-uri');
-        return;
       }
     } else {
       value = '';
