@@ -10,11 +10,62 @@ However, later that turned out to be irrelevant because the tool would only be u
 configuration for the specific use case were not sustained if that would mean significantly more effort.
 In particular, the script deploy.sh installs both the general tool and our specific configuration and the template `overview_table.html` is made specifically for our ontology and would not work
 with any other because I haven't found a way that users could specify different overview tables without allowing them to upload arbitrary code that would be executed on the server.
-Further the tool was never tested with any other configuration and there is no documentation as to what properties an ontology must have to work with the general tool.
+Further, the tool was never tested with any other configuration and there is no documentation as to what properties an ontology must have to work with the general tool.
 
-Overview
+Nevertheless, most small changes to the tool (e.g. adding the option to give the DOI of a publication) can be achieved by simply changing the ontology, without touching the actual code.
+
+Ontology
 ------
-todo
+The RATIO tool manages an RDF database according to an ontology. Data is added to subgraphs of the complete knowledge graph. In our application, subgraphs contained information about a 
+specific clinical trial.
+
+The CTRO ontology used by us can be found in `ontology_original.ttl`. To work as a configuration for the tool, certain
+information has to be added. The editor of the tool is a tree where the nodes are entities (owl:NamedIndividual) that have fields (owl:ObjectProperty or owl:DatatypeProperty) 
+with values (owl:NamedIndividual or literals). owl:NamedIndividual values can either be from a predefined list (e.g. ctro:hasGender), 
+or defined and described elsewhere in the tool (e.g. ctro:hasArmOut), or defined and described directly (e.g. ctro:hasArm).
+The last option corresponds to a branching of the tree and is marked by a triple (ctro:hasArm ratio:described "true"^^xsd:boolean) that has to be added to the original ontology.
+
+Before describing the additional information, here is the 'normal' ontology elements that are used by the ontology. Hopefully it is somewhat intuitive how it is used, I will not explain it here.
+1. Every owl:ObjectProperty and owl:DatatypeProperty has to have a rdfs:domain, a rdfs:range, and a rdfs:label.
+   Additional information (displayed when hovering over the corresponding element in the tool) can be provided via a rdfs:comment.
+   They can also be specified to be functional (allow not more than one value, zero values is ok) via owl:FunctionalProperty.
+2. rdfs:domain and rdfs:range of a property have to be described as owl:Class and every class has to be a rdfs:label and optionally a rdfs:comment.
+   Classes can be structured via rdfs:subClassOf.
+   Restrictions like owl:equivalentClass are ignored.
+3. Predefined individuals that can be values of object properties that are not described are defined as owl:NamedIndividual with rdfs:label and optionally rdfs:comment.
+
+Here is a list of all information you can add to a property in the configuration ontology:
+1. _ratio:described_: 
+   Marks an owl:ObjectProperty as branching into other described entities. 
+   Example: ctro:hasArm ratio:described "true"^^xsd:boolean
+   Default: False.
+2. _ratio:deletable_: 
+   Marks an owl:ObjectProperty as being 'essential'. Essential objects cannot be deleted or added or renamed. Therefore, they have to already exist in the initial graph 
+   (see `new_subgraph.ratio` on how to specify the initial graph). Only described properties can be essential. 
+   Example: ctro:hasPopulation ratio:deletable "false"^^xsd:boolean 
+   Default: True.
+3. _ratio:order_: 
+   Since an RDF graph is not ordered, we need to specify the order in which the fields are displayed in the tool. 
+   Example: ctro:hasPopulation ratio:order "4"^^xsd:positiveInteger
+   Default: 0, but This should not be used. Values (1,2,...) should be explicitly specified for all properties to ensure consistency of the display.
+4. _ratio:width_:
+   For properties that are not described, the width of the corresponding input field can be specified in percent.
+   Example: ctro:hasGender ratio:width "25"^^xsd:positiveInteger
+   Default: 50.
+
+Further, one can add subheadings to the display that are not part of the knowledge but merely there to structure the fields of a described entity when necessary. 
+They are modelled as 'pseudo properties'.Example:
+```
+ctro:hasStatisticalMeasure rdf:type ratio:Subheading ;
+                           ratio:order "10"^^xsd:positiveInteger ;
+                           rdfs:domain ctro:Outcome ;
+                           rdfs:label "Statistical measurements:" .
+```
+
+Finally, one has to specify the base of the URIs the tool will create for entities created by the user via `ratio:Configuration ratio:hasBase "http://www.semanticweb.org/root/ontologies/2018/6/ctro#"`.
+So in this case, when a user adds a second arm to a clinical trial with index 7, the tool will give it the URI `ctro:Arm_7_2`.
+
+
 
 Remote access to the webtentacle server
 ------
