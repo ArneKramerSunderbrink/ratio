@@ -5,7 +5,8 @@ This tool is not actively developed anymore (since August 2021). The purpose of 
 A quick word on the generality of the tool
 -------
 First of all, I initially assumed that I was supposed to develop a general tool that could work with different ontologies: You install a general version of the tool on your server
-and then upload your own ontology and other configuration files. The dummy data contains the configuration files that are used for our special use case.
+and then upload your own ontology and other configuration files. The dummy data contains the both configuration files that are used for our special use case and the data that was created by user 
+up till now.
 However, later that turned out to be irrelevant because the tool would only be used for one purpose with one ontology and the strict distinction between the general tool and the
 configuration for the specific use case were not sustained if that would mean significantly more effort.
 In particular, the script deploy.sh installs both the general tool and our specific configuration and the template `overview_table.html` is made specifically for our ontology and would not work
@@ -88,7 +89,9 @@ Here is what I did when I updated the tool:
 3. Replace `dummy_db.sqlite` with the database just downloaded from the server, do `flask db-init` and `flask db-add-dummy`, test again with the new database.
    If there is an error in the database itself (maybe the tool accidentally stored an `owl:NamedIndividual` without a `ctro` type or something like that, 
    causing a crash when trying to display the subgraph in the tool), use your favourite SQL tool (e.g. SQLite directly or python with `sqlite3`) to find and fix it.
-4. Stop the tool on the server with `pkill gunicorn` and delete everything from the `~/ratio` folder.
+4. Stop the tool on the server with `pkill gunicorn` and delete everything from the `~/ratio` folder. (Or better yet: Delete everything but `deploy.sh` and `gunicorn_conf.py` as you usually
+   don't have to update these, and don't delete `ratio-0.1-py2.py3-none-any.whl` so that when you download the new whl from bashupload you can overwrite the old via 
+   `mv new.whl ratio-0.1-py2.py3-none-any.whl` and thanks to autocompletion you don't have to input the name.)
 5. Install and run the updated tool on the server. See _Deploy with Gunicorn_ in `README.md`.
 
 Loose ends
