@@ -763,8 +763,8 @@ class SubgraphKnowledge(KnowledgeGraph):
 
         if value == '':
             # Empty values are allowed but will be deleted on reloading the page
-            # (they are persisted in the db though because I have not found out what's the best occasion to delete
-            # them yet..)
+            # todo they are persisted in the db though because I have not found out what's the best occasion to delete
+            #  them yet..
             return '', Literal(value)
         elif is_object_property and is_described:
             # we trust that the individual has the correct class, namely self.range_uri

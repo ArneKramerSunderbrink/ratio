@@ -93,4 +93,22 @@ Here is what I did when I updated the tool:
 
 Loose ends
 -------
-todo
+Here are some todos I would look into if I would continue work on the system (apart from the todos directly in the code):
+1. _Search.py_: The filter of the search page works basically like the Knowledge editor, code from `knowledge_model.py` was simply copied and modified.
+   It would be cleaner if `Filter` and `FilterField` would inherit `Entity` and `Field` from `knowledge_model.py` to share as much code as possible.
+2. _Clean the Database_: Literal values are deleted by making the corresponding fields empty, when reloading the page they are removed from the view.
+   However, for some reason I don't remember unfortunately (something about having a list of values in a field and deleting something from the middle
+   or something like that) they are not deleted from the database. This yields to empty values accumulating in the database over time. This values could be cleaned up
+   everytime a user reloads the editor for example (I initially thought multiple people should be able to work on a subgraph and therefore this would not be a viable solutionb
+   but this turned out to be false later). Or maybe there is even a better solution for the problem in the first place, if I'd
+   only remember what it was...
+3. _Tests_: I added tests in the early stages of development, but in a phase of hasty development I gave up on updating them. The test infrastructure is still there but none of them work anymore.
+4. _Admin account_: My intention with the admin interface was to avoid the update workflow described above as much as possible and allow as much bug fixing as possible in the admin interface
+   while the tool is running.
+   1. Clear the whole database (like the init-db command).
+   2. Upload a new ontology.
+   3. Download and upload the SQLite rows of single specific subgraph.
+   4. Replace all occurences of the URI A with the URI B in the knowledgebase.
+5. _Messages_: The frontend for the little messages at the bottom of the screen is really messy. It would be great to have a uniform way of displaying arbitrary messages that works the same
+   way for every page. This could be achieved by storing all messages in the global attribute flask.g and making a uniform message macro and put the same loop that displays all
+   messages on every page template and write code to handle user interactions with the messages in `base.js`.
