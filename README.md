@@ -21,7 +21,7 @@ Install Ratio:
     $ pip install -e .
 
 
-Run
+Run locally
 ---
 
     $ export FLASK_APP=ratio
