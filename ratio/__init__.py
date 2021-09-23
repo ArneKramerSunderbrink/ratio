@@ -52,11 +52,12 @@ def create_app(test_config=None):
             tool_description='CtrO-Editor allows capturing the information contained in published clinical trials and '
                              'exports it into a semantic machine-readable format (RDF).',
             Subgraph_term='Clinical trial',
-            subgraph_term='clinical trial',
+            subgraph_term='clinical trial',  # would be cleaner to just store this and call capitalize if necessary
             color0='#EDEDED',
             color1='#E6F7FF',
             color2='#F3F3DB',
-            color3='#BBFFB3'
+            color3='#BBFFB3',
+            external_help='https://sites.google.com/view/ctro-editor/leitfaden'
         )
     )
 

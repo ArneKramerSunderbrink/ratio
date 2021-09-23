@@ -82,7 +82,7 @@ Here is what I did when I updated the tool:
 
 1. Make and test changes locally.
 2. 1. If the tool is running on the server: In the admin interface, set the admin message to something like
-   "The tool will be updated today (01.02.2021) from 20:00 to 00:00. Changes made in that time are not persisted in the database" (if people are actively using it, else skip the admin message). 
+   "The tool will be updated today (01.02.2021) from 20:00 to 00:00. Changes made in that time are not persisted in the database." (if people are actively using it, else skip the admin message). 
    At the specified time download the backup from the admin interface.
    2. If the tool is not running and cannot be started (maybe because the version on the server is broken), access the server, go to `~/ratio/venv/var/ratio-instance` 
       and download the database `ratio.sqlite`.

@@ -32,6 +32,10 @@
           {% endif %}
           {% endif %}
 
+          {% if 'external_help' in frontend_config and frontend_config['external_help'] %}
+          <a href="{{ frontend_config['external_help'] }}" class="w3-button"><i class="fas fa-question"></i> Help</a>
+          {% endif %}
+
           <a href="{{ url_for('auth.logout') }}" class="w3-button"><i class="fas fa-sign-out-alt"></i> Log Out</a>
         </div>
       </div>

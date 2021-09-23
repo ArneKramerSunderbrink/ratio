@@ -35,7 +35,8 @@ echo "FRONTEND_CONFIG=dict(
     color0='#EDEDED',
     color1='#E6F7FF',
     color2='#F3F3DB',
-    color3='#BBFFB3'
+    color3='#BBFFB3',
+    external_help='https://sites.google.com/view/ctro-editor/leitfaden'
 )" >> venv/var/ratio-instance/config.py
 
 touch log.txt
